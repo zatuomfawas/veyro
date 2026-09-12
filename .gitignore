@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# prisma client (generated; output path set in prisma/schema.prisma)
+/generated/prisma
+
+# local test artefacts (curl cookie jars hold live session tokens)
+/cookies.txt
+/guardian_cookies.txt
+*.cookies.txt

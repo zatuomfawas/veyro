@@ -1,0 +1,322 @@
+// Veyro — production data model.
+//
+// Two rules this schema exists to enforce:
+//   1. Money is stored as integer minor units. There is no Float or Decimal
+//      column for an amount anywhere in this file, and there never should be.
+//   2. A balance is never stored. It is folded from LedgerEntry + Payout.
+//      There is deliberately no `balance` column on Business.
+
+// Prisma 7: the generator must name an output path, and the connection URL
+// lives in prisma.config.ts rather than here. Do not add `url` back to the
+// datasource block; Prisma 7 rejects the schema if you do.
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------- identity
+
+enum Role {
+  FOUNDER
+  GUARDIAN
+  ADMIN
+}
+
+model User {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  emailVerifiedAt DateTime?
+  passwordHash    String? // argon2id. Null when SSO-only.
+  totpSecret      String? // encrypted at rest, never returned by any API
+  name            String
+  role            Role
+  dateOfBirth     DateTime? // founders only; drives the eligibility branch
+  countryCode     String    @db.Char(2)
+  createdAt       DateTime  @default(now())
+  deletedAt       DateTime?
+
+  businesses    Business[]             @relation("FounderBusinesses")
+  guardianships GuardianRelationship[] @relation("GuardianOf")
+  sessions      Session[]
+  notifications Notification[]
+  auditEvents   AuditEvent[]
+
+  @@index([email])
+}
+
+model Session {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique // only the hash is stored
+  ipHash    String? // hashed, for anomaly detection, not for display
+  userAgent String?
+  createdAt DateTime  @default(now())
+  expiresAt DateTime
+  revokedAt DateTime?
+
+  @@index([userId, expiresAt])
+}
+
+// ---------------------------------------------------------------- business
+
+enum BusinessType {
+  SAAS
+  DIGITAL_PRODUCT
+  SERVICE
+  CONTENT
+  OTHER
+}
+
+enum RevenueModel {
+  SUBSCRIPTION
+  ONE_TIME
+  USAGE
+  MIXED
+}
+
+model Business {
+  id           String       @id @default(cuid())
+  founderId    String
+  founder      User         @relation("FounderBusinesses", fields: [founderId], references: [id])
+  name         String
+  type         BusinessType
+  url          String?
+  description  String // what the customer is paying for; providers ask for this
+  revenueModel RevenueModel
+  priceMinor   Int          @default(0)
+  currency     String       @default("USD") @db.Char(3)
+  countryCode  String       @db.Char(2)
+  createdAt    DateTime     @default(now())
+  archivedAt   DateTime?
+
+  relationship GuardianRelationship?
+  account      PaymentAccount?
+  entries      LedgerEntry[]
+  payouts      Payout[]
+
+  @@index([founderId])
+}
+
+// ---------------------------------------------------------------- guardianship
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  EXPIRED
+  REVOKED
+  ENDED
+}
+
+model GuardianRelationship {
+  id         String   @id @default(cuid())
+  businessId String   @unique
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  guardianId String?
+  guardian   User?    @relation("GuardianOf", fields: [guardianId], references: [id])
+
+  invitedName  String
+  invitedEmail String
+  relation     String // "Parent", "Legal guardian", ...
+  status       InvitationStatus @default(PENDING)
+
+  tokenHash   String    @unique // single-use, hashed; raw token only ever in the email
+  sentAt      DateTime  @default(now())
+  expiresAt   DateTime // 14 days
+  respondedAt DateTime?
+  endedAt     DateTime?
+
+  // Approval policy is owned by the guardian and editable only from their session.
+  approvePayouts         Boolean @default(true)
+  payoutThresholdMinor   Int     @default(0)
+  approveProviderChanges Boolean @default(true)
+
+  @@index([invitedEmail, status])
+}
+
+// ---------------------------------------------------------------- payments
+
+enum ProviderId {
+  SANDBOX
+  STRIPE_CONNECT
+  ADYEN_PLATFORMS
+}
+
+enum AccountStatus {
+  NOT_STARTED
+  AWAITING_GUARDIAN
+  PENDING
+  REQUIREMENTS_DUE
+  ACTIVE
+  RESTRICTED
+  DISCONNECTED
+}
+
+model PaymentAccount {
+  id                String        @id @default(cuid())
+  businessId        String        @unique
+  business          Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  provider          ProviderId
+  providerAccountId String?       @unique // the connected account id at the processor
+  status            AccountStatus @default(NOT_STARTED)
+
+  // The adult who passes the processor's checks. Veyro stores the reference,
+  // never the documents: identity files go straight to the processor's own form.
+  representativeUserId String?
+  requirementsDue      Json    @default("[]")
+  settlementDays       Int     @default(2)
+
+  // Payout destination. Only the display fragment is stored. No account or
+  // routing numbers are ever written to Veyro's database.
+  destinationBankName String?
+  destinationLast4    String? @db.Char(4)
+  destinationVerified Boolean @default(false)
+
+  connectedAt    DateTime?
+  disconnectedAt DateTime?
+  updatedAt      DateTime  @updatedAt
+}
+
+// ---------------------------------------------------------------- ledger
+
+enum EntryKind {
+  CHARGE
+  REFUND
+  DISPUTE_HOLD
+  DISPUTE_RELEASE
+  DISPUTE_LOSS
+  ADJUSTMENT
+}
+
+enum EntryBucket {
+  PENDING
+  AVAILABLE
+  HELD
+  REVERSED
+}
+
+enum EntryStatus {
+  SUCCEEDED
+  PARTIALLY_REFUNDED
+  REFUNDED
+  DISPUTED
+  REVERSED
+}
+
+model LedgerEntry {
+  id         String        @id @default(cuid())
+  businessId String
+  business   Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  parentId   String? // refunds and holds point at their charge
+  parent     LedgerEntry?  @relation("EntryChildren", fields: [parentId], references: [id])
+  children   LedgerEntry[] @relation("EntryChildren")
+
+  kind   EntryKind
+  bucket EntryBucket @default(PENDING)
+  status EntryStatus @default(SUCCEEDED)
+
+  grossMinor    Int // what the customer paid
+  feeMinor      Int    @default(0) // what the processor kept
+  netMinor      Int // gross - fee; the only figure that can reach a payout
+  refundedMinor Int    @default(0)
+  currency      String @default("USD") @db.Char(3)
+
+  customerRef String? // masked handle, never a full PII record
+  description String
+  availableOn DateTime // when it leaves PENDING
+  isSandbox   Boolean  @default(false)
+
+  // Processor event id. Unique so a replayed webhook cannot double-post money.
+  providerRef String   @unique
+  createdAt   DateTime @default(now())
+
+  @@index([businessId, bucket])
+  @@index([businessId, createdAt])
+}
+
+// ---------------------------------------------------------------- payouts
+
+enum PayoutStatus {
+  AWAITING_APPROVAL
+  IN_TRANSIT
+  PAID
+  FAILED
+  DECLINED
+  CANCELED
+}
+
+model Payout {
+  id          String       @id @default(cuid())
+  businessId  String
+  business    Business     @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  amountMinor Int
+  currency    String       @default("USD") @db.Char(3)
+  status      PayoutStatus @default(AWAITING_APPROVAL)
+
+  destination   String // display string only, e.g. "First Community Bank ••4417"
+  requestedById String
+  approvedById  String?
+  requestedAt   DateTime  @default(now())
+  approvedAt    DateTime?
+  sentAt        DateTime?
+  completedAt   DateTime?
+
+  failureCode String? // from the processor
+  failureText String? // rewritten for humans before display
+  providerRef String? @unique
+  isSandbox   Boolean @default(false)
+
+  @@index([businessId, status])
+}
+
+// ---------------------------------------------------------------- plumbing
+
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  body      String
+  routeName String?
+  routeId   String?
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId, readAt])
+}
+
+// Append-only. No update or delete path exists in application code.
+model AuditEvent {
+  id         String   @id @default(cuid())
+  actorId    String? // null means the payment provider acted
+  actor      User?    @relation(fields: [actorId], references: [id])
+  businessId String?
+  action     String // "payout.approved", "guardian.accepted", ...
+  target     String
+  metadata   Json     @default("{}")
+  ipHash     String?
+  createdAt  DateTime @default(now())
+
+  @@index([businessId, createdAt])
+}
+
+// Every processor webhook is written here before it is acted on, so a replay
+// or an out-of-order delivery cannot post the same money twice.
+model WebhookEvent {
+  id          String     @id @default(cuid())
+  provider    ProviderId
+  providerRef String
+  type        String
+  payload     Json
+  signatureOk Boolean
+  processedAt DateTime?
+  error       String?
+  receivedAt  DateTime   @default(now())
+
+  @@unique([provider, providerRef])
+}
