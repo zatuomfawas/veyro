@@ -83,18 +83,22 @@ function Notice({
 /* ------------------------------------------------------------------ *
  * Eligibility
  *
- * Sources (checked 5 Sep 2026):
+ * Sources:
  *   Stripe Services Agreement, Age Restrictions, 13+ may open an account; a
  *   user under 18 must add an adult Representative who accepts liability.
- *   Stripe support, "Age requirement to create a Stripe account", Standard
- *   accounts 13+ with a legal guardian as account owner before charges or
- *   payouts; Express and Custom Connect are 18+ and block signup.
+ *   Stripe support, "Age requirement to create a Stripe account".
+ *   Stripe Support by email, 8 September 2026, confirming directly that (a) 13+
+ *   with guardian involvement completed through Stripe's own onboarding is the
+ *   supported model, (b) Standard, Express AND Custom all support it — the
+ *   older "Express and Custom are 18+" guidance is superseded, (c) the US is
+ *   supported, and (d) Brazil is an exception at 18+.
  * These are provider policies, not confirmation that Veyro's specific platform
- * configuration has been approved. See ARCHITECTURE.md.
+ * configuration has been approved, and a support reply is not a legal
+ * guarantee. See ARCHITECTURE.md.
  * ------------------------------------------------------------------ */
 
 type EvidenceTier = "primary" | "secondary" | "disputed";
-type AccessStatus = "self" | "preview" | "extended" | "none";
+type AccessStatus = "self" | "preview" | "extended" | "adults_only" | "none";
 
 type CountryRow = [
   code: string,
@@ -112,8 +116,9 @@ const COUNTRIES: CountryRow[] = [
   // Contractual capacity, not the general age of majority. They coincide almost
   // everywhere, and where they do not the note says so.
   // status: "self" self-serve signup · "preview" contact-sales only · "extended" Paystack, not Stripe
+  //         "adults_only" provider supports the country, but only for account holders 18+
   ["AU","Australia",18,2,"","self","primary","OECD Family Database PF1.8"],["AT","Austria",18,3,"","self","primary","EU Agency for Fundamental Rights"],["BE","Belgium",18,3,"","self","primary","EU Agency for Fundamental Rights"],
-  ["BR","Brazil",18,3,"","self","secondary","Secondary summaries only"],["BG","Bulgaria",18,3,"","self","primary","EU Agency for Fundamental Rights"],
+  ["BR","Brazil",18,4,"Stripe confirmed by email on 8 September 2026 that Brazil is an exception: account holders there must be at least 18, guardian or no guardian.","adults_only","primary","Stripe Support, 8 September 2026"],["BG","Bulgaria",18,3,"","self","primary","EU Agency for Fundamental Rights"],
   ["CA","Canada",18,2,"18 in AB, MB, ON, QC, SK and PE. 19 in BC, NB, NL, NS, NT, NU and YT.","self","secondary","OECD confirms 19 in certain territories; the province split is secondary"],
   ["CI","Côte d'Ivoire",21,4,"","extended","secondary","Secondary summaries only"],
   ["HR","Croatia",18,3,"","self","primary","EU Agency for Fundamental Rights"],["CY","Cyprus",18,3,"","self","primary","EU Agency for Fundamental Rights"],["CZ","Czech Republic",18,3,"","self","primary","EU Agency for Fundamental Rights"],
@@ -155,7 +160,9 @@ const REGION_AGE: Record<string, number> = {
   Alabama: 19, Nebraska: 19, Mississippi: 21,
 };
 
-type Route = "no_country" | "extended" | "preview" | "too_young" | "adult" | "guardian" | "review" | "unverified";
+type Route =
+  | "no_country" | "extended" | "preview" | "adults_only"
+  | "too_young" | "adult" | "guardian" | "review" | "unverified";
 
 type EligibilityResult = {
   route: Route;
@@ -178,6 +185,12 @@ function eligibility(code: string, age: number | null, region: string): Eligibil
   if (tier === 9) return { ...ctx, route: "no_country" };
   if (status === "extended") return { ...ctx, route: "extended" };
   if (status === "preview") return { ...ctx, route: "preview" };
+  // A country-level adult-only exception (Brazil). Checked ahead of the
+  // provider's general floor of 13 because the local minimum is higher, so
+  // quoting 13 at someone here would be wrong as well as unhelpful.
+  if (status === "adults_only" && age !== null && age < majority) {
+    return { ...ctx, route: "adults_only" };
+  }
   if (age !== null && age < 13) return { ...ctx, route: "too_young" };
   if (age !== null && age >= majority) return { ...ctx, route: "adult" };
   if (tier === 1) return { ...ctx, route: "guardian" };
@@ -283,6 +296,14 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
                 themselves. There is no self-serve route for us to build on, so we cannot take you through setup.
               </Notice>
             )}
+            {R.route === "adults_only" && (
+              <Notice tone="clay" head={"You must be at least " + R.majority + " in " + R.country?.[1]}>
+                {R.country?.[1]} is the one country the payment provider carves out of the under-18 route. Stripe told
+                us directly: account holders there must be at least {R.majority}, and a parent or legal guardian on the
+                account does not change it. You&rsquo;re {age}, so there is no version of this that works yet — not with
+                us, and not with anyone else building on the same provider.
+              </Notice>
+            )}
             {R.route === "too_young" && (
               <Notice tone="clay" head="Not yet, and we won't pretend otherwise">
                 The provider&rsquo;s minimum age is 13, whoever is helping you. There is no version of this that works at
@@ -292,12 +313,12 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
             )}
             {R.route === "no_country" && (
               <Notice tone="clay" head="Not available where you are">
-                The payment provider we use supports self-serve signup in 44 countries, and yours isn&rsquo;t among them. That&rsquo;s a
+                The payment provider we use supports self-serve signup in 43 countries, and yours isn&rsquo;t among them. That&rsquo;s a
                 provider restriction we can&rsquo;t work around, and we&rsquo;re not going to suggest registering a company
                 somewhere else to get past it.
               </Notice>
             )}
-            {(["no_country", "review", "unverified", "preview", "extended"] as Route[]).includes(R.route) && (
+            {(["no_country", "review", "unverified", "preview", "extended", "adults_only"] as Route[]).includes(R.route) && (
               <div className="panel" style={{ marginTop: "var(--sp-4)" }}>
                 <div className="lbl" style={{ marginBottom: "var(--sp-1)" }}>What you can still do</div>
                 <p className="small">
@@ -319,7 +340,7 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
               </div>
             )}
 
-            {(["guardian", "adult", "review", "unverified", "preview", "extended"] as Route[]).includes(R.route) && (
+            {(["guardian", "adult", "review", "unverified", "preview", "extended", "adults_only"] as Route[]).includes(R.route) && (
               <div className="panel" style={{ marginTop: 12 }}>
                 {R.note && <>
                   <div className="lbl" style={{ marginBottom: 4 }}>Worth knowing about {R.country?.[1]}</div>
@@ -345,8 +366,9 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
         <div style={{ marginTop: 26 }}>
           <div className="lbl" style={{ marginBottom: 8 }}>How we work this out</div>
           <p className="tiny" style={{ maxWidth: "var(--m-body)" }}>
-            Two filters. First, how the payment provider reaches your country: 44 countries can sign up directly,
-            2 are sales-contact only, and 5 run on a different company&rsquo;s platform whose rules we have not read.
+            Two filters. First, how the payment provider reaches your country: 43 countries can sign up directly,
+            2 are sales-contact only, 5 run on a different company&rsquo;s platform whose rules we have not read, and
+            Brazil is supported but only for account holders of 18 or over.
             Second, the age at which you can enter a binding contract where you live, because the provider&rsquo;s terms
             defer to local law rather than assuming 18. Scotland is 16, seven Canadian provinces and territories
             are 19, Mississippi is 21, and Singapore separates contracting age from adulthood entirely.

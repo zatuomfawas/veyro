@@ -1,8 +1,8 @@
+import Link from "next/link";
 import { buildMetadata, buildViewport } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
-import Link from "next/link";
 
 export const metadata = buildMetadata("how");
 export const viewport = buildViewport();
@@ -12,6 +12,57 @@ export const viewport = buildViewport();
 // there is no "use client" here and no interactivity beyond links.
 
 const UPDATED = "13 September 2026";
+const REPLY_DATE = "8 September 2026";
+
+const HELP_AGE = "https://support.stripe.com/questions/age-requirement-to-create-a-stripe-account";
+const HELP_VERIFY =
+  "https://support.stripe.com/questions/us-verification-requirements-for-platforms-with-custom-accounts-faq";
+
+// Quoted material, kept in one place and verbatim, so it can be checked against
+// the original at a glance rather than hunted through JSX.
+const Q_CORE =
+  "A user who is at least 13 years old can create a Connect account, and where the user is " +
+  "under 18, the required parent or legal guardian involvement must be completed through " +
+  "Stripe's onboarding process before the account can accept charges or receive payouts.";
+
+const Q_TYPES =
+  "The current guidance is that Standard, Express, and Custom Connect accounts can support " +
+  "users aged 13–17 with legal guardian involvement, subject to country availability. If you " +
+  "have come across older information indicating an 18+ minimum for Express or Custom accounts, " +
+  "please follow the current Help Center guidance.";
+
+const Q_COUNTRIES =
+  "For your planned launch countries, the US is supported under this process. Country-specific " +
+  "requirements may apply, and availability for certain minor onboarding flows can vary by " +
+  "country. Brazil remains an exception where users must be at least 18 years old.";
+
+const Q_ONBOARDING =
+  "We recommend using Stripe-hosted onboarding or embedded onboarding components so that Stripe " +
+  "can collect and verify the required information directly. These onboarding flows automatically " +
+  "reflect current verification and compliance requirements.";
+
+const Q_ARCHITECTURE =
+  "From the architecture you've outlined, using Stripe-hosted onboarding for identity " +
+  "verification while not handling identity documents, banking credentials, or funds directly is " +
+  "the recommended approach.";
+
+function Quote({ children }: { children: React.ReactNode }) {
+  return (
+    <blockquote
+      style={{
+        margin: "16px 0 0",
+        padding: "2px 0 2px 20px",
+        borderLeft: "2px solid var(--brand)",
+        fontSize: "var(--fs-4)",
+        lineHeight: 1.6,
+        color: "var(--ink)",
+        maxWidth: "var(--m-body)",
+      }}
+    >
+      {children}
+    </blockquote>
+  );
+}
 
 export default function HowItWorks() {
   return (
@@ -34,11 +85,13 @@ export default function HowItWorks() {
           We asked Stripe whether under-18s can take payments. Here&rsquo;s their answer.
         </h1>
         <p className="lead" style={{ marginTop: 14 }}>
-          The internet is confident and wrong about this. The provider&rsquo;s own terms are public,
-          specific, and say something different. Here is what they say, what we asked, and what
-          building on it actually involved.
+          The internet is confident and wrong about this. So instead of reading more forum posts, we
+          described what we wanted to build and asked Stripe directly. They replied on {REPLY_DATE}.
+          Their answer is quoted below, including the part that corrected us.
         </p>
-        <p className="tiny" style={{ marginTop: 14 }}>Last checked {UPDATED}. Not legal or tax advice.</p>
+        <p className="tiny" style={{ marginTop: 14 }}>
+          Last checked {UPDATED}. Not legal or tax advice.
+        </p>
 
         <hr className="rule" style={{ margin: "32px 0" }} />
 
@@ -56,105 +109,117 @@ export default function HowItWorks() {
         </p>
 
         {/* ---------------------------------------------------------------- */}
-        <h2 className="h3" style={{ marginTop: 36 }}>What Stripe&rsquo;s agreement actually says</h2>
+        <h2 className="h3" style={{ marginTop: 36 }}>What we asked</h2>
         <p className="body" style={{ marginTop: 10 }}>
-          Two documents, both public, both checkable in about five minutes.
+          We wrote to Stripe support describing the model in plain terms — a platform onboarding
+          founders aged 13 to 17, with a parent or legal guardian as the adult on the account — and
+          asked four things: whether a platform may facilitate that at all, which Connect account
+          types support it, whether it is available in the countries we planned to launch in, and
+          whether our architecture, in which Stripe collects the identity documents and we never
+          touch them, was the right shape.
         </p>
-        <dl className="ruled" style={{ marginTop: 20 }}>
-          <div>
-            <dt>Stripe Services Agreement</dt>
-            <dd>
-              Under Age Restrictions, the floor is 13, not 18. A user under 18 may hold an account
-              provided an adult Representative is added to it — an adult who accepts liability for
-              that account.
-            </dd>
-          </div>
-          <div>
-            <dt>
-              Stripe support: &ldquo;Age requirement to create a Stripe account&rdquo;
-            </dt>
-            <dd>
-              More specific about account types. A <strong>Standard</strong> account can be created
-              from 13, with a legal guardian as the account owner, before the account takes charges
-              or pays out. <strong>Express</strong> and <strong>Custom</strong> Connect accounts are
-              18+ and block signup at the door.
-            </dd>
-          </div>
-        </dl>
-        <p className="body" style={{ marginTop: 20 }}>
-          So the accurate short answer is: <strong>from 13, on a Standard account, with an adult who
-          signs for it.</strong> Not on your own. Not impossible either.
+        <p className="tiny" style={{ marginTop: 10 }}>
+          That is a summary of our message, not a quotation of it. Everything attributed to Stripe
+          below is quoted exactly.
         </p>
-
-        <div className="panel" style={{ marginTop: 24, borderColor: "var(--amber-line)", background: "var(--amber-bg)", borderTop: "1px solid var(--amber-line)" }}>
-          <div className="lbl" style={{ marginBottom: 4 }}>Three things people collapse into one</div>
-          <p className="small">
-            What the provider&rsquo;s terms permit is not the same as what the law where you live
-            settles, and neither is the same as a specific platform&rsquo;s configuration having
-            been approved by the provider. We keep them apart everywhere on this site. Conflating
-            them is how someone ends up putting something untrue on a financial application.
-          </p>
-        </div>
 
         {/* ---------------------------------------------------------------- */}
-        <h2 className="h3" style={{ marginTop: 36 }}>The question we asked</h2>
-
-        <div className="statusblock sb-error" style={{ marginTop: 14 }}>
-          <div className="row" style={{ alignItems: "flex-start", gap: 12 }}>
-            <span className="sb-mark sb-mark-clay" />
-            <div>
-              <div className="sb-head">Draft — source not yet supplied</div>
-              <p className="sb-body">
-                This section quotes the message sent to Stripe verbatim, and the section below
-                quotes their reply. Neither is written yet, because the correspondence has not been
-                handed over. It will not be paraphrased, reconstructed from memory, or filled in
-                with something plausible. Publishing this page with these two sections invented
-                would destroy the only thing it is for.
-              </p>
-            </div>
-          </div>
-        </div>
-
         <h2 className="h3" style={{ marginTop: 36 }}>Their answer</h2>
-        <div className="statusblock sb-error" style={{ marginTop: 14 }}>
-          <div className="row" style={{ alignItems: "flex-start", gap: 12 }}>
-            <span className="sb-mark sb-mark-clay" />
-            <div>
-              <div className="sb-head">Draft — source not yet supplied</div>
-              <p className="sb-body">
-                Stripe&rsquo;s reply goes here, quoted exactly, with the date, who sent it, and an
-                honest note on what a support answer does and does not commit the company to.
-              </p>
-            </div>
-          </div>
+        <p className="body" style={{ marginTop: 10 }}>
+          The reply came from Arthur at Stripe Support on {REPLY_DATE}. The core of it:
+        </p>
+        <Quote>&ldquo;{Q_CORE}&rdquo;</Quote>
+        <p className="body" style={{ marginTop: 16 }}>
+          That sentence is what the rest of this site is built on. Thirteen, not eighteen. And the
+          guardian&rsquo;s involvement is not a formality bolted on afterwards — it has to be
+          completed through Stripe&rsquo;s own onboarding <em>before</em> the account can take a
+          single payment or send a single payout.
+        </p>
+
+        <h3 className="h4" style={{ marginTop: 26 }}>On account types, where they corrected us</h3>
+        <Quote>&ldquo;{Q_TYPES}&rdquo;</Quote>
+        <p className="body" style={{ marginTop: 16 }}>
+          We had been working from the older guidance. Every note in our own source files said
+          Express and Custom were 18+ and blocked signup at the door. Stripe says that is
+          superseded: all three account types support 13 to 17 with guardian involvement. We were
+          wrong, it came from a stale page, and we have corrected it here and in the checker rather
+          than quietly editing it out.
+        </p>
+
+        <h3 className="h4" style={{ marginTop: 26 }}>On countries</h3>
+        <Quote>&ldquo;{Q_COUNTRIES}&rdquo;</Quote>
+        <p className="body" style={{ marginTop: 16 }}>
+          Three separate facts in one paragraph, and we treat them separately. The US is{" "}
+          <strong>confirmed</strong>. Brazil is <strong>excluded</strong> — 18 or over, guardian or
+          no guardian, and the checker now says exactly that to anyone in Brazil who is younger.
+          Everywhere else, the UK included, sits under &ldquo;country-specific requirements may
+          apply&rdquo;: not refused, not confirmed either. We are not going to promote that to
+          confirmed because it would be convenient.
+        </p>
+
+        <h3 className="h4" style={{ marginTop: 26 }}>On how it should be built</h3>
+        <Quote>&ldquo;{Q_ONBOARDING}&rdquo;</Quote>
+        <Quote>&ldquo;{Q_ARCHITECTURE}&rdquo;</Quote>
+        <p className="body" style={{ marginTop: 16 }}>
+          This was the part we were most relieved by, because it was already the design. Identity
+          documents go to Stripe&rsquo;s hosted form, not to us. We never see a passport, a banking
+          credential, or the money. What we hold is the business, the guardian relationship, the
+          ledger and the record.
+        </p>
+
+        <div
+          className="panel"
+          style={{
+            marginTop: 24,
+            borderTop: "1px solid var(--amber-line)",
+            background: "var(--amber-bg)",
+          }}
+        >
+          <div className="lbl" style={{ marginBottom: 4 }}>What this reply is, and isn&rsquo;t</div>
+          <p className="small">
+            This is a support reply, not a legal guarantee — it reflects Stripe&rsquo;s current
+            guidance. Always check their Help Center for updates:{" "}
+            <a href={HELP_AGE} className="linkbtn" target="_blank" rel="noopener noreferrer">
+              age requirement to create a Stripe account
+            </a>{" "}
+            and{" "}
+            <a href={HELP_VERIFY} className="linkbtn" target="_blank" rel="noopener noreferrer">
+              verification requirements for platforms
+            </a>
+            . It also tells us what the provider permits, which is a different question from what
+            the law where you live settles — and neither is the same as a specific
+            platform&rsquo;s configuration having been approved.
+          </p>
         </div>
 
         {/* ---------------------------------------------------------------- */}
         <h2 className="h3" style={{ marginTop: 36 }}>What we found building it</h2>
         <p className="body" style={{ marginTop: 10 }}>
-          Reading the terms is one thing. Building on them is another. Four things we hit, in the
+          Getting an answer is one thing. Building on it is another. Four things we hit, in the
           order we hit them.
         </p>
 
         <ol className="numbered" style={{ marginTop: 20 }}>
           <li>
-            <span>The platform&rsquo;s own country limits which account types it can offer</span>
+            <span>Our own country decides which account types we can offer</span>
             <span>
-              Veyro&rsquo;s Stripe platform account is registered in the UAE, and Stripe does not
-              let UAE-registered platforms self-serve Express or Custom connected accounts. That
-              left Standard — which happens to be the only type the under-18 rule applies to. A
-              lucky constraint, not a designed one.
+              Stripe&rsquo;s reply says Standard, Express and Custom all support 13 to 17. We can
+              only use Standard — not because of the age rules, but because Veyro&rsquo;s platform
+              account is registered in the UAE, and Stripe does not let UAE-registered platforms
+              self-serve Express or Custom connected accounts. Two unrelated rules. The second one
+              is ours to live with.
             </span>
           </li>
           <li>
-            <span>Standard hands the account holder the keys</span>
+            <span>Standard hands the account holder the keys, and that costs you a promise</span>
             <span>
               A Standard connected account comes with a full Stripe dashboard and its own payout
-              schedule. The platform cannot hold the money, delay a payout, or approve one. That
-              changed what we are able to promise a guardian: they are notified of every payout and
-              get a permanent record of it. They do not get a veto, because on a Standard account
-              nobody can build them one. If another product tells you otherwise, ask which account
-              type it uses.
+              schedule. The platform cannot hold the money, delay a payout, or approve one. So your
+              guardian is notified of every payout and keeps a permanent record of it — they do not
+              get a veto. On Express or Custom we could build them one, which means the honest
+              version is that our platform&rsquo;s registration, not the under-18 rules, is why
+              that feature does not exist. If another product promises a guardian veto, ask which
+              account type it uses.
             </span>
           </li>
           <li>
@@ -190,13 +255,16 @@ export default function HowItWorks() {
 
         <h3 className="h4" style={{ marginTop: 22 }}>Can the provider reach your country at all?</h3>
         <p className="body" style={{ marginTop: 8 }}>
-          44 countries can sign up directly. Two — India and Indonesia — are preview only, meaning
+          43 countries can sign up directly. Two — India and Indonesia — are preview only, meaning
           you contact Stripe sales rather than signing up yourself, so there is no self-serve route
-          for us to build on. Five run through Paystack, Stripe&rsquo;s extended network, which is a
-          different company with different terms that we have not read and will not guess at.
+          for us to build on. Five run through Paystack, Stripe&rsquo;s extended network, a
+          different company with different terms that we have not read and will not guess at. And
+          Brazil is supported, but only for account holders of 18 or over.
         </p>
 
-        <h3 className="h4" style={{ marginTop: 22 }}>At what age can you sign a binding contract where you live?</h3>
+        <h3 className="h4" style={{ marginTop: 22 }}>
+          At what age can you sign a binding contract where you live?
+        </h3>
         <p className="body" style={{ marginTop: 8 }}>
           This is the one people miss. It is not 18 everywhere, and it is frequently not set
           nationally. Scotland is 16, under the Age of Legal Capacity (Scotland) Act 1991. Seven
@@ -206,24 +274,25 @@ export default function HowItWorks() {
         </p>
 
         <p className="body" style={{ marginTop: 16 }}>
-          We grade every country by how well we have actually checked it, and the checker shows you
-          the grade rather than hiding it:
+          The checker grades every country by how well it has actually been checked — the guidance
+          in the reply above for the provider half, a statute or official source for the local
+          contracting age — and it shows you the grade rather than hiding it:
         </p>
 
         <ul className="arrowlist" style={{ marginTop: 14 }}>
           <li>
-            <strong>United States and United Kingdom</strong> — age confirmed against a named
-            statute or an official body. The guardian route is open, and the checker says so
-            plainly.
+            <strong>United States</strong> — confirmed by Stripe in the reply above, and the
+            contracting age confirmed against a named source. The guardian route is open.
           </li>
           <li>
-            <strong>Most of Europe</strong> — the age itself comes from a primary source, but
-            whether a minor may hold the account locally with a guardian as representative has not
-            been reviewed. The checker says unverified, and means it.
+            <strong>Brazil</strong> — excluded. Stripe named it as the exception: 18 or over, full
+            stop. The checker says so rather than walking you into a rejection.
           </li>
           <li>
-            <strong>Brazil</strong> — Stripe supports Brazil, so the payments half works. The age is
-            from secondary summaries only and the rest is unchecked, so it reads as unverified too.
+            <strong>United Kingdom and most of Europe</strong> — the contracting age comes from a
+            primary source, but Stripe confirmed only the US by name and said availability can vary
+            by country. The provider half is unconfirmed, so the checker says unverified and means
+            it.
           </li>
           <li>
             <strong>Nigeria, Kenya, Ghana, South Africa, Côte d&rsquo;Ivoire</strong> — Paystack,
@@ -235,9 +304,9 @@ export default function HowItWorks() {
           <div className="lbl" style={{ marginBottom: 4 }}>The part that gates everything</div>
           <p className="small">
             Whether a minor may hold a payment account with a guardian as representative has not
-            been confirmed by a lawyer in <em>any</em> country, including the two above. Provider
-            policy permitting something is not the same as it being settled locally. We would rather
-            put that in the middle of our own article than bury it in a terms page.
+            been confirmed by a lawyer in <em>any</em> country, including the US. Provider policy
+            permitting something is not the same as it being settled locally. We would rather put
+            that in the middle of our own article than bury it in a terms page.
           </p>
         </div>
 
@@ -246,11 +315,15 @@ export default function HowItWorks() {
         <h2 className="h3">Find out what applies to you</h2>
         <p className="body" style={{ marginTop: 10 }}>
           Two questions — where you live and what year you were born. It runs in your browser, takes
-          about twenty seconds, and tells you when you don&rsquo;t need us at all.
+          about twenty seconds, and tells you when you don&rsquo;t need us at all. Its country data
+          comes from the guidance quoted above, plus a named source for the contracting age in each
+          country.
         </p>
         <div className="row" style={{ marginTop: 18, gap: 10, flexWrap: "wrap" }}>
           <Link className="btn btn-lg" href="/check">Check what applies to you</Link>
-          <Link className="btn btn-2 btn-lg" href="/">Back to home</Link>
+          <a className="btn btn-2 btn-lg" href={HELP_AGE} target="_blank" rel="noopener noreferrer">
+            Read Stripe&rsquo;s Help Center
+          </a>
         </div>
       </main>
 
