@@ -150,11 +150,13 @@ export default function HowItWorks() {
         <Quote>&ldquo;{Q_COUNTRIES}&rdquo;</Quote>
         <p className="body" style={{ marginTop: 16 }}>
           Three separate facts in one paragraph, and we treat them separately. The US is{" "}
-          <strong>confirmed</strong>. Brazil is <strong>excluded</strong> — 18 or over, guardian or
-          no guardian, and the checker now says exactly that to anyone in Brazil who is younger.
-          Everywhere else, the UK included, sits under &ldquo;country-specific requirements may
-          apply&rdquo;: not refused, not confirmed either. We are not going to promote that to
-          confirmed because it would be convenient.
+          <strong>confirmed by name</strong>. Brazil is <strong>excluded</strong> — 18 or over,
+          guardian or no guardian, and the checker says exactly that to anyone in Brazil who is
+          younger. Everywhere else sits under &ldquo;country-specific requirements may apply&rdquo;:
+          not refused, not individually confirmed either. The checker treats those as open, because
+          Stripe confirmed the mechanism and no country&rsquo;s law we have found prohibits it — but
+          it says plainly, in the result, that Stripe named only the US and that you would find out
+          for certain at the Stripe step.
         </p>
 
         <h3 className="h4" style={{ marginTop: 26 }}>On how it should be built</h3>
@@ -282,17 +284,18 @@ export default function HowItWorks() {
         <ul className="arrowlist" style={{ marginTop: 14 }}>
           <li>
             <strong>United States</strong> — confirmed by Stripe in the reply above, and the
-            contracting age confirmed against a named source. The guardian route is open.
+            contracting age confirmed against a named source. The strongest case we have.
           </li>
           <li>
             <strong>Brazil</strong> — excluded. Stripe named it as the exception: 18 or over, full
             stop. The checker says so rather than walking you into a rejection.
           </li>
           <li>
-            <strong>United Kingdom and most of Europe</strong> — the contracting age comes from a
-            primary source, but Stripe confirmed only the US by name and said availability can vary
-            by country. The provider half is unconfirmed, so the checker says unverified and means
-            it.
+            <strong>The United Kingdom, Europe and the rest of the self-serve list</strong> — open.
+            Stripe confirmed the mechanism, the local contracting age comes from a named source, and
+            we have found no law that prohibits a guardian being the adult on the account. What
+            Stripe would not confirm is availability country by country, so the checker says that in
+            the result rather than either hiding it or treating the whole country as unknown.
           </li>
           <li>
             <strong>Nigeria, Kenya, Ghana, South Africa, Côte d&rsquo;Ivoire</strong> — Paystack,
@@ -317,7 +320,8 @@ export default function HowItWorks() {
           Two questions — where you live and what year you were born. It runs in your browser, takes
           about twenty seconds, and tells you when you don&rsquo;t need us at all. Its country data
           comes from the guidance quoted above, plus a named source for the contracting age in each
-          country.
+          country. A country is treated as open unless its own law sets a higher age or the provider
+          carves it out.
         </p>
         <div className="row" style={{ marginTop: 18, gap: 10, flexWrap: "wrap" }}>
           <Link className="btn btn-lg" href="/check">Check what applies to you</Link>

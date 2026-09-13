@@ -154,6 +154,12 @@ const REGIONS: [string, string[]][] = [
           "Nova Scotia","Ontario","Quebec","Saskatchewan","Other territory"]],
   ["US", ["Alabama","Mississippi","Nebraska","Any other state"]],
 ];
+// Countries Stripe named explicitly in the 8 September 2026 reply. Everywhere
+// else the model is confirmed but the country is not, because the same reply
+// said "availability for certain minor onboarding flows can vary by country".
+// Add a code here only when Stripe confirms that country by name.
+const STRIPE_CONFIRMED = new Set<string>(["US"]);
+
 const REGION_AGE: Record<string, number> = {
   Scotland: 16, "British Columbia": 19, "New Brunswick": 19,
   "Newfoundland and Labrador": 19, "Nova Scotia": 19, "Other territory": 19,
@@ -162,7 +168,7 @@ const REGION_AGE: Record<string, number> = {
 
 type Route =
   | "no_country" | "extended" | "preview" | "adults_only"
-  | "too_young" | "adult" | "guardian" | "review" | "unverified";
+  | "too_young" | "adult" | "guardian";
 
 type EligibilityResult = {
   route: Route;
@@ -193,9 +199,13 @@ function eligibility(code: string, age: number | null, region: string): Eligibil
   }
   if (age !== null && age < 13) return { ...ctx, route: "too_young" };
   if (age !== null && age >= majority) return { ...ctx, route: "adult" };
-  if (tier === 1) return { ...ctx, route: "guardian" };
-  if (tier === 2) return { ...ctx, route: "review" };
-  return { ...ctx, route: "unverified" };
+  // Open by default. Stripe confirmed the mechanism itself — 13+, with the
+  // guardian's involvement completed through Stripe's own onboarding — so the
+  // route stands unless something explicitly says otherwise for this country:
+  // a higher local age (handled above), a provider carve-out like Brazil, or a
+  // different provider entirely. Tier is no longer a gate; it only decides how
+  // strongly the outcome is worded.
+  return { ...ctx, route: "guardian" };
 }
 
 function EligibilityCheck({ go }: { go: (route: string) => void }) {
@@ -256,6 +266,14 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
                 You&rsquo;re {age}, so the payment provider needs a parent or legal guardian added as the account owner
                 before the account can take charges or pay out. That adult accepts responsibility for the account. We walk both of you through it
                 and keep the records afterwards.
+                {STRIPE_CONFIRMED.has(R.country?.[0] ?? "") ? (
+                  <> Stripe confirmed {R.country?.[1]} by name when we asked them directly.</>
+                ) : (
+                  <> One thing we can&rsquo;t promise: Stripe confirmed how this works in general, but told us
+                  availability can vary by country and named only the US. Nothing in {R.country?.[1]}&rsquo;s law
+                  stops it, and you would find out for certain at the Stripe step — before any money moves, and
+                  before anyone has committed to anything.</>
+                )}
               </Notice>
             )}
             {R.route === "adult" && (
@@ -265,21 +283,6 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
                 You can open a payment account in your own name directly with a provider. We exist for
                 founders who are blocked by the age rule. If you run a programme for founders who are, that&rsquo;s a
                 different conversation.
-              </Notice>
-            )}
-            {R.route === "review" && (
-              <Notice tone="amber" head={"Not open in " + R.country?.[1] + " yet"}>
-                The provider supports businesses in {R.country?.[1]} and the age rules look workable, but we haven&rsquo;t had
-                minors&rsquo; contracting rules reviewed locally. We won&rsquo;t take you through setup on a guess. This is on our
-                list, and it&rsquo;s the honest position today.
-              </Notice>
-            )}
-            {R.route === "unverified" && (
-              <Notice tone="amber" head={"Unverified in " + R.country?.[1]}>
-                The provider supports businesses in {R.country?.[1]}, so the payments half works. What we have not
-                checked is whether a minor can be the account holder there with a guardian representative, and what
-                that means for tax. Two of the 45 supported countries we&rsquo;ve looked at have a different age of
-                adulthood than you&rsquo;d expect, so guessing is not good enough.
               </Notice>
             )}
             {R.route === "extended" && (
@@ -318,7 +321,7 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
                 somewhere else to get past it.
               </Notice>
             )}
-            {(["no_country", "review", "unverified", "preview", "extended", "adults_only"] as Route[]).includes(R.route) && (
+            {(["no_country", "preview", "extended", "adults_only"] as Route[]).includes(R.route) && (
               <div className="panel" style={{ marginTop: "var(--sp-4)" }}>
                 <div className="lbl" style={{ marginBottom: "var(--sp-1)" }}>What you can still do</div>
                 <p className="small">
@@ -340,7 +343,7 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
               </div>
             )}
 
-            {(["guardian", "adult", "review", "unverified", "preview", "extended", "adults_only"] as Route[]).includes(R.route) && (
+            {(["guardian", "adult", "preview", "extended", "adults_only"] as Route[]).includes(R.route) && (
               <div className="panel" style={{ marginTop: 12 }}>
                 {R.note && <>
                   <div className="lbl" style={{ marginBottom: 4 }}>Worth knowing about {R.country?.[1]}</div>
@@ -366,14 +369,16 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
         <div style={{ marginTop: 26 }}>
           <div className="lbl" style={{ marginBottom: 8 }}>How we work this out</div>
           <p className="tiny" style={{ maxWidth: "var(--m-body)" }}>
-            Two filters. First, how the payment provider reaches your country: 43 countries can sign up directly,
-            2 are sales-contact only, 5 run on a different company&rsquo;s platform whose rules we have not read, and
-            Brazil is supported but only for account holders of 18 or over.
-            Second, the age at which you can enter a binding contract where you live, because the provider&rsquo;s terms
-            defer to local law rather than assuming 18. Scotland is 16, seven Canadian provinces and territories
-            are 19, Mississippi is 21, and Singapore separates contracting age from adulthood entirely.
-            Verified against the provider&rsquo;s own availability page on 5 September 2026. Terms change, and none of
-            this is legal or tax advice.
+            Two filters, and a default. First, how the payment provider reaches your country: 43 countries can sign
+            up directly, 2 are sales-contact only, 5 run on a different company&rsquo;s platform whose rules we have
+            not read, and Brazil is supported but only for account holders of 18 or over. Second, the age at which you
+            can enter a binding contract where you live, because the provider&rsquo;s terms defer to local law rather
+            than assuming 18. Scotland is 16, seven Canadian provinces and territories are 19, Mississippi is 21, and
+            Singapore separates contracting age from adulthood entirely. Beyond those two, the route is treated as
+            open: Stripe confirmed the mechanism to us directly on 8 September 2026, so we do not mark a country
+            closed unless its own law sets a higher age or the provider carves it out. What Stripe would not confirm
+            is availability country by country, and the result above says so where it applies. Terms change, and none
+            of this is legal or tax advice.
           </p>
         </div>
       </div>
