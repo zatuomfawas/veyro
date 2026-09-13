@@ -18,7 +18,13 @@
 
 import type { Metadata, Viewport } from "next";
 
-export const SITE = "https://veyro.com";
+// The live domain. This is what every canonical, og:url, sitemap entry and the
+// robots.txt Host line resolve against, so it has to be the domain people
+// actually reach — a wrong value here tells search engines the real copy of
+// every page lives somewhere else, which is worse than having no canonical at
+// all. Overridable per environment, but it defaults to production on purpose:
+// a preview deployment should still name production as canonical.
+export const SITE = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://withveyro.com").replace(/\/$/, "");
 export const BRAND_COLOR = "#1e4636";
 
 // The mark, as a data URI — identical to prototype/veyro.jsx's FAVICON constant.
