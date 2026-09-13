@@ -260,26 +260,39 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
         {R && (
           <div style={{ marginTop: 16 }}>
             {R.route === "guardian" && (
-              <Notice tone="pine" head="This route is open to you"
+              <Notice tone="pine" head={"Verified in " + (R.region || R.country?.[1])}
                 action={<Btn size="sm" onClick={() => go("signup")}>Start setup</Btn>}>
-                In {R.region || R.country?.[1]} you can sign a binding contract in your own name from {R.majority}.
-                You&rsquo;re {age}, so the payment provider needs a parent or legal guardian added as the account owner
-                before the account can take charges or pay out. That adult accepts responsibility for the account. We walk both of you through it
-                and keep the records afterwards.
-                {STRIPE_CONFIRMED.has(R.country?.[0] ?? "") ? (
-                  <> Stripe confirmed {R.country?.[1]} by name when we asked them directly.</>
-                ) : (
-                  <> One thing we can&rsquo;t promise: Stripe confirmed how this works in general, but told us
-                  availability can vary by country and named only the US. Nothing in {R.country?.[1]}&rsquo;s law
-                  stops it, and you would find out for certain at the Stripe step — before any money moves, and
-                  before anyone has committed to anything.</>
-                )}
+                <p>
+                  {R.country?.[1]} is on the payment provider&rsquo;s supported list, and this route is open to you.
+                  In {R.region || R.country?.[1]} you can sign a binding contract in your own name from{" "}
+                  {R.majority}; you&rsquo;re {age}, so a parent or legal guardian is named as the adult on the payment
+                  account before it can take charges or pay out. They pass the provider&rsquo;s identity checks and
+                  accept responsibility for the account, which is what the provider requires and what makes the rest of
+                  it legitimate. You keep running the business. We walk both of you through the setup and keep the
+                  record of who agreed to what, and when.
+                </p>
+                <p style={{ marginTop: 10 }}>
+                  {STRIPE_CONFIRMED.has(R.country?.[0] ?? "") ? (
+                    <>Stripe confirmed {R.country?.[1]} by name when we asked them directly on 8 September 2026, and
+                    the age above comes from {R.evidence === "primary" ? "a named statute or an official body"
+                      : R.evidence === "disputed" ? "sources that disagree, so we use the higher figure"
+                      : "secondary summaries"}. This is the strongest case we have.</>
+                  ) : (
+                    <>Stripe confirmed how this works in general — 13 and over, with the guardian&rsquo;s involvement
+                    completed through their own onboarding — and we have found nothing in {R.country?.[1]}&rsquo;s law
+                    that prevents it. What they would not confirm is availability country by country; they named only
+                    the US. So you would find out for certain at the Stripe step, before any money moves and before
+                    anyone has committed to anything.</>
+                  )}
+                </p>
               </Notice>
             )}
             {R.route === "adult" && (
               <Notice tone="grey" head="You don't need us for this"
                 action={<Btn size="sm" variant="2" onClick={() => go("landing")}>Understood</Btn>}>
-                You&rsquo;re {age}, and you can contract in your own name in {R.region || R.country?.[1]} from {R.majority}.
+                {R.country?.[1]} is supported by the payment provider, and at your age none of this applies to you
+                anyway. You&rsquo;re {age}, and you can contract in your own name in {R.region || R.country?.[1]} from{" "}
+                {R.majority}.
                 You can open a payment account in your own name directly with a provider. We exist for
                 founders who are blocked by the age rule. If you run a programme for founders who are, that&rsquo;s a
                 different conversation.
