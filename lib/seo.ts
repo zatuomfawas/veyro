@@ -99,9 +99,9 @@ export const SEO_ROUTES: Record<SeoRouteKey, SeoRoute> = {
     title: "Veyro pricing, free to start",
     desc: "Veyro is free for your first business. Pro adds multiple businesses, analytics and exportable financial records.",
   },
-  signin: { path: "/sign-in", title: "Sign in, Veyro", desc: "Sign in to your Veyro founder or guardian account.", noindex: true },
+  signin: { path: "/auth/signin", title: "Sign in, Veyro", desc: "Sign in to your Veyro founder or guardian account.", noindex: true },
   signup: {
-    path: "/start",
+    path: "/auth/signup",
     title: "Start building, Veyro",
     desc: "Create your Veyro account and set up the financial side of your business in a few minutes.",
     noindex: true,

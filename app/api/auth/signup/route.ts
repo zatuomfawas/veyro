@@ -5,6 +5,9 @@ import { db } from "@/lib/db";
 import { hashPassword, createSession, audit } from "@/lib/auth";
 import { evaluateDateOfBirth, MIN_SIGNUP_AGE } from "@/lib/age";
 
+/** Founders may be 13+. A guardian must be a legal adult. */
+const GUARDIAN_MIN_AGE = 18;
+
 const cap = (v: unknown, max: number) => String(v ?? "").trim().slice(0, max);
 
 export async function POST(req: Request) {
@@ -34,6 +37,17 @@ export async function POST(req: Request) {
   if (password.length < 10) errors.password = "Use at least 10 characters. A short sentence is fine.";
   if (name.length < 2) errors.name = "Enter the name your guardian will recognise.";
   if (!country) errors.country = "We need this to know which rules apply to you.";
+
+  // A guardian is the adult who becomes the verified individual on the Stripe
+  // account and accepts liability for it. The provider's floor of 13 is the
+  // wrong test for them: a 14-year-old "guardian" would sail through signup and
+  // only be caught later, by a failed identity check, after an account had been
+  // opened and an invite accepted.
+  if (role === "GUARDIAN" && dob.ok && dob.age < GUARDIAN_MIN_AGE) {
+    errors.dateOfBirth =
+      `A parent or guardian has to be at least ${GUARDIAN_MIN_AGE}. They are the adult named on `
+      + "the payment account, and the payment provider verifies their identity.";
+  }
 
   if (!dob.ok) {
     errors.dateOfBirth =
