@@ -12,10 +12,14 @@
 //   3. Act on the event type. Every handler is idempotent.
 //   4. Stamp processedAt.
 //
-// payout.* events are deliberately not handled. On a Standard account those
-// describe the connected account paying itself out, which is a different thing
-// from FounderPayoutRequest (the founder asking us to send money). Forcing one
-// into the other would corrupt the balance foldWallet derives.
+// payment_intent.succeeded is what creates a FounderTransaction. charge.* is
+// deliberately ignored: one payment emits several events, so treating more than
+// one as "money arrived" double-posts it.
+//
+// payout.* is ignored too. On a Standard account those describe the connected
+// account paying itself out, which is a different thing from
+// FounderPayoutRequest (the founder asking us to send money). Forcing one into
+// the other would corrupt the balance foldWallet derives.
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
@@ -63,6 +67,81 @@ async function notifyIndividualMismatch(founderId: string): Promise<void> {
       }),
     ),
   );
+}
+
+/**
+ * Record a completed payment. This is the ONLY place a FounderTransaction is
+ * created — the customer's browser is never trusted to say a payment happened.
+ *
+ * Only payment_intent.succeeded is handled, not charge.succeeded: one payment
+ * emits several events, and treating more than one of them as "money arrived"
+ * would post the same charge twice under different event ids.
+ */
+async function recordPayment(event: Stripe.Event): Promise<void> {
+  const intent = event.data.object as Stripe.PaymentIntent;
+
+  // Direct charges arrive on the connected account, so event.account is the
+  // authority on whose money this is. Metadata says the same thing; if they
+  // disagree, something is wrong and we credit nobody.
+  const acctId = event.account;
+  if (!acctId) return; // a platform-account payment, not a founder's
+
+  const ownerId = await founderForAccount(acctId);
+  if (!ownerId) return; // not an account we know about
+
+  const founderId = intent.metadata?.veyroFounderId;
+  const productId = intent.metadata?.veyroProductId;
+  if (!founderId || !productId) {
+    console.warn(`PaymentIntent ${intent.id} has no Veyro metadata; not recorded.`);
+    return;
+  }
+  if (founderId !== ownerId) {
+    console.error(
+      `PaymentIntent ${intent.id} metadata names founder ${founderId} but arrived on `
+      + `${acctId}, which belongs to ${ownerId}. Not recorded.`,
+    );
+    await audit(null, "payment.attribution_mismatch", intent.id, ownerId, {
+      metadataFounderId: founderId, accountFounderId: ownerId,
+    });
+    return;
+  }
+
+  // The product has to still exist and still belong to this founder.
+  const product = await db.founderProduct.findUnique({ where: { id: productId } });
+  if (!product || product.founderId !== founderId) {
+    console.error(`PaymentIntent ${intent.id} names product ${productId}, which does not match.`);
+    return;
+  }
+
+  try {
+    const tx = await db.founderTransaction.create({
+      data: {
+        founderId,
+        productId,
+        amountMinor: intent.amount_received || intent.amount,
+        currency: intent.currency.toUpperCase(),
+        status: "COMPLETED",
+        stripePaymentIntentId: intent.id,
+      },
+    });
+    await audit(null, "payment.completed", tx.id, founderId, {
+      amountMinor: tx.amountMinor, currency: tx.currency, paymentIntentId: intent.id,
+    });
+    await db.notification.create({
+      data: {
+        userId: founderId,
+        title: "You got paid",
+        body: `${(tx.amountMinor / 100).toFixed(2)} ${tx.currency} for ${product.name}.`,
+        routeName: "founder.transactions",
+        routeId: founderId,
+      },
+    });
+  } catch (err) {
+    // Unique on stripePaymentIntentId: this payment is already recorded, which
+    // is the answer we want from a redelivery, not an error.
+    if ((err as { code?: string }).code === "P2002") return;
+    throw err;
+  }
 }
 
 /** Which founder owns this Stripe connected account, if any. */
@@ -142,6 +221,8 @@ export async function POST(req: Request) {
     } else if (ACCOUNT_PROGRESS_EVENTS.has(event.type)) {
       const founderId = event.account ? await founderForAccount(event.account) : null;
       if (founderId) await syncAndAudit(founderId);
+    } else if (event.type === "payment_intent.succeeded") {
+      await recordPayment(event);
     } else if (event.type === "account.application.deauthorized") {
       // On Connect events the connected account id is on the event, not the object.
       const acctId = event.account ?? null;

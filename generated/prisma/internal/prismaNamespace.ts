@@ -1258,7 +1258,7 @@ export const FounderTransactionScalarFieldEnum = {
   amountMinor: 'amountMinor',
   currency: 'currency',
   status: 'status',
-  stripeEventId: 'stripeEventId',
+  stripePaymentIntentId: 'stripePaymentIntentId',
   createdAt: 'createdAt'
 } as const
 

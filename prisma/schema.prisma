@@ -127,9 +127,13 @@ model FounderTransaction {
   currency    String                   @default("USD") @db.Char(3)
   status      FounderTransactionStatus @default(PENDING)
 
-  // Stripe's own event id. Unique so a replayed webhook cannot double-post money.
-  stripeEventId String   @unique
-  createdAt     DateTime @default(now())
+  // The PaymentIntent, not the webhook event. One payment is one row: a single
+  // payment emits several events (payment_intent.succeeded, charge.succeeded,
+  // charge.updated...), so keying on event id would let one charge post twice
+  // under two different ids. Webhook replay is deduped separately, by
+  // WebhookEvent[provider, providerRef].
+  stripePaymentIntentId String   @unique
+  createdAt             DateTime @default(now())
 
   @@index([founderId, createdAt])
   @@index([founderId, status])
