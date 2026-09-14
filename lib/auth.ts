@@ -65,42 +65,42 @@ export async function endSession() {
 
 /* ---------------- Authorisation ----------------
    Every one of these asks the database, not the request. A client can claim
-   anything; only these answers count. */
+   anything; only these answers count.
 
-/** A founder may act on a business only if they own it. */
-export async function canActOnBusiness(userId: string, businessId: string) {
-  const b = await db.business.findUnique({ where: { id: businessId } });
-  return !!b && b.founderId === userId && !b.archivedAt;
+   Scope is the founder. A guardian reaches a founder's data only through a
+   GuardianConsent that has actually been consented to and has not expired. */
+
+/** Consent that is accepted and still in force. Null expiresAt means no expiry. */
+function activeConsentWhere(founderId: string, guardianId: string) {
+  return {
+    founderId,
+    guardianId,
+    consentedAt: { not: null },
+    OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
+  };
 }
 
-/** A guardian may read a business only through an accepted relationship. */
-export async function canViewBusiness(userId: string, businessId: string) {
-  if (await canActOnBusiness(userId, businessId)) return true;
-  const rel = await db.guardianRelationship.findUnique({ where: { businessId } });
-  return !!rel && rel.guardianId === userId && rel.status === "ACCEPTED";
+/** The founder themselves, or the guardian who has consented for them. */
+export async function canActOnFounder(userId: string, founderId: string) {
+  if (userId === founderId) {
+    const self = await db.user.findUnique({ where: { id: founderId } });
+    return !!self && !self.deletedAt;
+  }
+  return isGuardianOf(userId, founderId);
 }
 
-/** Only the guardian approves. A founder approving their own payout would make
-    the consent record worthless, which is the one thing this product sells. */
-export async function canApprove(userId: string, businessId: string) {
-  const rel = await db.guardianRelationship.findUnique({ where: { businessId } });
-  return !!rel && rel.guardianId === userId && rel.status === "ACCEPTED";
-}
-
-/** The ACCEPTED guardian relationship in which `userId` is the guardian of
-    `businessId`, or null. Use this where an action is the guardian's alone —
-    opening the Stripe account, where the guardian must be the verified adult,
-    not the (possibly minor) founder. */
-export async function guardianRelationshipFor(userId: string, businessId: string) {
-  const rel = await db.guardianRelationship.findUnique({ where: { businessId } });
-  if (!rel || rel.status !== "ACCEPTED" || rel.guardianId !== userId) return null;
-  return rel;
+/** The guardian of record for this founder, and nobody else. */
+export async function isGuardianOf(userId: string, founderId: string) {
+  const consent = await db.guardianConsent.findFirst({
+    where: activeConsentWhere(founderId, userId),
+  });
+  return !!consent;
 }
 
 /** Append-only. There is deliberately no update or delete path. */
 export function audit(actorId: string | null, action: string, target: string,
-                      businessId?: string, metadata: object = {}) {
+                      founderId?: string, metadata: object = {}) {
   return db.auditEvent.create({
-    data: { actorId, action, target, businessId, metadata: metadata as never },
+    data: { actorId, action, target, founderId, metadata: metadata as never },
   });
 }

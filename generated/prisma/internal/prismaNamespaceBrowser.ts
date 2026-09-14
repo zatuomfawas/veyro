@@ -53,11 +53,11 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Session: 'Session',
-  Business: 'Business',
-  GuardianRelationship: 'GuardianRelationship',
-  PaymentAccount: 'PaymentAccount',
-  LedgerEntry: 'LedgerEntry',
-  Payout: 'Payout',
+  FounderProduct: 'FounderProduct',
+  FounderTransaction: 'FounderTransaction',
+  FounderPayoutRequest: 'FounderPayoutRequest',
+  GuardianConsent: 'GuardianConsent',
+  FounderPaymentAccount: 'FounderPaymentAccount',
   Notification: 'Notification',
   AuditEvent: 'AuditEvent',
   WebhookEvent: 'WebhookEvent'
@@ -110,108 +110,77 @@ export const SessionScalarFieldEnum = {
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
 
 
-export const BusinessScalarFieldEnum = {
+export const FounderProductScalarFieldEnum = {
   id: 'id',
   founderId: 'founderId',
   name: 'name',
-  type: 'type',
-  url: 'url',
   description: 'description',
-  revenueModel: 'revenueModel',
   priceMinor: 'priceMinor',
   currency: 'currency',
-  countryCode: 'countryCode',
-  createdAt: 'createdAt',
-  archivedAt: 'archivedAt'
-} as const
-
-export type BusinessScalarFieldEnum = (typeof BusinessScalarFieldEnum)[keyof typeof BusinessScalarFieldEnum]
-
-
-export const GuardianRelationshipScalarFieldEnum = {
-  id: 'id',
-  businessId: 'businessId',
-  guardianId: 'guardianId',
-  invitedName: 'invitedName',
-  invitedEmail: 'invitedEmail',
-  relation: 'relation',
+  priceRecurring: 'priceRecurring',
   status: 'status',
-  tokenHash: 'tokenHash',
-  sentAt: 'sentAt',
-  expiresAt: 'expiresAt',
-  respondedAt: 'respondedAt',
-  endedAt: 'endedAt',
-  approvePayouts: 'approvePayouts',
-  payoutThresholdMinor: 'payoutThresholdMinor',
-  approveProviderChanges: 'approveProviderChanges'
+  createdAt: 'createdAt'
 } as const
 
-export type GuardianRelationshipScalarFieldEnum = (typeof GuardianRelationshipScalarFieldEnum)[keyof typeof GuardianRelationshipScalarFieldEnum]
+export type FounderProductScalarFieldEnum = (typeof FounderProductScalarFieldEnum)[keyof typeof FounderProductScalarFieldEnum]
 
 
-export const PaymentAccountScalarFieldEnum = {
+export const FounderTransactionScalarFieldEnum = {
   id: 'id',
-  businessId: 'businessId',
+  founderId: 'founderId',
+  productId: 'productId',
+  amountMinor: 'amountMinor',
+  currency: 'currency',
+  status: 'status',
+  stripeEventId: 'stripeEventId',
+  createdAt: 'createdAt'
+} as const
+
+export type FounderTransactionScalarFieldEnum = (typeof FounderTransactionScalarFieldEnum)[keyof typeof FounderTransactionScalarFieldEnum]
+
+
+export const FounderPayoutRequestScalarFieldEnum = {
+  id: 'id',
+  founderId: 'founderId',
+  amountMinor: 'amountMinor',
+  currency: 'currency',
+  status: 'status',
+  createdAt: 'createdAt'
+} as const
+
+export type FounderPayoutRequestScalarFieldEnum = (typeof FounderPayoutRequestScalarFieldEnum)[keyof typeof FounderPayoutRequestScalarFieldEnum]
+
+
+export const GuardianConsentScalarFieldEnum = {
+  id: 'id',
+  founderId: 'founderId',
+  guardianId: 'guardianId',
+  invitedEmail: 'invitedEmail',
+  tokenHash: 'tokenHash',
+  invitedAt: 'invitedAt',
+  inviteExpiresAt: 'inviteExpiresAt',
+  respondedAt: 'respondedAt',
+  consentedAt: 'consentedAt',
+  expiresAt: 'expiresAt'
+} as const
+
+export type GuardianConsentScalarFieldEnum = (typeof GuardianConsentScalarFieldEnum)[keyof typeof GuardianConsentScalarFieldEnum]
+
+
+export const FounderPaymentAccountScalarFieldEnum = {
+  id: 'id',
+  founderId: 'founderId',
   provider: 'provider',
   providerAccountId: 'providerAccountId',
   status: 'status',
   representativeUserId: 'representativeUserId',
   requirementsDue: 'requirementsDue',
-  settlementDays: 'settlementDays',
-  destinationBankName: 'destinationBankName',
-  destinationLast4: 'destinationLast4',
-  destinationVerified: 'destinationVerified',
   connectedAt: 'connectedAt',
   disconnectedAt: 'disconnectedAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type PaymentAccountScalarFieldEnum = (typeof PaymentAccountScalarFieldEnum)[keyof typeof PaymentAccountScalarFieldEnum]
-
-
-export const LedgerEntryScalarFieldEnum = {
-  id: 'id',
-  businessId: 'businessId',
-  parentId: 'parentId',
-  kind: 'kind',
-  bucket: 'bucket',
-  status: 'status',
-  grossMinor: 'grossMinor',
-  feeMinor: 'feeMinor',
-  netMinor: 'netMinor',
-  refundedMinor: 'refundedMinor',
-  currency: 'currency',
-  customerRef: 'customerRef',
-  description: 'description',
-  availableOn: 'availableOn',
-  isSandbox: 'isSandbox',
-  providerRef: 'providerRef',
-  createdAt: 'createdAt'
-} as const
-
-export type LedgerEntryScalarFieldEnum = (typeof LedgerEntryScalarFieldEnum)[keyof typeof LedgerEntryScalarFieldEnum]
-
-
-export const PayoutScalarFieldEnum = {
-  id: 'id',
-  businessId: 'businessId',
-  amountMinor: 'amountMinor',
-  currency: 'currency',
-  status: 'status',
-  destination: 'destination',
-  requestedById: 'requestedById',
-  approvedById: 'approvedById',
-  requestedAt: 'requestedAt',
-  approvedAt: 'approvedAt',
-  sentAt: 'sentAt',
-  completedAt: 'completedAt',
-  failureCode: 'failureCode',
-  failureText: 'failureText',
-  providerRef: 'providerRef',
-  isSandbox: 'isSandbox'
-} as const
-
-export type PayoutScalarFieldEnum = (typeof PayoutScalarFieldEnum)[keyof typeof PayoutScalarFieldEnum]
+export type FounderPaymentAccountScalarFieldEnum = (typeof FounderPaymentAccountScalarFieldEnum)[keyof typeof FounderPaymentAccountScalarFieldEnum]
 
 
 export const NotificationScalarFieldEnum = {
@@ -231,7 +200,7 @@ export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[k
 export const AuditEventScalarFieldEnum = {
   id: 'id',
   actorId: 'actorId',
-  businessId: 'businessId',
+  founderId: 'founderId',
   action: 'action',
   target: 'target',
   metadata: 'metadata',

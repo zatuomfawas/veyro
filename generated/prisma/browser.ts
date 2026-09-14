@@ -28,30 +28,30 @@ export type User = Prisma.UserModel
  */
 export type Session = Prisma.SessionModel
 /**
- * Model Business
+ * Model FounderProduct
  * 
  */
-export type Business = Prisma.BusinessModel
+export type FounderProduct = Prisma.FounderProductModel
 /**
- * Model GuardianRelationship
+ * Model FounderTransaction
  * 
  */
-export type GuardianRelationship = Prisma.GuardianRelationshipModel
+export type FounderTransaction = Prisma.FounderTransactionModel
 /**
- * Model PaymentAccount
+ * Model FounderPayoutRequest
  * 
  */
-export type PaymentAccount = Prisma.PaymentAccountModel
+export type FounderPayoutRequest = Prisma.FounderPayoutRequestModel
 /**
- * Model LedgerEntry
+ * Model GuardianConsent
  * 
  */
-export type LedgerEntry = Prisma.LedgerEntryModel
+export type GuardianConsent = Prisma.GuardianConsentModel
 /**
- * Model Payout
+ * Model FounderPaymentAccount
  * 
  */
-export type Payout = Prisma.PayoutModel
+export type FounderPaymentAccount = Prisma.FounderPaymentAccountModel
 /**
  * Model Notification
  * 

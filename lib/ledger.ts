@@ -1,43 +1,99 @@
-// The ledger, server-side and unchanged from the prototype.
+// The ledger, server-side.
 //
-// A balance is never stored. Every figure is folded from the entry list, which
-// means the wallet cannot silently drift away from the transactions that made
-// it. The client is sent the result; it never computes one.
+// A balance is never stored. Every figure is folded from the founder's own
+// transactions and payout requests, which means the wallet cannot silently
+// drift away from the records that made it. The client is sent the result; it
+// never computes one.
+//
+// Folded per currency, deliberately. The previous business-scoped version
+// summed every row into one number regardless of currency, which would happily
+// add ¥1000 to $10.00 and report 2000 of nothing.
 import { db } from "./db";
 
-const OPEN_PAYOUTS = ["AWAITING_APPROVAL", "IN_TRANSIT"] as const;
+export type CurrencyFold = {
+  currency: string;
+  /** Customers paid this, and it completed. */
+  earned: number;
+  /** Sent back to customers. */
+  refunded: number;
+  /** Completed but not yet counted as earned — still settling at the provider. */
+  pending: number;
+  /** Requested or approved, not yet sent. Committed, so it cannot be spent twice. */
+  reserved: number;
+  /** Actually sent to the bank. */
+  paidOut: number;
+  /** earned - refunded - reserved - paidOut. The only figure a payout may draw on. */
+  available: number;
+  /**
+   * False means the fold disagrees with itself and the UI should say so rather
+   * than show a number nobody should trust.
+   */
+  balances: boolean;
+};
 
-export async function foldWallet(businessId: string) {
-  const [entries, payouts] = await Promise.all([
-    db.ledgerEntry.findMany({ where: { businessId } }),
-    db.payout.findMany({ where: { businessId } }),
+export type Wallet = {
+  founderId: string;
+  currencies: CurrencyFold[];
+  asOf: string;
+};
+
+const sum = <T,>(rows: T[], f: (row: T) => number) =>
+  rows.reduce((total, row) => total + (f(row) || 0), 0);
+
+export async function foldWallet(founderId: string): Promise<Wallet> {
+  const [transactions, payouts] = await Promise.all([
+    db.founderTransaction.findMany({ where: { founderId } }),
+    db.founderPayoutRequest.findMany({ where: { founderId } }),
   ]);
 
-  const sum = (f: (e: (typeof entries)[number]) => number) =>
-    entries.reduce((a, e) => a + (f(e) || 0), 0);
+  const codes = [
+    ...new Set([...transactions.map((t) => t.currency), ...payouts.map((p) => p.currency)]),
+  ].sort();
 
-  const revenue     = sum((e) => (e.kind === "CHARGE" ? e.grossMinor : 0));
-  const fees        = sum((e) => (e.kind === "CHARGE" ? e.feeMinor : 0));
-  const refunds     = -sum((e) => (e.kind === "REFUND" ? e.netMinor : 0));
-  const disputeLoss = -sum((e) => (e.kind === "DISPUTE_LOSS" ? e.netMinor : 0));
+  const currencies = codes.map((currency) => {
+    const tx = transactions.filter((t) => t.currency === currency);
+    const po = payouts.filter((p) => p.currency === currency);
 
-  const settledNet = sum((e) => (e.bucket === "AVAILABLE" ? e.netMinor : 0));
-  const pending    = sum((e) => (e.bucket === "PENDING" ? e.netMinor : 0));
-  const held       = sum((e) => (e.bucket === "HELD" ? e.netMinor : 0));
+    const earned = sum(tx, (t) => (t.status === "COMPLETED" ? t.amountMinor : 0));
+    const refunded = sum(tx, (t) => (t.status === "REFUNDED" ? t.amountMinor : 0));
+    const pending = sum(tx, (t) => (t.status === "PENDING" ? t.amountMinor : 0));
 
-  const reserved = payouts.filter((p) => (OPEN_PAYOUTS as readonly string[]).includes(p.status))
-    .reduce((a, p) => a + p.amountMinor, 0);
-  const paidOut  = payouts.filter((p) => p.status === "PAID")
-    .reduce((a, p) => a + p.amountMinor, 0);
+    // FAILED payouts are excluded on purpose: the money never left, so it is
+    // still available rather than spent.
+    const reserved = sum(po, (p) =>
+      p.status === "REQUESTED" || p.status === "APPROVED" ? p.amountMinor : 0,
+    );
+    const paidOut = sum(po, (p) => (p.status === "SENT" ? p.amountMinor : 0));
 
-  const available   = settledNet - reserved - paidOut;
-  const netEarnings = revenue - fees - refunds - disputeLoss;
+    const available = earned - refunded - reserved - paidOut;
 
-  return {
-    revenue, fees, refunds, disputeLoss, pending, held, reserved, paidOut, available, netEarnings,
-    // If this is ever false the ledger has a bug, and the UI says so rather than
-    // showing a number nobody should trust.
-    balances: netEarnings === available + pending + held + reserved + paidOut,
-    asOf: new Date().toISOString(),
-  };
+    return {
+      currency,
+      earned,
+      refunded,
+      pending,
+      reserved,
+      paidOut,
+      available,
+      balances: earned - refunded === available + reserved + paidOut,
+    };
+  });
+
+  return { founderId, currencies, asOf: new Date().toISOString() };
+}
+
+/** One currency's fold, or a zeroed one if the founder has nothing in it yet. */
+export function walletFor(wallet: Wallet, currency: string): CurrencyFold {
+  return (
+    wallet.currencies.find((c) => c.currency === currency) ?? {
+      currency,
+      earned: 0,
+      refunded: 0,
+      pending: 0,
+      reserved: 0,
+      paidOut: 0,
+      available: 0,
+      balances: true,
+    }
+  );
 }

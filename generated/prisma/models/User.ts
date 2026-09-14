@@ -230,11 +230,15 @@ export type UserWhereInput = {
   countryCode?: Prisma.StringFilter<"User"> | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  businesses?: Prisma.BusinessListRelationFilter
-  guardianships?: Prisma.GuardianRelationshipListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   auditEvents?: Prisma.AuditEventListRelationFilter
+  products?: Prisma.FounderProductListRelationFilter
+  transactions?: Prisma.FounderTransactionListRelationFilter
+  payoutRequests?: Prisma.FounderPayoutRequestListRelationFilter
+  paymentAccount?: Prisma.XOR<Prisma.FounderPaymentAccountNullableScalarRelationFilter, Prisma.FounderPaymentAccountWhereInput> | null
+  consentsReceived?: Prisma.GuardianConsentListRelationFilter
+  consentsGiven?: Prisma.GuardianConsentListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -249,11 +253,15 @@ export type UserOrderByWithRelationInput = {
   countryCode?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  businesses?: Prisma.BusinessOrderByRelationAggregateInput
-  guardianships?: Prisma.GuardianRelationshipOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   auditEvents?: Prisma.AuditEventOrderByRelationAggregateInput
+  products?: Prisma.FounderProductOrderByRelationAggregateInput
+  transactions?: Prisma.FounderTransactionOrderByRelationAggregateInput
+  payoutRequests?: Prisma.FounderPayoutRequestOrderByRelationAggregateInput
+  paymentAccount?: Prisma.FounderPaymentAccountOrderByWithRelationInput
+  consentsReceived?: Prisma.GuardianConsentOrderByRelationAggregateInput
+  consentsGiven?: Prisma.GuardianConsentOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -271,11 +279,15 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   countryCode?: Prisma.StringFilter<"User"> | string
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  businesses?: Prisma.BusinessListRelationFilter
-  guardianships?: Prisma.GuardianRelationshipListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   auditEvents?: Prisma.AuditEventListRelationFilter
+  products?: Prisma.FounderProductListRelationFilter
+  transactions?: Prisma.FounderTransactionListRelationFilter
+  payoutRequests?: Prisma.FounderPayoutRequestListRelationFilter
+  paymentAccount?: Prisma.XOR<Prisma.FounderPaymentAccountNullableScalarRelationFilter, Prisma.FounderPaymentAccountWhereInput> | null
+  consentsReceived?: Prisma.GuardianConsentListRelationFilter
+  consentsGiven?: Prisma.GuardianConsentListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -324,11 +336,15 @@ export type UserCreateInput = {
   countryCode: string
   createdAt?: Date | string
   deletedAt?: Date | string | null
-  businesses?: Prisma.BusinessCreateNestedManyWithoutFounderInput
-  guardianships?: Prisma.GuardianRelationshipCreateNestedManyWithoutGuardianInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  products?: Prisma.FounderProductCreateNestedManyWithoutFounderInput
+  transactions?: Prisma.FounderTransactionCreateNestedManyWithoutFounderInput
+  payoutRequests?: Prisma.FounderPayoutRequestCreateNestedManyWithoutFounderInput
+  paymentAccount?: Prisma.FounderPaymentAccountCreateNestedOneWithoutFounderInput
+  consentsReceived?: Prisma.GuardianConsentCreateNestedManyWithoutFounderInput
+  consentsGiven?: Prisma.GuardianConsentCreateNestedManyWithoutGuardianInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -343,11 +359,15 @@ export type UserUncheckedCreateInput = {
   countryCode: string
   createdAt?: Date | string
   deletedAt?: Date | string | null
-  businesses?: Prisma.BusinessUncheckedCreateNestedManyWithoutFounderInput
-  guardianships?: Prisma.GuardianRelationshipUncheckedCreateNestedManyWithoutGuardianInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  products?: Prisma.FounderProductUncheckedCreateNestedManyWithoutFounderInput
+  transactions?: Prisma.FounderTransactionUncheckedCreateNestedManyWithoutFounderInput
+  payoutRequests?: Prisma.FounderPayoutRequestUncheckedCreateNestedManyWithoutFounderInput
+  paymentAccount?: Prisma.FounderPaymentAccountUncheckedCreateNestedOneWithoutFounderInput
+  consentsReceived?: Prisma.GuardianConsentUncheckedCreateNestedManyWithoutFounderInput
+  consentsGiven?: Prisma.GuardianConsentUncheckedCreateNestedManyWithoutGuardianInput
 }
 
 export type UserUpdateInput = {
@@ -362,11 +382,15 @@ export type UserUpdateInput = {
   countryCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  businesses?: Prisma.BusinessUpdateManyWithoutFounderNestedInput
-  guardianships?: Prisma.GuardianRelationshipUpdateManyWithoutGuardianNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  products?: Prisma.FounderProductUpdateManyWithoutFounderNestedInput
+  transactions?: Prisma.FounderTransactionUpdateManyWithoutFounderNestedInput
+  payoutRequests?: Prisma.FounderPayoutRequestUpdateManyWithoutFounderNestedInput
+  paymentAccount?: Prisma.FounderPaymentAccountUpdateOneWithoutFounderNestedInput
+  consentsReceived?: Prisma.GuardianConsentUpdateManyWithoutFounderNestedInput
+  consentsGiven?: Prisma.GuardianConsentUpdateManyWithoutGuardianNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -381,11 +405,15 @@ export type UserUncheckedUpdateInput = {
   countryCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  businesses?: Prisma.BusinessUncheckedUpdateManyWithoutFounderNestedInput
-  guardianships?: Prisma.GuardianRelationshipUncheckedUpdateManyWithoutGuardianNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  products?: Prisma.FounderProductUncheckedUpdateManyWithoutFounderNestedInput
+  transactions?: Prisma.FounderTransactionUncheckedUpdateManyWithoutFounderNestedInput
+  payoutRequests?: Prisma.FounderPayoutRequestUncheckedUpdateManyWithoutFounderNestedInput
+  paymentAccount?: Prisma.FounderPaymentAccountUncheckedUpdateOneWithoutFounderNestedInput
+  consentsReceived?: Prisma.GuardianConsentUncheckedUpdateManyWithoutFounderNestedInput
+  consentsGiven?: Prisma.GuardianConsentUncheckedUpdateManyWithoutGuardianNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -516,34 +544,90 @@ export type UserUpdateOneRequiredWithoutSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSessionsInput, Prisma.UserUpdateWithoutSessionsInput>, Prisma.UserUncheckedUpdateWithoutSessionsInput>
 }
 
-export type UserCreateNestedOneWithoutBusinessesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutBusinessesInput, Prisma.UserUncheckedCreateWithoutBusinessesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBusinessesInput
+export type UserCreateNestedOneWithoutProductsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProductsInput, Prisma.UserUncheckedCreateWithoutProductsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProductsInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutBusinessesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutBusinessesInput, Prisma.UserUncheckedCreateWithoutBusinessesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBusinessesInput
-  upsert?: Prisma.UserUpsertWithoutBusinessesInput
+export type UserUpdateOneRequiredWithoutProductsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProductsInput, Prisma.UserUncheckedCreateWithoutProductsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProductsInput
+  upsert?: Prisma.UserUpsertWithoutProductsInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBusinessesInput, Prisma.UserUpdateWithoutBusinessesInput>, Prisma.UserUncheckedUpdateWithoutBusinessesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProductsInput, Prisma.UserUpdateWithoutProductsInput>, Prisma.UserUncheckedUpdateWithoutProductsInput>
 }
 
-export type UserCreateNestedOneWithoutGuardianshipsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutGuardianshipsInput, Prisma.UserUncheckedCreateWithoutGuardianshipsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGuardianshipsInput
+export type UserCreateNestedOneWithoutTransactionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTransactionsInput, Prisma.UserUncheckedCreateWithoutTransactionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTransactionsInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneWithoutGuardianshipsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutGuardianshipsInput, Prisma.UserUncheckedCreateWithoutGuardianshipsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGuardianshipsInput
-  upsert?: Prisma.UserUpsertWithoutGuardianshipsInput
+export type UserUpdateOneRequiredWithoutTransactionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTransactionsInput, Prisma.UserUncheckedCreateWithoutTransactionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTransactionsInput
+  upsert?: Prisma.UserUpsertWithoutTransactionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTransactionsInput, Prisma.UserUpdateWithoutTransactionsInput>, Prisma.UserUncheckedUpdateWithoutTransactionsInput>
+}
+
+export type UserCreateNestedOneWithoutPayoutRequestsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPayoutRequestsInput, Prisma.UserUncheckedCreateWithoutPayoutRequestsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPayoutRequestsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPayoutRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPayoutRequestsInput, Prisma.UserUncheckedCreateWithoutPayoutRequestsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPayoutRequestsInput
+  upsert?: Prisma.UserUpsertWithoutPayoutRequestsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPayoutRequestsInput, Prisma.UserUpdateWithoutPayoutRequestsInput>, Prisma.UserUncheckedUpdateWithoutPayoutRequestsInput>
+}
+
+export type UserCreateNestedOneWithoutConsentsReceivedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutConsentsReceivedInput, Prisma.UserUncheckedCreateWithoutConsentsReceivedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutConsentsReceivedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutConsentsGivenInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutConsentsGivenInput, Prisma.UserUncheckedCreateWithoutConsentsGivenInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutConsentsGivenInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutConsentsReceivedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutConsentsReceivedInput, Prisma.UserUncheckedCreateWithoutConsentsReceivedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutConsentsReceivedInput
+  upsert?: Prisma.UserUpsertWithoutConsentsReceivedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutConsentsReceivedInput, Prisma.UserUpdateWithoutConsentsReceivedInput>, Prisma.UserUncheckedUpdateWithoutConsentsReceivedInput>
+}
+
+export type UserUpdateOneWithoutConsentsGivenNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutConsentsGivenInput, Prisma.UserUncheckedCreateWithoutConsentsGivenInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutConsentsGivenInput
+  upsert?: Prisma.UserUpsertWithoutConsentsGivenInput
   disconnect?: Prisma.UserWhereInput | boolean
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutGuardianshipsInput, Prisma.UserUpdateWithoutGuardianshipsInput>, Prisma.UserUncheckedUpdateWithoutGuardianshipsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutConsentsGivenInput, Prisma.UserUpdateWithoutConsentsGivenInput>, Prisma.UserUncheckedUpdateWithoutConsentsGivenInput>
+}
+
+export type UserCreateNestedOneWithoutPaymentAccountInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPaymentAccountInput, Prisma.UserUncheckedCreateWithoutPaymentAccountInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPaymentAccountInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPaymentAccountNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPaymentAccountInput, Prisma.UserUncheckedCreateWithoutPaymentAccountInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPaymentAccountInput
+  upsert?: Prisma.UserUpsertWithoutPaymentAccountInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPaymentAccountInput, Prisma.UserUpdateWithoutPaymentAccountInput>, Prisma.UserUncheckedUpdateWithoutPaymentAccountInput>
 }
 
 export type UserCreateNestedOneWithoutNotificationsInput = {
@@ -588,10 +672,14 @@ export type UserCreateWithoutSessionsInput = {
   countryCode: string
   createdAt?: Date | string
   deletedAt?: Date | string | null
-  businesses?: Prisma.BusinessCreateNestedManyWithoutFounderInput
-  guardianships?: Prisma.GuardianRelationshipCreateNestedManyWithoutGuardianInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  products?: Prisma.FounderProductCreateNestedManyWithoutFounderInput
+  transactions?: Prisma.FounderTransactionCreateNestedManyWithoutFounderInput
+  payoutRequests?: Prisma.FounderPayoutRequestCreateNestedManyWithoutFounderInput
+  paymentAccount?: Prisma.FounderPaymentAccountCreateNestedOneWithoutFounderInput
+  consentsReceived?: Prisma.GuardianConsentCreateNestedManyWithoutFounderInput
+  consentsGiven?: Prisma.GuardianConsentCreateNestedManyWithoutGuardianInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -606,10 +694,14 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   countryCode: string
   createdAt?: Date | string
   deletedAt?: Date | string | null
-  businesses?: Prisma.BusinessUncheckedCreateNestedManyWithoutFounderInput
-  guardianships?: Prisma.GuardianRelationshipUncheckedCreateNestedManyWithoutGuardianInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  products?: Prisma.FounderProductUncheckedCreateNestedManyWithoutFounderInput
+  transactions?: Prisma.FounderTransactionUncheckedCreateNestedManyWithoutFounderInput
+  payoutRequests?: Prisma.FounderPayoutRequestUncheckedCreateNestedManyWithoutFounderInput
+  paymentAccount?: Prisma.FounderPaymentAccountUncheckedCreateNestedOneWithoutFounderInput
+  consentsReceived?: Prisma.GuardianConsentUncheckedCreateNestedManyWithoutFounderInput
+  consentsGiven?: Prisma.GuardianConsentUncheckedCreateNestedManyWithoutGuardianInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -640,10 +732,14 @@ export type UserUpdateWithoutSessionsInput = {
   countryCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  businesses?: Prisma.BusinessUpdateManyWithoutFounderNestedInput
-  guardianships?: Prisma.GuardianRelationshipUpdateManyWithoutGuardianNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  products?: Prisma.FounderProductUpdateManyWithoutFounderNestedInput
+  transactions?: Prisma.FounderTransactionUpdateManyWithoutFounderNestedInput
+  payoutRequests?: Prisma.FounderPayoutRequestUpdateManyWithoutFounderNestedInput
+  paymentAccount?: Prisma.FounderPaymentAccountUpdateOneWithoutFounderNestedInput
+  consentsReceived?: Prisma.GuardianConsentUpdateManyWithoutFounderNestedInput
+  consentsGiven?: Prisma.GuardianConsentUpdateManyWithoutGuardianNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -658,13 +754,17 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   countryCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  businesses?: Prisma.BusinessUncheckedUpdateManyWithoutFounderNestedInput
-  guardianships?: Prisma.GuardianRelationshipUncheckedUpdateManyWithoutGuardianNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  products?: Prisma.FounderProductUncheckedUpdateManyWithoutFounderNestedInput
+  transactions?: Prisma.FounderTransactionUncheckedUpdateManyWithoutFounderNestedInput
+  payoutRequests?: Prisma.FounderPayoutRequestUncheckedUpdateManyWithoutFounderNestedInput
+  paymentAccount?: Prisma.FounderPaymentAccountUncheckedUpdateOneWithoutFounderNestedInput
+  consentsReceived?: Prisma.GuardianConsentUncheckedUpdateManyWithoutFounderNestedInput
+  consentsGiven?: Prisma.GuardianConsentUncheckedUpdateManyWithoutGuardianNestedInput
 }
 
-export type UserCreateWithoutBusinessesInput = {
+export type UserCreateWithoutProductsInput = {
   id?: string
   email: string
   emailVerifiedAt?: Date | string | null
@@ -676,13 +776,17 @@ export type UserCreateWithoutBusinessesInput = {
   countryCode: string
   createdAt?: Date | string
   deletedAt?: Date | string | null
-  guardianships?: Prisma.GuardianRelationshipCreateNestedManyWithoutGuardianInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  transactions?: Prisma.FounderTransactionCreateNestedManyWithoutFounderInput
+  payoutRequests?: Prisma.FounderPayoutRequestCreateNestedManyWithoutFounderInput
+  paymentAccount?: Prisma.FounderPaymentAccountCreateNestedOneWithoutFounderInput
+  consentsReceived?: Prisma.GuardianConsentCreateNestedManyWithoutFounderInput
+  consentsGiven?: Prisma.GuardianConsentCreateNestedManyWithoutGuardianInput
 }
 
-export type UserUncheckedCreateWithoutBusinessesInput = {
+export type UserUncheckedCreateWithoutProductsInput = {
   id?: string
   email: string
   emailVerifiedAt?: Date | string | null
@@ -694,29 +798,33 @@ export type UserUncheckedCreateWithoutBusinessesInput = {
   countryCode: string
   createdAt?: Date | string
   deletedAt?: Date | string | null
-  guardianships?: Prisma.GuardianRelationshipUncheckedCreateNestedManyWithoutGuardianInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  transactions?: Prisma.FounderTransactionUncheckedCreateNestedManyWithoutFounderInput
+  payoutRequests?: Prisma.FounderPayoutRequestUncheckedCreateNestedManyWithoutFounderInput
+  paymentAccount?: Prisma.FounderPaymentAccountUncheckedCreateNestedOneWithoutFounderInput
+  consentsReceived?: Prisma.GuardianConsentUncheckedCreateNestedManyWithoutFounderInput
+  consentsGiven?: Prisma.GuardianConsentUncheckedCreateNestedManyWithoutGuardianInput
 }
 
-export type UserCreateOrConnectWithoutBusinessesInput = {
+export type UserCreateOrConnectWithoutProductsInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutBusinessesInput, Prisma.UserUncheckedCreateWithoutBusinessesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutProductsInput, Prisma.UserUncheckedCreateWithoutProductsInput>
 }
 
-export type UserUpsertWithoutBusinessesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutBusinessesInput, Prisma.UserUncheckedUpdateWithoutBusinessesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutBusinessesInput, Prisma.UserUncheckedCreateWithoutBusinessesInput>
+export type UserUpsertWithoutProductsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutProductsInput, Prisma.UserUncheckedUpdateWithoutProductsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutProductsInput, Prisma.UserUncheckedCreateWithoutProductsInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutBusinessesInput = {
+export type UserUpdateToOneWithWhereWithoutProductsInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutBusinessesInput, Prisma.UserUncheckedUpdateWithoutBusinessesInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutProductsInput, Prisma.UserUncheckedUpdateWithoutProductsInput>
 }
 
-export type UserUpdateWithoutBusinessesInput = {
+export type UserUpdateWithoutProductsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -728,13 +836,17 @@ export type UserUpdateWithoutBusinessesInput = {
   countryCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  guardianships?: Prisma.GuardianRelationshipUpdateManyWithoutGuardianNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  transactions?: Prisma.FounderTransactionUpdateManyWithoutFounderNestedInput
+  payoutRequests?: Prisma.FounderPayoutRequestUpdateManyWithoutFounderNestedInput
+  paymentAccount?: Prisma.FounderPaymentAccountUpdateOneWithoutFounderNestedInput
+  consentsReceived?: Prisma.GuardianConsentUpdateManyWithoutFounderNestedInput
+  consentsGiven?: Prisma.GuardianConsentUpdateManyWithoutGuardianNestedInput
 }
 
-export type UserUncheckedUpdateWithoutBusinessesInput = {
+export type UserUncheckedUpdateWithoutProductsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -746,13 +858,17 @@ export type UserUncheckedUpdateWithoutBusinessesInput = {
   countryCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  guardianships?: Prisma.GuardianRelationshipUncheckedUpdateManyWithoutGuardianNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  transactions?: Prisma.FounderTransactionUncheckedUpdateManyWithoutFounderNestedInput
+  payoutRequests?: Prisma.FounderPayoutRequestUncheckedUpdateManyWithoutFounderNestedInput
+  paymentAccount?: Prisma.FounderPaymentAccountUncheckedUpdateOneWithoutFounderNestedInput
+  consentsReceived?: Prisma.GuardianConsentUncheckedUpdateManyWithoutFounderNestedInput
+  consentsGiven?: Prisma.GuardianConsentUncheckedUpdateManyWithoutGuardianNestedInput
 }
 
-export type UserCreateWithoutGuardianshipsInput = {
+export type UserCreateWithoutTransactionsInput = {
   id?: string
   email: string
   emailVerifiedAt?: Date | string | null
@@ -764,13 +880,17 @@ export type UserCreateWithoutGuardianshipsInput = {
   countryCode: string
   createdAt?: Date | string
   deletedAt?: Date | string | null
-  businesses?: Prisma.BusinessCreateNestedManyWithoutFounderInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  products?: Prisma.FounderProductCreateNestedManyWithoutFounderInput
+  payoutRequests?: Prisma.FounderPayoutRequestCreateNestedManyWithoutFounderInput
+  paymentAccount?: Prisma.FounderPaymentAccountCreateNestedOneWithoutFounderInput
+  consentsReceived?: Prisma.GuardianConsentCreateNestedManyWithoutFounderInput
+  consentsGiven?: Prisma.GuardianConsentCreateNestedManyWithoutGuardianInput
 }
 
-export type UserUncheckedCreateWithoutGuardianshipsInput = {
+export type UserUncheckedCreateWithoutTransactionsInput = {
   id?: string
   email: string
   emailVerifiedAt?: Date | string | null
@@ -782,29 +902,33 @@ export type UserUncheckedCreateWithoutGuardianshipsInput = {
   countryCode: string
   createdAt?: Date | string
   deletedAt?: Date | string | null
-  businesses?: Prisma.BusinessUncheckedCreateNestedManyWithoutFounderInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  products?: Prisma.FounderProductUncheckedCreateNestedManyWithoutFounderInput
+  payoutRequests?: Prisma.FounderPayoutRequestUncheckedCreateNestedManyWithoutFounderInput
+  paymentAccount?: Prisma.FounderPaymentAccountUncheckedCreateNestedOneWithoutFounderInput
+  consentsReceived?: Prisma.GuardianConsentUncheckedCreateNestedManyWithoutFounderInput
+  consentsGiven?: Prisma.GuardianConsentUncheckedCreateNestedManyWithoutGuardianInput
 }
 
-export type UserCreateOrConnectWithoutGuardianshipsInput = {
+export type UserCreateOrConnectWithoutTransactionsInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutGuardianshipsInput, Prisma.UserUncheckedCreateWithoutGuardianshipsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTransactionsInput, Prisma.UserUncheckedCreateWithoutTransactionsInput>
 }
 
-export type UserUpsertWithoutGuardianshipsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutGuardianshipsInput, Prisma.UserUncheckedUpdateWithoutGuardianshipsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutGuardianshipsInput, Prisma.UserUncheckedCreateWithoutGuardianshipsInput>
+export type UserUpsertWithoutTransactionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTransactionsInput, Prisma.UserUncheckedUpdateWithoutTransactionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTransactionsInput, Prisma.UserUncheckedCreateWithoutTransactionsInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutGuardianshipsInput = {
+export type UserUpdateToOneWithWhereWithoutTransactionsInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutGuardianshipsInput, Prisma.UserUncheckedUpdateWithoutGuardianshipsInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTransactionsInput, Prisma.UserUncheckedUpdateWithoutTransactionsInput>
 }
 
-export type UserUpdateWithoutGuardianshipsInput = {
+export type UserUpdateWithoutTransactionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -816,13 +940,17 @@ export type UserUpdateWithoutGuardianshipsInput = {
   countryCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  businesses?: Prisma.BusinessUpdateManyWithoutFounderNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  products?: Prisma.FounderProductUpdateManyWithoutFounderNestedInput
+  payoutRequests?: Prisma.FounderPayoutRequestUpdateManyWithoutFounderNestedInput
+  paymentAccount?: Prisma.FounderPaymentAccountUpdateOneWithoutFounderNestedInput
+  consentsReceived?: Prisma.GuardianConsentUpdateManyWithoutFounderNestedInput
+  consentsGiven?: Prisma.GuardianConsentUpdateManyWithoutGuardianNestedInput
 }
 
-export type UserUncheckedUpdateWithoutGuardianshipsInput = {
+export type UserUncheckedUpdateWithoutTransactionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -834,10 +962,430 @@ export type UserUncheckedUpdateWithoutGuardianshipsInput = {
   countryCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  businesses?: Prisma.BusinessUncheckedUpdateManyWithoutFounderNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  products?: Prisma.FounderProductUncheckedUpdateManyWithoutFounderNestedInput
+  payoutRequests?: Prisma.FounderPayoutRequestUncheckedUpdateManyWithoutFounderNestedInput
+  paymentAccount?: Prisma.FounderPaymentAccountUncheckedUpdateOneWithoutFounderNestedInput
+  consentsReceived?: Prisma.GuardianConsentUncheckedUpdateManyWithoutFounderNestedInput
+  consentsGiven?: Prisma.GuardianConsentUncheckedUpdateManyWithoutGuardianNestedInput
+}
+
+export type UserCreateWithoutPayoutRequestsInput = {
+  id?: string
+  email: string
+  emailVerifiedAt?: Date | string | null
+  passwordHash?: string | null
+  totpSecret?: string | null
+  name: string
+  role: $Enums.Role
+  dateOfBirth?: Date | string | null
+  countryCode: string
+  createdAt?: Date | string
+  deletedAt?: Date | string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  products?: Prisma.FounderProductCreateNestedManyWithoutFounderInput
+  transactions?: Prisma.FounderTransactionCreateNestedManyWithoutFounderInput
+  paymentAccount?: Prisma.FounderPaymentAccountCreateNestedOneWithoutFounderInput
+  consentsReceived?: Prisma.GuardianConsentCreateNestedManyWithoutFounderInput
+  consentsGiven?: Prisma.GuardianConsentCreateNestedManyWithoutGuardianInput
+}
+
+export type UserUncheckedCreateWithoutPayoutRequestsInput = {
+  id?: string
+  email: string
+  emailVerifiedAt?: Date | string | null
+  passwordHash?: string | null
+  totpSecret?: string | null
+  name: string
+  role: $Enums.Role
+  dateOfBirth?: Date | string | null
+  countryCode: string
+  createdAt?: Date | string
+  deletedAt?: Date | string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  products?: Prisma.FounderProductUncheckedCreateNestedManyWithoutFounderInput
+  transactions?: Prisma.FounderTransactionUncheckedCreateNestedManyWithoutFounderInput
+  paymentAccount?: Prisma.FounderPaymentAccountUncheckedCreateNestedOneWithoutFounderInput
+  consentsReceived?: Prisma.GuardianConsentUncheckedCreateNestedManyWithoutFounderInput
+  consentsGiven?: Prisma.GuardianConsentUncheckedCreateNestedManyWithoutGuardianInput
+}
+
+export type UserCreateOrConnectWithoutPayoutRequestsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPayoutRequestsInput, Prisma.UserUncheckedCreateWithoutPayoutRequestsInput>
+}
+
+export type UserUpsertWithoutPayoutRequestsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPayoutRequestsInput, Prisma.UserUncheckedUpdateWithoutPayoutRequestsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPayoutRequestsInput, Prisma.UserUncheckedCreateWithoutPayoutRequestsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPayoutRequestsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPayoutRequestsInput, Prisma.UserUncheckedUpdateWithoutPayoutRequestsInput>
+}
+
+export type UserUpdateWithoutPayoutRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  products?: Prisma.FounderProductUpdateManyWithoutFounderNestedInput
+  transactions?: Prisma.FounderTransactionUpdateManyWithoutFounderNestedInput
+  paymentAccount?: Prisma.FounderPaymentAccountUpdateOneWithoutFounderNestedInput
+  consentsReceived?: Prisma.GuardianConsentUpdateManyWithoutFounderNestedInput
+  consentsGiven?: Prisma.GuardianConsentUpdateManyWithoutGuardianNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPayoutRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  products?: Prisma.FounderProductUncheckedUpdateManyWithoutFounderNestedInput
+  transactions?: Prisma.FounderTransactionUncheckedUpdateManyWithoutFounderNestedInput
+  paymentAccount?: Prisma.FounderPaymentAccountUncheckedUpdateOneWithoutFounderNestedInput
+  consentsReceived?: Prisma.GuardianConsentUncheckedUpdateManyWithoutFounderNestedInput
+  consentsGiven?: Prisma.GuardianConsentUncheckedUpdateManyWithoutGuardianNestedInput
+}
+
+export type UserCreateWithoutConsentsReceivedInput = {
+  id?: string
+  email: string
+  emailVerifiedAt?: Date | string | null
+  passwordHash?: string | null
+  totpSecret?: string | null
+  name: string
+  role: $Enums.Role
+  dateOfBirth?: Date | string | null
+  countryCode: string
+  createdAt?: Date | string
+  deletedAt?: Date | string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  products?: Prisma.FounderProductCreateNestedManyWithoutFounderInput
+  transactions?: Prisma.FounderTransactionCreateNestedManyWithoutFounderInput
+  payoutRequests?: Prisma.FounderPayoutRequestCreateNestedManyWithoutFounderInput
+  paymentAccount?: Prisma.FounderPaymentAccountCreateNestedOneWithoutFounderInput
+  consentsGiven?: Prisma.GuardianConsentCreateNestedManyWithoutGuardianInput
+}
+
+export type UserUncheckedCreateWithoutConsentsReceivedInput = {
+  id?: string
+  email: string
+  emailVerifiedAt?: Date | string | null
+  passwordHash?: string | null
+  totpSecret?: string | null
+  name: string
+  role: $Enums.Role
+  dateOfBirth?: Date | string | null
+  countryCode: string
+  createdAt?: Date | string
+  deletedAt?: Date | string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  products?: Prisma.FounderProductUncheckedCreateNestedManyWithoutFounderInput
+  transactions?: Prisma.FounderTransactionUncheckedCreateNestedManyWithoutFounderInput
+  payoutRequests?: Prisma.FounderPayoutRequestUncheckedCreateNestedManyWithoutFounderInput
+  paymentAccount?: Prisma.FounderPaymentAccountUncheckedCreateNestedOneWithoutFounderInput
+  consentsGiven?: Prisma.GuardianConsentUncheckedCreateNestedManyWithoutGuardianInput
+}
+
+export type UserCreateOrConnectWithoutConsentsReceivedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutConsentsReceivedInput, Prisma.UserUncheckedCreateWithoutConsentsReceivedInput>
+}
+
+export type UserCreateWithoutConsentsGivenInput = {
+  id?: string
+  email: string
+  emailVerifiedAt?: Date | string | null
+  passwordHash?: string | null
+  totpSecret?: string | null
+  name: string
+  role: $Enums.Role
+  dateOfBirth?: Date | string | null
+  countryCode: string
+  createdAt?: Date | string
+  deletedAt?: Date | string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  products?: Prisma.FounderProductCreateNestedManyWithoutFounderInput
+  transactions?: Prisma.FounderTransactionCreateNestedManyWithoutFounderInput
+  payoutRequests?: Prisma.FounderPayoutRequestCreateNestedManyWithoutFounderInput
+  paymentAccount?: Prisma.FounderPaymentAccountCreateNestedOneWithoutFounderInput
+  consentsReceived?: Prisma.GuardianConsentCreateNestedManyWithoutFounderInput
+}
+
+export type UserUncheckedCreateWithoutConsentsGivenInput = {
+  id?: string
+  email: string
+  emailVerifiedAt?: Date | string | null
+  passwordHash?: string | null
+  totpSecret?: string | null
+  name: string
+  role: $Enums.Role
+  dateOfBirth?: Date | string | null
+  countryCode: string
+  createdAt?: Date | string
+  deletedAt?: Date | string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  products?: Prisma.FounderProductUncheckedCreateNestedManyWithoutFounderInput
+  transactions?: Prisma.FounderTransactionUncheckedCreateNestedManyWithoutFounderInput
+  payoutRequests?: Prisma.FounderPayoutRequestUncheckedCreateNestedManyWithoutFounderInput
+  paymentAccount?: Prisma.FounderPaymentAccountUncheckedCreateNestedOneWithoutFounderInput
+  consentsReceived?: Prisma.GuardianConsentUncheckedCreateNestedManyWithoutFounderInput
+}
+
+export type UserCreateOrConnectWithoutConsentsGivenInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutConsentsGivenInput, Prisma.UserUncheckedCreateWithoutConsentsGivenInput>
+}
+
+export type UserUpsertWithoutConsentsReceivedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutConsentsReceivedInput, Prisma.UserUncheckedUpdateWithoutConsentsReceivedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutConsentsReceivedInput, Prisma.UserUncheckedCreateWithoutConsentsReceivedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutConsentsReceivedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutConsentsReceivedInput, Prisma.UserUncheckedUpdateWithoutConsentsReceivedInput>
+}
+
+export type UserUpdateWithoutConsentsReceivedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  products?: Prisma.FounderProductUpdateManyWithoutFounderNestedInput
+  transactions?: Prisma.FounderTransactionUpdateManyWithoutFounderNestedInput
+  payoutRequests?: Prisma.FounderPayoutRequestUpdateManyWithoutFounderNestedInput
+  paymentAccount?: Prisma.FounderPaymentAccountUpdateOneWithoutFounderNestedInput
+  consentsGiven?: Prisma.GuardianConsentUpdateManyWithoutGuardianNestedInput
+}
+
+export type UserUncheckedUpdateWithoutConsentsReceivedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  products?: Prisma.FounderProductUncheckedUpdateManyWithoutFounderNestedInput
+  transactions?: Prisma.FounderTransactionUncheckedUpdateManyWithoutFounderNestedInput
+  payoutRequests?: Prisma.FounderPayoutRequestUncheckedUpdateManyWithoutFounderNestedInput
+  paymentAccount?: Prisma.FounderPaymentAccountUncheckedUpdateOneWithoutFounderNestedInput
+  consentsGiven?: Prisma.GuardianConsentUncheckedUpdateManyWithoutGuardianNestedInput
+}
+
+export type UserUpsertWithoutConsentsGivenInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutConsentsGivenInput, Prisma.UserUncheckedUpdateWithoutConsentsGivenInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutConsentsGivenInput, Prisma.UserUncheckedCreateWithoutConsentsGivenInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutConsentsGivenInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutConsentsGivenInput, Prisma.UserUncheckedUpdateWithoutConsentsGivenInput>
+}
+
+export type UserUpdateWithoutConsentsGivenInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  products?: Prisma.FounderProductUpdateManyWithoutFounderNestedInput
+  transactions?: Prisma.FounderTransactionUpdateManyWithoutFounderNestedInput
+  payoutRequests?: Prisma.FounderPayoutRequestUpdateManyWithoutFounderNestedInput
+  paymentAccount?: Prisma.FounderPaymentAccountUpdateOneWithoutFounderNestedInput
+  consentsReceived?: Prisma.GuardianConsentUpdateManyWithoutFounderNestedInput
+}
+
+export type UserUncheckedUpdateWithoutConsentsGivenInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  products?: Prisma.FounderProductUncheckedUpdateManyWithoutFounderNestedInput
+  transactions?: Prisma.FounderTransactionUncheckedUpdateManyWithoutFounderNestedInput
+  payoutRequests?: Prisma.FounderPayoutRequestUncheckedUpdateManyWithoutFounderNestedInput
+  paymentAccount?: Prisma.FounderPaymentAccountUncheckedUpdateOneWithoutFounderNestedInput
+  consentsReceived?: Prisma.GuardianConsentUncheckedUpdateManyWithoutFounderNestedInput
+}
+
+export type UserCreateWithoutPaymentAccountInput = {
+  id?: string
+  email: string
+  emailVerifiedAt?: Date | string | null
+  passwordHash?: string | null
+  totpSecret?: string | null
+  name: string
+  role: $Enums.Role
+  dateOfBirth?: Date | string | null
+  countryCode: string
+  createdAt?: Date | string
+  deletedAt?: Date | string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  products?: Prisma.FounderProductCreateNestedManyWithoutFounderInput
+  transactions?: Prisma.FounderTransactionCreateNestedManyWithoutFounderInput
+  payoutRequests?: Prisma.FounderPayoutRequestCreateNestedManyWithoutFounderInput
+  consentsReceived?: Prisma.GuardianConsentCreateNestedManyWithoutFounderInput
+  consentsGiven?: Prisma.GuardianConsentCreateNestedManyWithoutGuardianInput
+}
+
+export type UserUncheckedCreateWithoutPaymentAccountInput = {
+  id?: string
+  email: string
+  emailVerifiedAt?: Date | string | null
+  passwordHash?: string | null
+  totpSecret?: string | null
+  name: string
+  role: $Enums.Role
+  dateOfBirth?: Date | string | null
+  countryCode: string
+  createdAt?: Date | string
+  deletedAt?: Date | string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  products?: Prisma.FounderProductUncheckedCreateNestedManyWithoutFounderInput
+  transactions?: Prisma.FounderTransactionUncheckedCreateNestedManyWithoutFounderInput
+  payoutRequests?: Prisma.FounderPayoutRequestUncheckedCreateNestedManyWithoutFounderInput
+  consentsReceived?: Prisma.GuardianConsentUncheckedCreateNestedManyWithoutFounderInput
+  consentsGiven?: Prisma.GuardianConsentUncheckedCreateNestedManyWithoutGuardianInput
+}
+
+export type UserCreateOrConnectWithoutPaymentAccountInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPaymentAccountInput, Prisma.UserUncheckedCreateWithoutPaymentAccountInput>
+}
+
+export type UserUpsertWithoutPaymentAccountInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPaymentAccountInput, Prisma.UserUncheckedUpdateWithoutPaymentAccountInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPaymentAccountInput, Prisma.UserUncheckedCreateWithoutPaymentAccountInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPaymentAccountInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPaymentAccountInput, Prisma.UserUncheckedUpdateWithoutPaymentAccountInput>
+}
+
+export type UserUpdateWithoutPaymentAccountInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  products?: Prisma.FounderProductUpdateManyWithoutFounderNestedInput
+  transactions?: Prisma.FounderTransactionUpdateManyWithoutFounderNestedInput
+  payoutRequests?: Prisma.FounderPayoutRequestUpdateManyWithoutFounderNestedInput
+  consentsReceived?: Prisma.GuardianConsentUpdateManyWithoutFounderNestedInput
+  consentsGiven?: Prisma.GuardianConsentUpdateManyWithoutGuardianNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPaymentAccountInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  countryCode?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  products?: Prisma.FounderProductUncheckedUpdateManyWithoutFounderNestedInput
+  transactions?: Prisma.FounderTransactionUncheckedUpdateManyWithoutFounderNestedInput
+  payoutRequests?: Prisma.FounderPayoutRequestUncheckedUpdateManyWithoutFounderNestedInput
+  consentsReceived?: Prisma.GuardianConsentUncheckedUpdateManyWithoutFounderNestedInput
+  consentsGiven?: Prisma.GuardianConsentUncheckedUpdateManyWithoutGuardianNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -852,10 +1400,14 @@ export type UserCreateWithoutNotificationsInput = {
   countryCode: string
   createdAt?: Date | string
   deletedAt?: Date | string | null
-  businesses?: Prisma.BusinessCreateNestedManyWithoutFounderInput
-  guardianships?: Prisma.GuardianRelationshipCreateNestedManyWithoutGuardianInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  products?: Prisma.FounderProductCreateNestedManyWithoutFounderInput
+  transactions?: Prisma.FounderTransactionCreateNestedManyWithoutFounderInput
+  payoutRequests?: Prisma.FounderPayoutRequestCreateNestedManyWithoutFounderInput
+  paymentAccount?: Prisma.FounderPaymentAccountCreateNestedOneWithoutFounderInput
+  consentsReceived?: Prisma.GuardianConsentCreateNestedManyWithoutFounderInput
+  consentsGiven?: Prisma.GuardianConsentCreateNestedManyWithoutGuardianInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -870,10 +1422,14 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   countryCode: string
   createdAt?: Date | string
   deletedAt?: Date | string | null
-  businesses?: Prisma.BusinessUncheckedCreateNestedManyWithoutFounderInput
-  guardianships?: Prisma.GuardianRelationshipUncheckedCreateNestedManyWithoutGuardianInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  products?: Prisma.FounderProductUncheckedCreateNestedManyWithoutFounderInput
+  transactions?: Prisma.FounderTransactionUncheckedCreateNestedManyWithoutFounderInput
+  payoutRequests?: Prisma.FounderPayoutRequestUncheckedCreateNestedManyWithoutFounderInput
+  paymentAccount?: Prisma.FounderPaymentAccountUncheckedCreateNestedOneWithoutFounderInput
+  consentsReceived?: Prisma.GuardianConsentUncheckedCreateNestedManyWithoutFounderInput
+  consentsGiven?: Prisma.GuardianConsentUncheckedCreateNestedManyWithoutGuardianInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -904,10 +1460,14 @@ export type UserUpdateWithoutNotificationsInput = {
   countryCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  businesses?: Prisma.BusinessUpdateManyWithoutFounderNestedInput
-  guardianships?: Prisma.GuardianRelationshipUpdateManyWithoutGuardianNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  products?: Prisma.FounderProductUpdateManyWithoutFounderNestedInput
+  transactions?: Prisma.FounderTransactionUpdateManyWithoutFounderNestedInput
+  payoutRequests?: Prisma.FounderPayoutRequestUpdateManyWithoutFounderNestedInput
+  paymentAccount?: Prisma.FounderPaymentAccountUpdateOneWithoutFounderNestedInput
+  consentsReceived?: Prisma.GuardianConsentUpdateManyWithoutFounderNestedInput
+  consentsGiven?: Prisma.GuardianConsentUpdateManyWithoutGuardianNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -922,10 +1482,14 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   countryCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  businesses?: Prisma.BusinessUncheckedUpdateManyWithoutFounderNestedInput
-  guardianships?: Prisma.GuardianRelationshipUncheckedUpdateManyWithoutGuardianNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  products?: Prisma.FounderProductUncheckedUpdateManyWithoutFounderNestedInput
+  transactions?: Prisma.FounderTransactionUncheckedUpdateManyWithoutFounderNestedInput
+  payoutRequests?: Prisma.FounderPayoutRequestUncheckedUpdateManyWithoutFounderNestedInput
+  paymentAccount?: Prisma.FounderPaymentAccountUncheckedUpdateOneWithoutFounderNestedInput
+  consentsReceived?: Prisma.GuardianConsentUncheckedUpdateManyWithoutFounderNestedInput
+  consentsGiven?: Prisma.GuardianConsentUncheckedUpdateManyWithoutGuardianNestedInput
 }
 
 export type UserCreateWithoutAuditEventsInput = {
@@ -940,10 +1504,14 @@ export type UserCreateWithoutAuditEventsInput = {
   countryCode: string
   createdAt?: Date | string
   deletedAt?: Date | string | null
-  businesses?: Prisma.BusinessCreateNestedManyWithoutFounderInput
-  guardianships?: Prisma.GuardianRelationshipCreateNestedManyWithoutGuardianInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  products?: Prisma.FounderProductCreateNestedManyWithoutFounderInput
+  transactions?: Prisma.FounderTransactionCreateNestedManyWithoutFounderInput
+  payoutRequests?: Prisma.FounderPayoutRequestCreateNestedManyWithoutFounderInput
+  paymentAccount?: Prisma.FounderPaymentAccountCreateNestedOneWithoutFounderInput
+  consentsReceived?: Prisma.GuardianConsentCreateNestedManyWithoutFounderInput
+  consentsGiven?: Prisma.GuardianConsentCreateNestedManyWithoutGuardianInput
 }
 
 export type UserUncheckedCreateWithoutAuditEventsInput = {
@@ -958,10 +1526,14 @@ export type UserUncheckedCreateWithoutAuditEventsInput = {
   countryCode: string
   createdAt?: Date | string
   deletedAt?: Date | string | null
-  businesses?: Prisma.BusinessUncheckedCreateNestedManyWithoutFounderInput
-  guardianships?: Prisma.GuardianRelationshipUncheckedCreateNestedManyWithoutGuardianInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  products?: Prisma.FounderProductUncheckedCreateNestedManyWithoutFounderInput
+  transactions?: Prisma.FounderTransactionUncheckedCreateNestedManyWithoutFounderInput
+  payoutRequests?: Prisma.FounderPayoutRequestUncheckedCreateNestedManyWithoutFounderInput
+  paymentAccount?: Prisma.FounderPaymentAccountUncheckedCreateNestedOneWithoutFounderInput
+  consentsReceived?: Prisma.GuardianConsentUncheckedCreateNestedManyWithoutFounderInput
+  consentsGiven?: Prisma.GuardianConsentUncheckedCreateNestedManyWithoutGuardianInput
 }
 
 export type UserCreateOrConnectWithoutAuditEventsInput = {
@@ -992,10 +1564,14 @@ export type UserUpdateWithoutAuditEventsInput = {
   countryCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  businesses?: Prisma.BusinessUpdateManyWithoutFounderNestedInput
-  guardianships?: Prisma.GuardianRelationshipUpdateManyWithoutGuardianNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  products?: Prisma.FounderProductUpdateManyWithoutFounderNestedInput
+  transactions?: Prisma.FounderTransactionUpdateManyWithoutFounderNestedInput
+  payoutRequests?: Prisma.FounderPayoutRequestUpdateManyWithoutFounderNestedInput
+  paymentAccount?: Prisma.FounderPaymentAccountUpdateOneWithoutFounderNestedInput
+  consentsReceived?: Prisma.GuardianConsentUpdateManyWithoutFounderNestedInput
+  consentsGiven?: Prisma.GuardianConsentUpdateManyWithoutGuardianNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditEventsInput = {
@@ -1010,10 +1586,14 @@ export type UserUncheckedUpdateWithoutAuditEventsInput = {
   countryCode?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  businesses?: Prisma.BusinessUncheckedUpdateManyWithoutFounderNestedInput
-  guardianships?: Prisma.GuardianRelationshipUncheckedUpdateManyWithoutGuardianNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  products?: Prisma.FounderProductUncheckedUpdateManyWithoutFounderNestedInput
+  transactions?: Prisma.FounderTransactionUncheckedUpdateManyWithoutFounderNestedInput
+  payoutRequests?: Prisma.FounderPayoutRequestUncheckedUpdateManyWithoutFounderNestedInput
+  paymentAccount?: Prisma.FounderPaymentAccountUncheckedUpdateOneWithoutFounderNestedInput
+  consentsReceived?: Prisma.GuardianConsentUncheckedUpdateManyWithoutFounderNestedInput
+  consentsGiven?: Prisma.GuardianConsentUncheckedUpdateManyWithoutGuardianNestedInput
 }
 
 
@@ -1022,19 +1602,25 @@ export type UserUncheckedUpdateWithoutAuditEventsInput = {
  */
 
 export type UserCountOutputType = {
-  businesses: number
-  guardianships: number
   sessions: number
   notifications: number
   auditEvents: number
+  products: number
+  transactions: number
+  payoutRequests: number
+  consentsReceived: number
+  consentsGiven: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  businesses?: boolean | UserCountOutputTypeCountBusinessesArgs
-  guardianships?: boolean | UserCountOutputTypeCountGuardianshipsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   auditEvents?: boolean | UserCountOutputTypeCountAuditEventsArgs
+  products?: boolean | UserCountOutputTypeCountProductsArgs
+  transactions?: boolean | UserCountOutputTypeCountTransactionsArgs
+  payoutRequests?: boolean | UserCountOutputTypeCountPayoutRequestsArgs
+  consentsReceived?: boolean | UserCountOutputTypeCountConsentsReceivedArgs
+  consentsGiven?: boolean | UserCountOutputTypeCountConsentsGivenArgs
 }
 
 /**
@@ -1045,20 +1631,6 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the UserCountOutputType
    */
   select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountBusinessesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.BusinessWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountGuardianshipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.GuardianRelationshipWhereInput
 }
 
 /**
@@ -1082,6 +1654,41 @@ export type UserCountOutputTypeCountAuditEventsArgs<ExtArgs extends runtime.Type
   where?: Prisma.AuditEventWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountProductsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FounderProductWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FounderTransactionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPayoutRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FounderPayoutRequestWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountConsentsReceivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GuardianConsentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountConsentsGivenArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GuardianConsentWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1095,11 +1702,15 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   countryCode?: boolean
   createdAt?: boolean
   deletedAt?: boolean
-  businesses?: boolean | Prisma.User$businessesArgs<ExtArgs>
-  guardianships?: boolean | Prisma.User$guardianshipsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   auditEvents?: boolean | Prisma.User$auditEventsArgs<ExtArgs>
+  products?: boolean | Prisma.User$productsArgs<ExtArgs>
+  transactions?: boolean | Prisma.User$transactionsArgs<ExtArgs>
+  payoutRequests?: boolean | Prisma.User$payoutRequestsArgs<ExtArgs>
+  paymentAccount?: boolean | Prisma.User$paymentAccountArgs<ExtArgs>
+  consentsReceived?: boolean | Prisma.User$consentsReceivedArgs<ExtArgs>
+  consentsGiven?: boolean | Prisma.User$consentsGivenArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1147,11 +1758,15 @@ export type UserSelectScalar = {
 
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerifiedAt" | "passwordHash" | "totpSecret" | "name" | "role" | "dateOfBirth" | "countryCode" | "createdAt" | "deletedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  businesses?: boolean | Prisma.User$businessesArgs<ExtArgs>
-  guardianships?: boolean | Prisma.User$guardianshipsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   auditEvents?: boolean | Prisma.User$auditEventsArgs<ExtArgs>
+  products?: boolean | Prisma.User$productsArgs<ExtArgs>
+  transactions?: boolean | Prisma.User$transactionsArgs<ExtArgs>
+  payoutRequests?: boolean | Prisma.User$payoutRequestsArgs<ExtArgs>
+  paymentAccount?: boolean | Prisma.User$paymentAccountArgs<ExtArgs>
+  consentsReceived?: boolean | Prisma.User$consentsReceivedArgs<ExtArgs>
+  consentsGiven?: boolean | Prisma.User$consentsGivenArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1160,11 +1775,15 @@ export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
-    businesses: Prisma.$BusinessPayload<ExtArgs>[]
-    guardianships: Prisma.$GuardianRelationshipPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     auditEvents: Prisma.$AuditEventPayload<ExtArgs>[]
+    products: Prisma.$FounderProductPayload<ExtArgs>[]
+    transactions: Prisma.$FounderTransactionPayload<ExtArgs>[]
+    payoutRequests: Prisma.$FounderPayoutRequestPayload<ExtArgs>[]
+    paymentAccount: Prisma.$FounderPaymentAccountPayload<ExtArgs> | null
+    consentsReceived: Prisma.$GuardianConsentPayload<ExtArgs>[]
+    consentsGiven: Prisma.$GuardianConsentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1572,11 +2191,15 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  businesses<T extends Prisma.User$businessesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$businessesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  guardianships<T extends Prisma.User$guardianshipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$guardianshipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuardianRelationshipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditEvents<T extends Prisma.User$auditEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  products<T extends Prisma.User$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$productsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FounderProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transactions<T extends Prisma.User$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FounderTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  payoutRequests<T extends Prisma.User$payoutRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$payoutRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FounderPayoutRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  paymentAccount<T extends Prisma.User$paymentAccountArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$paymentAccountArgs<ExtArgs>>): Prisma.Prisma__FounderPaymentAccountClient<runtime.Types.Result.GetResult<Prisma.$FounderPaymentAccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  consentsReceived<T extends Prisma.User$consentsReceivedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$consentsReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuardianConsentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  consentsGiven<T extends Prisma.User$consentsGivenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$consentsGivenArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuardianConsentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2010,54 +2633,6 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * User.businesses
- */
-export type User$businessesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Business
-   */
-  select?: Prisma.BusinessSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Business
-   */
-  omit?: Prisma.BusinessOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.BusinessInclude<ExtArgs> | null
-  where?: Prisma.BusinessWhereInput
-  orderBy?: Prisma.BusinessOrderByWithRelationInput | Prisma.BusinessOrderByWithRelationInput[]
-  cursor?: Prisma.BusinessWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.BusinessScalarFieldEnum | Prisma.BusinessScalarFieldEnum[]
-}
-
-/**
- * User.guardianships
- */
-export type User$guardianshipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the GuardianRelationship
-   */
-  select?: Prisma.GuardianRelationshipSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the GuardianRelationship
-   */
-  omit?: Prisma.GuardianRelationshipOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.GuardianRelationshipInclude<ExtArgs> | null
-  where?: Prisma.GuardianRelationshipWhereInput
-  orderBy?: Prisma.GuardianRelationshipOrderByWithRelationInput | Prisma.GuardianRelationshipOrderByWithRelationInput[]
-  cursor?: Prisma.GuardianRelationshipWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.GuardianRelationshipScalarFieldEnum | Prisma.GuardianRelationshipScalarFieldEnum[]
-}
-
-/**
  * User.sessions
  */
 export type User$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2127,6 +2702,145 @@ export type User$auditEventsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.AuditEventScalarFieldEnum | Prisma.AuditEventScalarFieldEnum[]
+}
+
+/**
+ * User.products
+ */
+export type User$productsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FounderProduct
+   */
+  select?: Prisma.FounderProductSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FounderProduct
+   */
+  omit?: Prisma.FounderProductOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FounderProductInclude<ExtArgs> | null
+  where?: Prisma.FounderProductWhereInput
+  orderBy?: Prisma.FounderProductOrderByWithRelationInput | Prisma.FounderProductOrderByWithRelationInput[]
+  cursor?: Prisma.FounderProductWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FounderProductScalarFieldEnum | Prisma.FounderProductScalarFieldEnum[]
+}
+
+/**
+ * User.transactions
+ */
+export type User$transactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FounderTransaction
+   */
+  select?: Prisma.FounderTransactionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FounderTransaction
+   */
+  omit?: Prisma.FounderTransactionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FounderTransactionInclude<ExtArgs> | null
+  where?: Prisma.FounderTransactionWhereInput
+  orderBy?: Prisma.FounderTransactionOrderByWithRelationInput | Prisma.FounderTransactionOrderByWithRelationInput[]
+  cursor?: Prisma.FounderTransactionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FounderTransactionScalarFieldEnum | Prisma.FounderTransactionScalarFieldEnum[]
+}
+
+/**
+ * User.payoutRequests
+ */
+export type User$payoutRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FounderPayoutRequest
+   */
+  select?: Prisma.FounderPayoutRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FounderPayoutRequest
+   */
+  omit?: Prisma.FounderPayoutRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FounderPayoutRequestInclude<ExtArgs> | null
+  where?: Prisma.FounderPayoutRequestWhereInput
+  orderBy?: Prisma.FounderPayoutRequestOrderByWithRelationInput | Prisma.FounderPayoutRequestOrderByWithRelationInput[]
+  cursor?: Prisma.FounderPayoutRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FounderPayoutRequestScalarFieldEnum | Prisma.FounderPayoutRequestScalarFieldEnum[]
+}
+
+/**
+ * User.paymentAccount
+ */
+export type User$paymentAccountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FounderPaymentAccount
+   */
+  select?: Prisma.FounderPaymentAccountSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FounderPaymentAccount
+   */
+  omit?: Prisma.FounderPaymentAccountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FounderPaymentAccountInclude<ExtArgs> | null
+  where?: Prisma.FounderPaymentAccountWhereInput
+}
+
+/**
+ * User.consentsReceived
+ */
+export type User$consentsReceivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GuardianConsent
+   */
+  select?: Prisma.GuardianConsentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GuardianConsent
+   */
+  omit?: Prisma.GuardianConsentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GuardianConsentInclude<ExtArgs> | null
+  where?: Prisma.GuardianConsentWhereInput
+  orderBy?: Prisma.GuardianConsentOrderByWithRelationInput | Prisma.GuardianConsentOrderByWithRelationInput[]
+  cursor?: Prisma.GuardianConsentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GuardianConsentScalarFieldEnum | Prisma.GuardianConsentScalarFieldEnum[]
+}
+
+/**
+ * User.consentsGiven
+ */
+export type User$consentsGivenArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GuardianConsent
+   */
+  select?: Prisma.GuardianConsentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GuardianConsent
+   */
+  omit?: Prisma.GuardianConsentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GuardianConsentInclude<ExtArgs> | null
+  where?: Prisma.GuardianConsentWhereInput
+  orderBy?: Prisma.GuardianConsentOrderByWithRelationInput | Prisma.GuardianConsentOrderByWithRelationInput[]
+  cursor?: Prisma.GuardianConsentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GuardianConsentScalarFieldEnum | Prisma.GuardianConsentScalarFieldEnum[]
 }
 
 /**

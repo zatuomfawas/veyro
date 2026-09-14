@@ -136,15 +136,15 @@ function dobString(d: Stripe.Person.Dob | null | undefined): string | null {
 // Compare the person Stripe verified against the guardian we intended. Returns a
 // mismatch only once the onboarding form carries something to check.
 async function checkIndividual(
-  businessId: string,
+  founderId: string,
   acct: Stripe.Account,
 ): Promise<IndividualMismatch | null> {
   const ind = acct.individual;
   if (!ind) return null;
 
-  const rel = await db.guardianRelationship.findUnique({ where: { businessId } });
-  if (!rel?.guardianId) return null;
-  const guardian = await db.user.findUnique({ where: { id: rel.guardianId } });
+  const consent = await db.guardianConsent.findUnique({ where: { founderId } });
+  if (!consent?.guardianId) return null;
+  const guardian = await db.user.findUnique({ where: { id: consent.guardianId } });
   if (!guardian) return null;
 
   if (ind.email) {
@@ -168,7 +168,7 @@ async function checkIndividual(
 
 export type AccountSyncResult = {
   paymentAccountId: string;
-  businessId: string;
+  founderId: string;
   from: string;
   to: ConnectStatus;
   changed: boolean;
@@ -192,16 +192,16 @@ export type AccountSyncResult = {
  * that's a retry (webhook) or a 502 (endpoint).
  */
 export async function syncAccountFromStripe(
-  providerAccountId: string,
+  founderId: string,
   known?: Stripe.Account,
 ): Promise<AccountSyncResult | null> {
-  const account = await db.paymentAccount.findUnique({ where: { providerAccountId } });
-  if (!account) return null;
+  const account = await db.founderPaymentAccount.findUnique({ where: { founderId } });
+  if (!account?.providerAccountId) return null;
 
-  const acct = known ?? (await stripe.accounts.retrieve(providerAccountId));
+  const acct = known ?? (await stripe.accounts.retrieve(account.providerAccountId));
   const country = acct.country ?? "US";
 
-  const mismatch = await checkIndividual(account.businessId, acct);
+  const mismatch = await checkIndividual(founderId, acct);
   // A wrong individual overrides everything: the account does not go live.
   const to: ConnectStatus = mismatch ? "RESTRICTED" : deriveAccountStatus(acct);
 
@@ -209,7 +209,7 @@ export async function syncAccountFromStripe(
   const pendingCodes = pendingRequirements(acct);
   const disabledReason = acct.requirements?.disabled_reason ?? null;
 
-  await db.paymentAccount.update({
+  await db.founderPaymentAccount.update({
     where: { id: account.id },
     data: {
       status: to,
@@ -221,7 +221,7 @@ export async function syncAccountFromStripe(
 
   return {
     paymentAccountId: account.id,
-    businessId: account.businessId,
+    founderId,
     from: account.status,
     to,
     changed: to !== account.status,
@@ -231,4 +231,56 @@ export async function syncAccountFromStripe(
     disabledReason,
     mismatch,
   };
+}
+
+/**
+ * Open the founder's Stripe Connect account, with the GUARDIAN as the account
+ * login and the verified individual. The founder may be a minor; the guardian
+ * is the adult who passes the provider's checks, so the account is created
+ * against their email and never the founder's.
+ *
+ * The idempotency key is derived from founderId, so a retried request returns
+ * the same Stripe account instead of opening a second one. The "g1" token pins
+ * the current account shape — bump it if the accounts.create body changes, or
+ * after deleting a test account created with it.
+ */
+export async function createFounderStripeAccount(founderId: string, guardianId: string) {
+  const [founder, guardian] = await Promise.all([
+    db.user.findUnique({ where: { id: founderId } }),
+    db.user.findUnique({ where: { id: guardianId } }),
+  ]);
+  if (!founder) throw new Error("Founder not found.");
+  if (!guardian) throw new Error("Guardian not found.");
+
+  const existing = await db.founderPaymentAccount.findUnique({ where: { founderId } });
+  if (existing?.providerAccountId) return existing;
+
+  const stripeAccount = await stripe.accounts.create(
+    {
+      type: "standard",
+      country: founder.countryCode.trim(),
+      email: guardian.email, // the guardian, never the founder
+      business_type: "individual",
+      business_profile: { name: founder.name },
+      metadata: { veyroFounderId: founderId, veyroGuardianUserId: guardianId },
+    },
+    { idempotencyKey: `veyro-founder-acct-g1-${founderId}` },
+  );
+
+  return db.founderPaymentAccount.upsert({
+    where: { founderId },
+    create: {
+      founderId,
+      provider: "STRIPE_CONNECT",
+      providerAccountId: stripeAccount.id,
+      status: "PENDING",
+      representativeUserId: guardianId,
+    },
+    update: {
+      provider: "STRIPE_CONNECT",
+      providerAccountId: stripeAccount.id,
+      status: existing?.status === "ACTIVE" ? "ACTIVE" : "PENDING",
+      representativeUserId: guardianId,
+    },
+  });
 }

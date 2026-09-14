@@ -18,46 +18,32 @@ export const Role = {
 export type Role = (typeof Role)[keyof typeof Role]
 
 
-export const BusinessType = {
-  SAAS: 'SAAS',
-  DIGITAL_PRODUCT: 'DIGITAL_PRODUCT',
-  SERVICE: 'SERVICE',
-  CONTENT: 'CONTENT',
-  OTHER: 'OTHER'
+export const ProductStatus = {
+  DRAFT: 'DRAFT',
+  LIVE: 'LIVE',
+  ARCHIVED: 'ARCHIVED'
 } as const
 
-export type BusinessType = (typeof BusinessType)[keyof typeof BusinessType]
+export type ProductStatus = (typeof ProductStatus)[keyof typeof ProductStatus]
 
 
-export const RevenueModel = {
-  SUBSCRIPTION: 'SUBSCRIPTION',
-  ONE_TIME: 'ONE_TIME',
-  USAGE: 'USAGE',
-  MIXED: 'MIXED'
-} as const
-
-export type RevenueModel = (typeof RevenueModel)[keyof typeof RevenueModel]
-
-
-export const InvitationStatus = {
+export const FounderTransactionStatus = {
   PENDING: 'PENDING',
-  ACCEPTED: 'ACCEPTED',
-  DECLINED: 'DECLINED',
-  EXPIRED: 'EXPIRED',
-  REVOKED: 'REVOKED',
-  ENDED: 'ENDED'
+  COMPLETED: 'COMPLETED',
+  REFUNDED: 'REFUNDED'
 } as const
 
-export type InvitationStatus = (typeof InvitationStatus)[keyof typeof InvitationStatus]
+export type FounderTransactionStatus = (typeof FounderTransactionStatus)[keyof typeof FounderTransactionStatus]
 
 
-export const ProviderId = {
-  SANDBOX: 'SANDBOX',
-  STRIPE_CONNECT: 'STRIPE_CONNECT',
-  ADYEN_PLATFORMS: 'ADYEN_PLATFORMS'
+export const PayoutRequestStatus = {
+  REQUESTED: 'REQUESTED',
+  APPROVED: 'APPROVED',
+  SENT: 'SENT',
+  FAILED: 'FAILED'
 } as const
 
-export type ProviderId = (typeof ProviderId)[keyof typeof ProviderId]
+export type PayoutRequestStatus = (typeof PayoutRequestStatus)[keyof typeof PayoutRequestStatus]
 
 
 export const AccountStatus = {
@@ -73,46 +59,10 @@ export const AccountStatus = {
 export type AccountStatus = (typeof AccountStatus)[keyof typeof AccountStatus]
 
 
-export const EntryKind = {
-  CHARGE: 'CHARGE',
-  REFUND: 'REFUND',
-  DISPUTE_HOLD: 'DISPUTE_HOLD',
-  DISPUTE_RELEASE: 'DISPUTE_RELEASE',
-  DISPUTE_LOSS: 'DISPUTE_LOSS',
-  ADJUSTMENT: 'ADJUSTMENT'
+export const ProviderId = {
+  SANDBOX: 'SANDBOX',
+  STRIPE_CONNECT: 'STRIPE_CONNECT',
+  ADYEN_PLATFORMS: 'ADYEN_PLATFORMS'
 } as const
 
-export type EntryKind = (typeof EntryKind)[keyof typeof EntryKind]
-
-
-export const EntryBucket = {
-  PENDING: 'PENDING',
-  AVAILABLE: 'AVAILABLE',
-  HELD: 'HELD',
-  REVERSED: 'REVERSED'
-} as const
-
-export type EntryBucket = (typeof EntryBucket)[keyof typeof EntryBucket]
-
-
-export const EntryStatus = {
-  SUCCEEDED: 'SUCCEEDED',
-  PARTIALLY_REFUNDED: 'PARTIALLY_REFUNDED',
-  REFUNDED: 'REFUNDED',
-  DISPUTED: 'DISPUTED',
-  REVERSED: 'REVERSED'
-} as const
-
-export type EntryStatus = (typeof EntryStatus)[keyof typeof EntryStatus]
-
-
-export const PayoutStatus = {
-  AWAITING_APPROVAL: 'AWAITING_APPROVAL',
-  IN_TRANSIT: 'IN_TRANSIT',
-  PAID: 'PAID',
-  FAILED: 'FAILED',
-  DECLINED: 'DECLINED',
-  CANCELED: 'CANCELED'
-} as const
-
-export type PayoutStatus = (typeof PayoutStatus)[keyof typeof PayoutStatus]
+export type ProviderId = (typeof ProviderId)[keyof typeof ProviderId]
