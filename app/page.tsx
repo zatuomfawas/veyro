@@ -66,9 +66,9 @@ export default function Home() {
             business, and Veyro keeps a separate ledger so that stays obvious.
           </li>
           <li>
-            Your guardian is notified of every payout and keeps a permanent record of it. They do
-            not get a veto. On the account type this is built on, nobody can build them one, and we
-            would rather say so here than have you discover it later.
+            Your guardian is notified of every payout request and keeps a permanent record of it.
+            They do not get a veto. On the account type this is built on, nobody can build them
+            one, and we would rather say so here than have you discover it later.
           </li>
           <li>
             Whether a minor may hold a payment account with a guardian as representative has not

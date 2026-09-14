@@ -217,11 +217,11 @@ export default function HowItWorks() {
             <span>
               A Standard connected account comes with a full Stripe dashboard and its own payout
               schedule. The platform cannot hold the money, delay a payout, or approve one. So your
-              guardian is notified of every payout and keeps a permanent record of it — they do not
-              get a veto. On Express or Custom we could build them one, which means the honest
-              version is that our platform&rsquo;s registration, not the under-18 rules, is why
-              that feature does not exist. If another product promises a guardian veto, ask which
-              account type it uses.
+              guardian is notified of every payout request and keeps a permanent record of it —
+              they do not get a veto. On Express or Custom we could build them one, which means the
+              honest version is that our platform&rsquo;s registration, not the under-18 rules, is
+              why that feature does not exist. If another product promises a guardian veto, ask
+              which account type it uses.
             </span>
           </li>
           <li>
