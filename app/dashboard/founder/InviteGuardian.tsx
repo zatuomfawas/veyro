@@ -11,12 +11,134 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Btn, Field, Notice } from "@/app/_ui/form";
 
-export default function InviteGuardian({ reinvite = false }: { reinvite?: boolean }) {
+/**
+ * The one-time code, with a copy button.
+ *
+ * Shown after a first invite and after a re-invite alike. A re-invite replaces
+ * the stored hash, so the previous code stops working — telling someone only
+ * "Invite sent" would leave them holding a code that no longer opens anything.
+ */
+function TokenReveal({ token, email, onDone }: { token: string; email: string; onDone: () => void }) {
+  const [copied, setCopied] = useState(false);
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(token);
+      setCopied(true);
+    } catch {
+      // Clipboard access is denied in some browsers and over plain http. The
+      // code is on screen and selectable either way, so this is not an error
+      // worth interrupting anyone over.
+      setCopied(false);
+    }
+  }
+
+  return (
+    <Notice tone="pine" head="Invite created. Copy this code now.">
+      <p style={{ margin: "0 0 10px" }}>
+        This is the only time it is shown. Veyro stores a hash of it, not the code itself, so it
+        cannot be looked up again. If you lose it, send a new invite.
+      </p>
+      <div
+        className="mono"
+        style={{
+          background: "var(--surface)", border: "1px solid var(--line)", padding: "10px 12px",
+          wordBreak: "break-all", fontSize: "var(--fs-2)", marginBottom: 10,
+        }}
+      >
+        {token}
+      </div>
+      {copied ? (
+        <p style={{ margin: "0 0 10px" }}>
+          Copied. Send it to <strong>{email}</strong> yourself — Veyro does not email it yet. They
+          sign in to their own guardian account to accept, which is what ties the consent to a real
+          adult.
+        </p>
+      ) : (
+        <p style={{ margin: "0 0 10px" }}>
+          Send it to <strong>{email}</strong> yourself. They sign in to their own guardian account
+          to accept, which is what ties the consent to a real adult.
+        </p>
+      )}
+      <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
+        <Btn type="button" variant="2" size="sm" onClick={copy}>
+          {copied ? "Copied" : "Copy code"}
+        </Btn>
+        <Btn type="button" variant="q" size="sm" onClick={onDone}>Done</Btn>
+      </div>
+    </Notice>
+  );
+}
+
+async function postInvite(invitedEmail: string) {
+  const res = await fetch("/api/founder/consent", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ invitedEmail }),
+  });
+  const body = await res.json().catch(() => null);
+  return { ok: res.ok, body };
+}
+
+/** One-click re-invite of an address already on the record. */
+export function ResendInvite({ email }: { email: string }) {
+  const router = useRouter();
+  const [token, setToken] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  if (token) {
+    return (
+      <TokenReveal
+        token={token}
+        email={email}
+        onDone={() => { setToken(null); router.refresh(); }}
+      />
+    );
+  }
+
+  return (
+    <div>
+      {error && (
+        <div style={{ marginBottom: 12 }}>
+          <Notice tone="clay" head="That didn&rsquo;t work">{error}</Notice>
+        </div>
+      )}
+      <Btn
+        type="button"
+        variant="2"
+        disabled={busy}
+        aria-busy={busy ? "true" : undefined}
+        onClick={async () => {
+          setBusy(true);
+          setError(null);
+          try {
+            const { ok, body } = await postInvite(email);
+            if (!ok) {
+              setError(body?.errors?.invitedEmail ?? body?.error ?? "No invite was sent.");
+            } else {
+              setToken(body.inviteToken);
+              router.refresh();
+            }
+          } catch {
+            setError("We couldn't reach the server. No invite was sent.");
+          } finally {
+            setBusy(false);
+          }
+        }}
+      >
+        {busy ? "Sending…" : `Re-invite ${email}`}
+      </Btn>
+    </div>
+  );
+}
+
+export default function InviteGuardian() {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
+  const [sentTo, setSentTo] = useState("");
   const [token, setToken] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -30,20 +152,14 @@ export default function InviteGuardian({ reinvite = false }: { reinvite?: boolea
     setFormError(null);
 
     try {
-      const res = await fetch("/api/founder/consent", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ invitedEmail: email }),
-      });
-      const body = await res.json().catch(() => null);
-
-      if (!res.ok) {
+      const { ok, body } = await postInvite(email);
+      if (!ok) {
         if (body?.errors) setErrors(body.errors);
         else setFormError(body?.error ?? "Something went wrong. No invite was sent.");
         setSubmitting(false);
         return;
       }
-
+      setSentTo(email);
       setToken(body.inviteToken);
       setSubmitting(false);
       // Repaint the server-rendered panels: the consent row now exists.
@@ -54,49 +170,13 @@ export default function InviteGuardian({ reinvite = false }: { reinvite?: boolea
     }
   }
 
-  async function copy() {
-    if (!token) return;
-    try {
-      await navigator.clipboard.writeText(token);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // Clipboard access is denied in some browsers and over plain http. The
-      // code is on screen and selectable either way, so this is not an error
-      // worth interrupting anyone over.
-      setCopied(false);
-    }
-  }
-
   if (token) {
     return (
-      <Notice tone="pine" head="Invite created. Copy this code now.">
-        <p style={{ margin: "0 0 10px" }}>
-          This is the only time it is shown. Veyro stores a hash of it, not the code itself, so
-          it cannot be looked up again. If you lose it, send a new invite.
-        </p>
-        <div
-          className="mono"
-          style={{
-            background: "var(--surface)", border: "1px solid var(--line)", padding: "10px 12px",
-            wordBreak: "break-all", fontSize: "var(--fs-2)", marginBottom: 10,
-          }}
-        >
-          {token}
-        </div>
-        <p style={{ margin: "0 0 10px" }}>
-          Send it to <strong>{email}</strong> yourself — Veyro does not email it yet. They sign in
-          to their own guardian account to accept, which is what ties the consent to a real adult.
-        </p>
-        <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
-          <Btn type="button" variant="2" size="sm" onClick={copy}>
-            {copied ? "Copied" : "Copy code"}
-          </Btn>
-          <Btn type="button" variant="q" size="sm" onClick={() => { setToken(null); setEmail(""); }}>
-            Done
-          </Btn>
-        </div>
-      </Notice>
+      <TokenReveal
+        token={token}
+        email={sentTo}
+        onDone={() => { setToken(null); setEmail(""); router.refresh(); }}
+      />
     );
   }
 
@@ -118,13 +198,14 @@ export default function InviteGuardian({ reinvite = false }: { reinvite?: boolea
           type="email"
           value={email}
           autoComplete="email"
+          maxLength={254}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="parent@example.com"
         />
       </Field>
 
       <Btn type="submit" disabled={submitting} aria-busy={submitting ? "true" : undefined}>
-        {submitting ? "Creating invite…" : reinvite ? "Send a new invite" : "Invite my guardian"}
+        {submitting ? "Creating invite…" : "Invite my guardian"}
       </Btn>
     </form>
   );
