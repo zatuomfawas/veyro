@@ -12,6 +12,7 @@ import { NextResponse } from "next/server";
 import { randomBytes, createHash } from "crypto";
 import { db } from "@/lib/db";
 import { currentUser, audit } from "@/lib/auth";
+import { consentState } from "@/lib/consent";
 import { readJson, cap } from "../_scope";
 
 export const runtime = "nodejs";
@@ -172,13 +173,8 @@ export async function GET() {
   const consent = await db.guardianConsent.findUnique({ where: { founderId: user.id } });
   if (!consent) return NextResponse.json({ ok: true, consent: null });
 
-  const state = consent.consentedAt
-    ? "consented"
-    : consent.respondedAt
-      ? "declined"
-      : consent.inviteExpiresAt < new Date()
-        ? "expired"
-        : "pending";
+  // Derived in lib/consent.ts, which the founder dashboard reads too.
+  const state = consentState(consent);
 
   return NextResponse.json({
     ok: true,
