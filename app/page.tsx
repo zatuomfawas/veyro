@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { buildMetadata, buildViewport } from "@/lib/seo";
+import { currentUser } from "@/lib/auth";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
@@ -8,8 +9,19 @@ export const metadata = buildMetadata("landing");
 export const viewport = buildViewport();
 
 // Server Component. No client JS on the marketing surface.
+//
+// currentUser() reads the session cookie, which opts this route out of static
+// rendering — it is now server-rendered per request. That is the price of
+// deciding the nav on the server instead of shipping a client component here.
+// For anonymous traffic, which is nearly all of it, the cost is a cookie read
+// and no database query: currentUser() returns null before it touches the db.
 
-export default function Home() {
+export default async function Home() {
+  // Asking the database, not the cookie alone. A revoked, expired or
+  // deleted-user session has to still show "Sign in" — hiding it because a
+  // stale cookie exists would strand someone who is, in fact, logged out.
+  const user = await currentUser();
+
   return (
     <div className="fw">
       <style>{CSS + CSS2}</style>
@@ -21,6 +33,9 @@ export default function Home() {
           <div className="lp-links">
             <Link className="btn btn-q btn-sm hide-s" href="/how-it-works">How it works</Link>
             <Link className="btn btn-2 btn-sm" href="/check">Check eligibility</Link>
+            {!user && (
+              <Link className="btn btn-q btn-sm" href="/auth/signin">Sign in</Link>
+            )}
           </div>
         </div>
       </div>
