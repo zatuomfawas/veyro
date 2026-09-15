@@ -249,7 +249,7 @@ export default async function FounderDashboard() {
                     Invite a guardian to get started. They are the adult the payment provider
                     verifies — not the owner of your business.
                   </p>
-                  <InviteGuardian />
+                  <InviteGuardian founderId={founderId} />
                 </div>
               ) : (
                 <div className="stack">
@@ -272,7 +272,7 @@ export default async function FounderDashboard() {
                       working. Sending a new one replaces it.
                     </Notice>
                   )}
-                  {consent && <ResendInvite email={consent.invitedEmail} />}
+                  {consent && <ResendInvite email={consent.invitedEmail} founderId={founderId} />}
                 </div>
               )}
             </Section>

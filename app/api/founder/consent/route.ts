@@ -9,15 +9,14 @@
 //   from their own signed-in session. The token proves which invite; the
 //   session proves who is answering; the email must match both.
 import { NextResponse } from "next/server";
-import { randomBytes, createHash } from "crypto";
+import { randomBytes } from "crypto";
 import { db } from "@/lib/db";
 import { currentUser, audit } from "@/lib/auth";
-import { consentState } from "@/lib/consent";
+import { consentState, hashInviteToken } from "@/lib/consent";
 import { readJson, cap } from "../_scope";
 
 export const runtime = "nodejs";
 
-const sha256 = (v: string) => createHash("sha256").update(v).digest("hex");
 const INVITE_DAYS = 14;
 
 export async function POST(req: Request) {
@@ -68,12 +67,12 @@ async function invite(
     create: {
       founderId: user.id,
       invitedEmail,
-      tokenHash: sha256(rawToken),
+      tokenHash: hashInviteToken(rawToken),
       inviteExpiresAt,
     },
     update: {
       invitedEmail,
-      tokenHash: sha256(rawToken),
+      tokenHash: hashInviteToken(rawToken),
       invitedAt: new Date(),
       inviteExpiresAt,
       guardianId: null,
@@ -102,7 +101,7 @@ async function respond(
     return NextResponse.json({ error: 'decision must be "accept" or "decline".' }, { status: 400 });
   }
 
-  const consent = await db.guardianConsent.findUnique({ where: { tokenHash: sha256(token) } });
+  const consent = await db.guardianConsent.findUnique({ where: { tokenHash: hashInviteToken(token) } });
   if (!consent) return NextResponse.json({ error: "This invite link is invalid." }, { status: 404 });
 
   if (consent.respondedAt) {

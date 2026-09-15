@@ -33,7 +33,9 @@ export default function SigninForm() {
         return;
       }
 
-      router.push("/");
+      // Founders have somewhere to be. Guardians do not yet — their dashboard
+      // is the next phase — so they land on the marketing page for now.
+      router.push(body?.user?.role === "FOUNDER" ? "/dashboard/founder" : "/");
       router.refresh();
     } catch {
       setFormError("We couldn't reach the server. Try again in a moment.");

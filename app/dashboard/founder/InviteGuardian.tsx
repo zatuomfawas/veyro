@@ -18,12 +18,22 @@ import { Btn, Field, Notice } from "@/app/_ui/form";
  * the stored hash, so the previous code stops working — telling someone only
  * "Invite sent" would leave them holding a code that no longer opens anything.
  */
-function TokenReveal({ token, email, onDone }: { token: string; email: string; onDone: () => void }) {
+function TokenReveal({
+  token, email, founderId, onDone,
+}: { token: string; email: string; founderId: string; onDone: () => void }) {
   const [copied, setCopied] = useState(false);
+
+  // The whole link, not the bare code. A code on its own has nowhere to be
+  // typed — there is no "enter your invite code" screen — so handing someone
+  // one would be handing them a dead end. window.location.origin keeps this
+  // right on localhost, on a preview deployment and in production alike.
+  const link =
+    (typeof window === "undefined" ? "" : window.location.origin)
+    + `/founder/${founderId}/consent?token=${encodeURIComponent(token)}`;
 
   async function copy() {
     try {
-      await navigator.clipboard.writeText(token);
+      await navigator.clipboard.writeText(link);
       setCopied(true);
     } catch {
       // Clipboard access is denied in some browsers and over plain http. The
@@ -34,10 +44,10 @@ function TokenReveal({ token, email, onDone }: { token: string; email: string; o
   }
 
   return (
-    <Notice tone="pine" head="Invite created. Copy this code now.">
+    <Notice tone="pine" head="Invite created. Copy this link now.">
       <p style={{ margin: "0 0 10px" }}>
-        This is the only time it is shown. Veyro stores a hash of it, not the code itself, so it
-        cannot be looked up again. If you lose it, send a new invite.
+        This is the only time it is shown. Veyro stores a hash of the code inside it, not the code
+        itself, so it cannot be looked up again. If you lose it, send a new invite.
       </p>
       <div
         className="mono"
@@ -46,7 +56,7 @@ function TokenReveal({ token, email, onDone }: { token: string; email: string; o
           wordBreak: "break-all", fontSize: "var(--fs-2)", marginBottom: 10,
         }}
       >
-        {token}
+        {link}
       </div>
       {copied ? (
         <p style={{ margin: "0 0 10px" }}>
@@ -62,7 +72,7 @@ function TokenReveal({ token, email, onDone }: { token: string; email: string; o
       )}
       <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
         <Btn type="button" variant="2" size="sm" onClick={copy}>
-          {copied ? "Copied" : "Copy code"}
+          {copied ? "Copied" : "Copy link"}
         </Btn>
         <Btn type="button" variant="q" size="sm" onClick={onDone}>Done</Btn>
       </div>
@@ -81,7 +91,7 @@ async function postInvite(invitedEmail: string) {
 }
 
 /** One-click re-invite of an address already on the record. */
-export function ResendInvite({ email }: { email: string }) {
+export function ResendInvite({ email, founderId }: { email: string; founderId: string }) {
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -92,6 +102,7 @@ export function ResendInvite({ email }: { email: string }) {
       <TokenReveal
         token={token}
         email={email}
+        founderId={founderId}
         onDone={() => { setToken(null); router.refresh(); }}
       />
     );
@@ -133,7 +144,7 @@ export function ResendInvite({ email }: { email: string }) {
   );
 }
 
-export default function InviteGuardian() {
+export default function InviteGuardian({ founderId }: { founderId: string }) {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
@@ -175,6 +186,7 @@ export default function InviteGuardian() {
       <TokenReveal
         token={token}
         email={sentTo}
+        founderId={founderId}
         onDone={() => { setToken(null); setEmail(""); router.refresh(); }}
       />
     );

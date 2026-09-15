@@ -9,7 +9,19 @@
 // row directly rather than calling the route. Two hand-written copies of this
 // ladder would eventually disagree about, say, whether an invite accepted
 // before its window closed is still consented.
+import { createHash } from "crypto";
 import type { GuardianConsent } from "@/generated/prisma/client";
+
+/**
+ * The stored form of an invite token.
+ *
+ * Only the hash is ever written, the same pattern as session tokens: if the
+ * database leaks, the tokens in it cannot be used to consent as anyone. Shared
+ * by the consent API and the acceptance page so one lookup cannot start hashing
+ * differently from the other and silently stop matching.
+ */
+export const hashInviteToken = (raw: string) =>
+  createHash("sha256").update(raw).digest("hex");
 
 export type ConsentState =
   /** No invite has ever been sent. */

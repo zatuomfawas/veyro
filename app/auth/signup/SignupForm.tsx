@@ -62,7 +62,9 @@ export default function SignupForm() {
       }
 
       // Signup already issued the session cookie, so this account is signed in.
-      router.push("/");
+      // Founders go straight to their dashboard; a guardian's next step is the
+      // invite link their founder sends them, not a page here.
+      router.push(body?.user?.role === "FOUNDER" ? "/dashboard/founder" : "/");
       router.refresh();
     } catch {
       setFormError("We couldn't reach the server. Nothing was created.");
