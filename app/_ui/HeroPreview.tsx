@@ -23,11 +23,11 @@ export function HeroPreview() {
           <span className="badge b-pine">Live</span>
         </div>
         <div className="card-b">
-          <div style={{ marginBottom: 14 }}>
+          <div style={{ marginBottom: 12 }}>
             <span className="num" style={{ fontSize: "var(--fs-7)", fontWeight: "var(--fw-bold)", letterSpacing: "-0.022em" }}>
               $240.00
             </span>
-            <span className="tiny" style={{ display: "block", marginTop: 2 }}>
+            <span className="tiny" style={{ display: "block", marginTop: 4 }}>
               available to pay out
             </span>
           </div>
@@ -53,7 +53,7 @@ export function HeroPreview() {
         </div>
       </div>
 
-      <div className="card" style={{ marginTop: 14 }}>
+      <div className="card" style={{ marginTop: 12 }}>
         <div className="card-h">
           <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
             <Icon name="card" size={14} />

@@ -174,14 +174,14 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
           <Icon name="back" size={13} />Back to home
         </Btn>
       </div></div>
-      <div className="wrap-s" style={{ marginTop: 10, marginBottom: 90 }}>
+      <div className="wrap-s" style={{ marginTop: 8, marginBottom: 90 }}>
         <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>Check what applies to you</h1>
-        <p className="body" style={{ marginTop: 10, fontSize: "var(--fs-4)" }}>
+        <p className="body" style={{ marginTop: 8, fontSize: "var(--fs-4)" }}>
           Where you live and how old you are decide which route is open, and whether you need us at all.
           No account, no email address.
         </p>
 
-        <div className="card" style={{ marginTop: 22 }}><div className="card-b">
+        <div className="card" style={{ marginTop: 20 }}><div className="card-b">
           <Field label="Where do you live?">
             <select className="select" value={code} onChange={(e) => { setCode(e.target.value); setRegion(""); reset(); }}>
               <option value="">Choose a country</option>
@@ -218,15 +218,15 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
                   it legitimate. You keep running the business. We walk both of you through the setup and keep the
                   record of who agreed to what, and when.
                 </p>
-                <p style={{ marginTop: 10 }}>
+                <p style={{ marginTop: 8 }}>
                   {STRIPE_CONFIRMED.has(R.country?.[0] ?? "") ? (
                     <>Stripe confirmed {R.country?.[1]} by name when we asked them directly on 8 September 2026, and
                     the age above comes from {R.evidence === "primary" ? "a named statute or an official body"
                       : R.evidence === "disputed" ? "sources that disagree, so we use the higher figure"
                       : "secondary summaries"}. This is the strongest case we have.</>
                   ) : (
-                    <>Stripe confirmed how this works in general — 13 and over, with the guardian&rsquo;s involvement
-                    completed through their own onboarding — and we have found nothing in {R.country?.[1]}&rsquo;s law
+                    <>Stripe confirmed how this works in general (13 and over, with the guardian&rsquo;s involvement
+                    completed through their own onboarding), and we have found nothing in {R.country?.[1]}&rsquo;s law
                     that prevents it. What they would not confirm is availability country by country; they named only
                     the US. So you would find out for certain at the Stripe step, before any money moves and before
                     anyone has committed to anything.</>
@@ -268,7 +268,7 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
               <Notice tone="clay" head={"You must be at least " + R.majority + " in " + R.country?.[1]}>
                 {R.country?.[1]} is the one country the payment provider carves out of the under-18 route. Stripe told
                 us directly: account holders there must be at least {R.majority}, and a parent or legal guardian on the
-                account does not change it. You&rsquo;re {age}, so there is no version of this that works yet — not with
+                account does not change it. You&rsquo;re {age}, so there is no version of this that works yet: not with
                 us, and not with anyone else building on the same provider.
               </Notice>
             )}
@@ -321,7 +321,7 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
                    : R.evidence === "disputed" ? "Sources disagree, so we use the higher figure. Being told you need a guardian when you do not costs a step; the reverse produces an invalid application."
                    : "From secondary summaries, not yet confirmed against the statute."}
                 </p>
-                <p className="tiny" style={{ marginTop: 10 }}>
+                <p className="tiny" style={{ marginTop: 8 }}>
                   Separately, and this is the part that gates everything: whether a minor may hold the account
                   in {R.country?.[1]} with a guardian as representative has not been confirmed by a lawyer in any
                   country. Provider policy permitting it is not the same as it being settled locally.
@@ -331,7 +331,7 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
           </div>
         )}
 
-        <div style={{ marginTop: 26 }}>
+        <div style={{ marginTop: 24 }}>
           <div className="lbl" style={{ marginBottom: 8 }}>How we work this out</div>
           <p className="tiny" style={{ maxWidth: "var(--m-body)" }}>
             Two filters, and a default. First, how the payment provider reaches your country: 43 countries can sign

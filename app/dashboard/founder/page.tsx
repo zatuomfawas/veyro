@@ -182,7 +182,7 @@ export default async function FounderDashboard() {
       <style>{CSS + CSS2}</style>
       <DashNav role="FOUNDER" current="dashboard" />
 
-      <main id="main" className="wrap-w" style={{ paddingTop: 28, paddingBottom: 80 }}>
+      <main id="main" className="wrap-w" style={{ paddingTop: 24, paddingBottom: 80 }}>
         {/* ---------------- 1. header ---------------- */}
         <DashHeader
           title="Your business"
@@ -219,7 +219,7 @@ export default async function FounderDashboard() {
                 <div className="stack">
                   <p className="body" style={{ margin: 0 }}>
                     Invite a guardian to get started. They are the adult the payment provider
-                    verifies — not the owner of your business.
+                    verifies, not the owner of your business.
                   </p>
                   <InviteGuardian founderId={founderId} />
                 </div>
@@ -282,7 +282,7 @@ export default async function FounderDashboard() {
                   <p className="body" style={{ marginTop: 0 }}>
                     Stripe still needs {due.length === 1 ? "one thing" : `${due.length} things`} before
                     this account can take payments. {guardianName} supplies{" "}
-                    {due.length === 1 ? "it" : "them"} in Stripe&rsquo;s own form — Veyro never sees
+                    {due.length === 1 ? "it" : "them"} in Stripe&rsquo;s own form. Veyro never sees
                     identity documents.
                   </p>
                   {due.length > 0 ? (
@@ -313,7 +313,7 @@ export default async function FounderDashboard() {
               ) : account.status === "DISCONNECTED" ? (
                 <Notice tone="clay" head="Account disconnected">
                   The Stripe connection was removed, so nothing can be sold right now.{" "}
-                  <strong>{guardianName}</strong> needs to reconnect it from their own account —
+                  <strong>{guardianName}</strong> needs to reconnect it from their own account.
                   reconnecting is theirs to do, not yours, because Stripe verifies them.
                 </Notice>
               ) : (
@@ -341,10 +341,10 @@ export default async function FounderDashboard() {
                   {wallet.currencies.map((c) => (
                     <div key={c.currency}>
                       {!c.balances && (
-                        <div style={{ marginBottom: 10 }}>
+                        <div style={{ marginBottom: 8 }}>
                           <Notice tone="clay" head="Balances don&rsquo;t reconcile">
                             The fold disagrees with itself for {c.currency}, so the figures below are
-                            not trustworthy. Nothing has been lost — the records are intact — but
+                            not trustworthy. Nothing has been lost (the records are intact), but
                             contact support at{" "}
                             <a className="linkbtn" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>{" "}
                             before acting on this.
@@ -466,7 +466,7 @@ export default async function FounderDashboard() {
                 <EmptyState>
                   <p className="body" style={{ margin: 0 }}>
                     No transactions yet. Every completed payment is recorded here from
-                    Stripe&rsquo;s own signed webhook — never from the customer&rsquo;s browser.
+                    Stripe&rsquo;s own signed webhook, never from the customer&rsquo;s browser.
                   </p>
                 </EmptyState>
               ) : (
@@ -484,7 +484,7 @@ export default async function FounderDashboard() {
                       {transactions.map((t) => (
                         <tr key={t.id}>
                           <td className="num">{fmtDate(t.createdAt)}</td>
-                          <td>{t.product?.name ?? "—"}</td>
+                          <td>{t.product?.name ?? "None"}</td>
                           <td className="num">{formatMinor(t.amountMinor, t.currency)}</td>
                           <td>
                             <span className={"badge " + (TX_BADGE[t.status] ?? "b-grey")}>

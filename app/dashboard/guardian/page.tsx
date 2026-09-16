@@ -115,7 +115,7 @@ export default async function GuardianDashboard() {
       <style>{CSS + CSS2}</style>
       <DashNav role="GUARDIAN" current="dashboard" />
 
-      <main id="main" className="wrap-w" style={{ paddingTop: 28, paddingBottom: 80 }}>
+      <main id="main" className="wrap-w" style={{ paddingTop: 24, paddingBottom: 80 }}>
         <DashHeader
           title="Your founders"
           subtitle={
@@ -141,7 +141,7 @@ export default async function GuardianDashboard() {
                 dashboard, and their invite link brings you to a page where you can accept.
               </p>
               <p className="small" style={{ marginBottom: 0 }}>
-                If you were expecting an invitation, ask them to send it again — links expire after
+                If you were expecting an invitation, ask them to send it again. Links expire after
                 fourteen days, and sending a new one replaces the old.
               </p>
             </EmptyState>
@@ -173,7 +173,7 @@ export default async function GuardianDashboard() {
                   <hr className="rule" style={{ margin: "18px 0" }} />
 
                   {/* ---- payments: the one thing only a guardian can do ---- */}
-                  <h3 className="h4" style={{ marginTop: 0, marginBottom: 10 }}>Payments</h3>
+                  <h3 className="h4" style={{ marginTop: 0, marginBottom: 8 }}>Payments</h3>
 
                   {!account || account.status === "NOT_STARTED" || account.status === "AWAITING_GUARDIAN" ? (
                     <div>
@@ -196,10 +196,10 @@ export default async function GuardianDashboard() {
                     <div>
                       <p className="body" style={{ marginTop: 0 }}>
                         Stripe needs {due.length === 1 ? "one more thing" : `${due.length} more things`} from
-                        you before this account can take payments. Veyro never sees identity documents —
+                        you before this account can take payments. Veyro never sees identity documents.
                         they go straight to Stripe.
                       </p>
-                      <div style={{ marginBottom: 18 }}><Requirements items={due} /></div>
+                      <div style={{ marginBottom: 16 }}><Requirements items={due} /></div>
                       <SetUpPayments founderId={founder.id} resume />
                     </div>
                   ) : (
@@ -217,11 +217,11 @@ export default async function GuardianDashboard() {
                   <div className="grid-2" style={{ gap: 32, alignItems: "start" }}>
                     {/* ---- payout requests ---- */}
                     <div>
-                      <h3 className="h4" style={{ marginTop: 0, marginBottom: 10 }}>Payout requests</h3>
+                      <h3 className="h4" style={{ marginTop: 0, marginBottom: 8 }}>Payout requests</h3>
                       {theirPayouts.length === 0 ? (
                         <p className="small" style={{ margin: 0 }}>
                           None yet. You are told each time {founder.name} asks for one, and the
-                          record is permanent. You are not asked to approve it — on this account
+                          record is permanent. You are not asked to approve it: on this account
                           type nobody can be given that power, and we would rather say so here.
                         </p>
                       ) : (
@@ -256,7 +256,7 @@ export default async function GuardianDashboard() {
 
                     {/* ---- wallet, read-only ---- */}
                     <div>
-                      <h3 className="h4" style={{ marginTop: 0, marginBottom: 10 }}>Money</h3>
+                      <h3 className="h4" style={{ marginTop: 0, marginBottom: 8 }}>Money</h3>
                       <WalletSummary wallet={wallet} />
                     </div>
                   </div>
@@ -264,7 +264,7 @@ export default async function GuardianDashboard() {
                   <hr className="rule" style={{ margin: "22px 0 18px" }} />
 
                   {/* ---- products, read-only ---- */}
-                  <h3 className="h4" style={{ marginTop: 0, marginBottom: 10 }}>
+                  <h3 className="h4" style={{ marginTop: 0, marginBottom: 8 }}>
                     What {founder.name} sells
                   </h3>
                   {theirProducts.length === 0 ? (

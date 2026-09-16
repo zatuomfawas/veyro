@@ -52,7 +52,7 @@ export default async function SettingsPage() {
       <style>{CSS + CSS2}</style>
       <DashNav role={user.role as DashRole} current="settings" />
 
-      <main id="main" className="wrap-w" style={{ paddingTop: 28, paddingBottom: 80 }}>
+      <main id="main" className="wrap-w" style={{ paddingTop: 24, paddingBottom: 80 }}>
         <DashHeader
           title="Settings"
           subtitle={
@@ -75,7 +75,7 @@ export default async function SettingsPage() {
                   `Your payment account is already open in ${lockedCountryName}. Stripe verified `
                   + "an identity and set up payouts against that country, so changing it here "
                   + "would leave Veyro describing one place and Stripe operating in another. "
-                  + "Moving country means closing that account and opening a new one — email us "
+                  + "Moving country means closing that account and opening a new one. Email us "
                   + "and we will talk you through it."
                 }
               />
@@ -89,8 +89,8 @@ export default async function SettingsPage() {
               <Notice tone="grey" head="Why not">
                 <p style={{ margin: "0 0 8px" }}>
                   Changing an email address is only safe if the new one is proved to belong to you
-                  first. Veyro cannot send mail yet — which is also why guardian invitations are
-                  copied by hand rather than emailed — so there is no way to prove it.
+                  first. Veyro cannot send mail yet, which is also why guardian invitations are
+                  copied by hand rather than emailed, so there is no way to prove it.
                 </p>
                 <p style={{ margin: 0 }}>
                   An unverified change would be the easiest way to take over an account: point the

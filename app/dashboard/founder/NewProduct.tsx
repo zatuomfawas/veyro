@@ -54,7 +54,7 @@ function checkField(field: "name" | "description" | "price", value: string): str
   }
   if (field === "description") {
     return value.trim().length < DESC_MIN
-      ? "Describe what the customer is paying for — a sentence is enough."
+      ? "Describe what the customer is paying for, and a sentence is enough."
       : null;
   }
   const minor = toMinor(value);
@@ -159,7 +159,7 @@ export default function NewProduct({ founderId }: { founderId: string }) {
           className="mono"
           style={{
             background: "var(--surface)", border: "1px solid var(--line)", padding: "10px 12px",
-            wordBreak: "break-all", fontSize: "var(--fs-2)", marginBottom: 10,
+            wordBreak: "break-all", fontSize: "var(--fs-2)", marginBottom: 8,
           }}
         >
           {link}
@@ -195,7 +195,7 @@ export default function NewProduct({ founderId }: { founderId: string }) {
   return (
     <form onSubmit={onSubmit} noValidate>
       {formError && (
-        <div style={{ marginBottom: 14 }}>
+        <div style={{ marginBottom: 12 }}>
           <Notice tone="clay" head="That didn&rsquo;t work">{formError}</Notice>
         </div>
       )}
@@ -235,8 +235,8 @@ export default function NewProduct({ founderId }: { founderId: string }) {
         hint="Only a live product can take a payment. A draft is yours to finish first.">
         <select className="select" value={status}
           onChange={(e) => setStatus(e.target.value as "LIVE" | "DRAFT")}>
-          <option value="LIVE">Live — ready to sell</option>
-          <option value="DRAFT">Draft — not for sale yet</option>
+          <option value="LIVE">Live, ready to sell</option>
+          <option value="DRAFT">Draft, not for sale yet</option>
         </select>
       </Field>
 

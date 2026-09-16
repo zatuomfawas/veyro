@@ -53,14 +53,14 @@ function TokenReveal({
         className="mono"
         style={{
           background: "var(--surface)", border: "1px solid var(--line)", padding: "10px 12px",
-          wordBreak: "break-all", fontSize: "var(--fs-2)", marginBottom: 10,
+          wordBreak: "break-all", fontSize: "var(--fs-2)", marginBottom: 8,
         }}
       >
         {link}
       </div>
       {copied ? (
         <p style={{ margin: "0 0 10px" }}>
-          Copied. Send it to <strong>{email}</strong> yourself — Veyro does not email it yet. They
+          Copied. Send it to <strong>{email}</strong> yourself. Veyro does not email it yet. They
           sign in to their own guardian account to accept, which is what ties the consent to a real
           adult.
         </p>
@@ -195,7 +195,7 @@ export default function InviteGuardian({ founderId }: { founderId: string }) {
   return (
     <form onSubmit={onSubmit} noValidate>
       {formError && (
-        <div style={{ marginBottom: 14 }}>
+        <div style={{ marginBottom: 12 }}>
           <Notice tone="clay" head="That didn&rsquo;t work">{formError}</Notice>
         </div>
       )}

@@ -43,7 +43,7 @@ export default function ConsentActions({ token }: { token: string }) {
   return (
     <div>
       {error && (
-        <div style={{ marginBottom: 14 }}>
+        <div style={{ marginBottom: 12 }}>
           <Notice tone="clay" head="That didn&rsquo;t work">{error}</Notice>
         </div>
       )}
@@ -65,7 +65,7 @@ export default function ConsentActions({ token }: { token: string }) {
           </div>
         </Notice>
       ) : (
-        <div className="row" style={{ gap: 10, flexWrap: "wrap" }}>
+        <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
           <Btn type="button" disabled={busy !== null} aria-busy={busy === "accept" ? "true" : undefined}
             onClick={() => respond("accept")}>
             {busy === "accept" ? "Accepting…" : "Accept"}

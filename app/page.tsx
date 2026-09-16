@@ -114,17 +114,17 @@ export default async function Home() {
                   <li><strong>Veyro never holds your money.</strong> It settles to your own account.</li>
                 </ul>
 
-                <div className="row" style={{ marginTop: 26, gap: 10, flexWrap: "wrap" }}>
+                <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap" }}>
                   <Link className="btn btn-lg" href="/check">Check eligibility</Link>
                   <Link className="btn btn-2 btn-lg" href="#how">Learn how it works</Link>
                 </div>
 
-                <p className="tiny" style={{ marginTop: 14 }}>
-                  About twenty seconds. If the answer is no, it says so plainly — and if you
+                <p className="tiny" style={{ marginTop: 12 }}>
+                  About twenty seconds. If the answer is no, it says so plainly. If you
                   don&rsquo;t need us at all, it says that too.
                 </p>
 
-                <div style={{ marginTop: 30, paddingTop: 18, borderTop: "1px solid var(--line)" }}>
+                <div style={{ marginTop: 32, paddingTop: 16, borderTop: "1px solid var(--line)" }}>
                   <div className="herofacts">
                     <div>
                       <span className="hf-n">13</span>
@@ -169,13 +169,13 @@ export default async function Home() {
                   by people who have not checked. So we asked the payment provider directly and got
                   it in writing.
                 </p>
-                <p className="body" style={{ marginTop: 14 }}>
+                <p className="body" style={{ marginTop: 12 }}>
                   The answer is more specific than a yes or a no, and the specifics are the whole
                   product: an age floor of 13 rather than 18, a guardian who is verified rather than
                   merely asked, one country carved out entirely, and everywhere else sitting under
                   &ldquo;requirements may vary&rdquo;. That is what the checker encodes.
                 </p>
-                <div className="row" style={{ marginTop: 18, gap: 10, flexWrap: "wrap" }}>
+                <div className="row" style={{ marginTop: 16, gap: 8, flexWrap: "wrap" }}>
                   <Link className="btn" href="/check">Check what applies to you</Link>
                   <Link className="btn btn-2" href="/how-it-works">Read what Stripe told us</Link>
                 </div>
@@ -189,7 +189,7 @@ export default async function Home() {
           <div className="wrap-lp">
             <span className="lp-eyebrow">The process</span>
             <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>Four steps, in order.</h2>
-            <p className="sec-lead body" style={{ marginTop: 12, marginBottom: 26 }}>
+            <p className="sec-lead body" style={{ marginTop: 12, marginBottom: 24 }}>
               Nothing can take a payment until every one of them is done. That is the provider&rsquo;s
               rule, not ours, and it is the part most guides skip.
             </p>
@@ -205,7 +205,7 @@ export default async function Home() {
               </Step>
               <Step icon="check" title="Your guardian is verified">
                 They complete the provider&rsquo;s own identity form, as the adult on the account.
-                Veyro never sees identity documents or bank details — they go straight to Stripe.
+                Veyro never sees identity documents or bank details. They go straight to Stripe.
               </Step>
               <Step icon="wallet" title="Take payments">
                 Your products get a checkout link. Money settles to the connected account, and your
@@ -215,7 +215,7 @@ export default async function Home() {
 
             <p className="lp-note" style={{ marginTop: 20 }}>
               Your guardian is <strong>notified</strong> of payout requests and keeps a permanent
-              record of them. They do not get a veto — on this account type nobody can build them
+              record of them. They do not get a veto. On this account type nobody can build them
               one, and we would rather say so here than have either of you discover it later.
             </p>
           </div>
@@ -238,11 +238,11 @@ export default async function Home() {
             >
               &ldquo;{Q_CORE}&rdquo;
             </blockquote>
-            <p className="tiny" style={{ color: "var(--reverse)", opacity: 0.72, marginTop: 14 }}>
+            <p className="tiny" style={{ color: "var(--reverse)", opacity: 0.72, marginTop: 12 }}>
               Stripe Support, {REPLY_DATE}, in reply to our question. The full exchange, including
               what they would not confirm, is on the next page.
             </p>
-            <div className="row" style={{ marginTop: 20, gap: 10, flexWrap: "wrap" }}>
+            <div className="row" style={{ marginTop: 20, gap: 8, flexWrap: "wrap" }}>
               <Link className="btn btn-2" href="/how-it-works">Read the full reply</Link>
             </div>
           </div>
@@ -252,7 +252,7 @@ export default async function Home() {
         <section className="lp">
           <div className="wrap-lp">
             <span className="lp-eyebrow">Why Veyro</span>
-            <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)", marginBottom: 26 }}>
+            <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)", marginBottom: 24 }}>
               Three things worth knowing before you start.
             </h2>
 
@@ -306,7 +306,7 @@ export default async function Home() {
               </Faq>
               <Faq q="Can my guardian stop a payout?">
                 No, and we will not pretend otherwise. On the account type this is built on, the
-                guardian is notified of every payout request and keeps a permanent record — but the
+                guardian is notified of every payout request and keeps a permanent record, but the
                 provider gives nobody a veto, so neither can we.
               </Faq>
               <Faq q="Does Veyro see my identity documents?">
@@ -335,7 +335,7 @@ export default async function Home() {
               Two questions, no account, no email address. You will get a straight answer, including
               the ones you may not want.
             </p>
-            <div className="row" style={{ marginTop: 22, gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
+            <div className="row" style={{ marginTop: 20, gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
               <Link className="btn btn-lg" href="/check">Check eligibility</Link>
               {!user && <Link className="btn btn-2 btn-lg" href="/auth/signup">Create your account</Link>}
             </div>

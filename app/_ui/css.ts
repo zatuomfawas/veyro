@@ -5,9 +5,15 @@
 // The custom properties are scoped to `.fw`, not `:root`, so that class has to
 // wrap any page using them or every token resolves to nothing. Zero border
 // radius (--radius:0) is deliberate; don't "fix" it.
+//
+// Typefaces are NOT loaded here. Archivo and Onest come from next/font in
+// app/layout.tsx, which self-hosts them at build time; --display and --ui read
+// the variables it sets. An @import of fonts.googleapis.com used to sit at the
+// top of this string, which was both unreliable (an @import in an injected
+// <style> block may be ignored) and a silent third-party dependency on first
+// paint. See DESIGN.md.
 
 export const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@110..125,700..900&family=Onest:wght@400;500;600&display=swap');
 
 .fw, .fw *, .fw *::before, .fw *::after { box-sizing: border-box; }
 .fw {
@@ -43,7 +49,7 @@ export const CSS = `
   --slate:#2a4763; --slate-bg:transparent; --slate-line:#a6b6c6;
   --clay:#8a2e21; --clay-bg:transparent; --clay-line:#c9a49c;
   /* Display face, wordmark only. Never for interface text. */
-  --display: "Archivo", "Archivo Expanded", "Helvetica Neue", "Arial Black", Helvetica, Arial, sans-serif;
+  --display: var(--font-archivo), "Archivo", "Helvetica Neue", "Arial Black", Helvetica, Arial, sans-serif;
   --display-wdth: 118%; --display-wght: 800;
   /* Logotype scale. Deliberately separate from the UI type scale */
   --wm-lg:72px; --wm-md:52px; --wm-sm:38px; --wm-nav:20px;
@@ -57,7 +63,7 @@ export const CSS = `
   /* Haffer (Displaay) is the intended primary. Its files are commercially
      licensed and unavailable here, so Onest is the implemented fallback, per the
      brief. Swapping Haffer in is a change to this one line. */
-  --ui: "Haffer", "Onest", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --ui: var(--font-onest), "Onest", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   /* One family. Everything below is the same typeface at a different size or weight. */
   font-family: var(--ui);
   color: var(--ink);

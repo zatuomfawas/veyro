@@ -54,7 +54,7 @@ function Shell({ children }: { children: React.ReactNode }) {
           <Link className="btn btn-q btn-sm" href="/how-it-works">What this means</Link>
         </div>
       </div>
-      <main id="main" className="wrap-s" style={{ marginTop: 10, marginBottom: 90 }}>
+      <main id="main" className="wrap-s" style={{ marginTop: 8, marginBottom: 90 }}>
         {children}
       </main>
       <SiteFooter />
@@ -67,11 +67,11 @@ function InvalidLink() {
   return (
     <Shell>
       <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>Invalid link</h1>
-      <p className="body" style={{ marginTop: 10, fontSize: "var(--fs-4)" }}>
+      <p className="body" style={{ marginTop: 8, fontSize: "var(--fs-4)" }}>
         This invitation link is not valid. It may have been mistyped, already used, or replaced by a
-        newer one — sending a new invite makes the previous link stop working.
+        newer one. Sending a new invite makes the previous link stop working.
       </p>
-      <p className="body" style={{ marginTop: 14 }}>
+      <p className="body" style={{ marginTop: 12 }}>
         Ask the founder who invited you to send a fresh link from their dashboard.
       </p>
     </Shell>
@@ -114,17 +114,17 @@ export default async function GuardianConsentPage({
         <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>
           {founderName} has asked you to be their guardian
         </h1>
-        <p className="body" style={{ marginTop: 10, fontSize: "var(--fs-4)" }}>
+        <p className="body" style={{ marginTop: 8, fontSize: "var(--fs-4)" }}>
           Sign in first, so the agreement is tied to a real account rather than to whoever opens
           this link.
         </p>
-        <div className="card" style={{ marginTop: 22 }}>
+        <div className="card" style={{ marginTop: 20 }}>
           <div className="card-b">
             <p className="body" style={{ marginTop: 0 }}>
               Use the email address this invitation was sent to. If you have not got a Veyro account
-              yet, create one as a parent or guardian — you need to be 18 or over.
+              yet, create one as a parent or guardian. You need to be 18 or over.
             </p>
-            <div className="row" style={{ gap: 10, flexWrap: "wrap" }}>
+            <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
               <Link className="btn" href={authUrlWithNext("/auth/signin", here)}>Sign in</Link>
               <Link className="btn btn-2" href={authUrlWithNext("/auth/signup", here)}>
                 Create a guardian account
@@ -144,11 +144,11 @@ export default async function GuardianConsentPage({
     return (
       <Shell>
         <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>This invitation is not for this account</h1>
-        <p className="body" style={{ marginTop: 10, fontSize: "var(--fs-4)" }}>
+        <p className="body" style={{ marginTop: 8, fontSize: "var(--fs-4)" }}>
           You are signed in as <span className="mono">{user.email}</span>, and this invitation was
           sent to a different address.
         </p>
-        <div className="card" style={{ marginTop: 22 }}>
+        <div className="card" style={{ marginTop: 20 }}>
           <div className="card-b">
             <p className="body" style={{ marginTop: 0 }}>
               Sign in with the address the invitation was sent to, then open this link again. If you
@@ -166,7 +166,7 @@ export default async function GuardianConsentPage({
     return (
       <Shell>
         <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>You declined this invitation</h1>
-        <p className="body" style={{ marginTop: 10, fontSize: "var(--fs-4)" }}>
+        <p className="body" style={{ marginTop: 8, fontSize: "var(--fs-4)" }}>
           Answered on {fmtDate(consent.respondedAt!)}. {founderName} cannot take payments without a
           guardian, and they can invite you again if this was a mistake.
         </p>
@@ -178,7 +178,7 @@ export default async function GuardianConsentPage({
     return (
       <Shell>
         <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>This invitation expired</h1>
-        <p className="body" style={{ marginTop: 10, fontSize: "var(--fs-4)" }}>
+        <p className="body" style={{ marginTop: 8, fontSize: "var(--fs-4)" }}>
           It stopped working on {fmtDate(consent.inviteExpiresAt)} and was never answered. Ask{" "}
           {founderName} to send a new one from their dashboard.
         </p>
@@ -200,12 +200,12 @@ export default async function GuardianConsentPage({
     return (
       <Shell>
         <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>✓ You&rsquo;ve accepted</h1>
-        <p className="body" style={{ marginTop: 10, fontSize: "var(--fs-4)" }}>
+        <p className="body" style={{ marginTop: 8, fontSize: "var(--fs-4)" }}>
           You are {founderName}&rsquo;s guardian of record as of {fmtDate(consent.consentedAt!)}.
           You are the adult the payment provider verifies.
         </p>
 
-        <div className="card" style={{ marginTop: 22 }}>
+        <div className="card" style={{ marginTop: 20 }}>
           <div className="card-h">
             <h2 className="h4" style={{ margin: 0 }}>Payments</h2>
             {account?.status === "ACTIVE"
@@ -223,7 +223,7 @@ export default async function GuardianConsentPage({
               <div>
                 <p className="body" style={{ marginTop: 0 }}>
                   Nothing can be sold until the payment account exists. You open it, because Stripe
-                  verifies you — not {founderName}, who may be under 18.
+                  verifies you, not {founderName}, who may be under 18.
                 </p>
                 <SetUpPayments founderId={consent.founderId} />
               </div>
@@ -245,7 +245,7 @@ export default async function GuardianConsentPage({
                   {due.length === 1 ? "one thing" : `${due.length} things`} from you before this
                   account can take payments.
                 </p>
-                <div style={{ marginBottom: 18 }}>
+                <div style={{ marginBottom: 16 }}>
                   <Requirements items={due} />
                 </div>
                 <SetUpPayments founderId={consent.founderId} resume />
@@ -271,17 +271,17 @@ export default async function GuardianConsentPage({
       <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>
         Accept invitation from {founderName}?
       </h1>
-      <p className="body" style={{ marginTop: 10, fontSize: "var(--fs-4)" }}>
+      <p className="body" style={{ marginTop: 8, fontSize: "var(--fs-4)" }}>
         {founderName} has asked you to be the guardian on their Veyro account. Read what that means
-        before you answer — it is a real responsibility, not a formality.
+        before you answer. It is a real responsibility, not a formality.
       </p>
 
-      <div className="card" style={{ marginTop: 22 }}>
+      <div className="card" style={{ marginTop: 20 }}>
         <div className="card-b">
           <ul className="arrowlist" style={{ marginTop: 0 }}>
             <li>
               You become the adult on the payment account. Stripe verifies <em>your</em> identity,
-              and you accept their terms — not {founderName}.
+              and you accept their terms, not {founderName}.
             </li>
             <li>
               You do not own their business, and Veyro keeps a separate ledger so that stays
@@ -298,7 +298,7 @@ export default async function GuardianConsentPage({
             </li>
           </ul>
 
-          <p className="small" style={{ marginBottom: 18 }}>
+          <p className="small" style={{ marginBottom: 16 }}>
             This invitation expires on {fmtDate(consent.inviteExpiresAt)}.
           </p>
 
@@ -306,7 +306,7 @@ export default async function GuardianConsentPage({
         </div>
       </div>
 
-      <p className="small" style={{ marginTop: 18 }}>
+      <p className="small" style={{ marginTop: 16 }}>
         Not sure? <Link className="linkbtn" href="/how-it-works">Read how Veyro works</Link>{" "}
         first. Nothing is recorded until you choose.
       </p>

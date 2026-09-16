@@ -16,7 +16,7 @@ export function SiteFooter() {
       <div className="wrap-lp">
         <div className="row-b" style={{ flexWrap: "wrap", gap: 20 }}>
           <Wordmark size={18} />
-          <div className="row" style={{ gap: 18, flexWrap: "wrap" }}>
+          <div className="row" style={{ gap: 16, flexWrap: "wrap" }}>
             <Link className="linkbtn" href="/check">Check eligibility</Link>
             <Link className="linkbtn" href="/how-it-works">How it works</Link>
             <Link className="linkbtn" href="/for-guardians">For parents</Link>

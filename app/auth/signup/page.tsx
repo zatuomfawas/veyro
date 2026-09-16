@@ -23,7 +23,7 @@ export default async function SignupPage({
         <>
           Already have an account? <Link className="linkbtn" href={next ? authUrlWithNext("/auth/signin", next) : "/auth/signin"}>Sign in</Link>.
           {" "}Not sure whether this applies where you live?{" "}
-          <Link className="linkbtn" href="/check">Check first</Link> — it takes about twenty seconds
+          <Link className="linkbtn" href="/check">Check first</Link>. It takes about twenty seconds
           and needs no account.
         </>
       }

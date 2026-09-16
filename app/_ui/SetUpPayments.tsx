@@ -20,7 +20,7 @@ export default function SetUpPayments({
   return (
     <div>
       {error && (
-        <div style={{ marginBottom: 14 }}>
+        <div style={{ marginBottom: 12 }}>
           <Notice tone="clay" head="That didn&rsquo;t work">{error}</Notice>
         </div>
       )}
@@ -58,9 +58,9 @@ export default function SetUpPayments({
         {busy ? "Opening Stripe…" : resume ? "Continue on Stripe" : "Set up payments"}
       </Btn>
 
-      <p className="tiny" style={{ marginTop: 10, marginBottom: 0 }}>
+      <p className="tiny" style={{ marginTop: 8, marginBottom: 0 }}>
         This opens Stripe&rsquo;s own form. You will be asked for your identity details and a bank
-        account — Veyro never receives them.
+        account. Veyro never receives them.
       </p>
     </div>
   );

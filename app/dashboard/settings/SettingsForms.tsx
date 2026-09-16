@@ -57,12 +57,12 @@ export function ProfileForm({
   return (
     <form onSubmit={onSubmit} noValidate>
       {formError && (
-        <div style={{ marginBottom: 14 }}>
+        <div style={{ marginBottom: 12 }}>
           <Notice tone="clay" head="That didn&rsquo;t work">{formError}</Notice>
         </div>
       )}
       {saved && (
-        <div style={{ marginBottom: 14 }}>
+        <div style={{ marginBottom: 12 }}>
           <Notice tone="pine" head="Saved">Your details are up to date.</Notice>
         </div>
       )}
@@ -86,7 +86,7 @@ export function ProfileForm({
       </Field>
 
       {countryLocked && (
-        <div style={{ marginTop: -4, marginBottom: 14 }}>
+        <div style={{ marginTop: -4, marginBottom: 12 }}>
           <Notice tone="grey" head="Your country is fixed now">{lockedReason}</Notice>
         </div>
       )}
@@ -146,12 +146,12 @@ export function PasswordForm() {
   return (
     <form onSubmit={onSubmit} noValidate>
       {formError && (
-        <div style={{ marginBottom: 14 }}>
+        <div style={{ marginBottom: 12 }}>
           <Notice tone="clay" head="That didn&rsquo;t work">{formError}</Notice>
         </div>
       )}
       {done !== null && (
-        <div style={{ marginBottom: 14 }}>
+        <div style={{ marginBottom: 12 }}>
           <Notice tone="pine" head="Password changed">
             {done > 0
               ? `You are still signed in here. ${done === 1 ? "One other session was" : `${done} other sessions were`} signed out.`

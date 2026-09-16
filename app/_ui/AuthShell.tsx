@@ -25,15 +25,15 @@ export function AuthShell({
         </div>
       </div>
 
-      <main id="main" className="wrap-s" style={{ marginTop: 10, marginBottom: 90 }}>
+      <main id="main" className="wrap-s" style={{ marginTop: 8, marginBottom: 90 }}>
         <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>{title}</h1>
-        <p className="body" style={{ marginTop: 10, fontSize: "var(--fs-4)" }}>{lead}</p>
+        <p className="body" style={{ marginTop: 8, fontSize: "var(--fs-4)" }}>{lead}</p>
 
-        <div className="card" style={{ marginTop: 22 }}>
+        <div className="card" style={{ marginTop: 20 }}>
           <div className="card-b">{children}</div>
         </div>
 
-        <p className="small" style={{ marginTop: 18 }}>{footer}</p>
+        <p className="small" style={{ marginTop: 16 }}>{footer}</p>
       </main>
     </div>
   );

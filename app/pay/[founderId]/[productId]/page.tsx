@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     return { title: "Payment | Veyro", robots: { index: false, follow: false } };
   }
   return {
-    title: `${product.name} — ${formatMinor(product.priceMinor, product.currency)}`,
+    title: `${product.name}, ${formatMinor(product.priceMinor, product.currency)}`,
     description: product.description,
     // A payment link is for whoever it was given to, not for search results.
     robots: { index: false, follow: false },
@@ -50,7 +50,7 @@ export default async function PayPage({ params }: Params) {
         </div>
       </div>
 
-      <main id="main" className="wrap-s" style={{ marginTop: 10, marginBottom: 90 }}>
+      <main id="main" className="wrap-s" style={{ marginTop: 8, marginBottom: 90 }}>
         {!isPurchasable(resolved) ? (
           <>
             <h1 className="d2" style={{ fontSize: "var(--fs-7)" }}>Not available</h1>
@@ -64,7 +64,7 @@ export default async function PayPage({ params }: Params) {
           <>
             <h1 className="d2" style={{ fontSize: "var(--fs-7)" }}>{resolved.product.name}</h1>
             {seller?.name && (
-              <p className="tiny" style={{ marginTop: 6 }}>
+              <p className="tiny" style={{ marginTop: 4 }}>
                 Sold by {seller.name}, through Veyro
               </p>
             )}
@@ -72,19 +72,19 @@ export default async function PayPage({ params }: Params) {
             <div className="card" style={{ marginTop: 20 }}>
               <div className="card-b">
                 <p className="small">{resolved.product.description}</p>
-                <div className="row-b" style={{ marginTop: 16, paddingTop: 14, borderTop: "1px solid var(--line)" }}>
+                <div className="row-b" style={{ marginTop: 16, paddingTop: 12, borderTop: "1px solid var(--line)" }}>
                   <span className="lbl">Total</span>
                   <span className="num" style={{ fontSize: "var(--fs-6)", fontWeight: 600 }}>
                     {formatMinor(resolved.product.priceMinor, resolved.product.currency)}
                     {resolved.product.priceRecurring && (
-                      <span className="tiny" style={{ marginLeft: 6 }}>per month</span>
+                      <span className="tiny" style={{ marginLeft: 4 }}>per month</span>
                     )}
                   </span>
                 </div>
               </div>
             </div>
 
-            <div style={{ marginTop: 18 }}>
+            <div style={{ marginTop: 16 }}>
               <PayClient
                 founderId={founderId}
                 productId={productId}
@@ -100,7 +100,7 @@ export default async function PayPage({ params }: Params) {
                   <p className="sb-body">
                     Your card details are entered on Stripe&rsquo;s own form and are never seen by
                     Veyro or by the seller. The payment goes directly to the seller&rsquo;s Stripe
-                    account — Veyro never holds it and takes no percentage of it.
+                    account. Veyro never holds it and takes no percentage of it.
                   </p>
                 </div>
               </div>

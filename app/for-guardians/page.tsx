@@ -33,17 +33,17 @@ export default function ForGuardians() {
         </div>
       </div>
 
-      <main id="main" className="wrap-lp" style={{ paddingTop: 44, paddingBottom: 90 }}>
+      <main id="main" className="wrap-lp" style={{ paddingTop: 40, paddingBottom: 90 }}>
         <span className="lp-eyebrow">For parents and guardians</span>
         <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
           What you are being asked to agree to.
         </h1>
-        <p className="lead" style={{ marginTop: 14 }}>
+        <p className="lead" style={{ marginTop: 12 }}>
           Someone under 18 has asked you to be the adult on their payment account. This page is what
           that means, written before you decide rather than after.
         </p>
 
-        <div className="truthgrid" style={{ marginTop: 36 }}>
+        <div className="truthgrid" style={{ marginTop: 32 }}>
           <div>
             <h2 className="h3" style={{ marginTop: 0 }}>The short version</h2>
           </div>
@@ -85,7 +85,7 @@ export default function ForGuardians() {
               person you are signing for sells something they do not deliver, it is your name on the
               account that the provider comes back to.
             </p>
-            <p className="body" style={{ marginTop: 14 }}>
+            <p className="body" style={{ marginTop: 12 }}>
               That is not a reason to say no. It is the reason to say yes deliberately, having
               looked at what they are selling and agreed it is something you are comfortable being
               associated with.
@@ -103,10 +103,10 @@ export default function ForGuardians() {
             <p className="body" style={{ marginTop: 0 }}>
               Stripe&rsquo;s written policy permits a 13-year-old to hold a Connect account where a
               parent or legal guardian completes their onboarding. That is provider policy, and we
-              have it in writing — you can{" "}
+              have it in writing. You can{" "}
               <Link className="linkbtn" href="/how-it-works">read their exact words</Link>.
             </p>
-            <p className="body" style={{ marginTop: 14 }}>
+            <p className="body" style={{ marginTop: 12 }}>
               Whether a minor may hold such an account with a guardian as representative has{" "}
               <strong>not been confirmed by a lawyer in any country</strong>, including yours.
               Provider policy allowing something is not the same as it being settled where you live.
@@ -155,7 +155,7 @@ export default function ForGuardians() {
           </div>
         </div>
 
-        <div className="card" style={{ marginTop: 44 }}>
+        <div className="card" style={{ marginTop: 40 }}>
           <div className="card-b">
             <h2 className="h4" style={{ marginTop: 0 }}>If you would rather not</h2>
             <p className="body">
@@ -171,7 +171,7 @@ export default function ForGuardians() {
           </div>
         </div>
 
-        <div className="row" style={{ marginTop: 28, gap: 10, flexWrap: "wrap" }}>
+        <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap" }}>
           <Link className="btn" href="/how-it-works">Read what Stripe told us</Link>
           <Link className="btn btn-2" href="/check">Check if this applies where you live</Link>
         </div>

@@ -4,7 +4,7 @@ import { ImageResponse } from "next/og";
 // prototype pointed og:image/twitter:image at "/og.svg", a file that doesn't
 // exist in this repo, and SVG isn't reliably supported as a social-card image
 // by Twitter/X or Facebook's crawlers anyway. This produces a real PNG.
-export const alt = "Veyro — Can you take payments under 18? Check in 20 seconds.";
+export const alt = "Veyro: can you take payments under 18? Check in 20 seconds.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -32,15 +32,15 @@ export default function Image() {
           fontFamily: "sans-serif",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <div style={{ width: 28, height: 28, background: REVERSE, clipPath: MARK_CLIP }} />
           <span style={{ fontSize: 40, fontWeight: 700, letterSpacing: -1 }}>Veyro</span>
         </div>
-        <div style={{ marginTop: 48, fontSize: 56, fontWeight: 700, lineHeight: 1.15, maxWidth: 920 }}>
+        <div style={{ marginTop: 40, fontSize: 56, fontWeight: 700, lineHeight: 1.15, maxWidth: 920 }}>
           Can you take payments under 18?
         </div>
         <div style={{ marginTop: 20, fontSize: 30, color: MUTED, maxWidth: 860 }}>
-          Check in 20 seconds — country, age, and whether you need a guardian at all.
+          Check in 20 seconds: country, age, and whether you need a guardian at all.
         </div>
       </div>
     ),

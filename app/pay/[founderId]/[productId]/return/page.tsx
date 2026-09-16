@@ -72,7 +72,7 @@ export default async function ReturnPage({
         </div>
 
         {intentId && (
-          <p className="tiny" style={{ marginTop: 18 }}>
+          <p className="tiny" style={{ marginTop: 16 }}>
             Reference <span className="mono">{intentId}</span>. Quote this if you need to ask about
             the payment.
           </p>

@@ -177,15 +177,15 @@ export default function SignupForm({ next }: { next?: string | null }) {
           setErrors((x) => ({ ...x, dateOfBirth: checkField("dateOfBirth", dateOfBirth, now) ?? "" }));
         }}
         aria-pressed={isGuardian}
-        style={{ marginBottom: 14 }}
+        style={{ marginBottom: 12 }}
       >
         <span className="tick" />
         <span>
           <span style={{ display: "block", fontSize: "var(--fs-3)", fontWeight: 500 }}>
             I am a parent or guardian
           </span>
-          <span className="tiny" style={{ display: "block", marginTop: 2 }}>
-            Tick this if you are the adult signing for someone else. You have to be 18 or over —
+          <span className="tiny" style={{ display: "block", marginTop: 4 }}>
+            Tick this if you are the adult signing for someone else. You have to be 18 or over:
             you are the person the payment provider verifies.
           </span>
         </span>

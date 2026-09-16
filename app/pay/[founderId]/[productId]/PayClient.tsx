@@ -134,7 +134,7 @@ function CheckoutForm({
       <button
         type="submit"
         className="btn btn-lg btn-w"
-        style={{ marginTop: 18 }}
+        style={{ marginTop: 16 }}
         disabled={!stripe || submitting}
         aria-busy={submitting ? "true" : undefined}
       >

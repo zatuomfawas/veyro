@@ -27,15 +27,15 @@ export default function NotFound() {
 
       <main id="main" className="wrap-n" style={{ paddingTop: 72, paddingBottom: 96 }}>
         <span className="lp-eyebrow">404</span>
-        <h1 className="d2" style={{ marginTop: 10, maxWidth: "18ch" }}>
+        <h1 className="d2" style={{ marginTop: 8, maxWidth: "18ch" }}>
           That page isn&rsquo;t here.
         </h1>
-        <p className="body" style={{ marginTop: 14 }}>
+        <p className="body" style={{ marginTop: 12 }}>
           Either the link is wrong, or it&rsquo;s a page we haven&rsquo;t written yet. Veyro is
           early, and we would rather leave a gap than fill it with something we haven&rsquo;t
           checked.
         </p>
-        <div className="row" style={{ marginTop: 24, gap: 10, flexWrap: "wrap" }}>
+        <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap" }}>
           <Link className="btn" href="/check">Check what applies to you</Link>
           <Link className="btn btn-2" href="/how-it-works">Read how it works</Link>
           <Link className="btn btn-q" href="/">Back to home</Link>
