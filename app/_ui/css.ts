@@ -16,6 +16,9 @@
 export const CSS = `
 
 .fw, .fw *, .fw *::before, .fw *::after { box-sizing: border-box; }
+/* Safety net: no single long word, email or URL may widen the page. Acts only
+   when a word would overflow its box, so ordinary prose is unaffected. */
+.fw { overflow-wrap: break-word; }
 .fw {
   /* ---- Type scale: 10 steps, nothing between them ---- */
   --fs-1:11.5px; --fs-2:12.5px; --fs-3:14px;  --fs-4:15.5px; --fs-5:17px;
