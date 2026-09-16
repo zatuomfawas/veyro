@@ -42,9 +42,9 @@ function Step({ icon, title, children }: { icon: string; title: string; children
 function Faq({ q, children }: { q: string; children: React.ReactNode }) {
   return (
     <details className="disc">
-      <summary className="disc-q" style={{ cursor: "pointer", listStyle: "none" }}>
-        <span className="disc-sign" aria-hidden="true" />
+      <summary className="disc-q">
         <span style={{ fontSize: "var(--fs-3)", fontWeight: 500 }}>{q}</span>
+        <span className="disc-sign" aria-hidden="true" />
       </summary>
       <p className="disc-a">{children}</p>
     </details>
@@ -256,7 +256,7 @@ export default async function Home() {
               Three things worth knowing before you start.
             </h2>
 
-            <div className="herofacts">
+            <div className="cardgrid">
               <div className="card">
                 <div className="card-b">
                   <h3 className="h4" style={{ marginTop: 0 }}>Your guardian consents once</h3>

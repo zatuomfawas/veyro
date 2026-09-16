@@ -283,7 +283,7 @@ export const CSS = `
 /* landing */
 .fw .lp-nav { height:62px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); }
 .fw .hero { padding:72px 0 68px; }
-.fw .herofacts { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:22px; }
+.fw .herofacts { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--sp-6); }
 .fw .herofacts .hf-n { display:block; font-size:var(--fs-7); font-weight:var(--fw-bold); letter-spacing:-0.022em; }
 .fw .herofacts .hf-l { display:block; font-size:var(--fs-2); line-height:1.45; color:var(--ink-3); margin-top:5px; }
 @media (max-width:760px) { .fw .herofacts { grid-template-columns:1fr; gap:14px; }
@@ -334,6 +334,9 @@ export const CSS = `
   color:var(--brand); }
 .fw .lp-dark .lp-eyebrow { color:#8fc4ac; }
 .fw .sec-lead { max-width:62ch; }
+.fw .cardgrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:var(--sp-6); align-items:stretch; }
+.fw .cardgrid > * { min-width:0; }
 .fw .truthgrid { display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:var(--sp-8); align-items:start; }
 .fw .ownership { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:var(--sp-8);
   margin-top:var(--sp-8); padding-top:var(--sp-6); border-top:1px solid var(--line); align-items:start; }
@@ -457,7 +460,7 @@ export const CSS = `
   .fw .rail { width:100%; border-right:0; border-bottom:1px solid var(--line); }
   .fw .nav { flex-direction:row; overflow-x:auto; padding:6px 10px; gap:4px; }
   .fw .nav button:not(.btn) { width:auto; white-space:nowrap; justify-content:center; }
-  .fw .grid-2, .fw .grid-4 { grid-template-columns:1fr; }
+  .fw .grid-2, .fw .grid-4, .fw .cardgrid { grid-template-columns:1fr; }
   .fw .wrap, .fw .wrap-n, .fw .wrap-w { padding:0 18px; }
   .fw .page { padding:20px 16px 60px; }
   .fw .topbar { padding:0 16px; }
@@ -543,6 +546,10 @@ export const CSS2 = `
 .fw .disc-sign::after { top:0; bottom:0; left:5px; width:1.5px;
   transition:transform 180ms cubic-bezier(.4,0,.2,1), opacity 180ms cubic-bezier(.4,0,.2,1); }
 .fw .disc[data-open="1"] .disc-sign::after { transform:scaleY(0); opacity:0; }
+.fw details.disc[open] .disc-sign::after { transform:scaleY(0); opacity:0; }
+.fw details.disc[open] .disc-q { color:var(--brand); }
+.fw .disc-q::-webkit-details-marker { display:none; }
+.fw summary.disc-q { list-style:none; }
 .fw .disc[data-open="1"] .disc-q { color:var(--brand); }
 /* 0fr to 1fr animates to the content's real height with no JS measurement */
 .fw .disc-panel { display:grid; grid-template-rows:0fr;
@@ -636,6 +643,8 @@ export const CSS2 = `
 .fw .lp-center .mark { margin-left:auto; margin-right:auto; }
 .fw .lp-center .statement, .fw .lp-center .statement-sub, .fw .lp-center .d2 { margin-left:auto; margin-right:auto; }
 .fw .lp-center .sec-h { margin-left:auto; margin-right:auto; }
+.fw .lp-center .lp-h2, .fw .lp-center .lp-h1, .fw .lp-center .body,
+.fw .lp-center .lead, .fw .lp-center .sec-lead { margin-left:auto; margin-right:auto; }
 .fw .lp-tall { padding:var(--sp-10) 0; }
 .fw .lp-dark .statement-sub { color:#b4b0a4; }
 /* The mark's own stroke angle, reused as a section divider */
