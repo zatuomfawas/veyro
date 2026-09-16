@@ -19,6 +19,12 @@ export const CSS = `
 /* Safety net: no single long word, email or URL may widen the page. Acts only
    when a word would overflow its box, so ordinary prose is unaffected. */
 .fw { overflow-wrap: break-word; }
+/* Visible to a screen reader, not to the eye. The clip-path/1px pattern is
+   used rather than display:none, which removes the text from the
+   accessibility tree entirely, or a negative text-indent, which some
+   screen readers skip. */
+.fw .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
 .fw {
   /* ---- Type scale: 10 steps, nothing between them ---- */
   --fs-1:11.5px; --fs-2:12.5px; --fs-3:14px;  --fs-4:15.5px; --fs-5:17px;

@@ -5,15 +5,21 @@
 // including Notice's inline borderRadius: 8, which is the prototype's actual
 // current state and not mine to quietly "fix" here.
 
-import React, { useMemo } from "react";
+import React, { useId, useMemo, useState } from "react";
 
 type BtnVariant = "1" | "2" | "q" | "d";
 type BtnSize = "sm" | "lg";
 const VARIANT_CLASS: Record<BtnVariant, string> = { "1": "", "2": " btn-2", q: " btn-q", d: " btn-d" };
 
+// `ref` is declared explicitly because React 19 passes it as an ordinary prop
+// to function components, but ButtonHTMLAttributes does not include it.
 export function Btn({
   variant = "1", size, className = "", ...p
-}: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: BtnVariant; size?: BtnSize }) {
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant?: BtnVariant;
+  size?: BtnSize;
+  ref?: React.Ref<HTMLButtonElement>;
+}) {
   const z = size === "lg" ? " btn-lg" : size === "sm" ? " btn-sm" : "";
   return <button {...p} className={"btn" + VARIANT_CLASS[variant] + z + (className ? " " + className : "")} />;
 }
@@ -57,5 +63,61 @@ export function Notice({
       <div className="small" style={{ maxWidth: "var(--m-body)" }}>{children}</div>
       {action && <div style={{ marginTop: 12 }}>{action}</div>}
     </div>
+  );
+}
+
+/**
+ * A password input with a show/hide toggle.
+ *
+ * Hiding a password protects it from someone reading over your shoulder, which
+ * is a real threat. It also makes typos invisible, which is why people paste
+ * passwords, retype them three times, or pick something shorter. Offering the
+ * toggle keeps the protection and removes the guessing.
+ *
+ * The button is type="button" so it never submits the form, and it is labelled
+ * for screen readers rather than relying on the visible "Show" text alone.
+ * `.pwwrap` and `.pwtoggle` were already in the design system, unused.
+ */
+export function PasswordField({
+  label, hint, error, value, onChange, onBlur, autoComplete, name,
+}: {
+  label: React.ReactNode;
+  hint?: React.ReactNode;
+  error?: React.ReactNode;
+  value: string;
+  onChange: (v: string) => void;
+  onBlur?: () => void;
+  autoComplete?: string;
+  name?: string;
+}) {
+  const [shown, setShown] = useState(false);
+  const id = useId();
+
+  return (
+    <Field label={label} hint={hint} error={error}>
+      <span className="pwwrap" style={{ display: "block" }}>
+        <input
+          id={id}
+          className="input"
+          name={name}
+          type={shown ? "text" : "password"}
+          value={value}
+          autoComplete={autoComplete}
+          onChange={(e) => onChange(e.target.value)}
+          onBlur={onBlur}
+          style={{ paddingRight: 64 }}
+        />
+        <button
+          type="button"
+          className="pwtoggle"
+          aria-controls={id}
+          aria-pressed={shown}
+          onClick={() => setShown((v) => !v)}
+        >
+          {shown ? "Hide" : "Show"}
+          <span className="sr-only"> password</span>
+        </button>
+      </span>
+    </Field>
   );
 }

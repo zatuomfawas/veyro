@@ -225,11 +225,17 @@ export default async function Home() {
         <section className="lp lp-dark">
           <div className="wrap-lp">
             <span className="lp-eyebrow">In their own words</span>
+            {/* Flush left, like the eyebrow, attribution and button around it. It
+                previously carried a 2px left border and 20px of padding, which made
+                it the only element in the section indented from the section edge.
+                The border also referenced var(--accent), a token that does not
+                exist, so an invalid value fell back to currentColor and drew a
+                near-white bar on the dark band. The quotation marks and the larger
+                size mark this as a quote; it does not need a rule as well. */}
             <blockquote
               style={{
                 margin: "var(--sp-4) 0 0",
-                borderLeft: "2px solid var(--accent)",
-                paddingLeft: "var(--sp-5)",
+                padding: 0,
                 color: "var(--reverse)",
                 fontSize: "var(--fs-5)",
                 lineHeight: 1.5,

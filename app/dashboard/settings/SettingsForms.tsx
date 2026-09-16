@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Btn, Field, Notice } from "@/app/_ui/form";
+import { Btn, Field, Notice, PasswordField } from "@/app/_ui/form";
 import { SIGNUP_COUNTRIES } from "@/app/_ui/countries";
 
 /* ---------------- name and country ---------------- */
@@ -160,21 +160,18 @@ export function PasswordForm() {
         </div>
       )}
 
-      <Field label="Current password" error={errors.currentPassword}>
-        <input className="input" type="password" value={current} autoComplete="current-password"
-          onChange={(e) => { setCurrent(e.target.value); setDone(null); }} />
-      </Field>
+      <PasswordField label="Current password" error={errors.currentPassword}
+        value={current} autoComplete="current-password"
+        onChange={(v) => { setCurrent(v); setDone(null); }} />
 
-      <Field label="New password" error={errors.newPassword}
-        hint="At least 10 characters. A short sentence is easier to remember than a jumble.">
-        <input className="input" type="password" value={next} autoComplete="new-password"
-          onChange={(e) => { setNext(e.target.value); setDone(null); }} />
-      </Field>
+      <PasswordField label="New password" error={errors.newPassword}
+        hint="At least 10 characters. A short sentence is easier to remember than a jumble."
+        value={next} autoComplete="new-password"
+        onChange={(v) => { setNext(v); setDone(null); }} />
 
-      <Field label="Confirm new password" error={errors.confirm}>
-        <input className="input" type="password" value={confirm} autoComplete="new-password"
-          onChange={(e) => { setConfirm(e.target.value); setDone(null); }} />
-      </Field>
+      <PasswordField label="Confirm new password" error={errors.confirm}
+        value={confirm} autoComplete="new-password"
+        onChange={(v) => { setConfirm(v); setDone(null); }} />
 
       <Btn type="submit" disabled={busy} aria-busy={busy ? "true" : undefined}>
         {busy ? "Changing…" : "Change password"}

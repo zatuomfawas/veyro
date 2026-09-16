@@ -7,7 +7,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Btn, Field, Notice } from "@/app/_ui/form";
+import { Btn, Field, Notice, PasswordField } from "@/app/_ui/form";
 import { SIGNUP_COUNTRIES } from "@/app/_ui/countries";
 import { safeNextPath, defaultLandingFor } from "@/lib/next-path";
 
@@ -137,18 +137,16 @@ export default function SignupForm({ next }: { next?: string | null }) {
           onChange={(e) => { setEmail(e.target.value); clear("email"); }} placeholder="you@example.com" />
       </Field>
 
-      <Field label="Password" error={errors.password || undefined}
-        hint="At least 10 characters. A short sentence is easier to remember than a jumble.">
-        <input className="input" type="password" value={password} autoComplete="new-password"
-          onBlur={blur("password", password)}
-          onChange={(e) => { setPassword(e.target.value); clear("password"); }} />
-      </Field>
+      <PasswordField label="Password" error={errors.password || undefined}
+        hint="At least 10 characters. A short sentence is easier to remember than a jumble."
+        value={password} autoComplete="new-password"
+        onBlur={blur("password", password)}
+        onChange={(v) => { setPassword(v); clear("password"); }} />
 
-      <Field label="Confirm password" error={errors.confirm || undefined}>
-        <input className="input" type="password" value={confirm} autoComplete="new-password"
-          onBlur={() => setErrors((x) => ({ ...x, confirm: confirm && confirm !== password ? "Those two passwords are different." : "" }))}
-          onChange={(e) => { setConfirm(e.target.value); clear("confirm"); }} />
-      </Field>
+      <PasswordField label="Confirm password" error={errors.confirm || undefined}
+        value={confirm} autoComplete="new-password"
+        onBlur={() => setErrors((x) => ({ ...x, confirm: confirm && confirm !== password ? "Those two passwords are different." : "" }))}
+        onChange={(v) => { setConfirm(v); clear("confirm"); }} />
 
       <Field label="Date of birth" error={errors.dateOfBirth || undefined}
         hint="The full date, because the age rules turn on it. It is never shown publicly.">

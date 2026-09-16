@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Btn, Field, Notice } from "@/app/_ui/form";
+import { Btn, Field, Notice, PasswordField } from "@/app/_ui/form";
 import { safeNextPath, defaultLandingFor } from "@/lib/next-path";
 
 export default function SigninForm({ next }: { next?: string | null }) {
@@ -57,10 +57,8 @@ export default function SigninForm({ next }: { next?: string | null }) {
           onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
       </Field>
 
-      <Field label="Password">
-        <input className="input" type="password" value={password} autoComplete="current-password"
-          onChange={(e) => setPassword(e.target.value)} />
-      </Field>
+      <PasswordField label="Password" value={password} autoComplete="current-password"
+        onChange={setPassword} />
 
       <Btn className="btn-w" type="submit" disabled={submitting}
         aria-busy={submitting ? "true" : undefined}>

@@ -32,6 +32,7 @@ import { DashNav, DashHeader, Section, EmptyState, SUPPORT_EMAIL, fmtDate } from
 
 import InviteGuardian, { ResendInvite } from "./InviteGuardian";
 import NewProduct from "./NewProduct";
+import RequestPayout from "./RequestPayout";
 
 export const viewport = buildViewport();
 
@@ -126,6 +127,9 @@ function activityLine(row: AuditRow): string | null {
 const TX_BADGE: Record<string, string> = { COMPLETED: "b-pine", PENDING: "b-amber", REFUNDED: "b-grey" };
 const TX_LABEL: Record<string, string> = { COMPLETED: "Paid", PENDING: "Settling", REFUNDED: "Refunded" };
 const PRODUCT_BADGE: Record<string, string> = { LIVE: "b-pine", DRAFT: "b-amber", ARCHIVED: "b-grey" };
+const PAYOUT_BADGE: Record<string, string> = {
+  REQUESTED: "b-amber", APPROVED: "b-slate", SENT: "b-pine", FAILED: "b-clay",
+};
 
 /* ---------------- page ---------------- */
 
@@ -138,7 +142,7 @@ export default async function FounderDashboard() {
 
   const founderId = user.id;
 
-  const [consent, account, products, transactions, wallet, activity] = await Promise.all([
+  const [consent, account, products, transactions, wallet, activity, payouts] = await Promise.all([
     db.guardianConsent.findUnique({
       where: { founderId },
       include: { guardian: { select: { name: true, email: true } } },
@@ -156,6 +160,11 @@ export default async function FounderDashboard() {
       where: { founderId },
       orderBy: { createdAt: "desc" },
       take: 12, // over-fetch: unmapped operational events are dropped below
+    }),
+    db.founderPayoutRequest.findMany({
+      where: { founderId },
+      orderBy: { createdAt: "desc" },
+      take: 10,
     }),
   ]);
 
@@ -176,6 +185,12 @@ export default async function FounderDashboard() {
     .slice(0, 5);
 
   const firstLive = products.find((p) => p.status === "LIVE");
+
+  // The payout form acts on one currency. The wallet folds per currency, so
+  // the one with the most available is the sensible default; USD when empty.
+  const richest = [...wallet.currencies].sort((a, b) => b.available - a.available)[0];
+  const primaryCurrency = richest?.currency ?? "USD";
+  const primaryAvailable = richest?.available ?? 0;
 
   return (
     <div className="fw">
@@ -381,6 +396,56 @@ export default async function FounderDashboard() {
                     the transactions beside it.
                   </p>
                 </div>
+              )}
+            </Section>
+
+            {/* ---------------- payouts ---------------- */}
+            <Section
+              title="Payouts"
+              aside={
+                payouts.length > 0
+                  ? <span className="badge b-grey">
+                      {payouts.length === 1 ? "1 request" : `${payouts.length} requests`}
+                    </span>
+                  : undefined
+              }
+            >
+              <RequestPayout
+                currency={primaryCurrency}
+                availableMinor={primaryAvailable}
+                accountActive={account?.status === "ACTIVE"}
+              />
+
+              {payouts.length > 0 && (
+                <>
+                  <hr className="rule" style={{ margin: "20px 0 16px" }} />
+                  <div className="tblwrap">
+                    <table className="tbl">
+                      <thead>
+                        <tr>
+                          <th scope="col">Date</th>
+                          <th scope="col" style={{ textAlign: "right" }}>Amount</th>
+                          <th scope="col">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {payouts.map((p) => (
+                          <tr key={p.id}>
+                            <td className="num">{fmtDate(p.createdAt)}</td>
+                            <td className="num" style={{ textAlign: "right" }}>
+                              {formatMinor(p.amountMinor, p.currency)}
+                            </td>
+                            <td>
+                              <span className={"badge " + (PAYOUT_BADGE[p.status] ?? "b-grey")}>
+                                {p.status.charAt(0) + p.status.slice(1).toLowerCase()}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
               )}
             </Section>
 

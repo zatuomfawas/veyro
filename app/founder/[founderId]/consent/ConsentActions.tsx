@@ -10,6 +10,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Btn, Notice } from "@/app/_ui/form";
+import { ConfirmModal } from "@/app/_ui/ConfirmModal";
 
 export default function ConsentActions({ token }: { token: string }) {
   const router = useRouter();
@@ -48,34 +49,34 @@ export default function ConsentActions({ token }: { token: string }) {
         </div>
       )}
 
-      {confirming ? (
-        <Notice tone="clay" head="Decline this invitation?">
-          <p style={{ margin: "0 0 12px" }}>
-            They will not be able to take payments. You can be invited again later.
-          </p>
-          <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
-            <Btn type="button" variant="d" disabled={busy !== null}
-              onClick={() => respond("decline")}>
-              {busy === "decline" ? "Declining…" : "Yes, decline"}
-            </Btn>
-            <Btn type="button" variant="q" disabled={busy !== null}
-              onClick={() => setConfirming(false)}>
-              Go back
-            </Btn>
-          </div>
-        </Notice>
-      ) : (
-        <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
-          <Btn type="button" disabled={busy !== null} aria-busy={busy === "accept" ? "true" : undefined}
-            onClick={() => respond("accept")}>
-            {busy === "accept" ? "Accepting…" : "Accept"}
-          </Btn>
-          <Btn type="button" variant="2" disabled={busy !== null}
-            onClick={() => setConfirming(true)}>
-            Decline
-          </Btn>
-        </div>
-      )}
+      <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
+        <Btn type="button" disabled={busy !== null} aria-busy={busy === "accept" ? "true" : undefined}
+          onClick={() => respond("accept")}>
+          {busy === "accept" ? "Accepting…" : "Accept"}
+        </Btn>
+        <Btn type="button" variant="2" disabled={busy !== null}
+          onClick={() => setConfirming(true)}>
+          Decline
+        </Btn>
+      </div>
+
+      <ConfirmModal
+        open={confirming}
+        title="Decline this invitation?"
+        confirmLabel="Decline"
+        cancelLabel="Go back"
+        tone="d"
+        busy={busy === "decline"}
+        onConfirm={() => respond("decline")}
+        onCancel={() => setConfirming(false)}
+      >
+        <p style={{ marginTop: 0 }}>
+          They will not be able to take payments without a guardian.
+        </p>
+        <p style={{ marginBottom: 0 }}>
+          This is not permanent: they can invite you again, and you can accept then.
+        </p>
+      </ConfirmModal>
     </div>
   );
 }
