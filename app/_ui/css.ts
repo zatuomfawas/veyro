@@ -46,7 +46,11 @@ export const CSS = `
   --card:#faf9f5; --reverse:#f4f2ec;
   --line:#d3cec1; --line-soft:#e0dbcd;
   --brand:#1e4636; --brand-h:#2a5c48;
-  --ink:#191814; --ink-2:#4c483f; --ink-3:#726d61;
+  /* --ink-3 was #726d61, which measured 4.21:1 on --surface: below WCAG AA's
+     4.5:1 for normal text, and --surface is the hero band's background, where
+     .tiny and .hf-l both use it. Darkened 9% to clear AA on every background
+     in the palette, worst case 4.55:1 on --surface-2. See DESIGN.md. */
+  --ink:#191814; --ink-2:#4c483f; --ink-3:#676358;
   --pine:#245040; --pine-bg:transparent; --pine-line:#a9bdb1;
   --amber:#7a4e10; --amber-bg:transparent; --amber-line:#cbb489;
   --slate:#2a4763; --slate-bg:transparent; --slate-line:#a6b6c6;

@@ -4,12 +4,18 @@ import { SITE, SEO_ROUTES, type SeoRouteKey } from "@/lib/seo";
 // Only routes that (a) exist as real pages and (b) are indexable. Listing a
 // page that 404s, or one marked noindex, is how you teach a crawler to
 // distrust the sitemap. Add a key here when its page is actually built.
-const BUILT: SeoRouteKey[] = ["landing", "check", "how"];
+const BUILT: SeoRouteKey[] = [
+  "landing", "check", "how", "guardians", "terms", "privacy", "accessibility",
+];
 
 const PRIORITY: Partial<Record<SeoRouteKey, number>> = {
   landing: 1,
   check: 0.9,
   how: 0.8,
+  guardians: 0.7,
+  terms: 0.3,
+  privacy: 0.3,
+  accessibility: 0.3,
 };
 
 export default function sitemap(): MetadataRoute.Sitemap {
