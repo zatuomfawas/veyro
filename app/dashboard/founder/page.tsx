@@ -25,14 +25,13 @@ import { describeRequirements } from "@/lib/stripe-account";
 import { formatMinor } from "@/lib/checkout";
 
 import { CSS, CSS2 } from "@/app/_ui/css";
-import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { Notice } from "@/app/_ui/form";
-import { SiteFooter } from "@/app/_ui/SiteFooter";
+import { Requirements } from "@/app/_ui/Requirements";
 import { SIGNUP_COUNTRIES } from "@/app/_ui/countries";
+import { DashNav, DashHeader, Section, EmptyState, SUPPORT_EMAIL, fmtDate } from "@/app/_ui/dash";
 
 import InviteGuardian, { ResendInvite } from "./InviteGuardian";
 import NewProduct from "./NewProduct";
-import SignOut from "./SignOut";
 
 export const viewport = buildViewport();
 
@@ -43,12 +42,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-const SUPPORT_EMAIL = "hello@withveyro.com";
-
 const COUNTRY_NAME = new Map(SIGNUP_COUNTRIES);
-
-const fmtDate = (d: Date | string) =>
-  new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 
 /* ---------------- overall status ---------------- */
 
@@ -129,20 +123,6 @@ function activityLine(row: AuditRow): string | null {
 
 /* ---------------- small pieces ---------------- */
 
-function Section({
-  title, aside, children,
-}: { title: string; aside?: React.ReactNode; children: React.ReactNode }) {
-  return (
-    <section className="card" style={{ marginBottom: 24 }}>
-      <div className="card-h">
-        <h2 className="h4" style={{ margin: 0 }}>{title}</h2>
-        {aside}
-      </div>
-      <div className="card-b">{children}</div>
-    </section>
-  );
-}
-
 const TX_BADGE: Record<string, string> = { COMPLETED: "b-pine", PENDING: "b-amber", REFUNDED: "b-grey" };
 const TX_LABEL: Record<string, string> = { COMPLETED: "Paid", PENDING: "Settling", REFUNDED: "Refunded" };
 const PRODUCT_BADGE: Record<string, string> = { LIVE: "b-pine", DRAFT: "b-amber", ARCHIVED: "b-grey" };
@@ -200,29 +180,15 @@ export default async function FounderDashboard() {
   return (
     <div className="fw">
       <style>{CSS + CSS2}</style>
-      <SkipLink />
+      <DashNav role="FOUNDER" current="dashboard" />
 
-      <div className="wrap-n">
-        <div className="lp-nav">
-          <Link href="/" aria-label="Veyro, home"><Wordmark size={20} /></Link>
-          <div className="lp-links">
-            <Link className="btn btn-q btn-sm hide-s" href="/how-it-works">How it works</Link>
-            <SignOut />
-          </div>
-        </div>
-      </div>
-
-      <main id="main" className="wrap-n" style={{ paddingTop: 28, paddingBottom: 80 }}>
+      <main id="main" className="wrap-w" style={{ paddingTop: 28, paddingBottom: 80 }}>
         {/* ---------------- 1. header ---------------- */}
-        <div className="page-h" style={{ marginBottom: 24 }}>
-          <div className="row" style={{ alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-            <h1 className="d2" style={{ fontSize: "var(--fs-8)", margin: 0 }}>Your business</h1>
-            <span className={"badge " + OVERALL[overall].badge}>{OVERALL[overall].label}</span>
-          </div>
-          <p className="body" style={{ marginTop: 8 }}>
-            {user.name} &middot; {COUNTRY_NAME.get(user.countryCode) ?? user.countryCode}
-          </p>
-        </div>
+        <DashHeader
+          title="Your business"
+          subtitle={`${user.name} · ${COUNTRY_NAME.get(user.countryCode) ?? user.countryCode}`}
+          badge={<span className={"badge " + OVERALL[overall].badge}>{OVERALL[overall].label}</span>}
+        />
 
         <div className="grid-2" style={{ gap: 24, alignItems: "start" }}>
           {/* ================= left: state ================= */}
@@ -314,16 +280,7 @@ export default async function FounderDashboard() {
                     identity documents.
                   </p>
                   {due.length > 0 ? (
-                    <div className="reqlist">
-                      {due.map((r) => (
-                        <div className="reqrow" key={r.code}>
-                          <div>
-                            <span className="req-t">{r.label}</span>
-                            <span className="req-d mono">{r.code}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                    <Requirements items={due} />
                   ) : (
                     <Notice tone="grey" head="Nothing itemised yet">
                       Stripe has flagged this account but has not said which field is outstanding.
@@ -368,11 +325,11 @@ export default async function FounderDashboard() {
             {/* ---------------- 4. wallet ---------------- */}
             <Section title="Wallet">
               {wallet.currencies.length === 0 ? (
-                <div className="empty">
+                <EmptyState>
                   <p className="body" style={{ margin: 0 }}>
                     Nothing yet. Money appears here once a customer pays.
                   </p>
-                </div>
+                </EmptyState>
               ) : (
                 <div className="stack">
                   {wallet.currencies.map((c) => (
@@ -424,9 +381,9 @@ export default async function FounderDashboard() {
             {/* ---------------- 7. recent activity ---------------- */}
             <Section title="Recent activity">
               {activityLines.length === 0 ? (
-                <div className="empty">
+                <EmptyState>
                   <p className="body" style={{ margin: 0 }}>Nothing has happened yet.</p>
-                </div>
+                </EmptyState>
               ) : (
                 <div className="reqlist">
                   {activityLines.map(({ row, line }) => (
@@ -451,9 +408,9 @@ export default async function FounderDashboard() {
               <hr className="rule" style={{ margin: "24px 0 18px" }} />
 
               {products.length === 0 ? (
-                <div className="empty">
+                <EmptyState>
                   <p className="body" style={{ margin: 0 }}>Nothing listed yet.</p>
-                </div>
+                </EmptyState>
               ) : (
                 <div className="tblwrap">
                   <table className="tbl">
@@ -500,12 +457,12 @@ export default async function FounderDashboard() {
             {/* ---------------- 6. transactions ---------------- */}
             <Section title="Transactions">
               {transactions.length === 0 ? (
-                <div className="empty">
+                <EmptyState>
                   <p className="body" style={{ margin: 0 }}>
                     No transactions yet. Every completed payment is recorded here from
                     Stripe&rsquo;s own signed webhook — never from the customer&rsquo;s browser.
                   </p>
-                </div>
+                </EmptyState>
               ) : (
                 <div className="tblwrap">
                   <table className="tbl">
@@ -539,7 +496,6 @@ export default async function FounderDashboard() {
         </div>
       </main>
 
-      <SiteFooter />
     </div>
   );
 }

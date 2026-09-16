@@ -208,7 +208,7 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
           <div style={{ marginTop: 16 }}>
             {R.route === "guardian" && (
               <Notice tone="pine" head={"Verified in " + (R.region || R.country?.[1])}
-                action={<Btn size="sm" onClick={() => go("signup")}>Start setup</Btn>}>
+                action={<Btn size="sm" onClick={() => go("signup")}>Create your account</Btn>}>
                 <p>
                   {R.country?.[1]} is on the payment provider&rsquo;s supported list, and this route is open to you.
                   In {R.region || R.country?.[1]} you can sign a binding contract in your own name from{" "}
@@ -236,7 +236,12 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
             )}
             {R.route === "adult" && (
               <Notice tone="grey" head="You don't need us for this"
-                action={<Btn size="sm" variant="2" onClick={() => go("landing")}>Understood</Btn>}>
+                action={
+                  <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
+                    <Btn size="sm" variant="2" onClick={() => go("signup")}>Create an account anyway</Btn>
+                    <Btn size="sm" variant="q" onClick={() => go("landing")}>Understood</Btn>
+                  </div>
+                }>
                 {R.country?.[1]} is supported by the payment provider, and at your age none of this applies to you
                 anyway. You&rsquo;re {age}, and you can contract in your own name in {R.region || R.country?.[1]} from{" "}
                 {R.majority}.
@@ -357,12 +362,11 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
 export default function CheckClient() {
   const router = useRouter();
 
-  // This standalone page has nowhere else to route to yet: the marketing site
-  // and signup flow the prototype's "landing" / "signup" routes point at
-  // don't exist in this Next app. Both send you home for now.
+  // The checker is the highest-intent moment in the product, so a result that
+  // says "yes, this is open to you" has to lead somewhere. It used to send
+  // every route home, written when /auth/signup did not exist yet.
   const go = (route: string) => {
-    void route;
-    router.push("/");
+    router.push(route === "signup" ? "/auth/signup" : "/");
   };
 
   return (

@@ -37,6 +37,28 @@ export async function createSession(userId: string) {
   return raw;
 }
 
+/**
+ * Revoke every session for this user except the one making the request.
+ *
+ * Called when a password changes. The point of changing a password is usually
+ * that someone else may have had it; leaving their existing sessions alive
+ * would make the change cosmetic, since a stolen session cookie keeps working
+ * on its own. The current session is spared so the person doing it is not
+ * signed out mid-flow.
+ */
+export async function revokeOtherSessions(userId: string) {
+  const raw = (await cookies()).get(SESSION_COOKIE)?.value;
+  const { count } = await db.session.updateMany({
+    where: {
+      userId,
+      revokedAt: null,
+      ...(raw ? { NOT: { tokenHash: sha256(raw) } } : {}),
+    },
+    data: { revokedAt: new Date() },
+  });
+  return count;
+}
+
 /** The signed-in user, or null. Never trust anything the client says about identity. */
 export async function currentUser() {
   const raw = (await cookies()).get(SESSION_COOKIE)?.value;
@@ -74,6 +96,22 @@ export async function endSession() {
 function activeConsentWhere(founderId: string, guardianId: string) {
   return {
     founderId,
+    guardianId,
+    consentedAt: { not: null },
+    OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
+  };
+}
+
+/**
+ * Every founder this guardian may act for.
+ *
+ * The same clause isGuardianOf() asks about one founder, minus the founderId —
+ * so the guardian dashboard lists exactly the founders the authorization check
+ * would let them touch. Writing the query a second time by hand is how a
+ * dashboard ends up showing a founder whose consent has since expired.
+ */
+export function guardianScopeWhere(guardianId: string) {
+  return {
     guardianId,
     consentedAt: { not: null },
     OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],

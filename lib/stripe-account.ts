@@ -16,7 +16,12 @@ import { db } from "./db";
 
 export type ConnectStatus = "ACTIVE" | "RESTRICTED" | "REQUIREMENTS_DUE" | "PENDING";
 
-export type RequirementInfo = { code: string; label: string };
+export type RequirementInfo = {
+  code: string;
+  label: string;
+  /** One line of plain guidance, where the label alone would puzzle a parent. */
+  hint?: string;
+};
 
 // The fields the user must provide or fix right now. Read ONLY from the
 // account's own top-level `requirements` — sub-objects like
@@ -66,6 +71,30 @@ function nationalIdLabel(country: string): string {
   }
 }
 
+/**
+ * Guidance for the requirements that read like they were written for a company.
+ *
+ * A parent helping a fifteen-year-old sell stickers is shown "A customer
+ * support phone number" and "Your business website or product link" and
+ * reasonably concludes they are in the wrong place — they have neither, and
+ * nothing tells them an ordinary phone number and a social profile are fine.
+ * Stripe asks for these because its form does not know it is looking at a
+ * sticker business; this is the sentence that closes that gap.
+ *
+ * Only where the label genuinely misleads. A hint under "Your home address"
+ * would be noise, and the row renders without one.
+ */
+const HINTS: Record<string, string> = {
+  "business_profile.url":
+    "If there's no website, a social media profile or the Veyro checkout link works.",
+  "business_profile.support_phone":
+    "A phone number a customer could reach you on. Your own is fine.",
+  "business_profile.product_description":
+    "One sentence on what's being sold.",
+  external_account:
+    "The bank account payouts go to. This is usually the guardian's.",
+};
+
 export function humanizeRequirement(code: string, country: string): RequirementInfo {
   const fixed: Record<string, string> = {
     "individual.id_number_secondary": "A second government ID number",
@@ -95,8 +124,9 @@ export function humanizeRequirement(code: string, country: string): RequirementI
     "business_profile.support_address": "A business support address",
   };
 
-  if (code === "individual.id_number") return { code, label: nationalIdLabel(country) };
-  if (fixed[code]) return { code, label: fixed[code] };
+  const hint = HINTS[code];
+  if (code === "individual.id_number") return { code, label: nationalIdLabel(country), hint };
+  if (fixed[code]) return { code, label: fixed[code], hint };
 
   // Unknown code — strip the API prefix, turn dots/underscores into spaces,
   // sentence-case. Still readable, never a raw path.
@@ -104,7 +134,7 @@ export function humanizeRequirement(code: string, country: string): RequirementI
     .replace(/^(individual|company|business_profile|tos_acceptance|relationship)\./, "")
     .replace(/[._]/g, " ")
     .trim();
-  return { code, label: cleaned ? cleaned[0].toUpperCase() + cleaned.slice(1) : code };
+  return { code, label: cleaned ? cleaned[0].toUpperCase() + cleaned.slice(1) : code, hint };
 }
 
 // Humanize a list of codes, collapsing ones that share a label (dob.day/month/year).

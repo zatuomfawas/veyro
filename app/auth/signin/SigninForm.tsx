@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Btn, Field, Notice } from "@/app/_ui/form";
+import { safeNextPath, defaultLandingFor } from "@/lib/next-path";
 
-export default function SigninForm() {
+export default function SigninForm({ next }: { next?: string | null }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,9 +34,9 @@ export default function SigninForm() {
         return;
       }
 
-      // Founders have somewhere to be. Guardians do not yet — their dashboard
-      // is the next phase — so they land on the marketing page for now.
-      router.push(body?.user?.role === "FOUNDER" ? "/dashboard/founder" : "/");
+      // A validated return path wins: someone who followed an invite link here
+      // is trying to get back to it, not to their dashboard.
+      router.push(safeNextPath(next) ?? defaultLandingFor(body?.user?.role));
       router.refresh();
     } catch {
       setFormError("We couldn't reach the server. Try again in a moment.");

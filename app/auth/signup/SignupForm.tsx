@@ -9,10 +9,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Btn, Field, Notice } from "@/app/_ui/form";
 import { SIGNUP_COUNTRIES } from "@/app/_ui/countries";
+import { safeNextPath, defaultLandingFor } from "@/lib/next-path";
 
 type FieldErrors = Record<string, string>;
 
-export default function SignupForm() {
+export default function SignupForm({ next }: { next?: string | null }) {
   const router = useRouter();
 
   const [name, setName] = useState("");
@@ -62,9 +63,9 @@ export default function SignupForm() {
       }
 
       // Signup already issued the session cookie, so this account is signed in.
-      // Founders go straight to their dashboard; a guardian's next step is the
-      // invite link their founder sends them, not a page here.
-      router.push(body?.user?.role === "FOUNDER" ? "/dashboard/founder" : "/");
+      // A guardian who arrived from an invite goes back to it, ready to accept;
+      // everyone else goes to their own dashboard.
+      router.push(safeNextPath(next) ?? defaultLandingFor(body?.user?.role));
       router.refresh();
     } catch {
       setFormError("We couldn't reach the server. Nothing was created.");

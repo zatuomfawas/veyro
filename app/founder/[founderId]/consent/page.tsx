@@ -18,7 +18,9 @@ import { buildViewport } from "@/lib/seo";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { consentState, hashInviteToken } from "@/lib/consent";
+import { authUrlWithNext } from "@/lib/next-path";
 import { describeRequirements } from "@/lib/stripe-account";
+import { Requirements } from "@/app/_ui/Requirements";
 
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
@@ -26,7 +28,7 @@ import { Notice } from "@/app/_ui/form";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 
 import ConsentActions from "./ConsentActions";
-import SetUpPayments from "./SetUpPayments";
+import SetUpPayments from "@/app/_ui/SetUpPayments";
 
 export const viewport = buildViewport();
 export const dynamic = "force-dynamic";
@@ -99,6 +101,8 @@ export default async function GuardianConsentPage({
   // probe which ids exist.
   if (!consent || consent.founderId !== founderId) return <InvalidLink />;
 
+  // Where an auth detour must return to, token and all.
+  const here = `/founder/${founderId}/consent?token=${encodeURIComponent(token)}`;
   const founderName = consent.founder.name;
   const state = consentState(consent);
   const user = await currentUser();
@@ -121,11 +125,13 @@ export default async function GuardianConsentPage({
               yet, create one as a parent or guardian — you need to be 18 or over.
             </p>
             <div className="row" style={{ gap: 10, flexWrap: "wrap" }}>
-              <Link className="btn" href="/auth/signin">Sign in</Link>
-              <Link className="btn btn-2" href="/auth/signup">Create a guardian account</Link>
+              <Link className="btn" href={authUrlWithNext("/auth/signin", here)}>Sign in</Link>
+              <Link className="btn btn-2" href={authUrlWithNext("/auth/signup", here)}>
+                Create a guardian account
+              </Link>
             </div>
             <p className="tiny" style={{ marginTop: 12, marginBottom: 0 }}>
-              Come back to this link afterwards to answer.
+              You will come straight back here afterwards, ready to answer.
             </p>
           </div>
         </div>
@@ -148,7 +154,7 @@ export default async function GuardianConsentPage({
               Sign in with the address the invitation was sent to, then open this link again. If you
               think it should have come to this account, ask {founderName} to re-send it.
             </p>
-            <Link className="btn btn-2" href="/auth/signin">Sign in as someone else</Link>
+            <Link className="btn btn-2" href={authUrlWithNext("/auth/signin", here)}>Sign in as someone else</Link>
           </div>
         </div>
       </Shell>
@@ -239,18 +245,9 @@ export default async function GuardianConsentPage({
                   {due.length === 1 ? "one thing" : `${due.length} things`} from you before this
                   account can take payments.
                 </p>
-                {due.length > 0 && (
-                  <div className="reqlist" style={{ marginBottom: 18 }}>
-                    {due.map((r) => (
-                      <div className="reqrow" key={r.code}>
-                        <div>
-                          <span className="req-t">{r.label}</span>
-                          <span className="req-d mono">{r.code}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <div style={{ marginBottom: 18 }}>
+                  <Requirements items={due} />
+                </div>
                 <SetUpPayments founderId={consent.founderId} resume />
               </div>
             ) : (

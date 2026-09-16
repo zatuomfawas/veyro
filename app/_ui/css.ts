@@ -111,6 +111,7 @@ export const CSS = `
   .fw .lp-h2 { max-width:24ch; }
 }
 .fw .wrap-n { max-width:768px; margin:0 auto; padding:0 28px; }
+  .fw .wrap-w { max-width:1500px; margin:0 auto; padding:0 28px; }
 .fw .wrap-s { max-width:560px; margin:0 auto; padding:0 28px; }
 .fw .row { display:flex; align-items:center; gap:10px; }
 .fw .row-b { display:flex; align-items:center; justify-content:space-between; gap:16px; }
@@ -444,7 +445,7 @@ export const CSS = `
   .fw .nav { flex-direction:row; overflow-x:auto; padding:6px 10px; gap:4px; }
   .fw .nav button:not(.btn) { width:auto; white-space:nowrap; justify-content:center; }
   .fw .grid-2, .fw .grid-4 { grid-template-columns:1fr; }
-  .fw .wrap, .fw .wrap-n { padding:0 18px; }
+  .fw .wrap, .fw .wrap-n, .fw .wrap-w { padding:0 18px; }
   .fw .page { padding:20px 16px 60px; }
   .fw .topbar { padding:0 16px; }
   .fw .d2 { font-size:var(--fs-7); }
@@ -464,7 +465,7 @@ export const CSS = `
   .fw .d2 { font-size:var(--fs-7); }
   .fw .wordmark-hero { font-size:var(--wm-sm); font-stretch:110%; }
   .fw .tagline { font-size:var(--fs-5); }
-  .fw .wrap, .fw .wrap-n { padding:0 14px; }
+  .fw .wrap, .fw .wrap-n, .fw .wrap-w { padding:0 14px; }
   .fw .page { padding:16px 12px 56px; }
   .fw .tbl th, .fw .tbl td { padding:9px 10px; font-size:var(--fs-2); }
   .fw .card-b, .fw .card-h, .fw .card-f { padding-left:13px; padding-right:13px; }
