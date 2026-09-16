@@ -186,11 +186,17 @@ export default async function FounderDashboard() {
         {/* ---------------- 1. header ---------------- */}
         <DashHeader
           title="Your business"
-          subtitle={`${user.name} · ${COUNTRY_NAME.get(user.countryCode) ?? user.countryCode}`}
+          subtitle={
+            <>
+              {user.name} &middot; {COUNTRY_NAME.get(user.countryCode) ?? user.countryCode} &middot;{" "}
+              <span className="mono">{user.email}</span> &middot;{" "}
+              <Link className="linkbtn" href="/dashboard/settings">Edit account</Link>
+            </>
+          }
           badge={<span className={"badge " + OVERALL[overall].badge}>{OVERALL[overall].label}</span>}
         />
 
-        <div className="grid-2" style={{ gap: 24, alignItems: "start" }}>
+        <div className="grid-2" style={{ gap: 32, alignItems: "start" }}>
           {/* ================= left: state ================= */}
           <div>
             {/* ---------------- 2. guardian ---------------- */}
@@ -403,7 +409,7 @@ export default async function FounderDashboard() {
           <div>
             {/* ---------------- 5. products ---------------- */}
             <Section title="Products">
-              <NewProduct />
+              <NewProduct founderId={founderId} />
 
               <hr className="rule" style={{ margin: "24px 0 18px" }} />
 

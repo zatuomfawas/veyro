@@ -6,6 +6,11 @@
 // it is public, so the database is the only thing between a stranger and a
 // charge. The page just avoids showing a form that would fail.
 import { db } from "./db";
+import { formatMinor } from "./money";
+
+// Re-exported so server callers keep one import site; the implementation lives in
+// lib/money.ts, which has no database import and is safe for client components.
+export { formatMinor };
 
 /** Stripe's own floor is currency-specific; these are the common ones in minor units. */
 const MINIMUM_MINOR: Record<string, number> = {
@@ -65,10 +70,3 @@ export function isPurchasable(v: Purchasable | NotPurchasable): v is Purchasable
 }
 
 /** Minor units to something a person reads, e.g. 1200 USD -> "$12.00". */
-export function formatMinor(amountMinor: number, currency: string): string {
-  try {
-    return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(amountMinor / 100);
-  } catch {
-    return `${(amountMinor / 100).toFixed(2)} ${currency}`;
-  }
-}

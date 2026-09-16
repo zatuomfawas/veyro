@@ -70,7 +70,7 @@ export default function HowItWorks() {
       <style>{CSS + CSS2}</style>
       <SkipLink />
 
-      <div className="wrap-n">
+      <div className="wrap-lp">
         <div className="lp-nav">
           <Link href="/" aria-label="Veyro, home"><Wordmark size={20} /></Link>
           <div className="lp-links">
@@ -79,7 +79,7 @@ export default function HowItWorks() {
         </div>
       </div>
 
-      <main id="main" className="wrap-n" style={{ paddingTop: 44, paddingBottom: 90 }}>
+      <main id="main" className="wrap-lp" style={{ paddingTop: 44, paddingBottom: 90 }}>
         <span className="lp-eyebrow">Research</span>
         <h1 className="d2" style={{ marginTop: 10, maxWidth: "20ch" }}>
           We asked Stripe whether under-18s can take payments. Here&rsquo;s their answer.

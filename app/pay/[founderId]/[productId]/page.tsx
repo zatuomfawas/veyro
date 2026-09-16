@@ -46,7 +46,7 @@ export default async function PayPage({ params }: Params) {
       <div className="wrap-s">
         <div className="lp-nav" style={{ borderBottom: 0 }}>
           <Wordmark size={18} />
-          <span className="tiny">Secure payment</span>
+          <span className="tiny">Payments secured by Stripe</span>
         </div>
       </div>
 
@@ -56,14 +56,17 @@ export default async function PayPage({ params }: Params) {
             <h1 className="d2" style={{ fontSize: "var(--fs-7)" }}>Not available</h1>
             <p className="body" style={{ marginTop: 12 }}>{REASON_TEXT[resolved]}</p>
             <p className="tiny" style={{ marginTop: 16 }}>
-              Nothing has been charged. If you were sent this link, ask whoever sent it to check it.
+              You have not been charged, and nothing has been taken from your card. If someone sent
+              you this link, ask them to check it and send a new one.
             </p>
           </>
         ) : (
           <>
             <h1 className="d2" style={{ fontSize: "var(--fs-7)" }}>{resolved.product.name}</h1>
             {seller?.name && (
-              <p className="tiny" style={{ marginTop: 6 }}>Sold by {seller.name}</p>
+              <p className="tiny" style={{ marginTop: 6 }}>
+                Sold by {seller.name}, through Veyro
+              </p>
             )}
 
             <div className="card" style={{ marginTop: 20 }}>
@@ -89,9 +92,24 @@ export default async function PayPage({ params }: Params) {
               />
             </div>
 
-            <p className="tiny" style={{ marginTop: 20, maxWidth: "var(--m-body)" }}>
-              Card details go straight to Stripe and are never seen by Veyro or by the seller. The
-              money goes to the seller&rsquo;s own Stripe account, not to Veyro.
+            <div className="statusblock" style={{ marginTop: 20 }}>
+              <div className="row" style={{ alignItems: "flex-start", gap: 12 }}>
+                <span className="sb-mark sb-mark-pine" />
+                <div>
+                  <div className="sb-head">Where your money and your card details go</div>
+                  <p className="sb-body">
+                    Your card details are entered on Stripe&rsquo;s own form and are never seen by
+                    Veyro or by the seller. The payment goes directly to the seller&rsquo;s Stripe
+                    account — Veyro never holds it and takes no percentage of it.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <p className="tiny" style={{ marginTop: 16, maxWidth: "var(--m-body)" }}>
+              This seller is under 18 and has a parent or guardian named on the payment account, as
+              the provider requires. Questions about a payment? Email{" "}
+              <a className="linkbtn" href="mailto:hello@withveyro.com">hello@withveyro.com</a>.
             </p>
           </>
         )}

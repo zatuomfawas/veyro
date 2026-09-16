@@ -64,7 +64,7 @@ export default async function SettingsPage() {
           }
         />
 
-        <div className="grid-2" style={{ gap: 24, alignItems: "start" }}>
+        <div className="grid-2" style={{ gap: 32, alignItems: "start" }}>
           <div>
             <Section title="Your details">
               <ProfileForm

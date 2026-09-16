@@ -111,7 +111,7 @@ export const CSS = `
   .fw .lp-h2 { max-width:24ch; }
 }
 .fw .wrap-n { max-width:768px; margin:0 auto; padding:0 28px; }
-  .fw .wrap-w { max-width:1500px; margin:0 auto; padding:0 28px; }
+  .fw .wrap-w { max-width:1400px; margin:0 auto; padding:0 var(--lp-gut); }
 .fw .wrap-s { max-width:560px; margin:0 auto; padding:0 28px; }
 .fw .row { display:flex; align-items:center; gap:10px; }
 .fw .row-b { display:flex; align-items:center; justify-content:space-between; gap:16px; }

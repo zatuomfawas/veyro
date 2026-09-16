@@ -13,6 +13,44 @@ import { safeNextPath, defaultLandingFor } from "@/lib/next-path";
 
 type FieldErrors = Record<string, string>;
 
+/**
+ * The same rules /api/auth/signup applies, checked when a field loses focus.
+ * On blur rather than on every keystroke: validating as someone types tells
+ * them their email is wrong after two letters, which teaches people to ignore
+ * the red text. The API still decides — this only saves a round trip.
+ */
+function checkField(field: string, value: string, isGuardian: boolean): string | null {
+  if (!value.trim()) return null;
+  switch (field) {
+    case "email":
+      return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(value.trim())
+        ? null : "Enter a working email address.";
+    case "password":
+      return value.length < 10
+        ? "Use at least 10 characters. A short sentence is fine." : null;
+    case "name":
+      return value.trim().length < 2
+        ? "Enter the name your guardian will recognise." : null;
+    case "dateOfBirth": {
+      const born = new Date(value);
+      if (Number.isNaN(born.getTime())) return "Enter your full date of birth.";
+      const now = new Date();
+      if (born > now) return "That date is in the future.";
+      let age = now.getFullYear() - born.getFullYear();
+      const m = now.getMonth() - born.getMonth();
+      if (m < 0 || (m === 0 && now.getDate() < born.getDate())) age--;
+      if (isGuardian && age < 18) {
+        return "A parent or guardian has to be at least 18. They are the adult the payment "
+          + "provider verifies.";
+      }
+      if (age < 13) return "You must be at least 13 to create an account.";
+      return null;
+    }
+    default:
+      return null;
+  }
+}
+
 export default function SignupForm({ next }: { next?: string | null }) {
   const router = useRouter();
 
@@ -27,6 +65,12 @@ export default function SignupForm({ next }: { next?: string | null }) {
   const [errors, setErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  const blur = (field: string, value: string) => () => {
+    const message = checkField(field, value, isGuardian);
+    setErrors((e) => ({ ...e, [field]: message ?? "" }));
+  };
+  const clear = (field: string) => setErrors((e) => ({ ...e, [field]: "" }));
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -81,34 +125,39 @@ export default function SignupForm({ next }: { next?: string | null }) {
         </div>
       )}
 
-      <Field label="Your name" error={errors.name}>
+      <Field label="Your name" error={errors.name || undefined}>
         <input className="input" value={name} autoComplete="name"
-          onChange={(e) => setName(e.target.value)} placeholder="Alex Taylor" />
+          onBlur={blur("name", name)}
+          onChange={(e) => { setName(e.target.value); clear("name"); }} placeholder="Alex Taylor" />
       </Field>
 
-      <Field label="Email address" error={errors.email}>
+      <Field label="Email address" error={errors.email || undefined}>
         <input className="input" type="email" value={email} autoComplete="email"
-          onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
+          onBlur={blur("email", email)}
+          onChange={(e) => { setEmail(e.target.value); clear("email"); }} placeholder="you@example.com" />
       </Field>
 
-      <Field label="Password" error={errors.password}
+      <Field label="Password" error={errors.password || undefined}
         hint="At least 10 characters. A short sentence is easier to remember than a jumble.">
         <input className="input" type="password" value={password} autoComplete="new-password"
-          onChange={(e) => setPassword(e.target.value)} />
+          onBlur={blur("password", password)}
+          onChange={(e) => { setPassword(e.target.value); clear("password"); }} />
       </Field>
 
-      <Field label="Confirm password" error={errors.confirm}>
+      <Field label="Confirm password" error={errors.confirm || undefined}>
         <input className="input" type="password" value={confirm} autoComplete="new-password"
-          onChange={(e) => setConfirm(e.target.value)} />
+          onBlur={() => setErrors((x) => ({ ...x, confirm: confirm && confirm !== password ? "Those two passwords are different." : "" }))}
+          onChange={(e) => { setConfirm(e.target.value); clear("confirm"); }} />
       </Field>
 
-      <Field label="Date of birth" error={errors.dateOfBirth}
+      <Field label="Date of birth" error={errors.dateOfBirth || undefined}
         hint="The full date, because the age rules turn on it. It is never shown publicly.">
         <input className="input" type="date" value={dateOfBirth}
-          onChange={(e) => setDateOfBirth(e.target.value)} max="2026-12-31" />
+          onBlur={blur("dateOfBirth", dateOfBirth)}
+          onChange={(e) => { setDateOfBirth(e.target.value); clear("dateOfBirth"); }} max="2026-12-31" />
       </Field>
 
-      <Field label="Where do you live?" error={errors.country}
+      <Field label="Where do you live?" error={errors.country || undefined}
         hint="The legal age to sign a contract is set locally, and it decides which route is open to you.">
         <select className="select" value={country} onChange={(e) => setCountry(e.target.value)}>
           <option value="">Choose a country</option>
@@ -122,7 +171,11 @@ export default function SignupForm({ next }: { next?: string | null }) {
         type="button"
         className="choice"
         data-on={isGuardian ? "1" : "0"}
-        onClick={() => setIsGuardian((v) => !v)}
+        onClick={() => {
+          const now = !isGuardian;
+          setIsGuardian(now);
+          setErrors((x) => ({ ...x, dateOfBirth: checkField("dateOfBirth", dateOfBirth, now) ?? "" }));
+        }}
         aria-pressed={isGuardian}
         style={{ marginBottom: 14 }}
       >

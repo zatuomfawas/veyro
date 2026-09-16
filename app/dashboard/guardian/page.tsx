@@ -113,12 +113,17 @@ export default async function GuardianDashboard() {
   return (
     <div className="fw">
       <style>{CSS + CSS2}</style>
-      <DashNav />
+      <DashNav role="GUARDIAN" current="dashboard" />
 
       <main id="main" className="wrap-w" style={{ paddingTop: 28, paddingBottom: 80 }}>
         <DashHeader
           title="Your founders"
-          subtitle={`${user.name} · guardian account`}
+          subtitle={
+            <>
+              {user.name} &middot; <span className="mono">{user.email}</span> &middot;{" "}
+              <Link className="linkbtn" href="/dashboard/settings">Edit account</Link>
+            </>
+          }
           badge={
             consents.length === 0
               ? <span className="badge b-grey">No founders yet</span>
@@ -209,7 +214,7 @@ export default async function GuardianDashboard() {
 
                   <hr className="rule" style={{ margin: "22px 0 18px" }} />
 
-                  <div className="grid-2" style={{ gap: 24, alignItems: "start" }}>
+                  <div className="grid-2" style={{ gap: 32, alignItems: "start" }}>
                     {/* ---- payout requests ---- */}
                     <div>
                       <h3 className="h4" style={{ marginTop: 0, marginBottom: 10 }}>Payout requests</h3>
