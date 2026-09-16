@@ -7,12 +7,26 @@ export const viewport = buildViewport();
 
 const UPDATED = "16 September 2026";
 
+const SECTIONS = [
+  { n: 1, title: "What we collect" },
+  { n: 2, title: "What we are built never to receive" },
+  { n: 3, title: "Why we hold it" },
+  { n: 4, title: "Who can see what" },
+  { n: 5, title: "Who we share it with" },
+  { n: 6, title: "Cookies" },
+  { n: 7, title: "How long we keep it" },
+  { n: 8, title: "Your rights" },
+  { n: 9, title: "People under 18" },
+  { n: 10, title: "Changes to this policy" },
+];
+
 export default function Privacy() {
   return (
     <LegalShell
       title="Privacy Policy"
       lead="What Veyro holds, what it is built never to receive, and how data about people under 18 is handled."
       updated={UPDATED}
+      sections={SECTIONS}
     >
       <Clause n={1} title="What we collect">
         <p className="body" style={{ marginTop: 0 }}>

@@ -7,12 +7,22 @@ export const viewport = buildViewport();
 
 const UPDATED = "16 September 2026";
 
+const SECTIONS = [
+  { n: 1, title: "The target" },
+  { n: 2, title: "What has been measured" },
+  { n: 3, title: "What is built in by design" },
+  { n: 4, title: "What has NOT been tested" },
+  { n: 5, title: "Known gaps" },
+  { n: 6, title: "Tell us" },
+];
+
 export default function Accessibility() {
   return (
     <LegalShell
       title="Accessibility Statement"
       lead="What Veyro aims for, what has actually been checked, and what has not."
       updated={UPDATED}
+      sections={SECTIONS}
     >
       <Clause n={1} title="The target">
         <p className="body" style={{ marginTop: 0 }}>

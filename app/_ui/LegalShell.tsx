@@ -14,20 +14,30 @@ export const SUPPORT_EMAIL = "hello@withveyro.com";
 // placeholder is visible on the page rather than buried.
 export const JURISDICTION_PLACEHOLDER = true;
 
+/** One clause, for the contents list. `n` must match the <Clause n=…> below it. */
+export type Section = { n: number; title: string };
+
 /**
  * Shared chrome for the three legal pages.
  *
+ * The container is 1200px, but the prose is not. A 1200px line of body text
+ * runs to roughly 160 characters, which is hard to read: the eye loses its
+ * place on the return sweep. So the width goes to a contents column instead,
+ * and the text keeps a 76ch measure. On a narrow screen the contents list
+ * drops above the text and everything is one column.
+ *
  * `updated` is a real date passed by each page and changed by hand when the
  * text changes. It is not derived from the file's mtime or the build time:
- * both of those move when nothing about the policy has changed, which turns a
- * date people rely on into noise.
+ * both move when nothing about the policy has changed, which turns a date
+ * people rely on into noise.
  */
 export function LegalShell({
-  title, lead, updated, children,
+  title, lead, updated, sections, children,
 }: {
   title: string;
   lead: string;
   updated: string;
+  sections: Section[];
   children: React.ReactNode;
 }) {
   return (
@@ -37,7 +47,7 @@ export function LegalShell({
       <SkipLink />
 
       <div className="navbar">
-        <div className="wrap-n">
+        <div className="wrap-lp">
           <nav className="lp-nav" aria-label="Main">
             <Link href="/" aria-label="Veyro, home"><Wordmark size={20} /></Link>
             <div className="lp-links">
@@ -48,12 +58,12 @@ export function LegalShell({
         </div>
       </div>
 
-      <main id="main" className="wrap-n" style={{ paddingTop: 40, paddingBottom: 72 }}>
+      <main id="main" className="wrap-lp" style={{ paddingTop: 40, paddingBottom: 72 }}>
         <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>{title}</h1>
         <p className="lead" style={{ marginTop: 12 }}>{lead}</p>
         <p className="tiny" style={{ marginTop: 12 }}>Last updated {updated}.</p>
 
-        <div style={{ marginTop: 24 }}>
+        <div style={{ marginTop: 24, maxWidth: "var(--m-wide)" }}>
           <Notice tone="amber" head="Read this first: these are not lawyer-reviewed">
             <p style={{ margin: "0 0 8px" }}>
               This document was drafted with an AI assistant and has not been reviewed by a
@@ -69,12 +79,38 @@ export function LegalShell({
           </Notice>
         </div>
 
-        <div style={{ marginTop: 32, maxWidth: "var(--m-body)" }}>{children}</div>
+        <div className="truthgrid" style={{ marginTop: 40, alignItems: "start" }}>
+          {/* Contents. Sticky below the header on desktop; at ≤900px truthgrid
+              collapses and this simply sits above the text. */}
+          <nav aria-label="On this page" style={{ position: "sticky", top: "calc(var(--nav-h) + 16px)" }}>
+            <h2 className="lp-eyebrow" style={{ marginBottom: 12 }}>On this page</h2>
+            <ol style={{ listStyle: "none", margin: 0, padding: 0 }}>
+              {sections.map((s) => (
+                <li key={s.n} style={{ marginBottom: 8 }}>
+                  <a
+                    className="linkbtn"
+                    href={`#clause-${s.n}`}
+                    style={{ fontSize: "var(--fs-3)", lineHeight: 1.4, display: "inline-block" }}
+                  >
+                    <span className="num" style={{ color: "var(--ink-3)", marginRight: 8 }}>
+                      {s.n}.
+                    </span>
+                    {s.title}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
 
-        <p className="tiny" style={{ marginTop: 40 }}>
-          Questions about this page:{" "}
-          <a className="linkbtn" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
-        </p>
+          <div style={{ maxWidth: "var(--m-wide)" }}>
+            {children}
+
+            <p className="tiny" style={{ marginTop: 40 }}>
+              Questions about this page:{" "}
+              <a className="linkbtn" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
+            </p>
+          </div>
+        </div>
       </main>
 
       <ScrollTop />
@@ -83,10 +119,19 @@ export function LegalShell({
   );
 }
 
-/** A numbered section of a legal document. */
+/**
+ * A numbered section of a legal document.
+ *
+ * scroll-margin-top keeps the sticky header off the heading when someone jumps
+ * here from the contents list. Without it the header lands on top of the title
+ * and you arrive mid-paragraph with no idea which clause you are in.
+ */
 export function Clause({ n, title, children }: { n: number; title: string; children: React.ReactNode }) {
   return (
-    <section style={{ marginBottom: 32 }}>
+    <section
+      id={`clause-${n}`}
+      style={{ marginBottom: 32, scrollMarginTop: "calc(var(--nav-h) + 16px)" }}
+    >
       <h2 className="h3" style={{ marginTop: 0, marginBottom: 8 }}>
         <span className="num" style={{ color: "var(--ink-3)", marginRight: 8 }}>{n}.</span>
         {title}

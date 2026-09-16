@@ -7,12 +7,26 @@ export const viewport = buildViewport();
 
 const UPDATED = "16 September 2026";
 
+const SECTIONS = [
+  { n: 1, title: "What Veyro is" },
+  { n: 2, title: "Who may use Veyro" },
+  { n: 3, title: "The guardian's role" },
+  { n: 4, title: "Your responsibilities" },
+  { n: 5, title: "What Veyro costs" },
+  { n: 6, title: "Availability, and changes" },
+  { n: 7, title: "Limitation of liability" },
+  { n: 8, title: "Ending your use of Veyro" },
+  { n: 9, title: "Governing law and disputes" },
+  { n: 10, title: "Nothing here is legal advice" },
+];
+
 export default function Terms() {
   return (
     <LegalShell
       title="Terms of Service"
       lead="What Veyro is, what it is not, and what you and your guardian are agreeing to."
       updated={UPDATED}
+      sections={SECTIONS}
     >
       <Clause n={1} title="What Veyro is">
         <p className="body" style={{ marginTop: 0 }}>

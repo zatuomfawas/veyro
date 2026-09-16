@@ -19,7 +19,19 @@ html {
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
+
+  /* `clip`, not `hidden`.
+   *
+   * overflow-x: hidden makes this element a scroll container, and a scroll
+   * container is what position:sticky sticks to. With it on html/body, the
+   * sticky header had nothing to stick against and scrolled away with the page.
+   * overflow-x: clip prevents the same horizontal scrolling without creating a
+   * scroll container, so the header works and the protection stays.
+   *
+   * This is belt and braces either way: .fw sets overflow-wrap: break-word, and
+   * every breakpoint from 375px to 1920px has been checked for elements wider
+   * than the viewport. */
+  overflow-x: clip;
 }
 
 body {

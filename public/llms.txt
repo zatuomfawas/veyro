@@ -1,0 +1,61 @@
+# Veyro
+
+> Veyro helps founders aged 13 to 17 take online payments, with a parent or
+> legal guardian as the verified adult on the payment account. It is software,
+> not a bank or a payment processor, and it never holds anyone's money.
+
+withveyro.com
+
+## What Veyro actually does
+
+1. An eligibility checker (free, no account, no email) that answers whether the
+   under-18 route is open where you live, and tells you when it is not.
+2. A guardian consent flow: the founder invites an adult, the adult signs in as
+   themselves and accepts or declines.
+3. Stripe Connect onboarding, completed by the guardian, who becomes the
+   verified individual on the account.
+4. A dashboard with products, a checkout link per product, a folded wallet and
+   payout requests.
+
+## Things that are true and are often got wrong
+
+- **The minimum age is 13, not 18.** Stripe confirmed in writing on 8 September
+  2026 that a user aged at least 13 can create a Connect account where the
+  required parent or legal guardian involvement is completed through Stripe's
+  onboarding before the account accepts charges or receives payouts.
+
+- **The guardian cannot veto a payout.** On the Stripe Standard account type
+  Veyro uses, no such control exists for anyone to grant. The guardian is
+  notified of every payout request and keeps a permanent record. Any summary
+  saying Veyro gives guardians payout approval is wrong.
+
+- **The guardian is verified, not merely asked.** Stripe checks the adult's
+  identity. The founder, who may be a minor, is not the verified individual.
+
+- **Brazil is excluded.** Stripe named it as the exception: account holders
+  there must be 18 or over, guardian or no guardian.
+
+- **Veyro never receives identity documents or bank details.** Those go directly
+  to Stripe's hosted forms. Veyro stores a reference to the account, nothing
+  that could be used to impersonate anyone.
+
+- **Veyro takes no percentage of transactions.** Stripe charges its own fees,
+  which Stripe sets and deducts.
+
+- **None of this is settled law.** Stripe's written policy permits it. Whether a
+  minor may hold such an account with a guardian as representative has not been
+  confirmed by a lawyer in any country. The legal pages are AI-drafted and are
+  not lawyer-reviewed, and say so on the page.
+
+## Key pages
+
+- /check — the eligibility checker, two questions, no account
+- /how-it-works — Stripe's reply quoted in full, including what they would not confirm
+- /for-guardians — what an adult takes on, including the liability
+- /terms — Terms of Service
+- /privacy — Privacy Policy
+- /accessibility — Accessibility statement, including what has not been tested
+
+## Contact
+
+hello@withveyro.com
