@@ -3,6 +3,8 @@ import { buildMetadata, buildViewport } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
+import { MobileNav } from "@/app/_ui/MobileNav";
+import { ScrollTop } from "@/app/_ui/ScrollTop";
 
 export const metadata = buildMetadata("guardians");
 export const viewport = buildViewport();
@@ -28,6 +30,13 @@ export default function ForGuardians() {
             <div className="lp-links">
               <Link className="btn btn-q btn-sm hide-s" href="/how-it-works">How it works</Link>
               <Link className="btn btn-sm" href="/check">Check eligibility</Link>
+              <MobileNav
+                items={[
+                  { href: "/how-it-works", label: "What Stripe told us" },
+                  { href: "/check", label: "Check eligibility" },
+                  { href: "/", label: "Home" },
+                ]}
+              />
             </div>
           </nav>
         </div>
@@ -177,6 +186,7 @@ export default function ForGuardians() {
         </div>
       </main>
 
+      <ScrollTop />
       <SiteFooter />
     </div>
   );

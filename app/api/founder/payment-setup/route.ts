@@ -95,8 +95,17 @@ export async function POST(req: Request) {
   try {
     accountLink = await stripe.accountLinks.create({
       account: account.providerAccountId!,
-      refresh_url: `${origin}/g/founder/${founderId}/payments?refresh=1`,
-      return_url: `${origin}/g/founder/${founderId}/payments?onboarded=1`,
+      // Both land on the guardian's dashboard, which already renders the right
+      // next step: "Live" once Stripe enables the account, or the itemised
+      // requirements with a "Continue on Stripe" button while it has not.
+      //
+      // These used to point at /g/founder/<id>/payments, a route from the
+      // prototype that has never existed in this app, so a guardian who
+      // finished Stripe's form was dropped on a 404. refresh_url mattered just
+      // as much: Stripe sends them there when the account link expires before
+      // they complete it, which is common, and that 404'd too.
+      refresh_url: `${origin}/dashboard/guardian?setup=refresh`,
+      return_url: `${origin}/dashboard/guardian?setup=done`,
       type: "account_onboarding",
     });
   } catch (err) {

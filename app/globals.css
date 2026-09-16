@@ -6,6 +6,14 @@
 
 html {
   height: 100%;
+
+  /* Anchor links glide instead of jumping. Without this a link to #how
+   * teleports, which loses the reader's sense of where the section sits in the
+   * page. The design system already overrides this to `auto !important` inside
+   * its prefers-reduced-motion block, so anyone who has asked for less motion
+   * keeps the instant jump. Section targets carry scroll-margin-top, so the
+   * sticky header does not land on top of the heading. */
+  scroll-behavior: smooth;
 }
 
 html,
@@ -19,4 +27,13 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* This must match --paper in app/_ui/css.ts.
+   *
+   * The literal is unavoidable: the design tokens are scoped to .fw on purpose,
+   * so body cannot read var(--paper). It has to be set here anyway, because .fw
+   * is a div that only spans its own content. On any page shorter than the
+   * viewport, the ivory stopped where the content stopped and the browser's
+   * default white showed underneath, which read as a page split in half. */
+  background: #f2f0ea;
 }

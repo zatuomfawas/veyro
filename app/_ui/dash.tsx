@@ -36,8 +36,11 @@ export function DashNav({
   return (
     <>
       <SkipLink />
-      <div className="wrap-w">
-        <div className="lp-nav">
+      {/* .navbar makes it sticky. A dashboard scrolls a long way, and Settings
+          and Sign out were both gone by the second screen. */}
+      <div className="navbar">
+        <div className="wrap-w">
+          <nav className="lp-nav" aria-label="Dashboard">
           <Link href="/" aria-label="Veyro, home"><Wordmark size={20} /></Link>
           <div className="lp-links">
             {home && (
@@ -57,7 +60,8 @@ export function DashNav({
               Settings
             </Link>
             <SignOut />
-          </div>
+            </div>
+          </nav>
         </div>
       </div>
     </>

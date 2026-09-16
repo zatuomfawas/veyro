@@ -3,6 +3,8 @@ import { buildMetadata, buildViewport } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
+import { ScrollProgress } from "@/app/_ui/ScrollProgress";
+import { ScrollTop } from "@/app/_ui/ScrollTop";
 
 export const metadata = buildMetadata("how");
 export const viewport = buildViewport();
@@ -68,14 +70,18 @@ export default function HowItWorks() {
   return (
     <div className="fw">
       <style>{CSS + CSS2}</style>
+      <ScrollProgress />
       <SkipLink />
 
-      <div className="wrap-lp">
-        <div className="lp-nav">
-          <Link href="/" aria-label="Veyro, home"><Wordmark size={20} /></Link>
-          <div className="lp-links">
-            <Link className="btn btn-2 btn-sm" href="/check">Check what applies to you</Link>
-          </div>
+      <div className="navbar">
+        <div className="wrap-lp">
+          <nav className="lp-nav" aria-label="Main">
+            <Link href="/" aria-label="Veyro, home"><Wordmark size={20} /></Link>
+            <div className="lp-links">
+              <Link className="btn btn-q btn-sm hide-s" href="/for-guardians">For parents</Link>
+              <Link className="btn btn-2 btn-sm" href="/check">Check what applies to you</Link>
+            </div>
+          </nav>
         </div>
       </div>
 
@@ -331,6 +337,7 @@ export default function HowItWorks() {
         </div>
       </main>
 
+      <ScrollTop />
       <SiteFooter />
     </div>
   );

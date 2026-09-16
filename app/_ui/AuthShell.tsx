@@ -18,10 +18,12 @@ export function AuthShell({
       <style>{CSS + CSS2}</style>
       <SkipLink />
 
-      <div className="wrap-s">
-        <div className="lp-nav" style={{ borderBottom: 0 }}>
+      <div className="navbar">
+        <div className="wrap-s">
+          <nav className="lp-nav" aria-label="Main" style={{ borderBottom: 0 }}>
           <Link href="/" aria-label="Veyro, home"><Wordmark size={20} /></Link>
-          <Link className="btn btn-q btn-sm" href="/check">Check eligibility</Link>
+            <Link className="btn btn-q btn-sm" href="/check">Check eligibility</Link>
+          </nav>
         </div>
       </div>
 

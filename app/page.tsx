@@ -6,6 +6,8 @@ import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink, Icon } from "@/app/_ui/marks";
 import { HeroPreview } from "@/app/_ui/HeroPreview";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
+import { MobileNav } from "@/app/_ui/MobileNav";
+import { ScrollTop } from "@/app/_ui/ScrollTop";
 
 export const metadata = buildMetadata("landing");
 export const viewport = buildViewport();
@@ -68,6 +70,14 @@ export default async function Home() {
             <div className="lp-links">
               <Link className="btn btn-q btn-sm hide-s" href="#how">How it works</Link>
               <Link className="btn btn-q btn-sm hide-s" href="/for-guardians">For parents</Link>
+              <MobileNav
+                items={[
+                  { href: "#how", label: "How it works" },
+                  { href: "/for-guardians", label: "For parents" },
+                  { href: "/how-it-works", label: "What Stripe told us" },
+                  { href: "#faq", label: "Questions" },
+                ]}
+              />
               {user ? (
                 <Link className="btn btn-sm" href={defaultLandingFor(user.role)}>
                   Back to your dashboard
@@ -349,6 +359,7 @@ export default async function Home() {
         </section>
       </main>
 
+      <ScrollTop />
       <SiteFooter />
     </div>
   );

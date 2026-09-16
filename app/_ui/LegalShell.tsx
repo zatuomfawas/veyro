@@ -3,6 +3,8 @@ import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { Notice } from "@/app/_ui/form";
+import { ScrollProgress } from "@/app/_ui/ScrollProgress";
+import { ScrollTop } from "@/app/_ui/ScrollTop";
 
 export const SUPPORT_EMAIL = "hello@withveyro.com";
 
@@ -31,6 +33,7 @@ export function LegalShell({
   return (
     <div className="fw">
       <style>{CSS + CSS2}</style>
+      <ScrollProgress />
       <SkipLink />
 
       <div className="navbar">
@@ -74,6 +77,7 @@ export function LegalShell({
         </p>
       </main>
 
+      <ScrollTop />
       <SiteFooter />
     </div>
   );

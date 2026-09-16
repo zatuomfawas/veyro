@@ -8,8 +8,12 @@ import { SiteFooter } from "@/app/_ui/SiteFooter";
 export const metadata = buildMetadata("notfound");
 export const viewport = buildViewport();
 
-// Pages linked from the footer that aren't built yet (/terms, /privacy) land
-// here. Better a branded page that says so than the framework's default.
+// Next's not-found convention. Anything that does not resolve lands here,
+// including a mistyped URL and an expired link, so it offers the two places
+// someone is most likely to have been heading: home, and the checker.
+//
+// (This previously noted that /terms and /privacy were unbuilt and landed
+// here. They exist now.)
 export default function NotFound() {
   return (
     <div className="fw">
