@@ -13,7 +13,7 @@ import { StickyCta } from "@/app/_ui/StickyCta";
 export const metadata = buildMetadata("landing");
 export const viewport = buildViewport();
 
-// Server Component. No client JS on the marketing surface — the section links
+// Server Component. No client JS on the marketing surface: the section links
 // are plain anchors and the FAQ is <details>, so everything below works with
 // JavaScript switched off.
 //
@@ -21,24 +21,42 @@ export const viewport = buildViewport();
 // rendering. For anonymous traffic, which is nearly all of it, that costs a
 // cookie read and no database query: currentUser() returns null before it
 // touches the db.
+//
+// This page sells what Veyro does. It used to open by explaining Stripe's age
+// policy, which is the answer to a question nobody has yet asked. The evidence
+// still matters and still exists in full on /how-it-works: the verbatim Stripe
+// reply, the country grading, and what they would not confirm. It is linked
+// from here rather than argued here.
 
-const REPLY_DATE = "8 September 2026";
-
-const Q_CORE =
-  "A user who is at least 13 years old can create a Connect account, and where the user is "
-  + "under 18, the required parent or legal guardian involvement must be completed through "
-  + "Stripe's onboarding process before the account can accept charges or receive payouts.";
-
-/** One step of the four-step explanation. */
-function Step({ icon, title, children }: { icon: string; title: string; children: React.ReactNode }) {
+/** One row of the who-does-what list. */
+function Role({ icon, who, children }: { icon: string; who: string; children: React.ReactNode }) {
   return (
     <li>
       <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
         <Icon name={icon} size={14} />
-        <strong style={{ fontSize: "var(--fs-3)" }}>{title}</strong>
+        <strong style={{ fontSize: "var(--fs-3)" }}>{who}</strong>
       </span>
       <span className="small">{children}</span>
     </li>
+  );
+}
+
+/**
+ * One line of the wallet.
+ *
+ * These are the six fields CurrencyFold actually has. There is deliberately no
+ * "Stripe fees" row: Stripe deducts its fee on its own side before the money
+ * reaches the connected account's balance, and Veyro never sees the figure. A
+ * fee line here would promise a number the ledger does not hold.
+ */
+function Flow({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="reqrow">
+      <div>
+        <span className="req-t">{label}</span>
+        <span className="req-d">{children}</span>
+      </div>
+    </div>
   );
 }
 
@@ -55,7 +73,7 @@ function Faq({ q, children }: { q: string; children: React.ReactNode }) {
 }
 
 export default async function Home() {
-  // A revoked or expired session must still show "Sign in" — hiding it because
+  // A revoked or expired session must still show "Sign in". Hiding it because
   // a stale cookie exists would strand someone who is, in fact, logged out.
   const user = await currentUser();
 
@@ -69,16 +87,8 @@ export default async function Home() {
           <nav className="lp-nav" aria-label="Main">
             <Link href="/" aria-label="Veyro, home"><Wordmark size={20} /></Link>
             <div className="lp-links">
-              <Link className="btn btn-q btn-sm hide-s" href="#how">How it works</Link>
+              <Link className="btn btn-q btn-sm hide-s" href="#roles">How it works</Link>
               <Link className="btn btn-q btn-sm hide-s" href="/for-guardians">For parents</Link>
-              <MobileNav
-                items={[
-                  { href: "#how", label: "How it works" },
-                  { href: "/for-guardians", label: "For parents" },
-                  { href: "/how-it-works", label: "What Stripe told us" },
-                  { href: "#faq", label: "Questions" },
-                ]}
-              />
               {user ? (
                 <Link className="btn btn-sm" href={defaultLandingFor(user.role)}>
                   Back to your dashboard
@@ -89,6 +99,15 @@ export default async function Home() {
                   <Link className="btn btn-sm" href="/check">Check eligibility</Link>
                 </>
               )}
+              <MobileNav
+                items={[
+                  { href: "#roles", label: "How it works" },
+                  { href: "#wallet", label: "Where your money goes" },
+                  { href: "/for-guardians", label: "For parents" },
+                  { href: "/how-it-works", label: "What Stripe told us" },
+                  { href: "#faq", label: "Questions" },
+                ]}
+              />
             </div>
           </nav>
         </div>
@@ -102,37 +121,21 @@ export default async function Home() {
               <div>
                 <h1 className="hero-h">
                   <Wordmark hero />
-                  <span className="tagline">
-                    Financial infrastructure for the next generation of founders.
-                  </span>
+                  <span className="tagline">You built the business. Now get paid.</span>
                 </h1>
 
-                <p className="foldwho">
-                  For founders aged 13 to 17 who have built something worth charging for
+                <p className="lead" style={{ marginTop: "var(--sp-5)" }}>
+                  Veyro helps young founders reach the financial infrastructure they need: a real
+                  payment account, a clear ledger, and money that lands where it should.
                 </p>
-
-                <p className="lead" style={{ marginTop: "var(--sp-4)" }}>
-                  <strong>Everyone says you have to be 18. You don&rsquo;t.</strong> We asked Stripe
-                  directly, and they told us a 13-year-old can hold a payment account, provided a
-                  parent or guardian completes the provider&rsquo;s own checks first. Veyro is the
-                  route through that: it works out whether it applies where you live, gets your
-                  guardian to yes, and keeps the record of who agreed to what.
-                </p>
-
-                <ul className="foldwhy">
-                  <li><strong>Free to find out.</strong> Two questions, no account, no email.</li>
-                  <li><strong>Your parent gets a real explanation</strong>, not a link and a shrug.</li>
-                  <li><strong>Veyro never holds your money.</strong> It settles to your own account.</li>
-                </ul>
 
                 <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap" }}>
-                  <Link className="btn btn-lg" href="/check">Check eligibility</Link>
-                  <Link className="btn btn-2 btn-lg" href="#how">Learn how it works</Link>
+                  <Link className="btn btn-lg" href="/check">Check my eligibility</Link>
+                  <Link className="btn btn-2 btn-lg" href="#roles">See how it works</Link>
                 </div>
 
                 <p className="tiny" style={{ marginTop: 12 }}>
-                  About twenty seconds. If the answer is no, it says so plainly. If you
-                  don&rsquo;t need us at all, it says that too.
+                  Two questions. No account, no email address.
                 </p>
 
                 <div style={{ marginTop: 32, paddingTop: 16, borderTop: "1px solid var(--line)" }}>
@@ -146,7 +149,7 @@ export default async function Home() {
                     <div>
                       <span className="hf-n">43</span>
                       <span className="hf-l">
-                        Countries the provider supports for self-serve signup
+                        Countries the payment provider supports for self-serve signup
                       </span>
                     </div>
                     <div>
@@ -164,123 +167,117 @@ export default async function Home() {
           </div>
         </div>
 
-        {/* ---------------- the claim ---------------- */}
-        <section className="lp" id="truth">
+        {/* ---------------- why it exists ---------------- */}
+        <section className="lp" id="why">
           <div className="wrap-lp">
             <div className="truthgrid">
               <div>
-                <span className="lp-eyebrow">Can I actually do this?</span>
+                <span className="lp-eyebrow">Why this exists</span>
                 <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
-                  Most answers online are wrong.
+                  Building it was never the hard part.
                 </h2>
               </div>
               <div>
                 <p className="lp-lead">
-                  Search whether you can take payments under 18 and you will be told no, repeatedly,
-                  by people who have not checked. So we asked the payment provider directly and got
-                  it in writing.
+                  I built Veyro after watching my brother hit the same wall over and over. Building
+                  the business was the easy part. Getting the financial infrastructure to run it
+                  wasn&rsquo;t.
                 </p>
-                <p className="body" style={{ marginTop: 12 }}>
-                  The answer is more specific than a yes or a no, and the specifics are the whole
-                  product: an age floor of 13 rather than 18, a guardian who is verified rather than
-                  merely asked, one country carved out entirely, and everywhere else sitting under
-                  &ldquo;requirements may vary&rdquo;. That is what the checker encodes.
+                <p className="body" style={{ marginTop: 16 }}>
+                  A capable fifteen-year-old can ship a product months before anyone will let them
+                  charge for it. Veyro closes that gap.
                 </p>
-                <div className="row" style={{ marginTop: 16, gap: 8, flexWrap: "wrap" }}>
-                  <Link className="btn" href="/check">Check what applies to you</Link>
-                  <Link className="btn btn-2" href="/how-it-works">Read what Stripe told us</Link>
-                </div>
+                <p className="small" style={{ marginTop: 16 }}>
+                  Mike Daniels &middot;{" "}
+                  <Link className="linkbtn" href="/about">Read the full story</Link>
+                </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ---------------- the process ---------------- */}
-        <section className="lp" id="how">
+        {/* ---------------- the roles ---------------- */}
+        <section className="lp" id="roles">
           <div className="wrap-lp">
-            <span className="lp-eyebrow">The process</span>
-            <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>Four steps, in order.</h2>
+            <span className="lp-eyebrow">Who does what</span>
+            <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>Four parts, one order.</h2>
             <p className="sec-lead body" style={{ marginTop: 12, marginBottom: 24 }}>
-              Nothing can take a payment until every one of them is done. That is the provider&rsquo;s
-              rule, not ours, and it is the part most guides skip.
+              Nothing can take a payment until each one is done. That sequence is the payment
+              provider&rsquo;s, not ours.
             </p>
 
             <ol className="numbered">
-              <Step icon="person" title="Create your account">
-                Thirteen or over, with your real date of birth. The age rules turn on the exact
-                date, so a year on its own is not enough.
-              </Step>
-              <Step icon="home" title="Invite your guardian">
-                You send them a link. They sign in as themselves, read what they are taking on, and
-                accept or decline. Nothing is assumed on their behalf.
-              </Step>
-              <Step icon="check" title="Your guardian is verified">
-                They complete the provider&rsquo;s own identity form, as the adult on the account.
-                Veyro never sees identity documents or bank details. They go straight to Stripe.
-              </Step>
-              <Step icon="wallet" title="Take payments">
-                Your products get a checkout link. Money settles to the connected account, and your
-                guardian is notified of every payout request.
-              </Step>
+              <Role icon="person" who="You">
+                Own and build the business. It is yours, and nothing here transfers it to anyone.
+              </Role>
+              <Role icon="home" who="Your guardian">
+                Completes the identity verification the provider requires, as the adult on the
+                account. Needed while you are under 18.
+              </Role>
+              <Role icon="list" who="Veyro">
+                Coordinates the steps, keeps your ledger, and records who agreed to what and when.
+              </Role>
+              <Role icon="card" who="Stripe">
+                Processes the payments and settles the money into the account in your name.
+              </Role>
             </ol>
 
             <p className="lp-note" style={{ marginTop: 20 }}>
-              Your guardian is <strong>notified</strong> of payout requests and keeps a permanent
-              record of them. They do not get a veto. On this account type nobody can build them
-              one, and we would rather say so here than have either of you discover it later.
+              Availability and the exact requirements vary by country.{" "}
+              <Link className="linkbtn" href="/check">The checker</Link> gives the answer for where
+              you live, and{" "}
+              <Link className="linkbtn" href="/how-it-works">/how-it-works</Link> quotes the
+              provider&rsquo;s written policy in full.
             </p>
           </div>
         </section>
 
-        {/* ---------------- what Stripe said ---------------- */}
-        <section className="lp lp-dark">
+        {/* ---------------- the wallet ---------------- */}
+        <section className="lp" id="wallet">
           <div className="wrap-lp">
-            <span className="lp-eyebrow">In their own words</span>
-            {/* Flush left, like the eyebrow, attribution and button around it. It
-                previously carried a 2px left border and 20px of padding, which made
-                it the only element in the section indented from the section edge.
-                The border also referenced var(--accent), a token that does not
-                exist, so an invalid value fell back to currentColor and drew a
-                near-white bar on the dark band. The quotation marks and the larger
-                size mark this as a quote; it does not need a rule as well. */}
-            <blockquote
-              style={{
-                margin: "var(--sp-4) 0 0",
-                padding: 0,
-                color: "var(--reverse)",
-                fontSize: "var(--fs-5)",
-                lineHeight: 1.5,
-                maxWidth: "var(--m-wide)",
-              }}
-            >
-              &ldquo;{Q_CORE}&rdquo;
-            </blockquote>
-            <p className="tiny" style={{ color: "var(--reverse)", opacity: 0.72, marginTop: 12 }}>
-              Stripe Support, {REPLY_DATE}, in reply to our question. The full exchange, including
-              what they would not confirm, is on the next page.
-            </p>
-            <div className="row" style={{ marginTop: 20, gap: 8, flexWrap: "wrap" }}>
-              <Link className="btn btn-2" href="/how-it-works">Read the full reply</Link>
+            <div className="truthgrid">
+              <div>
+                <span className="lp-eyebrow">Your money</span>
+                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                  Where your money goes.
+                </h2>
+                <p className="body" style={{ marginTop: 16 }}>
+                  Every figure is folded from your own records each time you look. No balance is
+                  stored anywhere, so it cannot drift from the payments behind it.
+                </p>
+                <p className="small" style={{ marginTop: 16 }}>
+                  Stripe takes its processing fee on its own side, before the money reaches your
+                  balance. Veyro takes nothing.
+                </p>
+              </div>
+
+              <div className="reqlist">
+                <Flow label="Earned">A customer paid, and it cleared.</Flow>
+                <Flow label="Still settling">Paid, not yet cleared by the provider.</Flow>
+                <Flow label="Refunded">Sent back to a customer.</Flow>
+                <Flow label="Committed">You have asked for it, so it cannot be spent twice.</Flow>
+                <Flow label="Available">What you can request today.</Flow>
+                <Flow label="Paid out">Already in the bank account on the payment account.</Flow>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* ---------------- what Veyro is ---------------- */}
+        {/* ---------------- commitments ---------------- */}
         <section className="lp">
           <div className="wrap-lp">
-            <span className="lp-eyebrow">Why Veyro</span>
+            <span className="lp-eyebrow">What Veyro commits to</span>
             <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)", marginBottom: 24 }}>
-              Three things worth knowing before you start.
+              Six things, all checkable.
             </h2>
 
             <div className="cardgrid">
               <div className="card">
                 <div className="card-b">
-                  <h3 className="h4" style={{ marginTop: 0 }}>Your guardian consents once</h3>
+                  <h3 className="h4" style={{ marginTop: 0 }}>Stripe verifies your guardian</h3>
                   <p className="small" style={{ marginBottom: 0 }}>
-                    They become the verified adult on the payment account and accept the
-                    provider&rsquo;s terms. They do not own your business, and Veyro keeps a separate
-                    ledger so that stays obvious.
+                    They are notified of every payout request. They cannot block one, and neither
+                    can anyone else on this account type.
                   </p>
                 </div>
               </div>
@@ -288,31 +285,57 @@ export default async function Home() {
                 <div className="card-b">
                   <h3 className="h4" style={{ marginTop: 0 }}>The money is never ours</h3>
                   <p className="small" style={{ marginBottom: 0 }}>
-                    Veyro is software, not a bank. Payments go directly to the connected account at
-                    the regulated provider. We never hold a customer&rsquo;s money, and we take no
-                    percentage of it.
+                    Customers pay your Stripe account directly. Veyro is not in the path of the
+                    money and never holds a customer&rsquo;s funds.
                   </p>
                 </div>
               </div>
               <div className="card">
                 <div className="card-b">
-                  <h3 className="h4" style={{ marginTop: 0 }}>You find out before anyone asks</h3>
+                  <h3 className="h4" style={{ marginTop: 0 }}>We never see your documents</h3>
                   <p className="small" style={{ marginBottom: 0 }}>
-                    The checker is free and needs no account. If your country is closed to this, or
-                    you are old enough not to need us, it tells you instead of signing you up.
+                    Identity and bank details go straight to Stripe&rsquo;s own form. Veyro stores a
+                    reference to the account, nothing more.
+                  </p>
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-b">
+                  <h3 className="h4" style={{ marginTop: 0 }}>We take no percentage</h3>
+                  <p className="small" style={{ marginBottom: 0 }}>
+                    No cut, no platform fee. Stripe charges its own processing fees, which Stripe
+                    sets and deducts.
+                  </p>
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-b">
+                  <h3 className="h4" style={{ marginTop: 0 }}>The checker is free</h3>
+                  <p className="small" style={{ marginBottom: 0 }}>
+                    No account, no email address. It tells you when the answer is no, and when you
+                    do not need us at all.
+                  </p>
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-b">
+                  <h3 className="h4" style={{ marginTop: 0 }}>Software, not a bank</h3>
+                  <p className="small" style={{ marginBottom: 0 }}>
+                    Provider policy permits this route. No court has tested it, and we say so rather
+                    than let you assume otherwise.
                   </p>
                 </div>
               </div>
             </div>
 
             <p className="body" style={{ marginTop: 24 }}>
-              These are three of six commitments, each one checkable against the code.{" "}
-              <Link className="linkbtn" href="/about">Read the full story and all six</Link>.
+              <Link className="linkbtn" href="/about">
+                All six in full, and what is not finished yet
+              </Link>
             </p>
           </div>
         </section>
 
-        {/* ---------------- questions ---------------- */}
         <section className="lp" id="faq">
           <div className="wrap-lp">
             <span className="lp-eyebrow">Questions</span>
@@ -380,11 +403,11 @@ export default async function Home() {
           <div className="wrap-lp lp-center">
             <h2 className="lp-h2">Find out in twenty seconds.</h2>
             <p className="body" style={{ marginTop: 12, marginLeft: "auto", marginRight: "auto" }}>
-              Two questions, no account, no email address. You will get a straight answer, including
-              the ones you may not want.
+              Two questions. No account, no email address. A straight answer, including the ones you
+              might not want.
             </p>
             <div className="row" style={{ marginTop: 20, gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
-              <Link className="btn btn-lg" href="/check">Check eligibility</Link>
+              <Link className="btn btn-lg" href="/check">Check my eligibility</Link>
               {!user && <Link className="btn btn-2 btn-lg" href="/auth/signup">Create your account</Link>}
             </div>
           </div>
@@ -392,7 +415,7 @@ export default async function Home() {
       </main>
 
       <ScrollTop />
-      <StickyCta note="Two questions. No account." />
+      <StickyCta label="Check my eligibility" note="Two questions. No account." />
       <SiteFooter />
     </div>
   );
