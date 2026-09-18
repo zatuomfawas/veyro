@@ -45,7 +45,10 @@ export function RoleStack() {
               <span className="req-t">{l.who}</span>
               <span className="req-d">{l.does}</span>
             </div>
-            <span className="tiny" style={{ whiteSpace: "nowrap", color: "var(--ink-3)" }}>
+            {/* Not nowrap: on a narrow phone an unwrappable "Never touches the
+                money" would squeeze the description column beside it to a few
+                characters per line. Allowed to wrap, it simply takes two. */}
+            <span className="tiny" style={{ color: "var(--ink-3)", textAlign: "right", flex: "0 1 auto" }}>
               {l.controls}
             </span>
           </div>

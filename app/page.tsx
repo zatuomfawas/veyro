@@ -96,7 +96,7 @@ export default async function Home() {
                 </Link>
               ) : (
                 <>
-                  <Link className="btn btn-q btn-sm" href="/auth/signin">Sign in</Link>
+                  <Link className="btn btn-q btn-sm hide-s" href="/auth/signin">Sign in</Link>
                   <Link className="btn btn-sm" href="/check">Check eligibility</Link>
                 </>
               )}
@@ -107,6 +107,7 @@ export default async function Home() {
                   { href: "/for-guardians", label: "For parents" },
                   { href: "/how-it-works", label: "What Stripe told us" },
                   { href: "#faq", label: "Questions" },
+                  { href: "/auth/signin", label: "Sign in" },
                 ]}
               />
             </div>

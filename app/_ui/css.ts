@@ -516,7 +516,7 @@ export const CSS2 = `
 .fw h1.hero-h { margin:0; }
 .fw .mark { display:block; flex:none; }
 .fw .brand { display:inline-block; line-height:1; }
-.fw .lp-links { display:flex; align-items:center; gap:4px; }
+.fw .lp-links { display:flex; align-items:center; gap:4px; flex-wrap:wrap; justify-content:flex-end; }
 .fw .lp-links button:not(.btn) { background:none; border:0; padding:7px 11px; border-radius:0; font-size:var(--fs-3);
   color:var(--ink-2); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; text-align:center; }
 .fw .lp-links button:not(.btn):hover { background:var(--surface-2); color:var(--ink); }
