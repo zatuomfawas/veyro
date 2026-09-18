@@ -292,7 +292,7 @@ export const CSS = `
 
 /* landing */
 .fw .lp-nav { height:62px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); }
-.fw .hero { padding:72px 0 68px; }
+.fw .hero { padding-block:72px 68px; }
 .fw .herofacts { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--sp-6); }
 .fw .herofacts .hf-n { display:block; font-size:var(--fs-7); font-weight:var(--fw-bold); letter-spacing:-0.022em; }
 .fw .herofacts .hf-l { display:block; font-size:var(--fs-2); line-height:1.45; color:var(--ink-3); margin-top:5px; }
@@ -475,7 +475,7 @@ export const CSS = `
   .fw .page { padding:20px 16px 60px; }
   .fw .topbar { padding:0 16px; }
   .fw .d2 { font-size:var(--fs-7); }
-  .fw .hero { padding:44px 0 36px; }
+  .fw .hero { padding-block:44px 36px; }
   .fw .tbl th, .fw .tbl td { padding:10px 12px; }
   .fw .hide-s { display:none; }
   .fw .grid-4 > * { border-right:0 !important; border-bottom:1px solid var(--line-soft); }
