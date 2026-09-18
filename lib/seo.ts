@@ -38,7 +38,7 @@ export const FAVICON =
 
 export type SeoRouteKey =
   | "landing" | "how" | "guardians" | "checkout" | "check" | "notfound"
-  | "thanks" | "accessibility" | "terms" | "privacy" | "pricing"
+  | "thanks" | "accessibility" | "terms" | "privacy"
   | "signin" | "signup" | "invite";
 
 export type SeoRoute = {
@@ -48,6 +48,11 @@ export type SeoRoute = {
   noindex?: boolean;
 };
 
+// No `pricing` entry. It described a "Pro" tier with multiple businesses,
+// analytics and exportable records: none of which exists, and no /pricing page
+// was ever built. It was unlinked, so nothing shipped it, but leaving it here
+// meant the first person to build that route would have published a meta
+// description for features that are not real.
 export const SEO_ROUTES: Record<SeoRouteKey, SeoRoute> = {
   landing: {
     path: "/",
@@ -93,11 +98,6 @@ export const SEO_ROUTES: Record<SeoRouteKey, SeoRoute> = {
     path: "/privacy",
     title: "Privacy Policy | Veyro",
     desc: "What Veyro holds, what it is built never to receive, and how data about people under 18 is handled.",
-  },
-  pricing: {
-    path: "/pricing",
-    title: "Veyro pricing, free to start",
-    desc: "Veyro is free for your first business. Pro adds multiple businesses, analytics and exportable financial records.",
   },
   signin: { path: "/auth/signin", title: "Sign in, Veyro", desc: "Sign in to your Veyro founder or guardian account.", noindex: true },
   signup: {

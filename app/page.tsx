@@ -304,6 +304,11 @@ export default async function Home() {
                 </div>
               </div>
             </div>
+
+            <p className="body" style={{ marginTop: 24 }}>
+              These are three of six commitments, each one checkable against the code.{" "}
+              <Link className="linkbtn" href="/about">Read the full story and all six</Link>.
+            </p>
           </div>
         </section>
 
@@ -331,8 +336,34 @@ export default async function Home() {
                 reference to the account, not the documents, and not your bank details.
               </Faq>
               <Faq q="What does it cost?">
-                Veyro takes no percentage of what you earn. The payment provider charges its own
-                fees on each transaction, which are theirs and are set by them.
+                Veyro takes no percentage of what you earn today. Stripe charges its own fees on
+                each transaction, which Stripe sets and deducts. Future pricing is undecided; if it
+                ever changes you will be told before it applies to you.
+              </Faq>
+              <Faq q="How does age verification actually work?">
+                Honestly, more weakly than the phrase suggests. The founder&rsquo;s birthdate is
+                self-declared and is never verified independently: Veyro checks the full date
+                against the 13 floor, but nobody confirms it is real. Stripe verifies the
+                <em> guardian&rsquo;s</em> identity, not the founder&rsquo;s age. This is weaker
+                than it should be and will be tightened before launch.
+              </Faq>
+              <Faq q="What happens when I turn 18?">
+                Nothing, yet. This has not been built. The guardian&rsquo;s name stays on the Stripe
+                account and the account itself does not change. It is something we will address
+                before launch, and we would rather say that than imply a handover that does not
+                exist.
+              </Faq>
+              <Faq q="Which countries are supported, and how do I check?">
+                Use the <Link className="linkbtn" href="/check">eligibility checker</Link>. Two
+                questions and you will know immediately whether this works where you live,
+                including when the answer is no. Brazil is excluded outright: Stripe requires
+                account holders there to be 18 or over, guardian or no guardian.
+              </Faq>
+              <Faq q="Why does Stripe ask all these business-sounding questions?">
+                Because Stripe verifies the adult on the account and has to understand what the
+                business actually does. They are required to ask by law, and their form does not
+                know it is looking at someone selling stickers. Your guardian fills them in, not
+                you, and Veyro adds a line of plain guidance under each one.
               </Faq>
               <Faq q="Is this settled law?">
                 No. Provider policy permitting a minor to hold an account with a guardian as the

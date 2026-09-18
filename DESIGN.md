@@ -127,7 +127,16 @@ are in the codebase and none should arrive:
 - **Em dashes in user-facing copy.** Use the punctuation the sentence needs: a
   period for two statements, a comma for an aside, a colon where the second half
   explains the first, parentheses for a true parenthetical. Code comments are
-  exempt, they are not copy
+  exempt, they are not copy.
+
+  **One further exemption: quoted human voice.** The rule governs text written
+  in the product's voice. It does not govern someone's own words. The founder's
+  account on `/about` keeps its em dash because that is his phrasing and his
+  rhythm, quoted as given, and flattening a person's sentence to satisfy a
+  house style is not a style fix. The same goes for the verbatim Stripe quotes
+  on `/how-it-works`: never edit quoted material to match this document. Both
+  places carry a comment saying so, because a find-and-replace pass will not
+  read this file.
 
 ---
 
