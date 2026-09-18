@@ -222,7 +222,7 @@ export default async function GuardianDashboard() {
                         <p className="small" style={{ margin: 0 }}>
                           None yet. You are told each time {founder.name} asks for one, and the
                           record is permanent. You are not asked to approve it: on this account
-                          type nobody can be given that power, and we would rather say so here.
+                          type that power does not exist for anyone to hold.
                         </p>
                       ) : (
                         <div className="tblwrap">

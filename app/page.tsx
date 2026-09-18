@@ -122,12 +122,17 @@ export default async function Home() {
               <div>
                 <h1 className="hero-h">
                   <Wordmark hero />
-                  <span className="tagline">You built the business. Now get paid.</span>
+                  <span className="tagline">Build something people will pay for.</span>
                 </h1>
 
                 <p className="lead" style={{ marginTop: "var(--sp-5)" }}>
-                  Veyro helps young founders reach the financial infrastructure they need: a real
-                  payment account, a clear ledger, and money that lands where it should.
+                  Veyro helps young founders navigate payment setup, guardian involvement and the
+                  financial side of running an online business.
+                </p>
+
+                <p className="foldwho">
+                  Built for young founders. Guardian involvement may be required depending on your
+                  setup.
                 </p>
 
                 <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap" }}>

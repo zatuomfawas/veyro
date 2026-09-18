@@ -3,6 +3,7 @@ import { buildMetadata, buildViewport } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
+import { RoleStack } from "@/app/_ui/RoleStack";
 import { ScrollProgress } from "@/app/_ui/ScrollProgress";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { StickyCta } from "@/app/_ui/StickyCta";
@@ -106,6 +107,18 @@ export default function HowItWorks() {
         <hr className="rule" style={{ margin: "32px 0" }} />
 
         {/* ---------------------------------------------------------------- */}
+        <div className="truthgrid" style={{ marginBottom: 40, alignItems: "start" }}>
+          <div>
+            <h2 className="h3" style={{ marginTop: 0 }}>Four parties, in order</h2>
+            <p className="small" style={{ marginTop: 12 }}>
+              The most common misunderstanding is that Veyro is the payment provider. It is not.
+              Money moves between a customer and the founder&rsquo;s own Stripe account, and Veyro
+              is never in that path.
+            </p>
+          </div>
+          <RoleStack />
+        </div>
+
         <h2 className="h3">What everyone else says</h2>
         <p className="body" style={{ marginTop: 8 }}>
           Search it and the answer comes back unanimous: you have to be 18 to accept online
@@ -253,7 +266,7 @@ export default function HowItWorks() {
             <span>
               Accounts v1 is no longer what Stripe recommends for new Connect integrations, and on
               a fresh platform account it is switched off until you explicitly enable it. That is a
-              migration sitting on our roadmap, and we would rather write it here than let you find
+              migration currently in development. It is written here rather than left for you to find
               out from a changelog.
             </span>
           </li>
@@ -318,8 +331,8 @@ export default function HowItWorks() {
           <p className="small">
             Whether a minor may hold a payment account with a guardian as representative has not
             been confirmed by a lawyer in <em>any</em> country, including the US. Provider policy
-            permitting something is not the same as it being settled locally. We would rather put
-            that in the middle of our own article than bury it in a terms page.
+            permitting something is not the same as it being settled locally. That belongs here, in the
+            middle of the article, rather than buried in a terms page.
           </p>
         </div>
 

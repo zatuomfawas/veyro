@@ -94,8 +94,8 @@ export default async function SettingsPage() {
                 </p>
                 <p style={{ margin: 0 }}>
                   An unverified change would be the easiest way to take over an account: point the
-                  address somewhere else, then reset the password. We would rather leave the field
-                  out and say so. Email{" "}
+                  address somewhere else, then reset the password. The field is left out rather than shipped
+                  half-working. Email{" "}
                   <a className="linkbtn" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a> if you
                   need it changed.
                 </p>

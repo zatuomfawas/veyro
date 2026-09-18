@@ -289,8 +289,8 @@ export default async function GuardianConsentPage({
             </li>
             <li>
               You are notified of every payout request and keep a permanent record of it. You do not
-              get a veto. On this account type nobody can build you one, and we would rather say so
-              now than have you find out later.
+              get a veto. On this account type that control does not exist for anyone to grant, which is
+              worth knowing before you agree rather than after.
             </li>
             <li>
               Veyro never receives your identity documents. They go directly to Stripe&rsquo;s own

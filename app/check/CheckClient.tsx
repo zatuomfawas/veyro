@@ -303,7 +303,7 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
                 </ul>
                 <p className="tiny" style={{ marginTop: "var(--sp-3)" }}>
                   Ask to be added as staff on their account rather than sharing a login. Veyro does not
-                  set this up for you, and we would rather say so than pretend.
+                  set this up for you.
                 </p>
               </div>
             )}

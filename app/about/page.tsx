@@ -40,7 +40,7 @@ const COMMITMENTS: { head: string; body: React.ReactNode }[] = [
         A guardian accepts in their own account, and Stripe checks their identity, not the
         founder&rsquo;s. They are told about every payout request and keep a permanent record of it.
         They get no veto, because on the Stripe account type this is built on nobody can be given
-        one. We would rather write that here than let a parent discover it later.
+        one. A guardian should know that before agreeing, not after.
       </>
     ),
   },
@@ -213,7 +213,7 @@ export default function About() {
               <li>
                 <strong>A founder&rsquo;s date of birth is self-declared.</strong> Nobody verifies
                 it. Stripe verifies the guardian&rsquo;s identity, not the founder&rsquo;s age. This
-                is weaker than it should be and will be tightened before launch.
+                is a current limitation, and tightening it is scheduled before launch.
               </li>
               <li>
                 <strong>Nothing happens when a founder turns 18.</strong> It has not been built. The

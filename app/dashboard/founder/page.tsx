@@ -132,6 +132,31 @@ const PAYOUT_BADGE: Record<string, string> = {
   REQUESTED: "b-amber", APPROVED: "b-slate", SENT: "b-pine", FAILED: "b-clay",
 };
 
+/** One step of setup. `done` comes from state, never from a stored flag. */
+function SetupStep({ done, label, detail }: { done: boolean; label: string; detail: string }) {
+  return (
+    <div className="reqrow">
+      <div style={{ display: "flex", gap: 10, alignItems: "baseline" }}>
+        <span
+          aria-hidden="true"
+          style={{
+            width: 13, height: 13, flex: "none", marginTop: 3,
+            border: "1px solid " + (done ? "var(--pine)" : "var(--line)"),
+            background: done ? "var(--pine)" : "transparent",
+          }}
+        />
+        <span>
+          <span className="req-t" style={{ color: done ? "var(--ink)" : "var(--ink-2)" }}>
+            {label}
+            <span className="sr-only">{done ? " (complete)" : " (not done yet)"}</span>
+          </span>
+          <span className="req-d">{detail}</span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
 /* ---------------- page ---------------- */
 
 export default async function FounderDashboard() {
@@ -187,6 +212,18 @@ export default async function FounderDashboard() {
 
   const firstLive = products.find((p) => p.status === "LIVE");
 
+  // Setup progress, derived from the same state the steps render. Nothing is
+  // stored, so a step cannot claim complete while its subject is not.
+  const setupFlags = [
+    true,
+    state === "consented",
+    account?.status === "ACTIVE",
+    products.some((p) => p.status === "LIVE"),
+    transactions.length > 0,
+  ];
+  const setupTotal = setupFlags.length;
+  const setupDone = setupFlags.filter(Boolean).length;
+
   // The payout form acts on one currency. The wallet folds per currency, so
   // the one with the most available is the sensible default; USD when empty.
   const richest = [...wallet.currencies].sort((a, b) => b.available - a.available)[0];
@@ -215,6 +252,64 @@ export default async function FounderDashboard() {
         <div className="grid-2" style={{ gap: 32, alignItems: "start" }}>
           {/* ================= left: state ================= */}
           <div>
+            {/* ---------------- setup ---------------- */}
+            <Section
+              title="Setup"
+              aside={
+                <span className={"badge " + (setupDone === setupTotal ? "b-pine" : "b-grey")}>
+                  {setupDone} of {setupTotal}
+                </span>
+              }
+            >
+              <div className="reqlist">
+                <SetupStep
+                  done
+                  label="Account created"
+                  detail={`You signed up on ${fmtDate(user.createdAt)}.`}
+                />
+                <SetupStep
+                  done={state === "consented"}
+                  label="Guardian consented"
+                  detail={
+                    state === "consented"
+                      ? `${guardianName} agreed and is the adult on the account.`
+                      : state === "none"
+                        ? "Invite a parent or guardian below."
+                        : "Waiting for them to accept the invitation."
+                  }
+                />
+                <SetupStep
+                  done={account?.status === "ACTIVE"}
+                  label="Payment account live"
+                  detail={
+                    account?.status === "ACTIVE"
+                      ? "Stripe has enabled charges and payouts."
+                      : account
+                        ? "Your guardian finishes this on Stripe's own form."
+                        : "Opens once your guardian has consented."
+                  }
+                />
+                <SetupStep
+                  done={products.some((p) => p.status === "LIVE")}
+                  label="Something to sell"
+                  detail={
+                    products.some((p) => p.status === "LIVE")
+                      ? "You have a live product with a checkout link."
+                      : "Add a product and make it live to get a checkout link."
+                  }
+                />
+                <SetupStep
+                  done={transactions.length > 0}
+                  label="First payment"
+                  detail={
+                    transactions.length > 0
+                      ? "Money has come in and is in your wallet."
+                      : "Share a checkout link. The first payment appears here."
+                  }
+                />
+              </div>
+            </Section>
+
             {/* ---------------- 2. guardian ---------------- */}
             <Section
               title="Your guardian"
@@ -507,7 +602,9 @@ export default async function FounderDashboard() {
                       <tr>
                         <th scope="col">Date</th>
                         <th scope="col">Product</th>
-                        <th scope="col">Amount</th>
+                        <th scope="col" style={{ textAlign: "right" }}>Paid</th>
+                        <th scope="col" style={{ textAlign: "right" }}>Fee</th>
+                        <th scope="col" style={{ textAlign: "right" }}>Net</th>
                         <th scope="col">Status</th>
                       </tr>
                     </thead>
@@ -515,8 +612,31 @@ export default async function FounderDashboard() {
                       {transactions.map((t) => (
                         <tr key={t.id}>
                           <td className="num">{fmtDate(t.createdAt)}</td>
-                          <td>{t.product?.name ?? "None"}</td>
-                          <td className="num">{formatMinor(t.amountMinor, t.currency)}</td>
+                          <td>
+                            {t.product?.name ?? "None"}
+                            {/* The provider's own reference, so a founder asking
+                                us about a payment can quote something Stripe
+                                recognises rather than describing it. */}
+                            <span className="req-d mono" style={{ fontSize: "var(--fs-1)" }}>
+                              {t.stripePaymentIntentId}
+                            </span>
+                          </td>
+                          <td className="num" style={{ textAlign: "right" }}>
+                            {formatMinor(t.amountMinor, t.currency)}
+                          </td>
+                          <td className="num" style={{ textAlign: "right" }}>
+                            {t.feeMinor == null
+                              ? <span className="tiny">Pending</span>
+                              : "− " + formatMinor(t.feeMinor, t.currency)}
+                          </td>
+                          <td className="num" style={{ textAlign: "right", fontWeight: 560 }}>
+                            {/* Net per row, so "paid" and "kept" can never be
+                                read as the same number. Blank rather than a
+                                guess while Stripe has not reported the fee. */}
+                            {t.feeMinor == null
+                              ? <span className="tiny">&mdash;</span>
+                              : formatMinor(t.amountMinor - t.feeMinor, t.currency)}
+                          </td>
                           <td>
                             <span className={"badge " + (TX_BADGE[t.status] ?? "b-grey")}>
                               {TX_LABEL[t.status] ?? t.status}

@@ -31,7 +31,7 @@ export const FAQ: FaqEntry[] = [
     homepage: true,
     a: (
       <>
-      No, and we will not pretend otherwise. On the account type this is built on, the
+      No. On the account type this is built on, the
       guardian is notified of every payout request and keeps a permanent record, but the
       provider gives nobody a veto, so neither can we.
       </>
@@ -63,7 +63,7 @@ export const FAQ: FaqEntry[] = [
     homepage: true,
     a: (
       <>
-      Honestly, more weakly than the phrase suggests. The founder&rsquo;s birthdate is
+      More weakly than the phrase suggests. The founder&rsquo;s birthdate is
       self-declared and is never verified independently: Veyro checks the full date
       against the 13 floor, but nobody confirms it is real. Stripe verifies the
       <em> guardian&rsquo;s</em> identity, not the founder&rsquo;s age. This is weaker
@@ -76,10 +76,9 @@ export const FAQ: FaqEntry[] = [
     homepage: true,
     a: (
       <>
-      Nothing, yet. This has not been built. The guardian&rsquo;s name stays on the Stripe
+      Nothing automatic. The guardian&rsquo;s name stays on the Stripe
       account and the account itself does not change. It is something we will address
-      before launch, and we would rather say that than imply a handover that does not
-      exist.
+      before launch. Until then there is no handover, and it would be wrong to imply one.
       </>
     ),
   },
@@ -114,8 +113,8 @@ export const FAQ: FaqEntry[] = [
       <>
       No. Provider policy permitting a minor to hold an account with a guardian as the
       verified adult is not the same as it being tested in court where you live. No lawyer
-      has confirmed it in any country, and we would rather write that here than let you
-      assume otherwise.
+      has confirmed it in any country. That is a real limitation, and it belongs on the page
+      rather than in a footnote.
       </>
     ),
   },

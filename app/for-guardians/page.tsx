@@ -119,7 +119,7 @@ export default function ForGuardians() {
               Whether a minor may hold such an account with a guardian as representative has{" "}
               <strong>not been confirmed by a lawyer in any country</strong>, including yours.
               Provider policy allowing something is not the same as it being settled where you live.
-              We would rather you weighed that now than found it in a footnote later.
+              That is worth weighing now rather than finding in a footnote later.
             </p>
           </div>
         </div>

@@ -36,7 +36,7 @@ export default function NotFound() {
         </h1>
         <p className="body" style={{ marginTop: 12 }}>
           Either the link is wrong, or it&rsquo;s a page we haven&rsquo;t written yet. Veyro is
-          early, and we would rather leave a gap than fill it with something we haven&rsquo;t
+          early, and a gap is better than something we have not
           checked.
         </p>
         <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap" }}>
