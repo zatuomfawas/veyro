@@ -5,6 +5,7 @@ import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { ScrollProgress } from "@/app/_ui/ScrollProgress";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
+import { StickyCta } from "@/app/_ui/StickyCta";
 
 export const metadata = buildMetadata("how");
 export const viewport = buildViewport();
@@ -85,7 +86,10 @@ export default function HowItWorks() {
         </div>
       </div>
 
-      <main id="main" className="wrap-lp" style={{ paddingTop: 40, paddingBottom: 90 }}>
+      {/* paddingBottom is inline, so it overrides .has-sticky's 86px on mobile.
+          It must stay at or above 86 or the sticky CTA will cover the last
+          paragraph. The class is kept because it states the intent. */}
+      <main id="main" className="wrap-lp has-sticky" style={{ paddingTop: 40, paddingBottom: 96 }}>
         <span className="lp-eyebrow">Research</span>
         <h1 className="d2" style={{ marginTop: 8, maxWidth: "20ch" }}>
           We asked Stripe whether under-18s can take payments. Here&rsquo;s their answer.
@@ -338,6 +342,7 @@ export default function HowItWorks() {
       </main>
 
       <ScrollTop />
+      <StickyCta label="Check what applies to you" />
       <SiteFooter />
     </div>
   );

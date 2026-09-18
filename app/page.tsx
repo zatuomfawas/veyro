@@ -8,6 +8,7 @@ import { HeroPreview } from "@/app/_ui/HeroPreview";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
+import { StickyCta } from "@/app/_ui/StickyCta";
 
 export const metadata = buildMetadata("landing");
 export const viewport = buildViewport();
@@ -93,7 +94,7 @@ export default async function Home() {
         </div>
       </div>
 
-      <main id="main">
+      <main id="main" className="has-sticky">
         {/* ---------------- hero ---------------- */}
         <div className="hero-band">
           <div className="wrap-lp hero">
@@ -360,6 +361,7 @@ export default async function Home() {
       </main>
 
       <ScrollTop />
+      <StickyCta note="Two questions. No account." />
       <SiteFooter />
     </div>
   );

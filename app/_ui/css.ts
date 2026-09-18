@@ -478,7 +478,7 @@ export const CSS = `
 }
 @media (pointer: coarse) {
   .fw .btn { min-height:var(--tap); }
-  .fw .btn-sm { min-height:var(--h-md); }
+  .fw .btn-sm { min-height:var(--tap); }
   .fw .nav button:not(.btn), .fw .frame-rail button:not(.btn), .fw .mobpanel button { min-height:var(--tap); }
   .fw .input, .fw .select { min-height:var(--tap); }
   .fw .tbl td { padding-top:14px; padding-bottom:14px; }
@@ -532,6 +532,7 @@ export const CSS2 = `
   background:var(--card); border:1px solid var(--ink); color:var(--ink); font-size:var(--fs-2); font-weight:var(--fw-bold);
   letter-spacing:0.02em; padding:6px 13px 6px 6px; cursor:pointer; }
 .fw .totop:hover { background:var(--surface); }
+@media (pointer: coarse) { .fw .totop { min-height:var(--tap); } }
 .fw .totop-mark { width:23px; height:23px; background:var(--brand); display:flex; align-items:center;
   justify-content:center; flex:none; }
 .fw .lp-nav { border-bottom:1px solid transparent; }
@@ -569,7 +570,7 @@ export const CSS2 = `
 }
 .fw .pwwrap { position:relative; }
 .fw .pwwrap .input { padding-right:66px; }
-.fw .pwtoggle { position:absolute; right:1px; top:1px; bottom:1px; padding:0 11px; background:transparent; border:0;
+.fw .pwtoggle { position:absolute; right:1px; top:0; bottom:0; min-height:var(--tap); padding:0 11px; background:transparent; border:0;
   font-size:var(--fs-2); font-weight:var(--fw-bold); color:var(--ink-2); cursor:pointer; }
 .fw .pwtoggle:hover { color:var(--ink); }
 .fw .lp-links button.mobmenu { display:none; }
@@ -597,6 +598,23 @@ export const CSS2 = `
   .fw .tbl tr { break-inside:avoid; }
   .fw .hide-s { display:table-cell !important; }
   .fw a[href]::after { content:" (" attr(href) ")"; font-size:9pt; color:#555; }
+
+  /* Same-page anchors print their own href, so every contents entry came out as
+     "What Veyro is (#clause-1)". The target is on the same sheet of paper. */
+  .fw a[href^="#"]::after { content:none; }
+
+  /* .navbar is the sticky wrapper. Its contents (.lp-nav) were already hidden,
+     which left an empty bar at the top of the first page. */
+  .fw .navbar, .fw .mobpanel, .fw .mobmenu { display:none !important; }
+
+  /* body paints the page ivory on screen. Paper should be paper. */
+  body { background:#fff !important; }
+
+  /* A sticky contents column means nothing on paper, and a clause split across
+     two sheets mid-sentence is the one thing a printed policy must not do. */
+  .fw [style*="position: sticky"], .fw [style*="position:sticky"] { position:static !important; }
+  .fw section[id^="clause-"] { break-inside:avoid; }
+  .fw .truthgrid { display:block; }
 }
 .fw .cookiebar { position:fixed; left:0; right:0; bottom:0; z-index:80; background:var(--card); border-top:1px solid var(--ink); }
 
