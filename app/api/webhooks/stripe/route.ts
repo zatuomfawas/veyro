@@ -113,12 +113,43 @@ async function recordPayment(event: Stripe.Event): Promise<void> {
     return;
   }
 
+  // Stripe's actual processing fee, read rather than estimated.
+  //
+  // On a direct charge the money and the fee both live on the connected
+  // account, so the balance transaction has to be fetched with { stripeAccount }
+  // or Stripe looks on the platform and finds nothing. A fee calculated from a
+  // published percentage would be wrong the moment a card is international, or
+  // Stripe changes pricing, or the account has negotiated rates.
+  //
+  // Null is a real answer, not a failure: some payment methods settle their
+  // balance transaction after the PaymentIntent succeeds, so the fee genuinely
+  // is not known yet. It is stored as null and shown as unknown, never as zero.
+  let feeMinor: number | null = null;
+  try {
+    const chargeId =
+      typeof intent.latest_charge === "string" ? intent.latest_charge : intent.latest_charge?.id;
+    if (chargeId) {
+      const charge = await stripe.charges.retrieve(
+        chargeId,
+        { expand: ["balance_transaction"] },
+        { stripeAccount: acctId },
+      );
+      const bt = charge.balance_transaction;
+      if (bt && typeof bt !== "string") feeMinor = bt.fee;
+    }
+  } catch (err) {
+    // A missing fee must never stop the payment being recorded. The money
+    // arrived; the fee is a detail we can live without and backfill later.
+    console.warn(`Could not read the fee for ${intent.id}:`, (err as Error).message);
+  }
+
   try {
     const tx = await db.founderTransaction.create({
       data: {
         founderId,
         productId,
         amountMinor: intent.amount_received || intent.amount,
+        feeMinor,
         currency: intent.currency.toUpperCase(),
         status: "COMPLETED",
         stripePaymentIntentId: intent.id,

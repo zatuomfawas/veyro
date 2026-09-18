@@ -123,7 +123,16 @@ model FounderTransaction {
   // money that moved because of it. Archive the product instead.
   product FounderProduct @relation(fields: [productId], references: [id], onDelete: Restrict)
 
+  /// Gross: what the customer paid, before anything is deducted.
   amountMinor Int
+
+  /// Stripe's processing fee, in the same currency, read from the charge's
+  /// balance transaction on the connected account. Null means Stripe had not
+  /// settled the balance transaction when the webhook arrived, which happens
+  /// with asynchronous payment methods. Null is displayed as "not yet known"
+  /// rather than as zero: a missing fee and a zero fee are different facts.
+  feeMinor Int?
+
   currency    String                   @default("USD") @db.Char(3)
   status      FounderTransactionStatus @default(PENDING)
 

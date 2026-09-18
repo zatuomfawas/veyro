@@ -27,6 +27,7 @@ import { formatMinor } from "@/lib/checkout";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Notice } from "@/app/_ui/form";
 import { Requirements } from "@/app/_ui/Requirements";
+import { MoneyPosition } from "@/app/_ui/MoneyPosition";
 import { SIGNUP_COUNTRIES } from "@/app/_ui/countries";
 import { DashNav, DashHeader, Section, EmptyState, SUPPORT_EMAIL, fmtDate } from "@/app/_ui/dash";
 
@@ -354,42 +355,7 @@ export default async function FounderDashboard() {
               ) : (
                 <div className="stack">
                   {wallet.currencies.map((c) => (
-                    <div key={c.currency}>
-                      {!c.balances && (
-                        <div style={{ marginBottom: 8 }}>
-                          <Notice tone="clay" head="Balances don&rsquo;t reconcile">
-                            The fold disagrees with itself for {c.currency}, so the figures below are
-                            not trustworthy. Nothing has been lost (the records are intact), but
-                            contact support at{" "}
-                            <a className="linkbtn" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>{" "}
-                            before acting on this.
-                          </Notice>
-                        </div>
-                      )}
-                      <p className="body" style={{ margin: "0 0 8px", fontWeight: 560 }}>
-                        {c.currency} {formatMinor(c.available, c.currency)} available
-                      </p>
-                      <div className="tblwrap">
-                        <table className="tbl">
-                          <tbody>
-                            {([
-                              ["Earned", c.earned],
-                              ["Refunded", c.refunded],
-                              ["Still settling", c.pending],
-                              ["Committed to a payout", c.reserved],
-                              ["Already paid out", c.paidOut],
-                            ] as const).map(([label, value]) => (
-                              <tr key={label}>
-                                <th scope="row">{label}</th>
-                                <td className="num" style={{ textAlign: "right" }}>
-                                  {formatMinor(value, c.currency)}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
+                    <MoneyPosition key={c.currency} fold={c} />
                   ))}
                   <p className="tiny" style={{ margin: 0 }}>
                     Folded from your own records. No balance is stored, so this cannot drift from

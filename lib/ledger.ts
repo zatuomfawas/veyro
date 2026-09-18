@@ -16,6 +16,20 @@ export type CurrencyFold = {
   earned: number;
   /** Sent back to customers. */
   refunded: number;
+  /**
+   * Stripe's processing fees on completed payments, as Stripe reported them.
+   * Never estimated from a published rate: see the webhook.
+   */
+  fees: number;
+  /**
+   * How many completed payments are still missing a fee, because Stripe had not
+   * settled their balance transaction when the webhook arrived. Above zero, the
+   * fee total is a floor rather than a final figure, and the UI must say so
+   * instead of presenting an incomplete number as complete.
+   */
+  feesPending: number;
+  /** earned - refunded - fees. What the founder actually keeps. */
+  net: number;
   /** Completed but not yet counted as earned — still settling at the provider. */
   pending: number;
   /** Requested or approved, not yet sent. Committed, so it cannot be spent twice. */
@@ -58,6 +72,14 @@ export async function foldWallet(founderId: string): Promise<Wallet> {
     const refunded = sum(tx, (t) => (t.status === "REFUNDED" ? t.amountMinor : 0));
     const pending = sum(tx, (t) => (t.status === "PENDING" ? t.amountMinor : 0));
 
+    // Fees are read from the rows, not derived from a percentage. A completed
+    // payment with a null fee is counted separately so the UI can say the total
+    // is incomplete rather than quietly understating what Stripe took.
+    const completed = tx.filter((t) => t.status === "COMPLETED");
+    const fees = sum(completed, (t) => t.feeMinor ?? 0);
+    const feesPending = completed.filter((t) => t.feeMinor == null).length;
+    const net = earned - refunded - fees;
+
     // FAILED payouts are excluded on purpose: the money never left, so it is
     // still available rather than spent.
     const reserved = sum(po, (p) =>
@@ -71,10 +93,17 @@ export async function foldWallet(founderId: string): Promise<Wallet> {
       currency,
       earned,
       refunded,
+      fees,
+      feesPending,
+      net,
       pending,
       reserved,
       paidOut,
       available,
+      // available is still derived from earned, because Stripe deducts its fee
+      // before the money reaches the connected account's balance: the fee never
+      // sits in a balance Veyro can pay out. net is what the founder keeps,
+      // which is a different question from what is currently withdrawable.
       balances: earned - refunded === available + reserved + paidOut,
     };
   });
@@ -89,6 +118,9 @@ export function walletFor(wallet: Wallet, currency: string): CurrencyFold {
       currency,
       earned: 0,
       refunded: 0,
+      fees: 0,
+      feesPending: 0,
+      net: 0,
       pending: 0,
       reserved: 0,
       paidOut: 0,
