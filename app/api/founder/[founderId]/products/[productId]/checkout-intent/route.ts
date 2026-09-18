@@ -14,20 +14,41 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { stripe, assertStripeConfigured } from "@/lib/stripe";
 import { resolvePurchasable, isPurchasable, REASON_TEXT } from "@/lib/checkout";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
+/**
+ * Per-IP ceiling. Generous enough that a customer retrying a declined card is
+ * never caught by it, tight enough to slow a script. See lib/rate-limit.ts for
+ * why this is weaker than it looks: the counters are per instance.
+ */
+const LIMIT = 20;
+const WINDOW_MS = 60_000;
+
 export async function POST(
-  _req: Request,
+  req: Request,
   { params }: { params: Promise<{ founderId: string; productId: string }> },
 ) {
+  // Keyed on the product as well as the caller, so hammering one product cannot
+  // lock a customer out of a different founder's checkout on the same network.
+  const { founderId: fid, productId: pid } = await params;
+  const gate = rateLimit(`checkout:${clientIp(req)}:${fid}:${pid}`, LIMIT, WINDOW_MS);
+  if (!gate.ok) {
+    return NextResponse.json(
+      { error: "Too many attempts. Wait a moment and try again." },
+      { status: 429, headers: { "retry-after": String(gate.retryAfter) } },
+    );
+  }
+
   try {
     assertStripeConfigured();
   } catch {
     return NextResponse.json({ error: "Payments are not configured on this server." }, { status: 500 });
   }
 
-  const { founderId, productId } = await params;
+  const founderId = fid;
+  const productId = pid;
 
   const resolved = await resolvePurchasable(founderId, productId);
   if (!isPurchasable(resolved)) {

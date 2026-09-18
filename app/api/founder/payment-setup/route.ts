@@ -48,8 +48,18 @@ export async function POST(req: Request) {
         { status: 403 },
       );
     }
+    // The explanatory 409 goes ONLY to the person the invite was addressed to.
+    //
+    // It used to go to anyone signed in, which meant this route answered
+    // "does this founder have a consented guardian?" for any founderId a caller
+    // cared to try. Founder ids are not secret: every public checkout URL
+    // contains one, so anyone sent a payment link could probe the seller's
+    // setup state. The comment above claimed that did not happen; it did.
     const consent = await db.guardianConsent.findUnique({ where: { founderId } });
-    if (!consent?.consentedAt) {
+    const isInvitedGuardian =
+      consent != null && consent.invitedEmail === user.email.toLowerCase();
+
+    if (isInvitedGuardian && !consent.consentedAt) {
       return NextResponse.json(
         {
           error: "A guardian must consent before payment setup can start.",
