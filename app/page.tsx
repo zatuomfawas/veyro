@@ -339,20 +339,33 @@ export default async function Home() {
 
         <section className="lp" id="faq">
           <div className="wrap-lp">
-            <span className="lp-eyebrow">Questions</span>
-            <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)", marginBottom: 20 }}>
-              The ones people actually ask.
-            </h2>
+            {/* truthgrid, like every other section on this page. Stacking the
+                heading above a 76ch column left roughly half the width empty
+                beside nine collapsed one-line questions, which read as a void
+                rather than as breathing room. */}
+            <div className="truthgrid" style={{ alignItems: "start" }}>
+              <div>
+                <span className="lp-eyebrow">Questions</span>
+                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                  The ones people actually ask.
+                </h2>
+                <p className="body" style={{ marginTop: 16 }}>
+                  Short answers here. Where something is not built yet, it says so rather than
+                  going quiet.
+                </p>
+                <p className="body" style={{ marginTop: 16 }}>
+                  <Link className="linkbtn" href="/faq">
+                    Every question, with the longer answers
+                  </Link>
+                </p>
+              </div>
 
-            <div style={{ maxWidth: "var(--m-wide)" }}>
-              {FAQ.filter((f) => f.homepage).map((f) => (
-                <Faq key={f.q} q={f.q}>{f.a}</Faq>
-              ))}
+              <div>
+                {FAQ.filter((f) => f.homepage).map((f) => (
+                  <Faq key={f.q} q={f.q}>{f.a}</Faq>
+                ))}
+              </div>
             </div>
-
-            <p className="body" style={{ marginTop: 24 }}>
-              <Link className="linkbtn" href="/faq">Every question, with the longer answers</Link>
-            </p>
           </div>
         </section>
 
