@@ -9,6 +9,7 @@ import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { StickyCta } from "@/app/_ui/StickyCta";
+import { FAQ } from "@/app/_ui/faq";
 
 export const metadata = buildMetadata("landing");
 export const viewport = buildViewport();
@@ -344,57 +345,14 @@ export default async function Home() {
             </h2>
 
             <div style={{ maxWidth: "var(--m-wide)" }}>
-              <Faq q="Does my parent own my business?">
-                No. They are the verified adult on the payment account, which is what the provider
-                requires. Ownership of what you build is not something Veyro assigns to anyone, and
-                the ledger is kept against you, not them.
-              </Faq>
-              <Faq q="Can my guardian stop a payout?">
-                No, and we will not pretend otherwise. On the account type this is built on, the
-                guardian is notified of every payout request and keeps a permanent record, but the
-                provider gives nobody a veto, so neither can we.
-              </Faq>
-              <Faq q="Does Veyro see my identity documents?">
-                Never. Identity checks happen on the provider&rsquo;s own hosted form. Veyro stores a
-                reference to the account, not the documents, and not your bank details.
-              </Faq>
-              <Faq q="What does it cost?">
-                Veyro takes no percentage of what you earn today. Stripe charges its own fees on
-                each transaction, which Stripe sets and deducts. Future pricing is undecided; if it
-                ever changes you will be told before it applies to you.
-              </Faq>
-              <Faq q="How does age verification actually work?">
-                Honestly, more weakly than the phrase suggests. The founder&rsquo;s birthdate is
-                self-declared and is never verified independently: Veyro checks the full date
-                against the 13 floor, but nobody confirms it is real. Stripe verifies the
-                <em> guardian&rsquo;s</em> identity, not the founder&rsquo;s age. This is weaker
-                than it should be and will be tightened before launch.
-              </Faq>
-              <Faq q="What happens when I turn 18?">
-                Nothing, yet. This has not been built. The guardian&rsquo;s name stays on the Stripe
-                account and the account itself does not change. It is something we will address
-                before launch, and we would rather say that than imply a handover that does not
-                exist.
-              </Faq>
-              <Faq q="Which countries are supported, and how do I check?">
-                Use the <Link className="linkbtn" href="/check">eligibility checker</Link>. Two
-                questions and you will know immediately whether this works where you live,
-                including when the answer is no. Brazil is excluded outright: Stripe requires
-                account holders there to be 18 or over, guardian or no guardian.
-              </Faq>
-              <Faq q="Why does Stripe ask all these business-sounding questions?">
-                Because Stripe verifies the adult on the account and has to understand what the
-                business actually does. They are required to ask by law, and their form does not
-                know it is looking at someone selling stickers. Your guardian fills them in, not
-                you, and Veyro adds a line of plain guidance under each one.
-              </Faq>
-              <Faq q="Is this settled law?">
-                No. Provider policy permitting a minor to hold an account with a guardian as the
-                verified adult is not the same as it being tested in court where you live. No lawyer
-                has confirmed it in any country, and we would rather write that here than let you
-                assume otherwise.
-              </Faq>
+              {FAQ.filter((f) => f.homepage).map((f) => (
+                <Faq key={f.q} q={f.q}>{f.a}</Faq>
+              ))}
             </div>
+
+            <p className="body" style={{ marginTop: 24 }}>
+              <Link className="linkbtn" href="/faq">Every question, with the longer answers</Link>
+            </p>
           </div>
         </section>
 
