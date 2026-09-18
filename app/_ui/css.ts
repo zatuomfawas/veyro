@@ -71,7 +71,11 @@ export const CSS = `
   --wm-kern:-0.085em;
   /* Landing only. The application keeps the smaller dashboard scale. */
   --lp-1:64px; --lp-2:40px; --lp-3:26px; --lp-lead:19px;
-  --lp-gut:32px; --lp-max:1200px;
+  --lp-gut:32px; --lp-max:1440px;
+  /* One gutter, fluid. 16px on a small phone, growing to 48px on a wide
+     desktop. Replaces four hand-written padding values that each needed
+     their own breakpoint. */
+  --gut: clamp(16px, 4vw, 48px);
   --lp-pad-lg:104px; --lp-pad-md:72px; --lp-pad-sm:48px;
   /* Haffer (Displaay) is the intended primary. Its files are commercially
      licensed and unavailable here, so Onest is the implemented fallback, per the
@@ -114,8 +118,8 @@ export const CSS = `
 .fw .ink3 { color:var(--ink-3); }
 
 /* layout */
-.fw .wrap { max-width:1080px; margin:0 auto; padding:0 28px; }
-.fw .wrap-lp { max-width:var(--lp-max); margin:0 auto; padding:0 var(--lp-gut); }
+.fw .wrap { max-width:1280px; margin:0 auto; padding:0 var(--gut); }
+.fw .wrap-lp { max-width:var(--lp-max); margin:0 auto; padding:0 var(--gut); }
 .fw .lp-h1 { font-size:var(--lp-1); line-height:1.02; letter-spacing:-0.035em; font-weight:var(--fw-bold); }
 .fw .lp-h2 { font-size:var(--lp-2); line-height:1.1; letter-spacing:-0.028em; font-weight:var(--fw-bold); max-width:18ch; }
 .fw .lp-h3 { font-size:var(--lp-3); line-height:1.2; letter-spacing:-0.02em; font-weight:var(--fw-bold); }
@@ -129,9 +133,9 @@ export const CSS = `
         --lp-pad-lg:64px; --lp-pad-md:48px; --lp-pad-sm:36px; }
   .fw .lp-h2 { max-width:24ch; }
 }
-.fw .wrap-n { max-width:768px; margin:0 auto; padding:0 28px; }
-  .fw .wrap-w { max-width:1400px; margin:0 auto; padding:0 var(--lp-gut); }
-.fw .wrap-s { max-width:560px; margin:0 auto; padding:0 28px; }
+.fw .wrap-n { max-width:880px; margin:0 auto; padding:0 var(--gut); }
+  .fw .wrap-w { max-width:1600px; margin:0 auto; padding:0 var(--gut); }
+.fw .wrap-s { max-width:720px; margin:0 auto; padding:0 var(--gut); }
 .fw .row { display:flex; align-items:center; gap:10px; }
 .fw .row-b { display:flex; align-items:center; justify-content:space-between; gap:16px; }
 .fw .grow { flex:1 1 auto; min-width:0; }
@@ -467,7 +471,7 @@ export const CSS = `
   .fw .nav { flex-direction:row; overflow-x:auto; padding:6px 10px; gap:4px; }
   .fw .nav button:not(.btn) { width:auto; white-space:nowrap; justify-content:center; }
   .fw .grid-2, .fw .grid-4, .fw .cardgrid { grid-template-columns:1fr; }
-  .fw .wrap, .fw .wrap-n, .fw .wrap-w { padding:0 18px; }
+  
   .fw .page { padding:20px 16px 60px; }
   .fw .topbar { padding:0 16px; }
   .fw .d2 { font-size:var(--fs-7); }
@@ -487,7 +491,7 @@ export const CSS = `
   .fw .d2 { font-size:var(--fs-7); }
   .fw .wordmark-hero { font-size:var(--wm-sm); font-stretch:110%; }
   .fw .tagline { font-size:var(--fs-5); }
-  .fw .wrap, .fw .wrap-n, .fw .wrap-w { padding:0 14px; }
+  
   .fw .page { padding:16px 12px 56px; }
   .fw .tbl th, .fw .tbl td { padding:9px 10px; font-size:var(--fs-2); }
   .fw .card-b, .fw .card-h, .fw .card-f { padding-left:13px; padding-right:13px; }

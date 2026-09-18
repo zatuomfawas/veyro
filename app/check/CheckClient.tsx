@@ -168,13 +168,13 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
 
   return (
     <main id="main" style={{ minHeight: "100vh", background: "var(--surface)" }}>
-      <div className="wrap-s"><div className="lp-nav" style={{ borderBottom: 0 }}>
+      <div className="wrap-n"><div className="lp-nav" style={{ borderBottom: 0 }}>
         <Brand onClick={() => go("landing")} />
         <Btn variant="2" size="sm" onClick={() => go("landing")}>
           <Icon name="back" size={13} />Back to home
         </Btn>
       </div></div>
-      <div className="wrap-s" style={{ marginTop: 8, marginBottom: 90 }}>
+      <div className="wrap-n" style={{ marginTop: 8, marginBottom: 90 }}>
         <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>Check what applies to you</h1>
         <p className="body" style={{ marginTop: 8, fontSize: "var(--fs-4)" }}>
           Where you live and how old you are decide which route is open, and whether you need us at all.
