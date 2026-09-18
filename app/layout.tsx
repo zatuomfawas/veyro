@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Archivo, Onest } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { SITE, SEO_ROUTES } from "@/lib/seo";
 import "./globals.css";
 
@@ -66,7 +67,25 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   // --display and --ui.
   return (
     <html lang="en" className={`${archivo.variable} ${onest.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        {/* Vercel Analytics: aggregate page views, no cookie.
+ 
+            Chosen over PostHog, Mixpanel and Google Analytics deliberately. The
+            people using this product are 13 to 17, and under GDPR Article 8 the
+            digital consent age is 13 to 16 depending on the member state, so a
+            meaningful share of them cannot lawfully consent to behavioural
+            tracking. Session recording on minors also sits badly beside a
+            product whose pitch to their parents is that it never receives their
+            documents and takes no percentage.
+
+            It sets no cookie and uses no browser storage: verified against the
+            package source, not its marketing. The script and its beacon are both
+            served from /_vercel/insights on our own origin, so the production
+            CSP needed no change at all. See /privacy, which names Vercel as the
+            processor. */}
+        <Analytics />
+      </body>
     </html>
   );
 }

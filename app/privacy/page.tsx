@@ -104,7 +104,8 @@ export default function Privacy() {
             own privacy policy.
           </li>
           <li>
-            <strong>Vercel</strong>, which hosts and serves the application.
+            <strong>Vercel</strong>, which hosts and serves the application, and which also
+            provides the aggregate page-view analytics described in section 6.
           </li>
           <li>
             <strong>Neon</strong>, which hosts the PostgreSQL database, running on AWS
@@ -126,9 +127,25 @@ export default function Privacy() {
         </p>
         <p className="body" style={{ marginTop: 12 }}>
           That cookie is strictly necessary to provide a service you have asked for, so no consent
-          banner is required for it and none is shown. There are no analytics cookies, no
-          advertising cookies and no third-party trackers. If that ever changes, a real consent
-          banner will appear before the cookie is set, not after.
+          banner is required for it and none is shown. There are still{" "}
+          <strong>no analytics cookies, no advertising cookies and no third-party trackers</strong>.
+          If that ever changes, a real consent banner will appear before the cookie is set, not
+          after.
+        </p>
+        <p className="body" style={{ marginTop: 12 }}>
+          We do measure how the site is used, with <strong>Vercel Web Analytics</strong>. It is
+          cookieless and stores nothing in your browser, which we checked against the package
+          itself rather than taking on trust. It records which page was viewed, the referring site,
+          the country the request came from, and the general device type. Vercel derives the
+          country from your IP address and does not keep the address itself, and the identifier it
+          uses to count a visit is rotated daily, so it cannot follow you across days or onto other
+          sites.
+        </p>
+        <p className="body" style={{ marginTop: 12 }}>
+          What it is not: there is no session recording, no heatmap, no profile of you, and nothing
+          is shared with an advertising network. We chose it over the tools that do those things
+          because most of the people here are under 18, and behavioural tracking of children sits
+          badly next to everything else on this page.
         </p>
       </Clause>
 
