@@ -35,8 +35,29 @@ export function AuthShell({
           the left column, which gives the width something to hold and keeps the
           form itself at a sensible measure rather than stretching the inputs.
           truthgrid collapses to one column at 900px. */}
-      <main id="main" className="wrap-lp" style={{ marginTop: 8, marginBottom: 90 }}>
-        <div className="truthgrid" style={{ alignItems: "start" }}>
+      {/* The auth pages vary enormously in height: signup is six fields, sign-in
+          is two, and the resend page is one. At a fixed top margin the short
+          ones clung to the header with most of a tall window empty underneath.
+          
+          The main now fills the space the header leaves and the content centres
+          within it. `margin-block: auto` rather than justify-content:center,
+          because auto margins collapse on the overflow side, so a form taller
+          than the window still starts at the top instead of having its heading
+          clipped above the fold.
+          
+          100dvh, not 100vh: on a phone, vh ignores the browser chrome and would
+          push the content below the fold by the height of the address bar. */}
+      <main
+        id="main"
+        className="wrap-lp"
+        style={{
+          minHeight: "calc(100dvh - var(--nav-h))",
+          display: "flex",
+          flexDirection: "column",
+          paddingBlock: "var(--sp-7)",
+        }}
+      >
+        <div className="truthgrid" style={{ alignItems: "start", marginBlock: "auto", width: "100%" }}>
           <div>
             <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>{title}</h1>
             <p className="body" style={{ marginTop: 8, fontSize: "var(--fs-4)" }}>{lead}</p>
