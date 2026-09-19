@@ -1,15 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Btn, Field, Notice, PasswordField } from "@/app/_ui/form";
 import { safeNextPath, defaultLandingFor } from "@/lib/next-path";
 
-export default function SigninForm({ next }: { next?: string | null }) {
+export default function SigninForm({
+  next, justVerified = false,
+}: { next?: string | null; justVerified?: boolean }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
+  // Set when signin is refused because the address is unproven. Kept apart
+  // from formError so the message can carry a way out rather than a dead end.
+  const [needsVerification, setNeedsVerification] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   async function onSubmit(e: React.FormEvent) {
@@ -29,6 +35,7 @@ export default function SigninForm({ next }: { next?: string | null }) {
       if (!res.ok) {
         // The API answers the same way for a wrong password and an unknown
         // email, on purpose. Repeating it verbatim keeps that property.
+        setNeedsVerification(Boolean(body?.needsVerification));
         setFormError(body?.error ?? "Email or password is wrong.");
         setSubmitting(false);
         return;
@@ -46,9 +53,32 @@ export default function SigninForm({ next }: { next?: string | null }) {
 
   return (
     <form onSubmit={onSubmit} noValidate>
+      {justVerified && !formError && (
+        <div style={{ marginBottom: 16 }}>
+          <Notice tone="pine" head="Email verified">
+            Your address is confirmed. Sign in below.
+          </Notice>
+        </div>
+      )}
+
       {formError && (
         <div style={{ marginBottom: 16 }}>
-          <Notice tone="clay" head="Could not sign you in">{formError}</Notice>
+          {/* An unverified account is not a failed sign-in, it is an unfinished
+              one, so it gets a different tone and a way forward rather than a
+              flat refusal. */}
+          <Notice
+            tone={needsVerification ? "amber" : "clay"}
+            head={needsVerification ? "Verify your email first" : "Could not sign you in"}
+            action={
+              needsVerification ? (
+                <Link className="btn btn-2 btn-sm" href="/auth/resend-verification">
+                  Send a new link
+                </Link>
+              ) : undefined
+            }
+          >
+            {formError}
+          </Notice>
         </div>
       )}
 

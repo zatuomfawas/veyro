@@ -10,6 +10,7 @@ import { db } from "@/lib/db";
 import { audit } from "@/lib/auth";
 import { foldWallet, walletFor } from "@/lib/ledger";
 import { resolveScope, isResponse, readJson, cap } from "../_scope";
+import { sendPayoutNotification } from "@/lib/email";
 
 export const runtime = "nodejs";
 
@@ -101,6 +102,15 @@ export async function POST(req: Request) {
       },
     });
     await audit(null, "guardian.payout_notified", payout.id, scope.founderId, { amountMinor, currency });
+
+    // The in-app notification above is the record; this is the nudge. Both are
+    // non-fatal, because the payout request itself has already been written.
+    const guardian = await db.user.findUnique({ where: { id: consent.guardianId } });
+    if (guardian) {
+      await sendPayoutNotification(
+        guardian.email, scope.user.name, amountMinor, currency, scope.founderId,
+      );
+    }
   }
 
   return NextResponse.json({ ok: true, payout, availableMinor: fold.available - amountMinor });

@@ -26,6 +26,7 @@ import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
 import { audit } from "@/lib/auth";
 import { syncAccountFromStripe } from "@/lib/stripe-account";
+import { sendPaymentNotification } from "@/lib/email";
 
 export const runtime = "nodejs";
 
@@ -158,6 +159,13 @@ async function recordPayment(event: Stripe.Event): Promise<void> {
     await audit(null, "payment.completed", tx.id, founderId, {
       amountMinor: tx.amountMinor, currency: tx.currency, paymentIntentId: intent.id,
     });
+
+    // Non-fatal, and deliberately after the row is written: the payment is
+    // recorded whether or not the founder can be told about it.
+    const founder = await db.user.findUnique({ where: { id: founderId } });
+    if (founder) {
+      await sendPaymentNotification(founder.email, tx.amountMinor, tx.currency, founderId);
+    }
     await db.notification.create({
       data: {
         userId: founderId,

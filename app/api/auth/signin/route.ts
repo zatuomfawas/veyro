@@ -27,6 +27,21 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Email or password is wrong." }, { status: 401 });
   }
 
+  // The address has to be proved before the account can be used. Checked after
+  // the password so this cannot be used to discover which addresses exist: a
+  // wrong password still returns the same generic 401 above.
+  if (!user.emailVerifiedAt) {
+    await audit(user.id, "auth.blocked_unverified", email);
+    return NextResponse.json(
+      {
+        error: "Verify your email first. We sent you a link when you signed up.",
+        needsVerification: true,
+        resendUrl: "/auth/resend-verification",
+      },
+      { status: 400 },
+    );
+  }
+
   await createSession(user.id);
   await audit(user.id, "auth.signed_in", email);
 

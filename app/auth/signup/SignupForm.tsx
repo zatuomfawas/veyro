@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Btn, Field, Notice, PasswordField } from "@/app/_ui/form";
 import { SIGNUP_COUNTRIES } from "@/app/_ui/countries";
-import { safeNextPath, defaultLandingFor } from "@/lib/next-path";
+import { safeNextPath } from "@/lib/next-path";
 
 type FieldErrors = Record<string, string>;
 
@@ -106,10 +106,14 @@ export default function SignupForm({ next }: { next?: string | null }) {
         return;
       }
 
-      // Signup already issued the session cookie, so this account is signed in.
-      // A guardian who arrived from an invite goes back to it, ready to accept;
-      // everyone else goes to their own dashboard.
-      router.push(safeNextPath(next) ?? defaultLandingFor(body?.user?.role));
+      // No session is issued at signup any more: the address has to be verified
+      // first. So this cannot go to a dashboard, which would redirect straight
+      // back out. The return path is preserved through the verification detour
+      // by handing it to the sign-in page.
+      const after = safeNextPath(next);
+      router.push(
+        "/auth/signin?registered=1" + (after ? `&next=${encodeURIComponent(after)}` : ""),
+      );
       router.refresh();
     } catch {
       setFormError("We couldn't reach the server. Nothing was created.");

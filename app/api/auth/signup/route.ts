@@ -2,8 +2,10 @@
 // bypassed by anyone who opens the network tab.
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { hashPassword, createSession, audit } from "@/lib/auth";
+import { hashPassword, audit } from "@/lib/auth";
 import { evaluateDateOfBirth, MIN_SIGNUP_AGE } from "@/lib/age";
+import { newVerificationToken } from "@/lib/verification";
+import { sendVerificationEmail } from "@/lib/email";
 
 /** Founders may be 13+. A guardian must be a legal adult. */
 const GUARDIAN_MIN_AGE = 18;
@@ -72,19 +74,34 @@ export async function POST(req: Request) {
     return NextResponse.json({ errors: { email: "That address cannot be used." } }, { status: 409 });
   }
 
+  // The address is unproven until the link in the email is clicked, so the
+  // account is created with emailVerifiedAt null and signin refuses it. This is
+  // what stops someone registering as an address they do not control and then
+  // accepting a guardian invitation that was sent to it.
+  const verification = newVerificationToken();
+
   const user = await db.user.create({
     data: {
       email, name, countryCode: country, role,
       passwordHash: await hashPassword(password),
       dateOfBirth,
+      emailVerificationTokenHash: verification.hash,
+      emailVerificationExpiresAt: verification.expiresAt,
     },
   });
 
-  await createSession(user.id);
   await audit(user.id, "account.created", email, undefined, { country, region, ageAtSignup });
+
+  // No session. Signing them in here would defeat the gate entirely.
+  //
+  // Non-fatal: the account exists whether or not this sends, and telling someone
+  // their signup failed because a mail provider was slow would be false.
+  await sendVerificationEmail(email, verification.token);
 
   return NextResponse.json({
     ok: true,
+    needsVerification: true,
+    message: "Check your email to verify your address, then sign in.",
     user: { id: user.id, name: user.name, email: user.email, role: user.role },
   });
 }

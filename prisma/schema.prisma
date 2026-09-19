@@ -35,7 +35,18 @@ enum Role {
 model User {
   id              String    @id @default(cuid())
   email           String    @unique
+  /// Null until the address is proved. Signin refuses a null, which is what
+  /// stops someone registering as an address they do not control and then
+  /// accepting a guardian invitation sent to it.
   emailVerifiedAt DateTime?
+
+  /// SHA-256 of the verification token, never the token itself, the same
+  /// pattern as Session.tokenHash and GuardianConsent.tokenHash. If the
+  /// database leaks, nothing in it can be used to verify as anyone.
+  emailVerificationTokenHash String? @unique
+
+  /// One-time tokens still need a clock. 24 hours.
+  emailVerificationExpiresAt DateTime?
   passwordHash    String? // argon2id. Null when SSO-only.
   totpSecret      String? // encrypted at rest, never returned by any API
   name            String

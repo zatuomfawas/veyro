@@ -13,6 +13,7 @@ import { randomBytes } from "crypto";
 import { db } from "@/lib/db";
 import { currentUser, audit } from "@/lib/auth";
 import { consentState, hashInviteToken } from "@/lib/consent";
+import { sendInviteNotification, sendGuardianAcceptedNotification } from "@/lib/email";
 import { readJson, cap } from "../_scope";
 
 export const runtime = "nodejs";
@@ -83,8 +84,12 @@ async function invite(
 
   await audit(user.id, "guardian.invited", consent.id, user.id, { invitedEmail, invitedName });
 
-  // rawToken goes into the invite email link; it is never stored anywhere.
-  // Sending the actual email is not wired up yet — this is the value to send.
+  // Non-fatal. The consent row exists either way, and the founder is still
+  // given the raw token below so they can send the link by hand if mail is down
+  // or the sending domain is not verified yet.
+  await sendInviteNotification(user.name, invitedEmail, rawToken, user.id);
+
+  // rawToken is returned once and never stored. It is what the link contains.
   return NextResponse.json({ ok: true, consentId: consent.id, inviteToken: rawToken });
 }
 
@@ -141,6 +146,12 @@ async function respond(
   );
 
   if (decision === "accept") {
+    // Tell the founder their guardian said yes, so they are not left refreshing.
+    const founder = await db.user.findUnique({ where: { id: consent.founderId } });
+    if (founder) {
+      await sendGuardianAcceptedNotification(founder.email, user.name, consent.founderId);
+    }
+
     await db.notification.create({
       data: {
         userId: consent.founderId,
