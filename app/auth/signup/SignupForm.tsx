@@ -66,6 +66,15 @@ export default function SignupForm({ next }: { next?: string | null }) {
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
+  // Which required fields are still empty. The API is still the authority on
+  // whether each value is *valid*; this only answers "has it been filled in",
+  // which is the question the submit button needs.
+  const missing = [
+    ["name", name], ["email", email], ["password", password],
+    ["confirm", confirm], ["dateOfBirth", dateOfBirth], ["country", country],
+  ].filter(([, v]) => !String(v).trim()).map(([k]) => k as string);
+  const complete = missing.length === 0;
+
   const blur = (field: string, value: string) => () => {
     const message = checkField(field, value, isGuardian);
     setErrors((e) => ({ ...e, [field]: message ?? "" }));
@@ -75,6 +84,17 @@ export default function SignupForm({ next }: { next?: string | null }) {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (submitting) return;
+
+    // Flag every empty field at once rather than letting the server answer a
+    // question the browser already knows, and rather than revealing them one at
+    // a time as each is fixed.
+    if (!complete) {
+      const blanks: FieldErrors = {};
+      for (const f of missing) blanks[f] = "This one is needed.";
+      setErrors(blanks);
+      setFormError(null);
+      return;
+    }
 
     // The one check the API cannot make: it never receives the confirmation.
     if (password !== confirm) {
@@ -193,10 +213,16 @@ export default function SignupForm({ next }: { next?: string | null }) {
         </span>
       </button>
 
-      <Btn className="btn-w" type="submit" disabled={submitting}
+      <Btn className="btn-w" type="submit" disabled={submitting || !complete}
         aria-busy={submitting ? "true" : undefined}>
         {submitting ? "Creating your account…" : "Create account"}
       </Btn>
+
+      {!complete && (
+        <p className="hint" style={{ marginTop: 8 }} role="status">
+          {missing.length} {missing.length === 1 ? "field" : "fields"} left to fill in.
+        </p>
+      )}
     </form>
   );
 }

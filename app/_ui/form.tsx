@@ -91,7 +91,17 @@ export function PasswordField({
   name?: string;
 }) {
   const [shown, setShown] = useState(false);
+  // Caps Lock is invisible behind dots, so the classic failure is typing the
+  // right password in the wrong case three times and concluding the account is
+  // broken. getModifierState is read from the event rather than tracked from
+  // keystrokes, so it is correct even when the key was pressed before the field
+  // was focused, or in another window.
+  const [capsLock, setCapsLock] = useState(false);
   const id = useId();
+
+  const readCapsLock = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    setCapsLock(e.getModifierState("CapsLock"));
+  };
 
   return (
     <Field label={label} hint={hint} error={error}>
@@ -104,8 +114,11 @@ export function PasswordField({
           value={value}
           autoComplete={autoComplete}
           onChange={(e) => onChange(e.target.value)}
-          onBlur={onBlur}
+          onBlur={(e) => { setCapsLock(false); onBlur?.(); void e; }}
+          onKeyDown={readCapsLock}
+          onKeyUp={readCapsLock}
           style={{ paddingRight: 64 }}
+          aria-describedby={capsLock ? id + "-caps" : undefined}
         />
         <button
           type="button"
@@ -118,6 +131,19 @@ export function PasswordField({
           <span className="sr-only"> password</span>
         </button>
       </span>
+
+      {/* role="status" rather than "alert": it is a heads-up, not an error, and
+          an assertive announcement would interrupt someone mid-password. */}
+      {capsLock && (
+        <span
+          id={id + "-caps"}
+          role="status"
+          className="hint"
+          style={{ display: "block", marginTop: 6, color: "var(--amber)" }}
+        >
+          Caps Lock is on.
+        </span>
+      )}
     </Field>
   );
 }
