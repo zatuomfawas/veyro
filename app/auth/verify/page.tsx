@@ -1,12 +1,10 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { buildViewport } from "@/lib/seo";
 import { db } from "@/lib/db";
-import { audit } from "@/lib/auth";
 import { hashVerificationToken } from "@/lib/verification";
 import { AuthShell } from "@/app/_ui/AuthShell";
-import { Notice } from "@/app/_ui/form";
+import { Btn, Notice } from "@/app/_ui/form";
 
 export const viewport = buildViewport();
 export const dynamic = "force-dynamic";
@@ -16,64 +14,96 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-// A page rather than an API route, because failure has to render something.
-// A redirect-only endpoint cannot show "this link expired, here is how to get a
-// new one", and that is the case people actually hit.
+// This page LOOKS. It does not write.
+//
+// Verification used to happen here, on the GET, and that was the bug. Mail
+// providers and corporate filters fetch every URL in an email to scan it, and
+// link previews do the same, so a one-time token was being spent by a robot
+// before the person clicked. The human then saw "this link didn't work" on an
+// account that had in fact just been verified by the scanner.
+//
+// So the GET only checks whether the token is still good and renders a button.
+// The write happens in POST /api/auth/verify, which scanners do not trigger
+// because they follow links rather than submitting forms. The extra click is
+// the cost of the link surviving contact with an inbox.
 export default async function VerifyPage({
   searchParams,
 }: {
-  searchParams: Promise<{ token?: string | string[] }>;
+  searchParams: Promise<{ token?: string | string[]; state?: string }>;
 }) {
-  const raw = (await searchParams).token;
+  const params = await searchParams;
+  const raw = params.token;
   const token = (Array.isArray(raw) ? raw[0] : raw)?.trim();
 
-  if (token) {
+  // Set by the POST route when it refuses, so the reason survives the redirect.
+  const failed = params.state === "invalid" || params.state === "expired";
+
+  let usable = false;
+  if (token && !failed) {
     const user = await db.user.findUnique({
       where: { emailVerificationTokenHash: hashVerificationToken(token) },
+      select: { emailVerifiedAt: true, emailVerificationExpiresAt: true },
     });
-
-    if (user) {
-      const expired =
-        !user.emailVerificationExpiresAt || user.emailVerificationExpiresAt < new Date();
-
-      if (!expired) {
-        // One-time use: the hash is cleared in the same write that records the
-        // verification, so a link cannot be replayed from an inbox or a log.
-        await db.user.update({
-          where: { id: user.id },
-          data: {
-            emailVerifiedAt: new Date(),
-            emailVerificationTokenHash: null,
-            emailVerificationExpiresAt: null,
-          },
-        });
-        await audit(user.id, "auth.email_verified", user.email);
-        redirect("/auth/signin?verified=1");
-      }
-    }
+    usable = Boolean(
+      user
+        && !user.emailVerifiedAt
+        && user.emailVerificationExpiresAt
+        && user.emailVerificationExpiresAt > new Date(),
+    );
   }
 
-  // Everything else lands here: no token, an unknown token, an expired one, or
-  // one already used. They are deliberately not distinguished, because saying
-  // "already verified" for one address and "invalid" for another turns this page
-  // into a way to test which addresses have accounts.
+  if (usable) {
+    return (
+      <AuthShell
+        title="One more tap"
+        lead="Confirm this was you, and your address is verified."
+        footer={
+          <>
+            Wrong account? <Link className="linkbtn" href="/auth/signin">Sign in</Link> instead.
+          </>
+        }
+      >
+        <form method="post" action="/api/auth/verify">
+          <input type="hidden" name="token" value={token} />
+          <p className="body" style={{ marginTop: 0 }}>
+            This confirms the email address you signed up with. Nothing else changes.
+          </p>
+          <Btn className="btn-w" type="submit">Verify my email</Btn>
+          <p className="hint" style={{ marginTop: 8 }}>
+            The button is here rather than happening automatically because some email providers
+            open every link in a message to scan it, which would use up your link before you got
+            to it.
+          </p>
+        </form>
+      </AuthShell>
+    );
+  }
+
+  // No token, an unknown one, an expired one, or one already used. Deliberately
+  // not distinguished: telling one address "already verified" and another
+  // "invalid" turns this page into a way to test which addresses have accounts.
   return (
     <AuthShell
       title="This link didn&rsquo;t work"
       lead="Verification links last 24 hours and can only be used once."
       footer={
         <>
-          Already verified?{" "}
-          <Link className="linkbtn" href="/auth/signin">Sign in</Link>.
+          Already verified? <Link className="linkbtn" href="/auth/signin">Sign in</Link>.
         </>
       }
     >
-      <Notice tone="amber" head="Request a new link">
-        <p style={{ margin: "0 0 12px" }}>
-          If the link has expired, or you have already used it and still cannot sign in, we can
-          send another one.
+      <Notice tone="amber" head="Two things this usually means">
+        <p style={{ margin: "0 0 8px" }}>
+          The link has expired, or it has already been used. If you have verified once, you do not
+          need to again: just sign in.
         </p>
-        <Link className="btn" href="/auth/resend-verification">Send a new link</Link>
+        <p style={{ margin: "0 0 12px" }}>
+          If signing in still says your email is unverified, get a fresh link.
+        </p>
+        <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
+          <Link className="btn" href="/auth/signin">Try signing in</Link>
+          <Link className="btn btn-2" href="/auth/resend-verification">Send a new link</Link>
+        </div>
       </Notice>
     </AuthShell>
   );
