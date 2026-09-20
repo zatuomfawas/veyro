@@ -141,6 +141,22 @@ export const CSS = `
 .fw .grow { flex:1 1 auto; min-width:0; }
 .fw .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
 .fw .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:0; }
+/* A grid item's automatic minimum size is its min-content, so one unshrinkable
+   descendant (a table, a long number) widens the whole TRACK and every sibling
+   with it. The item then renders wider than the grid box, and because body has
+   overflow-x:clip the page does not scroll: the overflow is silently cut off
+   instead. That failure is invisible to a scrollWidth check, which is why it
+   survived earlier passes.
+
+   Tracks written as minmax(0,1fr) are already immune; a bare 1fr is not. Rather
+   than depend on every future track being written the careful way, every layout
+   grid's children get min-width:0 here. Items can then shrink, and the scroll
+   containers inside them (.tblwrap) do the scrolling they were put there to do. */
+.fw .grid-2 > *, .fw .grid-4 > *, .fw .cardgrid > *,
+.fw .herofacts > *, .fw .footgrid > *, .fw .reality > *, .fw .stagebar > *,
+.fw .ruled > div > *, .fw .split > *, .fw .split-lead > *, .fw .truthgrid > *,
+.fw .ownership > *, .fw .pricegrid > *, .fw .trustgrid > *, .fw .hstage > *,
+.fw .hpanel-rows > div > *, .fw .numbered li > * { min-width:0; }
 .fw .rule { height:1px; background:var(--line); border:0; margin:0; }
 .fw .stack > * + * { margin-top:14px; }
 
@@ -306,6 +322,9 @@ export const CSS = `
 .fw .footgrid button { display:block; background:none; border:0; padding:0 0 9px; font-size:var(--fs-3);
   color:var(--ink-2); cursor:pointer; text-align:left; }
 .fw .footgrid button:hover { color:var(--brand); }
+/* Footer navigation. Was an inline style on each link, which meant the
+   coarse-pointer tap-target rule below could not reach it. */
+.fw .footlink { display:block; padding:0 0 9px; font-size:var(--fs-3); }
 .fw .footbase { display:flex; justify-content:space-between; align-items:flex-end; gap:28px; flex-wrap:wrap;
   margin-top:40px; padding-top:20px; border-top:1px solid var(--line); }
 @media (max-width:760px) {
@@ -486,6 +505,24 @@ export const CSS = `
   .fw .nav button:not(.btn), .fw .frame-rail button:not(.btn), .fw .mobpanel button { min-height:var(--tap); }
   .fw .input, .fw .select { min-height:var(--tap); }
   .fw .tbl td { padding-top:14px; padding-bottom:14px; }
+  /* A .linkbtn in a table cell is the row's action ("Open checkout"). As inline
+     text only its glyph box is tappable, about 16px tall, so the cell padding
+     around it is dead space that looks tappable and is not. */
+  .fw .tbl .linkbtn { display:inline-flex; align-items:center; min-height:var(--tap); }
+  /* Footer navigation sat at 30px on every page. These are ordinary navigation
+     links, not prose, so they get the same target as any other control. */
+  .fw .footlink { display:flex; align-items:center; min-height:var(--tap); padding:0; }
+  .fw .mobmenu, .fw .skiplink { min-height:var(--tap); }
+  /* The wordmark is the "go home" control and wraps a 20px mark, so its link box
+     was 23px tall. Targeted by its label rather than by adding a class to all
+     fifteen places that render it. */
+  .fw [aria-label="Veyro, home"] { display:inline-flex; align-items:center; min-height:var(--tap); }
+  /* A .linkbtn alone in its paragraph is a standalone control ("Every question,
+     with the longer answers", the support address in the footer), not a link
+     inside a sentence, so it gets a real target. Links WITH text around them are
+     deliberately untouched: WCAG exempts them, and padding one out would break
+     the line it sits in. */
+  .fw p > .linkbtn:only-child { display:inline-flex; align-items:center; min-height:var(--tap); }
 }
 @media (max-width: 420px) {
   .fw .d2 { font-size:var(--fs-7); }
@@ -695,7 +732,11 @@ export const CSS2 = `
 }
 .fw .grid-4 > :last-child { border-right:0 !important; }
 .fw .hero-grid { align-items:start; }
-@media (max-width:940px) { .fw .hero-grid { grid-template-columns:1fr !important; gap:32px !important; } }
+/* minmax(0,1fr), not 1fr: a bare 1fr track is floored at its item's min-content,
+   so one long unbreakable line in the hero widened the track past the viewport
+   and body's overflow-x:clip cut the hero off instead of scrolling. The !important
+   here was overriding the minmax(0,...) that .split-lead sets for exactly this. */
+@media (max-width:940px) { .fw .hero-grid { grid-template-columns:minmax(0,1fr) !important; gap:32px !important; } }
 @media (max-width:760px) {
   .fw .wordmark-hero { font-size:var(--wm-md); font-stretch:114%; }
   .fw .tagline { font-size:var(--fs-6); }

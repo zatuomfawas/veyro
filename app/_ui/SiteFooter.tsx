@@ -58,8 +58,7 @@ export function SiteFooter() {
             <div key={col.head}>
               <h3>{col.head}</h3>
               {col.links.map((l) => (
-                <Link key={l.href} className="linkbtn" href={l.href}
-                  style={{ display: "block", padding: "0 0 9px", fontSize: "var(--fs-3)" }}>
+                <Link key={l.href} className="linkbtn footlink" href={l.href}>
                   {l.label}
                 </Link>
               ))}
