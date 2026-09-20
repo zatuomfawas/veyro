@@ -13,6 +13,7 @@ const COLUMNS: { head: string; links: { href: string; label: string; external?: 
   {
     head: "Product",
     links: [
+      { href: "/get-started", label: "Get started" },
       { href: "/how-it-works", label: "How it works" },
       { href: "/wallet", label: "The Founder Wallet" },
       { href: "/check", label: "Check eligibility" },

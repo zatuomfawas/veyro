@@ -4,6 +4,9 @@ import { SITE, SEO_ROUTES, type SeoRouteKey } from "@/lib/seo";
 // Public pages that have their own metadata rather than a SEO_ROUTES entry.
 // Listed explicitly so the sitemap cannot claim a route that was never built.
 const EXTRA: { path: string; priority: number }[] = [
+  // High: it is the page that answers "how do I actually use this", which is
+  // the question most people arrive with.
+  { path: "/get-started", priority: 0.9 },
   { path: "/wallet", priority: 0.8 },
   { path: "/for-founders", priority: 0.7 },
   { path: "/faq", priority: 0.7 },

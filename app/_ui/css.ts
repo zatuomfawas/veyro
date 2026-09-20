@@ -81,6 +81,9 @@ export const CSS = `
      licensed and unavailable here, so Onest is the implemented fallback, per the
      brief. Swapping Haffer in is a change to this one line. */
   --ui: var(--font-onest), "Onest", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* Code only. Not loaded over the network: every face here ships with an OS,
+     so a snippet costs no request and cannot flash an unstyled fallback. */
+  --code: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   /* One family. Everything below is the same typeface at a different size or weight. */
   font-family: var(--ui);
   color: var(--ink);
@@ -257,6 +260,43 @@ export const CSS = `
 .fw .charcount[data-over="1"] { color:var(--clay); font-weight:var(--fw-med); }
 .fw .hint { display:block; margin-top:5px; font-size:var(--fs-2); color:var(--ink-3); }
 .fw .err { display:block; margin-top:5px; font-size:var(--fs-2); color:var(--clay); }
+/* Code.
+   .mono is the UI face with tabular figures, which is right for an account id
+   inside a sentence and wrong for a block of markup: it has no real monospace
+   metrics, so indentation does not line up. This is the one place a second
+   family is justified, and it is a stack of faces already on the machine. */
+.fw .code { font-family:var(--code); font-size:var(--fs-2); line-height:1.7;
+  background:var(--surface); border:1px solid var(--line); padding:14px 16px;
+  overflow-x:auto; white-space:pre; tab-size:2; color:var(--ink); margin:0; }
+.fw .code .c { color:var(--ink-3); }
+.fw .code b { font-weight:var(--fw-bold); color:var(--brand); }
+.fw .codecap { display:flex; align-items:center; justify-content:space-between; gap:12px;
+  border:1px solid var(--line); border-bottom:0; background:var(--card);
+  padding:8px 14px; font-size:var(--fs-2); color:var(--ink-3); }
+.fw .codecap + .code { border-top:0; }
+
+/* Flow diagram.
+   Four stages and the arrows between them. A row on a wide screen, a column on
+   a narrow one, with the arrows turning a quarter turn rather than being
+   swapped for different glyphs. The arrows are decorative: the list itself
+   carries the order for anyone not looking at it. */
+.fw .flow { display:flex; align-items:stretch; flex-wrap:wrap; list-style:none; margin:0; padding:0; }
+.fw .flow-step { flex:1 1 170px; min-width:0; border:1px solid var(--ink);
+  background:var(--card); padding:13px 15px; }
+.fw .flow-step .fs-n { display:block; font-size:var(--fs-1); letter-spacing:0.06em;
+  text-transform:uppercase; color:var(--ink-3); margin-bottom:5px; }
+.fw .flow-step .fs-t { display:block; font-size:var(--fs-4); font-weight:var(--fw-bold);
+  letter-spacing:-0.01em; }
+.fw .flow-step .fs-d { display:block; font-size:var(--fs-2); color:var(--ink-2); margin-top:4px; }
+.fw .flow-step[data-you="1"] { border-color:var(--brand); box-shadow:inset 0 0 0 1px var(--brand); }
+.fw .flow-arrow { flex:0 0 34px; display:flex; align-items:center; justify-content:center;
+  color:var(--ink-3); font-size:var(--fs-5); }
+@media (max-width:760px) {
+  .fw .flow { flex-direction:column; }
+  .fw .flow-step { flex:1 1 auto; }
+  .fw .flow-arrow { flex:0 0 26px; transform:rotate(90deg); }
+}
+
 /* Segmented control.
    Two mutually exclusive views of the same figure, so they belong inside one
    border rather than sitting as a button next to a word. Built from the same

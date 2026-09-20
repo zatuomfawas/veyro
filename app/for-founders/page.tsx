@@ -63,6 +63,10 @@ export default function ForFounders() {
           Shipping the product is the part you already know how to do. This page is the other part:
           what has to exist before a stranger can pay you, and who has to do each piece.
         </p>
+        <p className="small" style={{ marginTop: 14 }}>
+          Want the steps in order, with the code for the buy button?{" "}
+          <Link className="linkbtn" href="/get-started">Start here</Link>.
+        </p>
 
         <hr className="rule" style={{ margin: "26px 0" }} />
 
