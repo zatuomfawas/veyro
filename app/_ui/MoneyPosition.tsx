@@ -126,21 +126,10 @@ export function MoneyPosition({
         <span style={{ fontSize: "var(--fs-3)", fontWeight: 560 }}>
           Money position &middot; {fold.currency}
         </span>
-        {example
-          ? <span className="badge b-grey">Example data</span>
-          : !fold.balances
-            ? <span className="badge b-clay">Unreconciled</span>
-            : null}
+        {example ? <span className="badge b-grey">Example data</span> : null}
       </div>
 
       <div className="card-b">
-        {!fold.balances && !example && (
-          <p className="small" style={{ marginTop: 0, color: "var(--clay)" }}>
-            These figures do not reconcile against each other. Nothing has been lost, the records
-            are intact, but do not act on the numbers below until it has been looked at.
-          </p>
-        )}
-
         <div>
           <span
             className="num"

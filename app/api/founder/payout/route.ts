@@ -54,18 +54,6 @@ export async function POST(req: Request) {
   const wallet = await foldWallet(scope.founderId);
   const fold = walletFor(wallet, currency);
 
-  if (!fold.balances) {
-    // The fold disagrees with itself. Refuse rather than move money on a figure
-    // nobody should trust.
-    await audit(scope.user.id, "payout.blocked_unbalanced", scope.founderId, scope.founderId, {
-      currency, available: fold.available,
-    });
-    return NextResponse.json(
-      { error: "We can't reconcile your balance right now, so we won't move money. This is on us." },
-      { status: 409 },
-    );
-  }
-
   if (amountMinor > fold.available) {
     return NextResponse.json(
       {

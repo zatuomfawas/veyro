@@ -67,7 +67,7 @@ function WalletSummary({ wallet }: { wallet: Wallet }) {
         <tbody>
           {wallet.currencies.map((c) => (
             <tr key={c.currency}>
-              <td>{c.currency}{!c.balances && <span className="badge b-clay" style={{ marginLeft: 8 }}>Unreconciled</span>}</td>
+              <td>{c.currency}</td>
               <td className="num" style={{ textAlign: "right", fontWeight: 560 }}>{formatMinor(c.available, c.currency)}</td>
               <td className="num" style={{ textAlign: "right" }}>{formatMinor(c.earned, c.currency)}</td>
               <td className="num" style={{ textAlign: "right" }}>{formatMinor(c.paidOut, c.currency)}</td>

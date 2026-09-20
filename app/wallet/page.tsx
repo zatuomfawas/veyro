@@ -32,11 +32,11 @@ export const metadata: Metadata = {
 // they appear. They are NOT a screenshot of anyone's account and not a claim
 // about typical earnings.
 //
-// The arithmetic is real, and is the same arithmetic foldWallet performs:
-//   net       = 150000 - 10000 - 5000        = 135000
+// The arithmetic is real, and is the same arithmetic foldWallet performs. Note
+// that `earned` is gross: it includes the 10000 that was later refunded, which
+// is why refunding it again below is not double-counting.
+//   net       = 150000 - 10000 - 5000          = 135000
 //   available = 150000 - 10000 - 25000 - 42000 = 73000
-// If either line stopped adding up, the component would say so rather than
-// print it, which is the point of showing it here.
 const EXAMPLE: CurrencyFold = {
   currency: "USD",
   earned: 150_000,
@@ -48,7 +48,6 @@ const EXAMPLE: CurrencyFold = {
   reserved: 25_000,
   paidOut: 42_000,
   available: 73_000,
-  balances: true,
 };
 
 export default function WalletPage() {
