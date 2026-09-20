@@ -213,6 +213,13 @@ model GuardianConsent {
   consentedAt DateTime?
   expiresAt   DateTime?
 
+  // Set when the invited adult opens a dead link and asks for a fresh one.
+  // Without this the request has nowhere to live: an expired invite left the
+  // guardian with nothing to do but chase the founder by text, and the founder
+  // with no idea they were waiting. Cleared whenever a new invite is sent,
+  // because the request has then been answered.
+  newLinkRequestedAt DateTime?
+
   @@index([invitedEmail])
 }
 

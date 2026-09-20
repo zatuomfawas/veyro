@@ -44,10 +44,11 @@ function TokenReveal({
   }
 
   return (
-    <Notice tone="pine" head="Invite created. Copy this link now.">
+    <Notice tone="pine" head={`Invite emailed to ${email}`}>
       <p style={{ margin: "0 0 10px" }}>
-        This is the only time it is shown. Veyro stores a hash of the code inside it, not the code
-        itself, so it cannot be looked up again. If you lose it, send a new invite.
+        The same link is below in case the email does not arrive. This is the only time it is
+        shown: Veyro stores a hash of the code, not the code itself, so it cannot be looked up
+        again. If you lose it, send a new invite and the old link stops working.
       </p>
       <div
         className="mono"
@@ -58,18 +59,12 @@ function TokenReveal({
       >
         {link}
       </div>
-      {copied ? (
-        <p style={{ margin: "0 0 10px" }}>
-          Copied. Send it to <strong>{email}</strong> yourself. Veyro does not email it yet. They
-          sign in to their own guardian account to accept, which is what ties the consent to a real
-          adult.
-        </p>
-      ) : (
-        <p style={{ margin: "0 0 10px" }}>
-          Send it to <strong>{email}</strong> yourself. They sign in to their own guardian account
-          to accept, which is what ties the consent to a real adult.
-        </p>
-      )}
+      <p style={{ margin: "0 0 10px" }}>
+        {copied ? "Copied. " : ""}
+        <strong>{email}</strong> signs in to their own guardian account to accept, which is what
+        ties the consent to a real adult. The link works for 14 days; if it expires they can ask
+        you for a new one from the page it opens.
+      </p>
       <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
         <Btn type="button" variant="2" size="sm" onClick={copy}>
           {copied ? "Copied" : "Copy link"}

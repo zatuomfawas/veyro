@@ -136,6 +136,32 @@ export function sendInviteNotification(
   );
 }
 
+/* ---------------- guardian asked for a fresh link ---------------- */
+
+/**
+ * The invited adult opened a dead link and asked for another.
+ *
+ * Sent to the FOUNDER, because they are the only one who can issue a new
+ * invite. Without this the request sits on a dashboard nobody has a reason to
+ * open, and the guardian is left assuming they were ignored.
+ */
+export function sendNewLinkRequest(
+  founderEmail: string, guardianEmail: string, founderId: string,
+) {
+  return send(
+    founderEmail,
+    "Your guardian asked for a new invite link",
+    `${guardianEmail} opened the invitation you sent, but it had already expired.\n\n`
+      + "They have asked for a new one. Invite links last 14 days, and sending a new one "
+      + "replaces the old link.\n\n"
+      + `Send it from your dashboard: ${SITE}/dashboard/founder#guardian\n\n`
+      + "Nothing is wrong with your account. An invite expiring is normal and this is the "
+      + "ordinary way to fix it."
+      + SIGNOFF,
+    { action: "email.new_link_requested_sent", founderId, meta: { guardianEmail } },
+  );
+}
+
 /* ---------------- guardian accepted ---------------- */
 
 export function sendGuardianAcceptedNotification(

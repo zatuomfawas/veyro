@@ -28,6 +28,7 @@ import { Notice } from "@/app/_ui/form";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 
 import ConsentActions from "./ConsentActions";
+import RequestNewLink from "./RequestNewLink";
 import SetUpPayments from "@/app/_ui/SetUpPayments";
 
 export const viewport = buildViewport();
@@ -63,19 +64,86 @@ function Shell({ children }: { children: React.ReactNode }) {
 }
 
 /** Same answer for a missing token, a wrong token, and a token for another founder. */
-function InvalidLink() {
+/**
+ * A link that does not open anything.
+ *
+ * Usually an out-of-date one: sending a new invite replaces the stored hash, so
+ * every earlier link stops working, and an inbox keeps them all. The visitor
+ * did nothing wrong and has no way to tell which of the emails is current.
+ *
+ * When they are signed in as the adult this founder actually invited, that is
+ * enough to know they are the right person holding the wrong link, so they get
+ * the same "ask for a new one" button as an expired invite. Everyone else gets
+ * the generic text, unchanged: the response must not become a way to discover
+ * which founder ids or invitations exist.
+ */
+function InvalidLink({
+  founderName, founderId, alreadyRequested,
+}: {
+  founderName?: string | null;
+  founderId?: string | null;
+  alreadyRequested?: Date | null;
+} = {}) {
+  const canAsk = Boolean(founderName && founderId);
   return (
     <Shell>
-      <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>Invalid link</h1>
+      <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>
+        {canAsk ? "This link is out of date" : "Invalid link"}
+      </h1>
       <p className="body" style={{ marginTop: 8, fontSize: "var(--fs-4)" }}>
-        This invitation link is not valid. It may have been mistyped, already used, or replaced by a
-        newer one. Sending a new invite makes the previous link stop working.
+        {canAsk
+          ? `${founderName} has invited you, but this particular link no longer works. Sending a `
+            + "new invite makes every earlier link stop working, so an older email will do this "
+            + "even though the invitation itself is fine."
+          : "This invitation link is not valid. It may have been mistyped, already used, or "
+            + "replaced by a newer one. Sending a new invite makes the previous link stop working."}
       </p>
-      <p className="body" style={{ marginTop: 12 }}>
-        Ask the founder who invited you to send a fresh link from their dashboard.
-      </p>
+      {canAsk ? (
+        <>
+          <p className="small" style={{ marginTop: 16 }}>
+            Check your inbox for the most recent message from Veyro first, since that link will
+            still open. If you cannot find it, ask for another.
+          </p>
+          <div style={{ marginTop: 24 }}>
+            {alreadyRequested ? (
+              <Notice tone="pine" head="Already asked">
+                {founderName} was told on {fmtDate(alreadyRequested)}. The new invitation will
+                arrive at the address this one was sent to.
+              </Notice>
+            ) : (
+              <RequestNewLink founderId={founderId!} founderName={founderName!} />
+            )}
+          </div>
+        </>
+      ) : (
+        <p className="body" style={{ marginTop: 12 }}>
+          Ask the founder who invited you to send a fresh link from their dashboard.
+        </p>
+      )}
     </Shell>
   );
+}
+
+/**
+ * Whether the person reading a dead link is the adult this founder invited.
+ *
+ * Deliberately keyed on the signed-in session rather than on anything in the
+ * URL: the token is what failed, so it cannot be the thing that authorises.
+ */
+async function staleLinkContext(founderId: string) {
+  const user = await currentUser();
+  if (!user) return {};
+  const live = await db.guardianConsent.findUnique({
+    where: { founderId },
+    include: { founder: { select: { name: true } } },
+  });
+  if (!live || live.consentedAt) return {};
+  if (live.invitedEmail.toLowerCase() !== user.email.toLowerCase()) return {};
+  return {
+    founderName: live.founder.name,
+    founderId,
+    alreadyRequested: live.newLinkRequestedAt,
+  };
 }
 
 export default async function GuardianConsentPage({
@@ -89,7 +157,7 @@ export default async function GuardianConsentPage({
   const token = (Array.isArray(raw) ? raw[0] : raw)?.trim();
 
   // 1. No token at all.
-  if (!token) return <InvalidLink />;
+  if (!token) return <InvalidLink {...(await staleLinkContext(founderId))} />;
 
   const consent = await db.guardianConsent.findUnique({
     where: { tokenHash: hashInviteToken(token) },
@@ -98,8 +166,11 @@ export default async function GuardianConsentPage({
 
   // 2. Token does not match anything, or 3. matches a different founder than
   // the path claims. Both answer identically, so the path cannot be used to
-  // probe which ids exist.
-  if (!consent || consent.founderId !== founderId) return <InvalidLink />;
+  // probe which ids exist. staleLinkContext adds nothing for anyone who is not
+  // already signed in as the invited adult, so that stays true.
+  if (!consent || consent.founderId !== founderId) {
+    return <InvalidLink {...(await staleLinkContext(founderId))} />;
+  }
 
   // Where an auth detour must return to, token and all.
   const here = `/founder/${founderId}/consent?token=${encodeURIComponent(token)}`;
@@ -179,9 +250,24 @@ export default async function GuardianConsentPage({
       <Shell>
         <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>This invitation expired</h1>
         <p className="body" style={{ marginTop: 8, fontSize: "var(--fs-4)" }}>
-          It stopped working on {fmtDate(consent.inviteExpiresAt)} and was never answered. Ask{" "}
-          {founderName} to send a new one from their dashboard.
+          Invitations last 14 days. This one stopped working on{" "}
+          {fmtDate(consent.inviteExpiresAt)} and was never answered. That is normal and nothing
+          has gone wrong; {founderName} just needs to send a new one.
         </p>
+        <p className="small" style={{ marginTop: 16 }}>
+          A new link goes to this same address. Only {founderName} can issue one, which is why
+          this asks them rather than renewing it here.
+        </p>
+        <div style={{ marginTop: 24 }}>
+          {consent.newLinkRequestedAt ? (
+            <Notice tone="pine" head="Already asked">
+              {founderName} was told on {fmtDate(consent.newLinkRequestedAt)}. When they send the
+              new invitation it will arrive at this address. Nothing else is needed from you.
+            </Notice>
+          ) : (
+            <RequestNewLink token={token} founderName={founderName} />
+          )}
+        </div>
       </Shell>
     );
   }

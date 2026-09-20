@@ -391,6 +391,18 @@ export default async function FounderDashboard() {
                       working. Sending a new one replaces it.
                     </Notice>
                   )}
+                  {/* They opened a dead link and asked for another. This is the
+                      one thing blocking the account, and the person waiting has
+                      no way to move it forward themselves. */}
+                  {consent?.newLinkRequestedAt && (
+                    <Notice
+                      tone="amber"
+                      head={`${consent.invitedEmail} asked for a new link`}
+                    >
+                      On {fmtDate(consent.newLinkRequestedAt)}. They opened the invitation after
+                      it had expired. Send a new one below and it goes to the same address.
+                    </Notice>
+                  )}
                   {consent && <ResendInvite email={consent.invitedEmail} founderId={founderId} />}
                 </div>
               )}

@@ -164,7 +164,8 @@ export const GuardianConsentScalarFieldEnum = {
   inviteExpiresAt: 'inviteExpiresAt',
   respondedAt: 'respondedAt',
   consentedAt: 'consentedAt',
-  expiresAt: 'expiresAt'
+  expiresAt: 'expiresAt',
+  newLinkRequestedAt: 'newLinkRequestedAt'
 } as const
 
 export type GuardianConsentScalarFieldEnum = (typeof GuardianConsentScalarFieldEnum)[keyof typeof GuardianConsentScalarFieldEnum]
