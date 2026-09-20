@@ -18,7 +18,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { audit } from "@/lib/auth";
-import { newVerificationToken } from "@/lib/verification";
+import { newVerificationToken, VERIFICATION_TTL_MS } from "@/lib/verification";
 import { sendVerificationEmail } from "@/lib/email";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
 import { readJson, cap } from "../../founder/_scope";
@@ -27,6 +27,9 @@ export const runtime = "nodejs";
 
 const LIMIT = 3;
 const WINDOW_MS = 5 * 60_000;
+
+/** Minimum gap between two verification emails to one address. */
+const RESEND_COOLDOWN_MS = 3 * 60_000;
 
 /** The same answer in every case. Defined once so no branch can drift from it. */
 const SAME_ANSWER = {
@@ -65,6 +68,21 @@ export async function POST(req: Request) {
   if (user.emailVerifiedAt) {
     await audit(user.id, "auth.resend_already_verified", email);
     return NextResponse.json(SAME_ANSWER);
+  }
+
+  // A database-backed cooldown, for the same reason as forgot-password: the
+  // in-memory limiter above is per instance, and this endpoint sends mail to an
+  // address supplied by the caller. Derived from the stored expiry, so every
+  // instance reads the same answer.
+  //
+  // Invisible to an honest user, because the link already sent stays valid for
+  // the rest of its 24 hours.
+  if (user.emailVerificationExpiresAt) {
+    const issuedAt = user.emailVerificationExpiresAt.getTime() - VERIFICATION_TTL_MS;
+    if (Date.now() - issuedAt < RESEND_COOLDOWN_MS) {
+      await audit(user.id, "auth.resend_throttled", email);
+      return NextResponse.json(SAME_ANSWER);
+    }
   }
 
   // A new token replaces the old one, so the previous link stops working.

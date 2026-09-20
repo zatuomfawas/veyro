@@ -12,10 +12,25 @@
 // than nothing, and the limitation is written here rather than discovered
 // later by someone trusting the function name.
 //
-// The endpoint it guards is /api/founder/[founderId]/products/[productId]/
-// checkout-intent, which is unauthenticated by design (a customer pays without
-// an account) and calls Stripe on every request. The cost of abuse is Stripe
-// API quota and noise in the dashboard, not money moving.
+// WHAT IT GUARDS. Four endpoints, all unauthenticated by design:
+//
+//   checkout-intent        a customer pays without an account, and every
+//                          request calls Stripe. Abuse costs API quota and
+//                          dashboard noise, not money moving.
+//   resend-verification    sends mail to an arbitrary address
+//   forgot-password        sends mail to an arbitrary address
+//   reset-password         accepts a token, so it is the one worth grinding
+//
+// The three auth endpoints raise the stakes above what this module can carry
+// alone. A caller spread across instances can still send more mail than the
+// stated limit, which burns sending reputation and lands on someone who never
+// asked for any of it.
+//
+// So the mail-sending endpoints do not rely on this. They also refuse to issue
+// a second token while a recent one is still live, which is enforced in the
+// database and therefore holds no matter which instance answers. This module
+// is the cheap first pass; that check is the one that actually bounds how much
+// mail one address can be sent.
 
 type Bucket = { count: number; resetAt: number };
 

@@ -2,11 +2,15 @@
 
 // Add something to sell.
 //
-// Currency is fixed to USD. The API takes any three-letter code, but
-// formatMinor() divides by 100 unconditionally, so a JPY product would render
-// as "¥5.00" for ¥500 everywhere it appears. Offering a currency picker here
-// would ship that bug into the UI; one currency until the formatter handles
-// zero-decimal currencies properly.
+// Currency is fixed to USD, though no longer for the reason this comment used
+// to give: formatMinor() now takes each currency's exponent from Intl instead
+// of assuming hundredths, so display is correct for JPY and KWD alike.
+//
+// The remaining blocker is input, not output. toMinor() below parses at most
+// two decimal places and multiplies by 100, so it would read "5000" as ¥50.00
+// and store 500000 for a currency that has no minor unit at all. A currency
+// picker needs that parser to take its exponent from the same place the
+// formatter now does.
 //
 // Status offers Draft or Live only, not Archived. Archiving is something you do
 // to an existing product, not a state you create one in.

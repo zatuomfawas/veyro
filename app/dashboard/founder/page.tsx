@@ -32,6 +32,7 @@ import { SIGNUP_COUNTRIES } from "@/app/_ui/countries";
 import { DashNav, Section, EmptyState, SUPPORT_EMAIL, fmtDate } from "@/app/_ui/dash";
 
 import InviteGuardian, { ResendInvite } from "./InviteGuardian";
+import Notifications from "@/app/_ui/Notifications";
 import NewProduct from "./NewProduct";
 import RequestPayout from "./RequestPayout";
 import {
@@ -149,7 +150,8 @@ export default async function FounderDashboard() {
 
   const founderId = user.id;
 
-  const [consent, account, products, transactions, wallet, activity, payouts] = await Promise.all([
+  const [consent, account, products, transactions, wallet, activity, payouts, notifications] =
+    await Promise.all([
     db.guardianConsent.findUnique({
       where: { founderId },
       include: { guardian: { select: { name: true, email: true } } },
@@ -173,10 +175,28 @@ export default async function FounderDashboard() {
       orderBy: { createdAt: "desc" },
       take: 10,
     }),
+    // Unread first, then newest, so the thing you have not seen is never
+    // pushed off the end by older rows you already read.
+    db.notification.findMany({
+      where: { userId: founderId },
+      orderBy: [{ readAt: { sort: "asc", nulls: "first" } }, { createdAt: "desc" }],
+      take: 6,
+    }),
   ]);
 
   const state = consentState(consent);
   const guardianName = consent?.guardian?.name ?? consent?.invitedEmail ?? "Your guardian";
+
+  // Dates cross to the client as ISO strings: a Date would be serialised
+  // anyway, and being explicit keeps the component's props honest about it.
+  const notificationRows = notifications.map((n) => ({
+    id: n.id,
+    title: n.title,
+    body: n.body,
+    routeName: n.routeName,
+    createdAt: n.createdAt.toISOString(),
+    readAt: n.readAt?.toISOString() ?? null,
+  }));
 
   // requirementsDue is a Json column, so it is whatever was last written to it.
   // Narrow it rather than trusting the type.
@@ -283,6 +303,11 @@ export default async function FounderDashboard() {
             </div>
           </div>
         </div>
+
+        {/* Below revenue, above the working sections. An unread "Payment setup
+            needs redoing" is urgent, but not more urgent than the number the
+            founder opened the page to see. */}
+        <Notifications rows={notificationRows} />
 
         <div className="grid-2" style={{ gap: 32, alignItems: "start" }}>
           {/* ================= left: state ================= */}

@@ -25,6 +25,7 @@ import { CSS, CSS2 } from "@/app/_ui/css";
 import { Notice } from "@/app/_ui/form";
 import { Requirements } from "@/app/_ui/Requirements";
 import SetUpPayments from "@/app/_ui/SetUpPayments";
+import Notifications from "@/app/_ui/Notifications";
 import { DashNav, DashHeader, Section, EmptyState, SUPPORT_EMAIL, fmtDate } from "@/app/_ui/dash";
 
 export const viewport = buildViewport();
@@ -93,7 +94,7 @@ export default async function GuardianDashboard() {
   const founderIds = consents.map((c) => c.founderId);
 
   // Batched rather than per founder: one query each, not one each per founder.
-  const [accounts, payouts, products, wallets] = await Promise.all([
+  const [accounts, payouts, products, wallets, notifications] = await Promise.all([
     db.founderPaymentAccount.findMany({ where: { founderId: { in: founderIds } } }),
     db.founderPayoutRequest.findMany({
       where: { founderId: { in: founderIds } },
@@ -105,10 +106,26 @@ export default async function GuardianDashboard() {
       orderBy: { createdAt: "desc" },
     }),
     Promise.all(founderIds.map((id) => foldWallet(id))),
+    // Payout requests and account problems are written here as Notification
+    // rows and, until now, never read back. Unread first, then newest.
+    db.notification.findMany({
+      where: { userId: user.id },
+      orderBy: [{ readAt: { sort: "asc", nulls: "first" } }, { createdAt: "desc" }],
+      take: 6,
+    }),
   ]);
 
   const accountFor = new Map(accounts.map((a) => [a.founderId, a]));
   const walletFor = new Map(founderIds.map((id, i) => [id, wallets[i]]));
+
+  const notificationRows = notifications.map((n) => ({
+    id: n.id,
+    title: n.title,
+    body: n.body,
+    routeName: n.routeName,
+    createdAt: n.createdAt.toISOString(),
+    readAt: n.readAt?.toISOString() ?? null,
+  }));
 
   return (
     <div className="fw">
@@ -132,6 +149,8 @@ export default async function GuardianDashboard() {
                 </span>
           }
         />
+
+        <Notifications rows={notificationRows} />
 
         {consents.length === 0 ? (
           <Section title="Nothing to oversee yet">

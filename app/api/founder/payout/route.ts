@@ -11,6 +11,7 @@ import { audit } from "@/lib/auth";
 import { foldWallet, walletFor } from "@/lib/ledger";
 import { resolveScope, isResponse, readJson, cap } from "../_scope";
 import { sendPayoutNotification } from "@/lib/email";
+import { formatMinor } from "@/lib/money";
 
 export const runtime = "nodejs";
 
@@ -83,7 +84,7 @@ export async function POST(req: Request) {
         userId: consent.guardianId,
         title: `${scope.user.name} requested a payout`,
         body:
-          `${(amountMinor / 100).toFixed(2)} ${currency} has been requested. This is a notice, `
+          `${formatMinor(amountMinor, currency)} has been requested. This is a notice, `
           + "not a request to approve — on this account type payouts run on Stripe's schedule.",
         routeName: "founder.payouts",
         routeId: scope.founderId,

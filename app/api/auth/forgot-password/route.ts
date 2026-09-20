@@ -19,7 +19,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { audit } from "@/lib/auth";
-import { newResetToken } from "@/lib/password-reset";
+import { newResetToken, RESET_TTL_MS } from "@/lib/password-reset";
 import { sendPasswordResetEmail } from "@/lib/email";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
 import { readJson, cap } from "../../founder/_scope";
@@ -28,6 +28,12 @@ export const runtime = "nodejs";
 
 const LIMIT = 3;
 const WINDOW_MS = 5 * 60_000;
+
+/**
+ * Minimum gap between two reset emails to one address, enforced in the
+ * database so it survives however many instances are running.
+ */
+const RESEND_COOLDOWN_MS = 3 * 60_000;
 
 /** The same answer in every case, so no branch can leak by differing. */
 const SAME_ANSWER = {
@@ -68,6 +74,25 @@ export async function POST(req: Request) {
   if (!user.passwordHash) {
     await audit(user.id, "auth.reset_no_password", email);
     return NextResponse.json(SAME_ANSWER);
+  }
+
+  // A cooldown that lives in the database rather than in one instance's memory.
+  //
+  // The in-memory limiter above is per instance, so a caller spread across
+  // several can send more mail than its stated limit. This cannot be dodged
+  // that way: the last issue time is derived from the stored expiry, which
+  // every instance reads from the same row.
+  //
+  // It is invisible to an honest user. The link already sent is still valid for
+  // the rest of its hour, so someone clicking "send it again" because the first
+  // one was slow still has a working link in their inbox — and gets the same
+  // answer either way.
+  if (user.passwordResetExpiresAt) {
+    const issuedAt = user.passwordResetExpiresAt.getTime() - RESET_TTL_MS;
+    if (Date.now() - issuedAt < RESEND_COOLDOWN_MS) {
+      await audit(user.id, "auth.reset_throttled", email);
+      return NextResponse.json(SAME_ANSWER);
+    }
   }
 
   // A new token replaces any outstanding one, so the previous link stops

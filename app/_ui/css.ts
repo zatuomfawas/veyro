@@ -523,6 +523,9 @@ export const CSS = `
      deliberately untouched: WCAG exempts them, and padding one out would break
      the line it sits in. */
   .fw p > .linkbtn:only-child { display:inline-flex; align-items:center; min-height:var(--tap); }
+  /* "See the payment" / "Mark read" on a notification are standalone controls
+     sitting in a row, not links inside a sentence. */
+  .fw .n-actions .linkbtn { display:inline-flex; align-items:center; min-height:var(--tap); }
 }
 @media (max-width: 420px) {
   .fw .d2 { font-size:var(--fs-7); }

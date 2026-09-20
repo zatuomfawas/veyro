@@ -27,6 +27,7 @@ import { db } from "@/lib/db";
 import { audit } from "@/lib/auth";
 import { syncAccountFromStripe } from "@/lib/stripe-account";
 import { sendPaymentNotification } from "@/lib/email";
+import { formatMinor } from "@/lib/money";
 
 export const runtime = "nodejs";
 
@@ -170,7 +171,10 @@ async function recordPayment(event: Stripe.Event): Promise<void> {
       data: {
         userId: founderId,
         title: "You got paid",
-        body: `${(tx.amountMinor / 100).toFixed(2)} ${tx.currency} for ${product.name}.`,
+        // formatMinor rather than a hand-rolled /100, which is the one place a
+        // currency bug reliably gets in: the divisor depends on the currency,
+        // and Stripe reports whatever the customer actually paid in.
+        body: `${formatMinor(tx.amountMinor, tx.currency)} for ${product.name}.`,
         routeName: "founder.transactions",
         routeId: founderId,
       },
