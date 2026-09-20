@@ -11,6 +11,7 @@
 // the platform account instead would work in testing and be wrong in every way
 // that matters.
 import { NextResponse } from "next/server";
+import { randomUUID } from "crypto";
 import type Stripe from "stripe";
 import { stripe, assertStripeConfigured } from "@/lib/stripe";
 import { resolvePurchasable, isPurchasable, REASON_TEXT } from "@/lib/checkout";
@@ -50,6 +51,21 @@ export async function POST(
   const founderId = fid;
   const productId = pid;
 
+  // One checkout attempt's identifier, supplied by the page that is loading.
+  //
+  // Accepted from the client on purpose, because only the client knows that
+  // two requests are the same page load. It is used for nothing but the
+  // idempotency key, and it is regenerated server-side unless it looks like a
+  // UUID, so a caller cannot put arbitrary text into that key or reach another
+  // customer's intent by sending a short guessable value. An older client that
+  // sends nothing simply gets a fresh intent, which is the safe direction.
+  const body = await req.json().catch(() => null);
+  const supplied = typeof body?.attempt === "string" ? body.attempt : "";
+  const attempt =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(supplied)
+      ? supplied
+      : randomUUID();
+
   const resolved = await resolvePurchasable(founderId, productId);
   if (!isPurchasable(resolved)) {
     return NextResponse.json(
@@ -77,10 +93,25 @@ export async function POST(
       },
       {
         stripeAccount: stripeAccountId, // direct charge — money to the founder
-        // A double-clicked buy button reuses the same intent rather than
-        // creating a second one. Scoped to the product's current price so a
-        // price change starts a fresh intent instead of charging the old one.
-        idempotencyKey: `veyro-pi-${productId}-${product.priceMinor}-${product.currency}`,
+        // Scoped to ONE checkout attempt, via a nonce the page generates when
+        // it loads. That is the whole fix for a bug that made this product
+        // sellable once a day.
+        //
+        // The key used to be `veyro-pi-{productId}-{price}-{currency}`, which
+        // contains nothing about who is buying, so every customer of the same
+        // product at the same price sent Stripe the same key. Stripe honours a
+        // key for 24 hours and answers a repeat with the original object, so
+        // the second customer was handed the FIRST customer's PaymentIntent
+        // and client_secret: if that intent had already succeeded they could
+        // not pay at all, and if it had not, the two were pointed at one
+        // charge. Confirmed against Stripe rather than reasoned about — the
+        // same key returns an identical pi_… id and client_secret.
+        //
+        // The comment it carried said it was so a double-clicked buy button
+        // reused the intent instead of creating two. That is worth keeping and
+        // is what the nonce does, because it is stable for one page load and
+        // different for everyone else.
+        idempotencyKey: `veyro-pi-${productId}-${product.priceMinor}-${product.currency}-${attempt}`,
       },
     );
   } catch (err) {

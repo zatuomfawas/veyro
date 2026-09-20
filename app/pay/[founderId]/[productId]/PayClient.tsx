@@ -23,13 +23,25 @@ export default function PayClient({ founderId, productId, amountLabel }: Props) 
   const [intent, setIntent] = useState<Intent | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // One id for this page load, so the server can tell a repeated request from
+  // this browser apart from a different customer opening the same product.
+  // Without it the idempotency key was identical for everyone and Stripe handed
+  // the second buyer the first buyer's PaymentIntent. useMemo rather than
+  // useState so the effect below, which runs twice in development, sees the
+  // same value both times: that repeat is precisely what should be deduplicated.
+  const attempt = useMemo(() => crypto.randomUUID(), []);
+
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
         const res = await fetch(
           `/api/founder/${founderId}/products/${productId}/checkout-intent`,
-          { method: "POST", headers: { "content-type": "application/json" } },
+          {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ attempt }),
+          },
         );
         const body = await res.json();
         if (cancelled) return;
@@ -43,7 +55,7 @@ export default function PayClient({ founderId, productId, amountLabel }: Props) 
       }
     })();
     return () => { cancelled = true; };
-  }, [founderId, productId]);
+  }, [founderId, productId, attempt]);
 
   // Recreated only when the account changes, never on every render.
   const stripePromise = useMemo(() => {
