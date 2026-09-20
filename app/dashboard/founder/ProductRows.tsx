@@ -13,11 +13,11 @@
 // and none of that exists in this design system yet; a row that expands needs
 // none of it and stays put on a phone.
 
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Btn, Field, Notice } from "@/app/_ui/form";
 import { Icon } from "@/app/_ui/marks";
-import { formatMinor } from "@/lib/money";
+import { formatMinor, parseMinor, toMajorInput } from "@/lib/money";
 
 export type ProductRow = {
   id: string;
@@ -33,19 +33,6 @@ export type ProductRow = {
 const BADGE: Record<string, string> = { LIVE: "b-pine", DRAFT: "b-amber", ARCHIVED: "b-grey" };
 const LABEL: Record<string, string> = { LIVE: "Live", DRAFT: "Draft", ARCHIVED: "Archived" };
 
-/** "12.34" from 1234. Only ever used for two-decimal currencies; see below. */
-const toMajor = (minor: number) => (minor / 100).toFixed(2);
-
-/** 1234 from "12.34". Returns null on anything that is not an amount. */
-function toMinor(input: string): number | null {
-  const text = input.trim().replace(/^\$/, "").replace(/,/g, "");
-  const m = /^(\d+)(?:\.(\d{1,2}))?$/.exec(text);
-  if (!m) return null;
-  const whole = Number(m[1]);
-  const cents = Number((m[2] ?? "").padEnd(2, "0") || "0");
-  if (!Number.isSafeInteger(whole)) return null;
-  return whole * 100 + cents;
-}
 
 function Editor({
   product, founderId, onDone, onCancel,
@@ -57,13 +44,19 @@ function Editor({
 }) {
   const [name, setName] = useState(product.name);
   const [description, setDescription] = useState(product.description);
-  const [price, setPrice] = useState(toMajor(product.priceMinor));
+  const [price, setPrice] = useState(toMajorInput(product.priceMinor, product.currency));
   const [status, setStatus] = useState(product.status);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
-  const priceMinor = toMinor(price);
+  // Opening the editor puts the caret in it. Without this the form appears
+  // below a button that still has focus, so a keyboard or screen-reader user
+  // has to go looking for what the button just opened.
+  const firstField = useRef<HTMLInputElement>(null);
+  useEffect(() => { firstField.current?.focus(); }, []);
+
+  const priceMinor = parseMinor(price, product.currency);
   const priceChanged = priceMinor !== null && priceMinor !== product.priceMinor;
   const goingDark = product.status === "LIVE" && status !== "LIVE";
 
@@ -76,6 +69,23 @@ function Editor({
       return;
     }
 
+    // Send only what moved.
+    //
+    // Sending all four every time meant opening the editor and pressing Save
+    // without typing still wrote "product.updated" to the audit log. That log
+    // is the permanent record of what happened to someone's business, and an
+    // entry for a change that did not happen makes it worth less.
+    const changed: Record<string, unknown> = { founderId };
+    if (name !== product.name) changed.name = name;
+    if (description !== product.description) changed.description = description;
+    if (priceMinor !== product.priceMinor) changed.priceMinor = priceMinor;
+    if (status !== product.status) changed.status = status;
+
+    if (Object.keys(changed).length === 1) {
+      onDone(`Nothing to change in “${product.name}”.`);
+      return;
+    }
+
     setSaving(true);
     setErrors({});
     setFormError(null);
@@ -83,7 +93,7 @@ function Editor({
       const res = await fetch(`/api/founder/products/${product.id}`, {
         method: "PATCH",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ founderId, name, description, priceMinor, status }),
+        body: JSON.stringify(changed),
       });
       const body = await res.json().catch(() => null);
       if (!res.ok) {
@@ -108,17 +118,32 @@ function Editor({
       )}
 
       <Field label="Name" error={errors.name}>
-        <input className="input" value={name} maxLength={120}
+        <input ref={firstField} className="input" value={name} maxLength={120}
           onChange={(e) => setName(e.target.value)} />
       </Field>
 
-      <Field label="Description" error={errors.description}
-        hint="What the customer reads on the checkout page before paying.">
+      <Field
+        label="Description"
+        error={errors.description}
+        hint={
+          <>
+            What the customer reads on the checkout page before paying.
+            <span className="charcount" data-near={description.length > 450 ? "1" : undefined}>
+              {description.length}/500
+            </span>
+          </>
+        }
+      >
         <textarea className="input ta" rows={3} value={description} maxLength={500}
           onChange={(e) => setDescription(e.target.value)} />
       </Field>
 
-      <Field label={`Price in ${product.currency}`} error={errors.priceMinor}>
+      <Field
+        label={`Price in ${product.currency}`}
+        error={errors.priceMinor}
+        hint={`Between ${formatMinor(1, product.currency)} and ${formatMinor(99999999, product.currency)}. `
+          + "Card payments have a minimum of about $0.50."}
+      >
         <input className="input" inputMode="decimal" value={price}
           onChange={(e) => setPrice(e.target.value)} />
       </Field>
@@ -174,7 +199,7 @@ export default function ProductRows({
     <>
       {saved && (
         <div style={{ marginBottom: 12 }}>
-          <Notice tone="pine" head="Product updated">{saved}</Notice>
+          <Notice tone="pine" head="Product updated" live>{saved}</Notice>
         </div>
       )}
 
@@ -213,6 +238,7 @@ export default function ProductRows({
                         type="button"
                         className="btn btn-2 btn-sm"
                         aria-expanded={open}
+                        aria-controls={`edit-${p.id}`}
                         onClick={() => { setSaved(null); setEditing(open ? null : p.id); }}
                       >
                         <Icon name="pencil" size={13} />
@@ -222,7 +248,7 @@ export default function ProductRows({
                   </tr>
                   {open && (
                     <tr>
-                      <td colSpan={5} style={{ background: "var(--surface)" }}>
+                      <td colSpan={5} id={`edit-${p.id}`} style={{ background: "var(--surface)" }}>
                         <Editor
                           product={p}
                           founderId={founderId}

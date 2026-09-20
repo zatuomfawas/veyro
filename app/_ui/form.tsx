@@ -84,12 +84,30 @@ const NOTICE_BORDER: Record<Tone, string> = {
   amber: "var(--amber-line)", clay: "var(--clay-line)", pine: "var(--pine-line)", slate: "var(--slate-line)", grey: "var(--line)",
 };
 
-/** Failure and blocked states. Never a code, always: what happened, why, what next. */
+/**
+ * Failure and blocked states. Never a code, always: what happened, why, what next.
+ *
+ * `live` marks a notice that appeared in response to something the person just
+ * did — "Product updated", "Invite sent". Without it a confirmation is a purely
+ * visual event: the text arrives on screen and a screen reader says nothing, so
+ * the one group who cannot see the change is the one not told about it.
+ * role="status" is polite and waits for a pause, which is right for a
+ * confirmation; errors that need interrupting use role="alert" on the field.
+ */
 export function Notice({
-  tone = "amber", head, children, action,
-}: { tone?: Tone; head: React.ReactNode; children: React.ReactNode; action?: React.ReactNode }) {
+  tone = "amber", head, children, action, live,
+}: {
+  tone?: Tone;
+  head: React.ReactNode;
+  children: React.ReactNode;
+  action?: React.ReactNode;
+  live?: boolean;
+}) {
   return (
-    <div style={{ background: NOTICE_BG[tone], border: "1px solid " + NOTICE_BORDER[tone], borderRadius: 0, padding: "14px 16px" }}>
+    <div
+      role={live ? "status" : undefined}
+      style={{ background: NOTICE_BG[tone], border: "1px solid " + NOTICE_BORDER[tone], borderRadius: 0, padding: "14px 16px" }}
+    >
       <div style={{ fontSize: "var(--fs-3)", fontWeight: 560, marginBottom: 4 }}>{head}</div>
       <div className="small" style={{ maxWidth: "var(--m-body)" }}>{children}</div>
       {action && <div style={{ marginTop: 12 }}>{action}</div>}

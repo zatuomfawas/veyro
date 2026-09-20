@@ -2,15 +2,14 @@
 
 // Add something to sell.
 //
-// Currency is fixed to USD, though no longer for the reason this comment used
-// to give: formatMinor() now takes each currency's exponent from Intl instead
-// of assuming hundredths, so display is correct for JPY and KWD alike.
+// Currency is fixed to USD, and the reasons it used to be have now both gone.
+// formatMinor() takes each currency's exponent from Intl rather than assuming
+// hundredths, and parseMinor() does the same on the way in, so ¥5000 reads as
+// 5000 and not as 500000. Offering a currency picker is a product decision
+// now, not something blocked by the arithmetic.
 //
-// The remaining blocker is input, not output. toMinor() below parses at most
-// two decimal places and multiplies by 100, so it would read "5000" as ¥50.00
-// and store 500000 for a currency that has no minor unit at all. A currency
-// picker needs that parser to take its exponent from the same place the
-// formatter now does.
+// What would still need doing: the copy below names dollars in several places,
+// and the API defaults an absent currency to USD.
 //
 // Status offers Draft or Live only, not Archived. Archiving is something you do
 // to an existing product, not a state you create one in.
@@ -28,7 +27,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Btn, Field, Notice } from "@/app/_ui/form";
-import { formatMinor } from "@/lib/money";
+import { formatMinor, parseMinor } from "@/lib/money";
 
 const NAME_MAX = 100;
 const DESC_MAX = 500;
@@ -36,20 +35,9 @@ const DESC_MIN = 10;
 const PRICE_MIN_MINOR = 1;             // $0.01
 const PRICE_MAX_MINOR = 99_999_999;    // $999,999.99
 
-/**
- * "12.50" -> 1250, as an integer, without ever multiplying a float.
- * (12.10 * 100 is 1210.0000000000002 in IEEE 754, and Math.round hides that
- * rather than avoiding it.) Returns null if the text isn't money.
- */
-function toMinor(input: string): number | null {
-  const text = input.trim().replace(/^\$/, "").replace(/,/g, "");
-  const m = /^(\d+)(?:\.(\d{1,2}))?$/.exec(text);
-  if (!m) return null;
-  const whole = Number(m[1]);
-  const cents = Number((m[2] ?? "").padEnd(2, "0") || "0");
-  if (!Number.isSafeInteger(whole)) return null;
-  return whole * 100 + cents;
-}
+/** Products are USD-only here; parseMinor takes the currency so that stays true
+ * when they are not. See lib/money.ts for why it never multiplies a float. */
+const toMinor = (input: string) => parseMinor(input, "USD");
 
 /** The same rules the API applies, for a message shown before submitting. */
 function checkField(field: "name" | "description" | "price", value: string): string | null {

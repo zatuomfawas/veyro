@@ -15,18 +15,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Btn, Field, Notice } from "@/app/_ui/form";
 import { ConfirmModal } from "@/app/_ui/ConfirmModal";
-import { formatMinor } from "@/lib/money";
+import { formatMinor, parseMinor } from "@/lib/money";
 
-/** "12.50" -> 1250, without ever multiplying a float. See NewProduct for why. */
-function toMinor(input: string): number | null {
-  const text = input.trim().replace(/^\$/, "").replace(/,/g, "");
-  const m = /^(\d+)(?:\.(\d{1,2}))?$/.exec(text);
-  if (!m) return null;
-  const whole = Number(m[1]);
-  const cents = Number((m[2] ?? "").padEnd(2, "0") || "0");
-  if (!Number.isSafeInteger(whole)) return null;
-  return whole * 100 + cents;
-}
+
 
 export default function RequestPayout({
   currency, availableMinor, accountActive,
@@ -39,7 +30,7 @@ export default function RequestPayout({
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState<{ amountMinor: number; leftMinor: number } | null>(null);
 
-  const minor = toMinor(amount);
+  const minor = parseMinor(amount, currency);
 
   // Checked here only for a message beside the field. The API folds the wallet
   // again and decides; a number sent from the browser is never trusted.
