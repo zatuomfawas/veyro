@@ -72,8 +72,13 @@ export default function Notifications({ rows }: { rows: NotificationRow[] }) {
   return (
     <div className="card" style={{ marginBottom: "var(--sp-6)" }}>
       <div className="card-h">
+        {/* Not "Recent activity": the founder dashboard already has a section
+            by that name, built from the audit log, and two panels on one page
+            with the same title is a puzzle rather than a layout. That one is a
+            record of what happened; this one is the part that might still need
+            something from you. */}
         <span style={{ fontSize: "var(--fs-3)", fontWeight: 560 }}>
-          Recent activity
+          Updates
           {unread.length > 0 && (
             <span className="badge b-amber" style={{ marginLeft: 8 }}>
               {unread.length} new

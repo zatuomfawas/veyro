@@ -40,8 +40,8 @@ export function overallStatus(state: ConsentState, accountStatus?: string): Over
 /* ---------------- header ---------------- */
 
 export function BusinessHeader({
-  name, country, status,
-}: { name: string; country: string; status: Overall }) {
+  name, country, status, email,
+}: { name: string; country: string; status: Overall; email?: string }) {
   return (
     <div className="page-h" style={{ marginBottom: "var(--sp-6)" }}>
       <div className="row-b" style={{ flexWrap: "wrap", gap: "var(--sp-4)" }}>
@@ -50,7 +50,24 @@ export function BusinessHeader({
               and labelling a person's name "your business" is a small untruth a
               parent reading over their shoulder would notice. */}
           <h1 className="d2" style={{ fontSize: "var(--fs-8)", margin: 0 }}>{name}</h1>
-          <p className="small" style={{ marginTop: 4, marginBottom: 0 }}>{country}</p>
+          {/* Who this account is, next to whose it is. This used to sit at the
+              bottom of the status card, which answers what the account can do
+              — a different question, and not one an email address belongs in. */}
+          <p className="small" style={{ marginTop: 4, marginBottom: 0 }}>
+            {country}
+            {email && (
+              <>
+                {" · "}
+                <span className="mono">{email}</span>
+                {" · "}
+                {/* nowrap so the label does not break to "Account" / "settings"
+                    across two lines on a phone, which is where this line wraps. */}
+                <Link className="linkbtn" href="/dashboard/settings" style={{ whiteSpace: "nowrap" }}>
+                  Account settings
+                </Link>
+              </>
+            )}
+          </p>
         </div>
         <span className={"badge " + BADGE[status].cls}>{BADGE[status].label}</span>
       </div>

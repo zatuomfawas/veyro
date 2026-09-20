@@ -278,13 +278,17 @@ export default async function FounderDashboard() {
           name={user.name}
           country={COUNTRY_NAME.get(user.countryCode) ?? user.countryCode}
           status={computeOverall(state, account?.status)}
+          email={user.email}
         />
 
         {/* ---------------- the two questions ----------------
             "How much have I made" on the left, "what happens next" on the
             right. grid-2 collapses at 760px with revenue first, which is the
             right order on a phone too. */}
-        <div className="grid-2" style={{ gap: "var(--sp-7)", alignItems: "start", marginBottom: "var(--sp-7)" }}>
+        {/* stretch, not start: two cards of different heights side by side read
+            as an accident. Matched frames read as a pair, and the one action in
+            the right-hand card sits on its floor rather than halfway up. */}
+        <div className="grid-2" style={{ gap: "var(--sp-7)", alignItems: "stretch", marginBottom: "var(--sp-7)" }}>
           <RevenueCard
             fold={primaryFold}
             monthMinor={monthMinor}
@@ -293,8 +297,8 @@ export default async function FounderDashboard() {
             firstLiveHref={firstLive ? `/pay/${founderId}/${firstLive.id}` : null}
           />
 
-          <div className="card">
-            <div className="card-b">
+          <div className="card" style={{ display: "flex", flexDirection: "column" }}>
+            <div className="card-b" style={{ display: "flex", flexDirection: "column", flex: 1 }}>
               <div className="reqlist">
                 <GuardianStatus
                   state={state}
@@ -311,14 +315,13 @@ export default async function FounderDashboard() {
                 />
               </div>
 
-              <div style={{ marginTop: "var(--sp-5)" }}>
+              {/* marginTop:auto pushes the action to the bottom of the card, so
+                  it lands in the same place whether the status list above it is
+                  one line or four. */}
+              <div style={{ marginTop: "auto", paddingTop: "var(--sp-5)" }}>
                 <PrimaryAction state={state} accountStatus={account?.status} />
               </div>
 
-              <p className="tiny" style={{ marginTop: "var(--sp-4)", marginBottom: 0 }}>
-                <span className="mono">{user.email}</span> &middot;{" "}
-                <Link className="linkbtn" href="/dashboard/settings">Account settings</Link>
-              </p>
             </div>
           </div>
         </div>

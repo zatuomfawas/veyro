@@ -8,10 +8,17 @@
 // every link already shared keeps working — which is the thing a founder is
 // actually afraid of when they open this.
 //
-// The editor is a second row rather than a modal. A modal needs focus
-// trapping, a scroll lock and an escape route to be usable with a keyboard,
-// and none of that exists in this design system yet; a row that expands needs
-// none of it and stays put on a phone.
+// The editor is a second row rather than a modal, and the reason first written
+// here was wrong: it said no modal primitive existed. ConfirmModal does exist,
+// and it is a real one — focus moves in, Tab is trapped, Escape closes, focus
+// returns to whatever opened it.
+//
+// The actual reason is what each is for. A modal suits a question with one
+// answer, which is why RequestPayout uses it: stop, confirm this, go back.
+// Editing is not that. It is four fields the founder wants to check against
+// the row they are editing, sometimes more than once, and a dialog that covers
+// that row to ask about it is working against them. Inline keeps the thing
+// being edited on screen and does not take the page hostage to do it.
 
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
