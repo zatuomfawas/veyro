@@ -89,15 +89,15 @@ export default async function SettingsPage() {
               <Notice tone="grey" head="Why not">
                 <p style={{ margin: "0 0 8px" }}>
                   Changing an email address is only safe if the new one is proved to belong to you
-                  first. Veyro cannot send mail yet, which is also why guardian invitations are
-                  copied by hand rather than emailed, so there is no way to prove it.
+                  first, and the old one is told it happened. Both of those are now possible, so
+                  this is a feature that has not been built rather than one that cannot be.
                 </p>
                 <p style={{ margin: 0 }}>
-                  An unverified change would be the easiest way to take over an account: point the
-                  address somewhere else, then reset the password. The field is left out rather than shipped
-                  half-working. Email{" "}
-                  <a className="linkbtn" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a> if you
-                  need it changed.
+                  Shipped half-working it would be the easiest way to take over an account: point
+                  the address somewhere else, then reset the password to it. Until it is done
+                  properly, email{" "}
+                  <a className="linkbtn" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a> and a
+                  person will change it for you.
                 </p>
               </Notice>
             </Section>

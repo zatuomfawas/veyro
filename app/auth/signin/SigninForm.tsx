@@ -74,7 +74,15 @@ export default function SigninForm({
                 <Link className="btn btn-2 btn-sm" href="/auth/resend-verification">
                   Send a new link
                 </Link>
-              ) : undefined
+              ) : (
+                // A refused sign-in is most often a forgotten password, and the
+                // person it happens to is the least able to go looking for the
+                // way out. Offered here as well as under the field, because
+                // this is where they are actually looking when it fails.
+                <Link className="btn btn-2 btn-sm" href="/auth/forgot-password">
+                  Reset your password
+                </Link>
+              )
             }
           >
             {formError}
@@ -89,6 +97,10 @@ export default function SigninForm({
 
       <PasswordField label="Password" value={password} autoComplete="current-password"
         onChange={setPassword} />
+
+      <p className="small" style={{ marginTop: -6, marginBottom: 18 }}>
+        <Link className="linkbtn" href="/auth/forgot-password">Forgot your password?</Link>
+      </p>
 
       <Btn className="btn-w" type="submit" disabled={submitting}
         aria-busy={submitting ? "true" : undefined}>

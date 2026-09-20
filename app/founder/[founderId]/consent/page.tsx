@@ -238,9 +238,24 @@ export default async function GuardianConsentPage({
       <Shell>
         <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>You declined this invitation</h1>
         <p className="body" style={{ marginTop: 8, fontSize: "var(--fs-4)" }}>
-          Answered on {fmtDate(consent.respondedAt!)}. {founderName} cannot take payments without a
-          guardian, and they can invite you again if this was a mistake.
+          Answered on {fmtDate(consent.respondedAt!)}. Declining is a real answer and it has been
+          recorded; {founderName} cannot take payments without a guardian.
         </p>
+        <p className="small" style={{ marginTop: 16 }}>
+          If that was a mistake, or you have since talked it over, you can ask for a new
+          invitation. A decline cannot be undone from here: {founderName} has to invite you
+          again, and you would answer afresh.
+        </p>
+        <div style={{ marginTop: 24 }}>
+          {consent.newLinkRequestedAt ? (
+            <Notice tone="pine" head="Already asked">
+              {founderName} was told on {fmtDate(consent.newLinkRequestedAt)}. If they send a new
+              invitation it will arrive at this address.
+            </Notice>
+          ) : (
+            <RequestNewLink token={token} founderName={founderName} />
+          )}
+        </div>
       </Shell>
     );
   }

@@ -47,6 +47,15 @@ model User {
 
   /// One-time tokens still need a clock. 24 hours.
   emailVerificationExpiresAt DateTime?
+  /// SHA-256 of a password-reset token. Same hash-only rule as every other
+  /// token here: a database leak must not hand anyone a working reset link.
+  passwordResetTokenHash String? @unique
+
+  /// Resets expire far faster than verification links. A reset link is a way
+  /// into the account, so an hour is the window; a verification link only
+  /// proves an address and can afford a day.
+  passwordResetExpiresAt DateTime?
+
   passwordHash    String? // argon2id. Null when SSO-only.
   totpSecret      String? // encrypted at rest, never returned by any API
   name            String

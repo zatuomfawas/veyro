@@ -30,6 +30,8 @@ export type UserMinAggregateOutputType = {
   emailVerifiedAt: Date | null
   emailVerificationTokenHash: string | null
   emailVerificationExpiresAt: Date | null
+  passwordResetTokenHash: string | null
+  passwordResetExpiresAt: Date | null
   passwordHash: string | null
   totpSecret: string | null
   name: string | null
@@ -46,6 +48,8 @@ export type UserMaxAggregateOutputType = {
   emailVerifiedAt: Date | null
   emailVerificationTokenHash: string | null
   emailVerificationExpiresAt: Date | null
+  passwordResetTokenHash: string | null
+  passwordResetExpiresAt: Date | null
   passwordHash: string | null
   totpSecret: string | null
   name: string | null
@@ -62,6 +66,8 @@ export type UserCountAggregateOutputType = {
   emailVerifiedAt: number
   emailVerificationTokenHash: number
   emailVerificationExpiresAt: number
+  passwordResetTokenHash: number
+  passwordResetExpiresAt: number
   passwordHash: number
   totpSecret: number
   name: number
@@ -80,6 +86,8 @@ export type UserMinAggregateInputType = {
   emailVerifiedAt?: true
   emailVerificationTokenHash?: true
   emailVerificationExpiresAt?: true
+  passwordResetTokenHash?: true
+  passwordResetExpiresAt?: true
   passwordHash?: true
   totpSecret?: true
   name?: true
@@ -96,6 +104,8 @@ export type UserMaxAggregateInputType = {
   emailVerifiedAt?: true
   emailVerificationTokenHash?: true
   emailVerificationExpiresAt?: true
+  passwordResetTokenHash?: true
+  passwordResetExpiresAt?: true
   passwordHash?: true
   totpSecret?: true
   name?: true
@@ -112,6 +122,8 @@ export type UserCountAggregateInputType = {
   emailVerifiedAt?: true
   emailVerificationTokenHash?: true
   emailVerificationExpiresAt?: true
+  passwordResetTokenHash?: true
+  passwordResetExpiresAt?: true
   passwordHash?: true
   totpSecret?: true
   name?: true
@@ -201,6 +213,8 @@ export type UserGroupByOutputType = {
   emailVerifiedAt: Date | null
   emailVerificationTokenHash: string | null
   emailVerificationExpiresAt: Date | null
+  passwordResetTokenHash: string | null
+  passwordResetExpiresAt: Date | null
   passwordHash: string | null
   totpSecret: string | null
   name: string
@@ -238,6 +252,8 @@ export type UserWhereInput = {
   emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   emailVerificationTokenHash?: Prisma.StringNullableFilter<"User"> | string | null
   emailVerificationExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  passwordResetTokenHash?: Prisma.StringNullableFilter<"User"> | string | null
+  passwordResetExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   passwordHash?: Prisma.StringNullableFilter<"User"> | string | null
   totpSecret?: Prisma.StringNullableFilter<"User"> | string | null
   name?: Prisma.StringFilter<"User"> | string
@@ -263,6 +279,8 @@ export type UserOrderByWithRelationInput = {
   emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   emailVerificationTokenHash?: Prisma.SortOrderInput | Prisma.SortOrder
   emailVerificationExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  passwordResetTokenHash?: Prisma.SortOrderInput | Prisma.SortOrder
+  passwordResetExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordHash?: Prisma.SortOrderInput | Prisma.SortOrder
   totpSecret?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -286,11 +304,13 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   email?: string
   emailVerificationTokenHash?: string
+  passwordResetTokenHash?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   emailVerificationExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  passwordResetExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   passwordHash?: Prisma.StringNullableFilter<"User"> | string | null
   totpSecret?: Prisma.StringNullableFilter<"User"> | string | null
   name?: Prisma.StringFilter<"User"> | string
@@ -308,7 +328,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   paymentAccount?: Prisma.XOR<Prisma.FounderPaymentAccountNullableScalarRelationFilter, Prisma.FounderPaymentAccountWhereInput> | null
   consentsReceived?: Prisma.GuardianConsentListRelationFilter
   consentsGiven?: Prisma.GuardianConsentListRelationFilter
-}, "id" | "email" | "emailVerificationTokenHash">
+}, "id" | "email" | "emailVerificationTokenHash" | "passwordResetTokenHash">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -316,6 +336,8 @@ export type UserOrderByWithAggregationInput = {
   emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   emailVerificationTokenHash?: Prisma.SortOrderInput | Prisma.SortOrder
   emailVerificationExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  passwordResetTokenHash?: Prisma.SortOrderInput | Prisma.SortOrder
+  passwordResetExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordHash?: Prisma.SortOrderInput | Prisma.SortOrder
   totpSecret?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -338,6 +360,8 @@ export type UserScalarWhereWithAggregatesInput = {
   emailVerifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   emailVerificationTokenHash?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   emailVerificationExpiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  passwordResetTokenHash?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  passwordResetExpiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   passwordHash?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   totpSecret?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   name?: Prisma.StringWithAggregatesFilter<"User"> | string
@@ -354,6 +378,8 @@ export type UserCreateInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -379,6 +405,8 @@ export type UserUncheckedCreateInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -404,6 +432,8 @@ export type UserUpdateInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -429,6 +459,8 @@ export type UserUncheckedUpdateInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -454,6 +486,8 @@ export type UserCreateManyInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -470,6 +504,8 @@ export type UserUpdateManyMutationInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -486,6 +522,8 @@ export type UserUncheckedUpdateManyInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -502,6 +540,8 @@ export type UserCountOrderByAggregateInput = {
   emailVerifiedAt?: Prisma.SortOrder
   emailVerificationTokenHash?: Prisma.SortOrder
   emailVerificationExpiresAt?: Prisma.SortOrder
+  passwordResetTokenHash?: Prisma.SortOrder
+  passwordResetExpiresAt?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   totpSecret?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -518,6 +558,8 @@ export type UserMaxOrderByAggregateInput = {
   emailVerifiedAt?: Prisma.SortOrder
   emailVerificationTokenHash?: Prisma.SortOrder
   emailVerificationExpiresAt?: Prisma.SortOrder
+  passwordResetTokenHash?: Prisma.SortOrder
+  passwordResetExpiresAt?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   totpSecret?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -534,6 +576,8 @@ export type UserMinOrderByAggregateInput = {
   emailVerifiedAt?: Prisma.SortOrder
   emailVerificationTokenHash?: Prisma.SortOrder
   emailVerificationExpiresAt?: Prisma.SortOrder
+  passwordResetTokenHash?: Prisma.SortOrder
+  passwordResetExpiresAt?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
   totpSecret?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -710,6 +754,8 @@ export type UserCreateWithoutSessionsInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -734,6 +780,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -774,6 +822,8 @@ export type UserUpdateWithoutSessionsInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -798,6 +848,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -822,6 +874,8 @@ export type UserCreateWithoutProductsInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -846,6 +900,8 @@ export type UserUncheckedCreateWithoutProductsInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -886,6 +942,8 @@ export type UserUpdateWithoutProductsInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -910,6 +968,8 @@ export type UserUncheckedUpdateWithoutProductsInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -934,6 +994,8 @@ export type UserCreateWithoutTransactionsInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -958,6 +1020,8 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -998,6 +1062,8 @@ export type UserUpdateWithoutTransactionsInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1022,6 +1088,8 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1046,6 +1114,8 @@ export type UserCreateWithoutPayoutRequestsInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -1070,6 +1140,8 @@ export type UserUncheckedCreateWithoutPayoutRequestsInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -1110,6 +1182,8 @@ export type UserUpdateWithoutPayoutRequestsInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1134,6 +1208,8 @@ export type UserUncheckedUpdateWithoutPayoutRequestsInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1158,6 +1234,8 @@ export type UserCreateWithoutConsentsReceivedInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -1182,6 +1260,8 @@ export type UserUncheckedCreateWithoutConsentsReceivedInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -1211,6 +1291,8 @@ export type UserCreateWithoutConsentsGivenInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -1235,6 +1317,8 @@ export type UserUncheckedCreateWithoutConsentsGivenInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -1275,6 +1359,8 @@ export type UserUpdateWithoutConsentsReceivedInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1299,6 +1385,8 @@ export type UserUncheckedUpdateWithoutConsentsReceivedInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1334,6 +1422,8 @@ export type UserUpdateWithoutConsentsGivenInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1358,6 +1448,8 @@ export type UserUncheckedUpdateWithoutConsentsGivenInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1382,6 +1474,8 @@ export type UserCreateWithoutPaymentAccountInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -1406,6 +1500,8 @@ export type UserUncheckedCreateWithoutPaymentAccountInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -1446,6 +1542,8 @@ export type UserUpdateWithoutPaymentAccountInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1470,6 +1568,8 @@ export type UserUncheckedUpdateWithoutPaymentAccountInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1494,6 +1594,8 @@ export type UserCreateWithoutNotificationsInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -1518,6 +1620,8 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -1558,6 +1662,8 @@ export type UserUpdateWithoutNotificationsInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1582,6 +1688,8 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1606,6 +1714,8 @@ export type UserCreateWithoutAuditEventsInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -1630,6 +1740,8 @@ export type UserUncheckedCreateWithoutAuditEventsInput = {
   emailVerifiedAt?: Date | string | null
   emailVerificationTokenHash?: string | null
   emailVerificationExpiresAt?: Date | string | null
+  passwordResetTokenHash?: string | null
+  passwordResetExpiresAt?: Date | string | null
   passwordHash?: string | null
   totpSecret?: string | null
   name: string
@@ -1670,6 +1782,8 @@ export type UserUpdateWithoutAuditEventsInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1694,6 +1808,8 @@ export type UserUncheckedUpdateWithoutAuditEventsInput = {
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerificationTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordResetTokenHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordResetExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totpSecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1812,6 +1928,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   emailVerifiedAt?: boolean
   emailVerificationTokenHash?: boolean
   emailVerificationExpiresAt?: boolean
+  passwordResetTokenHash?: boolean
+  passwordResetExpiresAt?: boolean
   passwordHash?: boolean
   totpSecret?: boolean
   name?: boolean
@@ -1838,6 +1956,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   emailVerifiedAt?: boolean
   emailVerificationTokenHash?: boolean
   emailVerificationExpiresAt?: boolean
+  passwordResetTokenHash?: boolean
+  passwordResetExpiresAt?: boolean
   passwordHash?: boolean
   totpSecret?: boolean
   name?: boolean
@@ -1854,6 +1974,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   emailVerifiedAt?: boolean
   emailVerificationTokenHash?: boolean
   emailVerificationExpiresAt?: boolean
+  passwordResetTokenHash?: boolean
+  passwordResetExpiresAt?: boolean
   passwordHash?: boolean
   totpSecret?: boolean
   name?: boolean
@@ -1870,6 +1992,8 @@ export type UserSelectScalar = {
   emailVerifiedAt?: boolean
   emailVerificationTokenHash?: boolean
   emailVerificationExpiresAt?: boolean
+  passwordResetTokenHash?: boolean
+  passwordResetExpiresAt?: boolean
   passwordHash?: boolean
   totpSecret?: boolean
   name?: boolean
@@ -1880,7 +2004,7 @@ export type UserSelectScalar = {
   deletedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerifiedAt" | "emailVerificationTokenHash" | "emailVerificationExpiresAt" | "passwordHash" | "totpSecret" | "name" | "role" | "dateOfBirth" | "countryCode" | "createdAt" | "deletedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerifiedAt" | "emailVerificationTokenHash" | "emailVerificationExpiresAt" | "passwordResetTokenHash" | "passwordResetExpiresAt" | "passwordHash" | "totpSecret" | "name" | "role" | "dateOfBirth" | "countryCode" | "createdAt" | "deletedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
@@ -1928,6 +2052,17 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
      * One-time tokens still need a clock. 24 hours.
      */
     emailVerificationExpiresAt: Date | null
+    /**
+     * SHA-256 of a password-reset token. Same hash-only rule as every other
+     * token here: a database leak must not hand anyone a working reset link.
+     */
+    passwordResetTokenHash: string | null
+    /**
+     * Resets expire far faster than verification links. A reset link is a way
+     * into the account, so an hour is the window; a verification link only
+     * proves an address and can afford a day.
+     */
+    passwordResetExpiresAt: Date | null
     passwordHash: string | null
     totpSecret: string | null
     name: string
@@ -2373,6 +2508,8 @@ export interface UserFieldRefs {
   readonly emailVerifiedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly emailVerificationTokenHash: Prisma.FieldRef<"User", 'String'>
   readonly emailVerificationExpiresAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly passwordResetTokenHash: Prisma.FieldRef<"User", 'String'>
+  readonly passwordResetExpiresAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
   readonly totpSecret: Prisma.FieldRef<"User", 'String'>
   readonly name: Prisma.FieldRef<"User", 'String'>

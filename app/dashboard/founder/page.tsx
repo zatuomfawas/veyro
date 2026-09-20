@@ -399,8 +399,9 @@ export default async function FounderDashboard() {
                       tone="amber"
                       head={`${consent.invitedEmail} asked for a new link`}
                     >
-                      On {fmtDate(consent.newLinkRequestedAt)}. They opened the invitation after
-                      it had expired. Send a new one below and it goes to the same address.
+                      On {fmtDate(consent.newLinkRequestedAt)}. The invitation they have does not
+                      work for them{state === "declined" ? ", and they have had second thoughts" : ""}.
+                      Send a new one below and it goes to the same address.
                     </Notice>
                   )}
                   {consent && <ResendInvite email={consent.invitedEmail} founderId={founderId} />}

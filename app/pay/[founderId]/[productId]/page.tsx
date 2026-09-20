@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { resolvePurchasable, isPurchasable, REASON_TEXT, formatMinor } from "@/lib/checkout";
@@ -55,9 +56,18 @@ export default async function PayPage({ params }: Params) {
           <>
             <h1 className="d2" style={{ fontSize: "var(--fs-7)" }}>Not available</h1>
             <p className="body" style={{ marginTop: 12 }}>{REASON_TEXT[resolved]}</p>
+            <p className="body" style={{ marginTop: 16 }}>
+              You have not been charged and nothing has been taken from your card.{" "}
+              {seller?.name
+                ? `Ask ${seller.name} for an up-to-date link; only they can change this.`
+                : "Ask whoever sent you this link for an up-to-date one."}
+            </p>
+            {/* A stranger who followed a link to a page that does not work deserves
+                to know whose site they are on. Without this the page is a dead end
+                that also looks like a scam. */}
             <p className="tiny" style={{ marginTop: 16 }}>
-              You have not been charged, and nothing has been taken from your card. If someone sent
-              you this link, ask them to check it and send a new one.
+              Veyro is the software this seller uses to take payments.{" "}
+              <Link className="linkbtn" href="/">What Veyro is</Link>
             </p>
           </>
         ) : (

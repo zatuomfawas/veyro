@@ -113,6 +113,54 @@ export function sendVerificationEmail(email: string, token: string) {
   );
 }
 
+/* ---------------- password reset ---------------- */
+
+/**
+ * @param token the PLAINTEXT reset token. Stored only as a hash; this is the
+ *   one moment the usable value exists.
+ *
+ * Says plainly what to do if the request was not theirs, because a reset email
+ * nobody asked for is alarming, and the honest answer is reassuring: the link
+ * alone changes nothing until it is used, and ignoring it is enough.
+ */
+export function sendPasswordResetEmail(email: string, token: string) {
+  const link = `${SITE}/auth/reset-password?token=${encodeURIComponent(token)}`;
+  return send(
+    email,
+    "Reset your Veyro password",
+    "Someone asked to reset the password on this account.\n\n"
+      + "Set a new one here:\n\n"
+      + `${link}\n\n`
+      + "The link works for one hour and can be used once. Using it signs out every device "
+      + "that was signed in, which is what you want if someone else had got in.\n\n"
+      + "If this was not you, you can ignore this email. Your password has not changed and "
+      + "nobody can change it without this link."
+      + SIGNOFF,
+    { action: "email.password_reset_sent" },
+  );
+}
+
+/**
+ * Sent after a reset completes, to the address that was reset.
+ *
+ * This is the one that catches an account takeover. If someone else reset the
+ * password, this is the only message the real owner receives, so it goes out
+ * even though the reset already succeeded.
+ */
+export function sendPasswordChangedEmail(email: string) {
+  return send(
+    email,
+    "Your Veyro password was changed",
+    "The password on this account has just been changed, and every device that was "
+      + "signed in has been signed out.\n\n"
+      + "If that was you, there is nothing to do.\n\n"
+      + "If it was not, reply to this email straight away. Whoever changed it had access to "
+      + `this inbox, so securing your email account is the first step: ${REPLY_TO}`
+      + SIGNOFF,
+    { action: "email.password_changed_sent" },
+  );
+}
+
 /* ---------------- guardian invitation ---------------- */
 
 export function sendInviteNotification(
@@ -151,9 +199,10 @@ export function sendNewLinkRequest(
   return send(
     founderEmail,
     "Your guardian asked for a new invite link",
-    `${guardianEmail} opened the invitation you sent, but it had already expired.\n\n`
-      + "They have asked for a new one. Invite links last 14 days, and sending a new one "
-      + "replaces the old link.\n\n"
+    `${guardianEmail} cannot use the invitation you sent, and has asked for a new one.\n\n`
+      + "That usually means the link expired, or a later invite replaced it and they opened an "
+      + "older email. Invite links last 14 days, and sending a new one replaces every earlier "
+      + "link.\n\n"
       + `Send it from your dashboard: ${SITE}/dashboard/founder#guardian\n\n`
       + "Nothing is wrong with your account. An invite expiring is normal and this is the "
       + "ordinary way to fix it."

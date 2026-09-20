@@ -69,9 +69,25 @@ export async function POST(req: Request) {
   const ageAtSignup = dob.ok ? dob.age : null;
 
   if (await db.user.findUnique({ where: { email } })) {
-    // Deliberately vague. Confirming which addresses exist lets someone
-    // enumerate your users.
-    return NextResponse.json({ errors: { email: "That address cannot be used." } }, { status: 409 });
+    // Worth being honest about what this does and does not do. The wording is
+    // vague, but the response still only happens for an address that exists,
+    // so it does distinguish registered addresses from unregistered ones. The
+    // way to actually close that is to accept the signup, create nothing, and
+    // email the existing owner instead — which is a change to how signup
+    // behaves, not a change to this string, and is not made here.
+    //
+    // What this string must not do is strand somebody. The commonest reason to
+    // see it is having an account already and not remembering, and until now it
+    // was a flat refusal with no suggestion of what to do next.
+    return NextResponse.json(
+      {
+        errors: {
+          email: "That address cannot be used. If the account is yours, sign in "
+            + "or reset your password.",
+        },
+      },
+      { status: 409 },
+    );
   }
 
   // The address is unproven until the link in the email is clicked, so the
