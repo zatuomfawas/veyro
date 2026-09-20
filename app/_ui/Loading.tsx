@@ -13,7 +13,7 @@ export function Loading({ what, wide = true }: { what: string; wide?: boolean })
   return (
     <div className="fw">
       <style>{CSS + CSS2}</style>
-      <main className={wide ? "wrap-w" : "wrap-s"} style={{ paddingTop: 56, paddingBottom: 80 }}>
+      <main className={wide ? "wrap-w" : "wrap-s"} style={{ paddingTop: 56, paddingBottom: 56 }}>
         <p className="body" role="status" aria-live="polite" style={{ margin: 0 }}>
           Loading {what}…
         </p>

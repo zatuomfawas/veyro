@@ -90,7 +90,7 @@ export default function HowItWorks() {
       {/* paddingBottom is inline, so it overrides .has-sticky's 86px on mobile.
           It must stay at or above 86 or the sticky CTA will cover the last
           paragraph. The class is kept because it states the intent. */}
-      <main id="main" className="wrap-lp has-sticky" style={{ paddingTop: 40, paddingBottom: 96 }}>
+      <main id="main" className="wrap-lp has-sticky" style={{ paddingTop: 32 }}>
         <span className="lp-eyebrow">Research</span>
         <h1 className="d2" style={{ marginTop: 8, maxWidth: "20ch" }}>
           We asked Stripe whether under-18s can take payments. Here&rsquo;s their answer.
@@ -104,7 +104,7 @@ export default function HowItWorks() {
           Last checked {UPDATED}. Not legal or tax advice.
         </p>
 
-        <hr className="rule" style={{ margin: "32px 0" }} />
+        <hr className="rule" style={{ margin: "24px 0" }} />
 
         {/* ---------------------------------------------------------------- */}
         <div className="truthgrid" style={{ marginBottom: 40, alignItems: "start" }}>

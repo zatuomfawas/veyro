@@ -54,7 +54,7 @@ export default function ForFounders() {
         </div>
       </div>
 
-      <main id="main" className="wrap-lp has-sticky" style={{ paddingTop: 40, paddingBottom: 96 }}>
+      <main id="main" className="wrap-lp has-sticky" style={{ paddingTop: 32 }}>
         <span className="lp-eyebrow">For founders</span>
         <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
           You can build it. Now charge for it.
@@ -64,7 +64,7 @@ export default function ForFounders() {
           what has to exist before a stranger can pay you, and who has to do each piece.
         </p>
 
-        <hr className="rule" style={{ margin: "40px 0" }} />
+        <hr className="rule" style={{ margin: "26px 0" }} />
 
         <div className="truthgrid">
           <div>
@@ -126,7 +126,7 @@ export default function ForFounders() {
           </div>
         </div>
 
-        <hr className="rule" style={{ margin: "40px 0" }} />
+        <hr className="rule" style={{ margin: "26px 0" }} />
 
         <div className="truthgrid">
           <div>
@@ -149,7 +149,7 @@ export default function ForFounders() {
           </div>
         </div>
 
-        <hr className="rule" style={{ margin: "40px 0" }} />
+        <hr className="rule" style={{ margin: "26px 0" }} />
 
         <div className="truthgrid">
           <div>
@@ -174,7 +174,7 @@ export default function ForFounders() {
           </div>
         </div>
 
-        <div className="row" style={{ marginTop: 48, gap: 8, flexWrap: "wrap" }}>
+        <div className="row" style={{ marginTop: 32, gap: 8, flexWrap: "wrap" }}>
           <Link className="btn btn-lg" href="/check">Check my eligibility</Link>
           <Link className="btn btn-2 btn-lg" href="/how-it-works">How the setup works</Link>
         </div>

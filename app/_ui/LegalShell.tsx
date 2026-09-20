@@ -58,7 +58,7 @@ export function LegalShell({
         </div>
       </div>
 
-      <main id="main" className="wrap-lp" style={{ paddingTop: 40, paddingBottom: 72 }}>
+      <main id="main" className="wrap-lp" style={{ paddingTop: 40, paddingBottom: 56 }}>
         <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>{title}</h1>
         <p className="lead" style={{ marginTop: 12 }}>{lead}</p>
         <p className="tiny" style={{ marginTop: 12 }}>Last updated {updated}.</p>

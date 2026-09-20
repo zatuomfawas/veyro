@@ -124,7 +124,7 @@ export default function About() {
         </div>
       </div>
 
-      <main id="main" className="wrap-lp" style={{ paddingTop: 40, paddingBottom: 80 }}>
+      <main id="main" className="wrap-lp" style={{ paddingTop: 40, paddingBottom: 56 }}>
         <span className="lp-eyebrow">About</span>
         <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
           Why Veyro exists.
@@ -176,7 +176,7 @@ export default function About() {
           </div>
         </div>
 
-        <hr className="rule" style={{ margin: "48px 0" }} />
+        <hr className="rule" style={{ margin: "30px 0" }} />
 
         {/* ---------------- commitments ---------------- */}
         <span className="lp-eyebrow">What Veyro commits to</span>
@@ -197,7 +197,7 @@ export default function About() {
           ))}
         </ol>
 
-        <hr className="rule" style={{ margin: "48px 0" }} />
+        <hr className="rule" style={{ margin: "30px 0" }} />
 
         {/* ---------------- what is not done ---------------- */}
         <div className="truthgrid">

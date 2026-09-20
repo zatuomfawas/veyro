@@ -253,7 +253,7 @@ export default async function FounderDashboard() {
       <style>{CSS + CSS2}</style>
       <DashNav role="FOUNDER" current="dashboard" />
 
-      <main id="main" className="wrap-w" style={{ paddingTop: 24, paddingBottom: 80 }}>
+      <main id="main" className="wrap-w" style={{ paddingTop: 24, paddingBottom: 56 }}>
         {/* ---------------- header ---------------- */}
         <BusinessHeader
           name={user.name}

@@ -132,7 +132,7 @@ export default async function GuardianDashboard() {
       <style>{CSS + CSS2}</style>
       <DashNav role="GUARDIAN" current="dashboard" />
 
-      <main id="main" className="wrap-w" style={{ paddingTop: 24, paddingBottom: 80 }}>
+      <main id="main" className="wrap-w" style={{ paddingTop: 24, paddingBottom: 56 }}>
         <DashHeader
           title="Your founders"
           subtitle={

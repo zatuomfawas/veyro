@@ -58,7 +58,7 @@ export default function FaqPage() {
         </div>
       </div>
 
-      <main id="main" className="wrap-lp" style={{ paddingTop: 40, paddingBottom: 80 }}>
+      <main id="main" className="wrap-lp" style={{ paddingTop: 40, paddingBottom: 56 }}>
         <span className="lp-eyebrow">Questions</span>
         <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
           The ones people actually ask.

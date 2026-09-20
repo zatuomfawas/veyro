@@ -69,7 +69,7 @@ export default function Status() {
         </div>
       </div>
 
-      <main id="main" className="wrap-n" style={{ paddingTop: 40, paddingBottom: 80 }}>
+      <main id="main" className="wrap-n" style={{ paddingTop: 40, paddingBottom: 56 }}>
         <span className="lp-eyebrow">Status</span>
         <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>What Veyro runs on.</h1>
 

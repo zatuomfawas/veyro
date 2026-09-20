@@ -5,7 +5,7 @@
 // including Notice's inline borderRadius: 8, which is the prototype's actual
 // current state and not mine to quietly "fix" here.
 
-import React, { useId, useMemo, useState } from "react";
+import React, { useId, useState } from "react";
 
 type BtnVariant = "1" | "2" | "q" | "d";
 type BtnSize = "sm" | "lg";
@@ -24,17 +24,43 @@ export function Btn({
   return <button {...p} className={"btn" + VARIANT_CLASS[variant] + z + (className ? " " + className : "")} />;
 }
 
-let fieldSeq = 0;
 export function Field({
-  label, hint, error, children,
-}: { label: React.ReactNode; hint?: React.ReactNode; error?: React.ReactNode; children: React.ReactNode }) {
-  const id = useMemo(() => "f" + ++fieldSeq, []);
-  const child = React.isValidElement<{ "aria-invalid"?: string; "aria-describedby"?: string }>(children)
-    ? React.cloneElement(children, {
-        "aria-invalid": error ? "true" : undefined,
-        "aria-describedby": error ? id + "-e" : hint ? id + "-h" : undefined,
-      })
-    : children;
+  label, hint, error, children, id: idProp,
+}: {
+  label: React.ReactNode;
+  hint?: React.ReactNode;
+  error?: React.ReactNode;
+  children: React.ReactNode;
+  /**
+   * Supply this when the control is not the direct child — a password input
+   * inside its show/hide wrapper, say. Field then names its hint and error
+   * `${id}-h` and `${id}-e` and leaves the wiring to the caller, instead of
+   * cloning the wrapper and putting aria-describedby on a span, where it
+   * describes nothing.
+   */
+  id?: string;
+}) {
+  // useId, not a module-level counter.
+  //
+  // This used to be `"f" + ++fieldSeq`, which cannot agree between server and
+  // client: the server's counter keeps climbing for the lifetime of the
+  // process, across every request, while the browser's starts again at zero. A
+  // field rendered as f17 on the server hydrated as f1, React logged a
+  // hydration mismatch on every page carrying a form, and — the part that
+  // actually hurt — the input's aria-describedby then pointed at an id that no
+  // longer existed, so the hint and the error message were announced to nobody.
+  //
+  // useId is built for exactly this and is stable across both renders.
+  const auto = useId();
+  const id = idProp ?? auto;
+  const child =
+    idProp === undefined
+      && React.isValidElement<{ "aria-invalid"?: string; "aria-describedby"?: string }>(children)
+      ? React.cloneElement(children, {
+          "aria-invalid": error ? "true" : undefined,
+          "aria-describedby": error ? id + "-e" : hint ? id + "-h" : undefined,
+        })
+      : children;
   return (
     <label className="field">
       <span className="lbl">{label}</span>
@@ -103,8 +129,17 @@ export function PasswordField({
     setCapsLock(e.getModifierState("CapsLock"));
   };
 
+  // Every description this input has, in one attribute. aria-describedby takes
+  // a list, and setting it more than once would mean the last write wins: the
+  // Caps Lock warning used to replace the hint, or Field's clone landed on the
+  // wrapping span and described nothing at all.
+  const describedBy = [
+    error ? id + "-e" : hint ? id + "-h" : null,
+    capsLock ? id + "-caps" : null,
+  ].filter(Boolean).join(" ") || undefined;
+
   return (
-    <Field label={label} hint={hint} error={error}>
+    <Field label={label} hint={hint} error={error} id={id}>
       <span className="pwwrap" style={{ display: "block" }}>
         <input
           id={id}
@@ -118,7 +153,8 @@ export function PasswordField({
           onKeyDown={readCapsLock}
           onKeyUp={readCapsLock}
           style={{ paddingRight: 64 }}
-          aria-describedby={capsLock ? id + "-caps" : undefined}
+          aria-invalid={error ? "true" : undefined}
+          aria-describedby={describedBy}
         />
         <button
           type="button"

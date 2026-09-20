@@ -29,7 +29,7 @@ export default function NotFound() {
         </div>
       </div>
 
-      <main id="main" className="wrap-n" style={{ paddingTop: 72, paddingBottom: 96 }}>
+      <main id="main" className="wrap-n" style={{ paddingTop: 48, paddingBottom: 56 }}>
         <span className="lp-eyebrow">404</span>
         <h1 className="d2" style={{ marginTop: 8, maxWidth: "18ch" }}>
           That page isn&rsquo;t here.

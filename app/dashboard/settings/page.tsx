@@ -1,11 +1,11 @@
 // Account settings.
 //
-// Three things can change here and one deliberately cannot. Email is absent
-// because nothing in this app can send mail — invites are copied by hand for
-// the same reason — and an email change that cannot be verified is account
-// takeover waiting to happen: point the address at one you control, then
-// recover the password. Saying that on the page is better than shipping a field
-// that quietly does the wrong thing.
+// Three things can change here and one deliberately does not. Email is absent
+// because an email change that cannot be verified is account takeover waiting
+// to happen: point the address at one you control, then reset the password to
+// it. Mail does send now, so this is unbuilt rather than impossible, and the
+// page says so. Saying it is better than shipping a field that quietly does
+// the wrong thing.
 
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -52,7 +52,7 @@ export default async function SettingsPage() {
       <style>{CSS + CSS2}</style>
       <DashNav role={user.role as DashRole} current="settings" />
 
-      <main id="main" className="wrap-w" style={{ paddingTop: 24, paddingBottom: 80 }}>
+      <main id="main" className="wrap-w" style={{ paddingTop: 24, paddingBottom: 56 }}>
         <DashHeader
           title="Settings"
           subtitle={

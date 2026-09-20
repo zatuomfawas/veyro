@@ -78,7 +78,7 @@ export default function WalletPage() {
         </div>
       </div>
 
-      <main id="main" className="wrap-lp has-sticky" style={{ paddingTop: 40, paddingBottom: 96 }}>
+      <main id="main" className="wrap-lp has-sticky" style={{ paddingTop: 32 }}>
         <span className="lp-eyebrow">The Founder Wallet</span>
         <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
           See exactly where your money is.
@@ -110,7 +110,7 @@ export default function WalletPage() {
           <MoneyPosition fold={EXAMPLE} example />
         </div>
 
-        <hr className="rule" style={{ margin: "48px 0" }} />
+        <hr className="rule" style={{ margin: "30px 0" }} />
 
         <div className="truthgrid">
           <div>
@@ -135,7 +135,7 @@ export default function WalletPage() {
           </div>
         </div>
 
-        <hr className="rule" style={{ margin: "48px 0" }} />
+        <hr className="rule" style={{ margin: "30px 0" }} />
 
         <div className="truthgrid">
           <div>
@@ -161,7 +161,7 @@ export default function WalletPage() {
           </div>
         </div>
 
-        <div className="card" style={{ marginTop: 48 }}>
+        <div className="card" style={{ marginTop: 32 }}>
           <div className="card-b">
             <h2 className="h4" style={{ marginTop: 0 }}>Where the money actually sits</h2>
             <p className="body">

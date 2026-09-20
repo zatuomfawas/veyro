@@ -71,7 +71,7 @@ export const CSS = `
   --wm-kern:-0.085em;
   /* Landing only. The application keeps the smaller dashboard scale. */
   --lp-1:64px; --lp-2:40px; --lp-3:26px; --lp-lead:19px;
-  --lp-gut:32px; --lp-max:1440px;
+  --lp-gut:32px; --lp-max:1600px;
   /* One gutter, fluid. 16px on a small phone, growing to 48px on a wide
      desktop. Replaces four hand-written padding values that each needed
      their own breakpoint. */
@@ -308,7 +308,7 @@ export const CSS = `
 
 /* landing */
 .fw .lp-nav { height:62px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); }
-.fw .hero { padding-block:72px 68px; }
+.fw .hero { padding-block:52px 44px; }
 .fw .herofacts { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--sp-6); }
 .fw .herofacts .hf-n { display:block; font-size:var(--fs-7); font-weight:var(--fw-bold); letter-spacing:-0.022em; }
 .fw .herofacts .hf-l { display:block; font-size:var(--fs-2); line-height:1.45; color:var(--ink-3); margin-top:5px; }
@@ -337,7 +337,7 @@ export const CSS = `
 .fw .vd { font-size:var(--fs-2); font-weight:var(--fw-med); white-space:nowrap; }
 .fw .vd-ok { color:var(--pine); } .fw .vd-no { color:var(--clay); } .fw .vd-off { color:var(--ink-3); }
 .fw .reqlist { border-top:1px solid var(--ink); }
-.fw .reqrow { display:flex; align-items:center; gap:var(--sp-4); padding:var(--sp-3) 0;
+.fw .reqrow { display:flex; align-items:center; gap:var(--sp-4); padding:var(--sp-2) 0;
   border-bottom:1px solid var(--line); }
 .fw .req-t { display:block; font-size:var(--fs-3); font-weight:var(--fw-med); }
 .fw .req-d { display:block; font-size:var(--fs-2); color:var(--ink-2); margin-top:2px; max-width:var(--m-lead); }
@@ -481,6 +481,12 @@ export const CSS = `
 }
 /* Default off. The 760px query below turns it on, and nothing later overrides it. */
 .fw .stickycta { display:none; }
+/* Tail padding for pages that carry the sticky bar, declared here rather than
+   inline on each page. It used to be an inline paddingBottom, which beat the
+   86px rule below on mobile and so had to stay larger than the bar whether or
+   not that suited the page. With both values in the stylesheet, desktop can be
+   tight and mobile still reserves room for the bar. */
+.fw .has-sticky { padding-bottom:56px; }
 @media (max-width: 760px) {
   .fw .stickycta { display:block; position:fixed; left:0; right:0; bottom:0; z-index:75;
     background:var(--card); border-top:1px solid var(--ink); padding:11px 16px 13px; }
@@ -494,7 +500,7 @@ export const CSS = `
   .fw .page { padding:20px 16px 60px; }
   .fw .topbar { padding:0 16px; }
   .fw .d2 { font-size:var(--fs-7); }
-  .fw .hero { padding-block:44px 36px; }
+  .fw .hero { padding-block:34px 28px; }
   .fw .tbl th, .fw .tbl td { padding:10px 12px; }
   .fw .hide-s { display:none; }
   .fw .grid-4 > * { border-right:0 !important; border-bottom:1px solid var(--line-soft); }
@@ -560,7 +566,13 @@ export const CSS2 = `
 .fw .lp-links button:not(.btn) { background:none; border:0; padding:7px 11px; border-radius:0; font-size:var(--fs-3);
   color:var(--ink-2); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; text-align:center; }
 .fw .lp-links button:not(.btn):hover { background:var(--surface-2); color:var(--ink); }
-.fw section.lp { padding:72px 0; border-top:1px solid var(--line);
+/* Section rhythm.
+   72px top and bottom meant 144px of nothing between every two sections, which
+   measured as the largest empty runs on the site and read as the page having
+   been padded out. 48 is still an unmistakable break — there is a rule line at
+   every boundary doing that work — while putting the next section's first line
+   most of a screen earlier on a long page. */
+.fw section.lp { padding:48px 0; border-top:1px solid var(--line);
   scroll-margin-top:calc(var(--nav-h) + var(--sp-4)); }
 .fw [id]:focus { outline:none; }
 .fw #main { scroll-margin-top:calc(var(--nav-h) + var(--sp-4)); }
@@ -667,14 +679,14 @@ export const CSS2 = `
 .fw .linkrow-t { display:block; font-size:var(--fs-4); font-weight:var(--fw-bold); }
 .fw .linkrow-d { display:block; font-size:var(--fs-3); color:var(--ink-2); margin-top:3px; }
 .fw .numbered { list-style:none; margin:0; padding:0; counter-reset:s; border-top:1px solid var(--ink); }
-.fw .numbered li { counter-increment:s; display:grid; grid-template-columns:2.2rem minmax(0,26ch) minmax(0,1fr); gap:20px; padding:15px 0; border-bottom:1px solid var(--line); align-items:baseline; }
+.fw .numbered li { counter-increment:s; display:grid; grid-template-columns:2.2rem minmax(0,15ch) minmax(0,1fr); gap:18px; padding:12px 0; border-bottom:1px solid var(--line); align-items:baseline; }
 .fw .numbered li::before { content:counter(s,decimal-leading-zero); font-size:var(--fs-2); letter-spacing:0.03em; color:var(--ink-3); }
 .fw .numbered li > span:first-of-type { font-size:var(--fs-4); font-weight:var(--fw-bold); }
 .fw .numbered li > span:last-of-type { font-size:var(--fs-3); color:var(--ink-2); line-height:1.55; }
 @media (max-width:760px) { .fw .numbered li { grid-template-columns:2.2rem minmax(0,1fr); gap:6px 16px; }
   .fw .numbered li > span:last-of-type { grid-column:2; } }
 .fw .ruled { margin:0; border-top:1px solid var(--ink); }
-.fw .ruled > div { display:grid; grid-template-columns:minmax(0,22ch) minmax(0,1fr); gap:28px; padding:16px 0; border-bottom:1px solid var(--line); }
+.fw .ruled > div { display:grid; grid-template-columns:minmax(0,16ch) minmax(0,1fr); gap:24px; padding:13px 0; border-bottom:1px solid var(--line); }
 .fw .ruled dt { font-size:var(--fs-4); font-weight:var(--fw-bold); letter-spacing:-0.006em; }
 .fw .ruled dd { margin:0; font-size:var(--fs-3); line-height:1.6; color:var(--ink-2); }
 @media (max-width:760px) { .fw .ruled > div { grid-template-columns:1fr; gap:5px; } }
@@ -744,6 +756,6 @@ export const CSS2 = `
   .fw .wordmark-hero { font-size:var(--wm-md); font-stretch:114%; }
   .fw .tagline { font-size:var(--fs-6); }
   .fw .lp-links button.hide-s { display:none; }
-  .fw section.lp { padding:42px 0; }
+  .fw section.lp { padding:32px 0; }
 }
 `;

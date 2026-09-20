@@ -36,7 +36,7 @@ export default function Contact() {
         </div>
       </div>
 
-      <main id="main" className="wrap-n" style={{ paddingTop: 40, paddingBottom: 80 }}>
+      <main id="main" className="wrap-n" style={{ paddingTop: 40, paddingBottom: 56 }}>
         <span className="lp-eyebrow">Contact</span>
         <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>Talk to a person.</h1>
         <p className="lead" style={{ marginTop: 16 }}>
