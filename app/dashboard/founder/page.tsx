@@ -20,7 +20,7 @@ import { buildViewport } from "@/lib/seo";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { foldWallet } from "@/lib/ledger";
-import { consentState, type ConsentState } from "@/lib/consent";
+import { consentState } from "@/lib/consent";
 import { describeRequirements } from "@/lib/stripe-account";
 import { formatMinor } from "@/lib/checkout";
 
@@ -29,11 +29,15 @@ import { Notice } from "@/app/_ui/form";
 import { Requirements } from "@/app/_ui/Requirements";
 import { MoneyPosition } from "@/app/_ui/MoneyPosition";
 import { SIGNUP_COUNTRIES } from "@/app/_ui/countries";
-import { DashNav, DashHeader, Section, EmptyState, SUPPORT_EMAIL, fmtDate } from "@/app/_ui/dash";
+import { DashNav, Section, EmptyState, SUPPORT_EMAIL, fmtDate } from "@/app/_ui/dash";
 
 import InviteGuardian, { ResendInvite } from "./InviteGuardian";
 import NewProduct from "./NewProduct";
 import RequestPayout from "./RequestPayout";
+import {
+  BusinessHeader, RevenueCard, GuardianStatus, PaymentStatus, PrimaryAction,
+  overallStatus as computeOverall,
+} from "./Overview";
 
 export const viewport = buildViewport();
 
@@ -45,29 +49,6 @@ export const metadata: Metadata = {
 };
 
 const COUNTRY_NAME = new Map(SIGNUP_COUNTRIES);
-
-/* ---------------- overall status ---------------- */
-
-type Overall = "setup_incomplete" | "awaiting_guardian" | "live" | "restricted";
-
-const OVERALL: Record<Overall, { label: string; badge: string }> = {
-  live: { label: "Live", badge: "b-pine" },
-  restricted: { label: "On hold", badge: "b-clay" },
-  awaiting_guardian: { label: "Waiting on your guardian", badge: "b-amber" },
-  setup_incomplete: { label: "Setup incomplete", badge: "b-slate" },
-};
-
-function overallStatus(state: ConsentState, accountStatus: string | undefined): Overall {
-  if (accountStatus === "ACTIVE") return "live";
-  if (accountStatus === "RESTRICTED" || accountStatus === "DISCONNECTED") return "restricted";
-  // Before an account exists, the next move belongs to the guardian either way:
-  // they consent, then they open it.
-  if (state !== "consented") return "awaiting_guardian";
-  if (!accountStatus || accountStatus === "NOT_STARTED" || accountStatus === "AWAITING_GUARDIAN") {
-    return "awaiting_guardian";
-  }
-  return "setup_incomplete";
-}
 
 /* ---------------- recent activity ---------------- */
 
@@ -196,7 +177,6 @@ export default async function FounderDashboard() {
 
   const state = consentState(consent);
   const guardianName = consent?.guardian?.name ?? consent?.invitedEmail ?? "Your guardian";
-  const overall = overallStatus(state, account?.status);
 
   // requirementsDue is a Json column, so it is whatever was last written to it.
   // Narrow it rather than trusting the type.
@@ -226,6 +206,24 @@ export default async function FounderDashboard() {
 
   // The payout form acts on one currency. The wallet folds per currency, so
   // the one with the most available is the sensible default; USD when empty.
+  // Revenue is shown in one currency at a time. Summing them would need an
+  // exchange rate this app does not have, and an invented total is worse than
+  // two honest ones, so the rest are listed rather than added.
+  const byEarned = [...wallet.currencies].sort((a, b) => b.earned - a.earned);
+  const primaryFold = byEarned[0] ?? null;
+  const otherFolds = byEarned.slice(1);
+
+  // This month, in the primary currency only, computed here so the toggle
+  // switches between two known numbers instead of refetching.
+  const monthStart = new Date();
+  monthStart.setDate(1);
+  monthStart.setHours(0, 0, 0, 0);
+  const monthMinor = transactions
+    .filter((t) => t.status === "COMPLETED"
+      && t.currency === (primaryFold?.currency ?? "USD")
+      && t.createdAt >= monthStart)
+    .reduce((total, t) => total + t.amountMinor, 0);
+
   const richest = [...wallet.currencies].sort((a, b) => b.available - a.available)[0];
   const primaryCurrency = richest?.currency ?? "USD";
   const primaryAvailable = richest?.available ?? 0;
@@ -236,18 +234,55 @@ export default async function FounderDashboard() {
       <DashNav role="FOUNDER" current="dashboard" />
 
       <main id="main" className="wrap-w" style={{ paddingTop: 24, paddingBottom: 80 }}>
-        {/* ---------------- 1. header ---------------- */}
-        <DashHeader
-          title="Your business"
-          subtitle={
-            <>
-              {user.name} &middot; {COUNTRY_NAME.get(user.countryCode) ?? user.countryCode} &middot;{" "}
-              <span className="mono">{user.email}</span> &middot;{" "}
-              <Link className="linkbtn" href="/dashboard/settings">Edit account</Link>
-            </>
-          }
-          badge={<span className={"badge " + OVERALL[overall].badge}>{OVERALL[overall].label}</span>}
+        {/* ---------------- header ---------------- */}
+        <BusinessHeader
+          name={user.name}
+          country={COUNTRY_NAME.get(user.countryCode) ?? user.countryCode}
+          status={computeOverall(state, account?.status)}
         />
+
+        {/* ---------------- the two questions ----------------
+            "How much have I made" on the left, "what happens next" on the
+            right. grid-2 collapses at 760px with revenue first, which is the
+            right order on a phone too. */}
+        <div className="grid-2" style={{ gap: "var(--sp-7)", alignItems: "start", marginBottom: "var(--sp-7)" }}>
+          <RevenueCard
+            fold={primaryFold}
+            monthMinor={monthMinor}
+            otherCurrencies={otherFolds}
+            hasTransactions={transactions.length > 0}
+            firstLiveHref={firstLive ? `/pay/${founderId}/${firstLive.id}` : null}
+          />
+
+          <div className="card">
+            <div className="card-b">
+              <div className="reqlist">
+                <GuardianStatus
+                  state={state}
+                  guardianName={guardianName}
+                  invitedEmail={consent?.invitedEmail}
+                  consentedAt={consent?.consentedAt}
+                  expiresAt={consent?.inviteExpiresAt}
+                />
+                <PaymentStatus
+                  accountStatus={account?.status}
+                  requirements={due}
+                  guardianName={guardianName}
+                  connectedAt={account?.connectedAt}
+                />
+              </div>
+
+              <div style={{ marginTop: "var(--sp-5)" }}>
+                <PrimaryAction state={state} accountStatus={account?.status} />
+              </div>
+
+              <p className="tiny" style={{ marginTop: "var(--sp-4)", marginBottom: 0 }}>
+                <span className="mono">{user.email}</span> &middot;{" "}
+                <Link className="linkbtn" href="/dashboard/settings">Account settings</Link>
+              </p>
+            </div>
+          </div>
+        </div>
 
         <div className="grid-2" style={{ gap: 32, alignItems: "start" }}>
           {/* ================= left: state ================= */}
@@ -311,6 +346,7 @@ export default async function FounderDashboard() {
             </Section>
 
             {/* ---------------- 2. guardian ---------------- */}
+            <div id="guardian" />
             <Section
               title="Your guardian"
               aside={
@@ -461,6 +497,7 @@ export default async function FounderDashboard() {
             </Section>
 
             {/* ---------------- payouts ---------------- */}
+            <div id="payouts" />
             <Section
               title="Payouts"
               aside={
@@ -534,6 +571,7 @@ export default async function FounderDashboard() {
           {/* ================= right: things ================= */}
           <div>
             {/* ---------------- 5. products ---------------- */}
+            <div id="products" />
             <Section title="Products">
               <NewProduct founderId={founderId} />
 
