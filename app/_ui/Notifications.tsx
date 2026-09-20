@@ -108,15 +108,17 @@ export default function Notifications({ rows }: { rows: NotificationRow[] }) {
             return (
               <div className="reqrow" key={n.id}>
                 <div style={{ display: "flex", gap: 10, alignItems: "baseline" }}>
-                  {/* The unread marker is a filled dot; read rows keep the same
-                      indent so the list does not shift as things are read. */}
+                  {/* Square, like the setup markers on the dashboard and like
+                      everything else in a system whose first rule is
+                      --radius:0. Read rows keep the same indent so the list
+                      does not shift as things are read. */}
                   <span
                     aria-hidden="true"
                     style={{
-                      width: 7, height: 7, flex: "0 0 7px", marginTop: 6,
+                      width: "var(--marker)", height: "var(--marker)",
+                      flex: "0 0 var(--marker)", marginTop: 6,
                       background: seen ? "transparent" : "var(--amber)",
                       border: seen ? "1px solid var(--line)" : "none",
-                      borderRadius: "50%",
                     }}
                   />
                   <span style={{ minWidth: 0 }}>

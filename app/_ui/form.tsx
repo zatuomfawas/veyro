@@ -1,9 +1,14 @@
 "use client";
 
-// Form and feedback primitives, verbatim from prototype/veyro.jsx. Shared by
-// the checker and the auth pages so there is one Btn, one Field, one Notice —
-// including Notice's inline borderRadius: 8, which is the prototype's actual
-// current state and not mine to quietly "fix" here.
+// Form and feedback primitives, ported from prototype/veyro.jsx. Shared by the
+// checker and the auth pages so there is one Btn, one Field, one Notice.
+//
+// Notice carried the prototype's inline borderRadius: 8 for a long time, kept
+// because matching the prototype mattered more than internal consistency. It is
+// 0 now: --radius:0 is the first rule of this design system, every other
+// surface obeys it, and a notice is the element a person sees at the worst
+// moment of their session. Being the one rounded box on the page made it read
+// as pasted in from somewhere else.
 
 import React, { useId, useState } from "react";
 
@@ -84,7 +89,7 @@ export function Notice({
   tone = "amber", head, children, action,
 }: { tone?: Tone; head: React.ReactNode; children: React.ReactNode; action?: React.ReactNode }) {
   return (
-    <div style={{ background: NOTICE_BG[tone], border: "1px solid " + NOTICE_BORDER[tone], borderRadius: 8, padding: "14px 16px" }}>
+    <div style={{ background: NOTICE_BG[tone], border: "1px solid " + NOTICE_BORDER[tone], borderRadius: 0, padding: "14px 16px" }}>
       <div style={{ fontSize: "var(--fs-3)", fontWeight: 560, marginBottom: 4 }}>{head}</div>
       <div className="small" style={{ maxWidth: "var(--m-body)" }}>{children}</div>
       {action && <div style={{ marginTop: 12 }}>{action}</div>}

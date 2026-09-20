@@ -34,23 +34,16 @@ export default function RevenueToggle({
         {month ? thisMonth : allTime}
       </span>
 
-      <div className="row" style={{ marginTop: "var(--sp-2)", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+      <div className="row" style={{ marginTop: "var(--sp-3)", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
         <span className="tiny">Earned</span>
-        <span role="group" aria-label="Period" style={{ display: "inline-flex", gap: 4 }}>
-          <button
-            type="button"
-            className={"btn btn-sm " + (month ? "btn-q" : "btn-2")}
-            aria-pressed={!month}
-            onClick={() => setMonth(false)}
-          >
+        {/* One control with two segments, rather than two buttons that happened
+            to be styled differently. Which period is showing is then a property
+            of the control instead of something to infer from the borders. */}
+        <span className="seg" role="group" aria-label="Period">
+          <button type="button" aria-pressed={!month} onClick={() => setMonth(false)}>
             All time
           </button>
-          <button
-            type="button"
-            className={"btn btn-sm " + (month ? "btn-2" : "btn-q")}
-            aria-pressed={month}
-            onClick={() => setMonth(true)}
-          >
+          <button type="button" aria-pressed={month} onClick={() => setMonth(true)}>
             This month
           </button>
         </span>

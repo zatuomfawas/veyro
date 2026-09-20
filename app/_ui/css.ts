@@ -91,15 +91,35 @@ export const CSS = `
   font-variant-numeric: tabular-nums;
   text-rendering: optimizeLegibility;
 }
+/* Selected text was the browser's default blue, the one colour on the page
+   from outside this palette — and it shows up constantly here, because people
+   select amounts, account ids and invite links to copy them. */
+.fw ::selection { background:#cfdcd4; color:var(--ink); }
 .fw button, .fw input, .fw select, .fw textarea { font: inherit; color: inherit; }
 .fw a { color: inherit; text-decoration: none; }
 .fw :focus-visible { outline:2px solid var(--brand); outline-offset:2px; border-radius:0; }
 .fw .page-h { padding-bottom:2px; }
 .fw .page-h .d2 + .small { margin-top:5px; }
 .fw .rail-sec { padding:16px 8px 6px; font-size:var(--fs-1); color:var(--ink-3); }
-/* The only motion in the product is scroll, and it is handled in JS via
-   scrollBehavior(). This rule is the belt-and-braces version for the browser. */
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto !important; } }
+/* Motion.
+   One duration and one curve, used everywhere, so the whole interface changes
+   state at the same speed. 120ms is under the threshold where a transition
+   starts to feel like a delay, which is the point: it should register as the
+   control responding, not as an animation playing.
+   Only colour and border change. Nothing moves, nothing scales, nothing fades
+   in on load — this is an interface for looking at money, and movement it did
+   not ask for reads as instability. */
+.fw { --t: 120ms cubic-bezier(.4,0,.2,1); }
+.fw .btn, .fw .linkbtn, .fw .input, .fw .select, .fw .ta,
+.fw .choice, .fw .tick, .fw .tick::after, .fw a.card, .fw .mobmenu {
+  transition: background-color var(--t), border-color var(--t), color var(--t), box-shadow var(--t);
+}
+/* The only motion in the product otherwise is scroll, handled in JS via
+   scrollBehavior(). This is the belt-and-braces version for the browser. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior:auto !important; }
+  .fw *, .fw *::before, .fw *::after { transition-duration:0ms !important; animation-duration:0ms !important; }
+}
 
 /* type */
 .fw h1,.fw h2,.fw h3,.fw h4 { margin:0; font-weight:var(--fw-bold); letter-spacing:-0.016em; font-family:inherit; }
@@ -175,11 +195,18 @@ export const CSS = `
 .fw .btn-2:active { background:var(--surface-2); border-color:var(--ink-3); }
 .fw .btn-q:active { background:var(--surface-2); }
 .fw .btn-d:active { background:#f0d9d5; }
-.fw .btn:disabled, .fw .btn:disabled:hover { opacity:.38; cursor:not-allowed; background:var(--brand); border-color:var(--brand); }
+/* Disabled is a state, not a faded version of the enabled one.
+   This was opacity .38 over the brand green, which rendered white text on a
+   washed-out green at roughly 2:1 — the label was the least readable thing on
+   the page at the moment someone is trying to work out why they cannot submit.
+   A neutral surface with muted text reads as "not yet" and clears AA. */
+.fw .btn:disabled, .fw .btn:disabled:hover {
+  opacity:1; cursor:not-allowed;
+  background:var(--surface-2); border-color:var(--line); color:var(--ink-3); }
 .fw .btn-2:disabled, .fw .btn-2:disabled:hover { background:var(--card); border-color:var(--line); color:var(--ink-3); }
 
 .fw .nav button:not(.btn)[data-on="1"] { font-weight:var(--fw-med); }
-.fw .btn:disabled { opacity:.4; cursor:not-allowed; }
+/* (the disabled rule lives above; a second one here used to override it) */
 .fw .btn-2 { background:var(--paper); color:var(--ink); border-color:var(--line); }
 .fw .btn-2:hover { background:var(--surface); border-color:#d5d5d1; }
 .fw .btn-q { background:transparent; border-color:transparent; color:var(--ink-2); }
@@ -230,12 +257,44 @@ export const CSS = `
 .fw .charcount[data-over="1"] { color:var(--clay); font-weight:var(--fw-med); }
 .fw .hint { display:block; margin-top:5px; font-size:var(--fs-2); color:var(--ink-3); }
 .fw .err { display:block; margin-top:5px; font-size:var(--fs-2); color:var(--clay); }
+/* Segmented control.
+   Two mutually exclusive views of the same figure, so they belong inside one
+   border rather than sitting as a button next to a word. Built from the same
+   1px edge and brand fill as everything else; the selected segment is filled,
+   the other is quiet, and a single hairline divides them. */
+.fw .seg { display:inline-flex; border:1px solid var(--line); background:var(--card); }
+.fw .seg > button {
+  appearance:none; border:0; background:transparent; cursor:pointer;
+  font-size:var(--fs-2); font-weight:var(--fw-med); color:var(--ink-2);
+  padding:0 var(--sp-3); height:26px; white-space:nowrap;
+  transition: background-color var(--t), color var(--t); }
+.fw .seg > button + button { border-left:1px solid var(--line); }
+.fw .seg > button:hover:not([aria-pressed="true"]) { background:var(--surface); color:var(--ink); }
+.fw .seg > button[aria-pressed="true"] { background:var(--brand); color:var(--reverse); }
+@media (pointer: coarse) { .fw .seg > button { height:var(--tap); } }
+
 .fw .choice { display:flex; gap:10px; align-items:flex-start; padding:12px 13px; border:1px solid var(--line); cursor:pointer; background:var(--card); text-align:left; width:100%; }
 .fw .choice:hover { border-color:var(--ink-3); }
-.fw .choice[data-on="1"] { border-color:var(--ink); background:var(--card); box-shadow:inset 0 0 0 1px var(--ink); }
-.fw .tick { width:15px; height:15px; border-radius:50%; border:1.5px solid var(--line); flex:none; margin-top:3px; position:relative; }
-.fw .choice[data-on="1"] .tick { border-color:var(--ink); }
-.fw .choice[data-on="1"] .tick::after { content:""; position:absolute; inset:3px; border-radius:50%; background:var(--ink); }
+/* Selected borrows the brand, not near-black. The tick inside is brand green,
+   so a black surround made one control answer in two colours, and doubling a
+   near-black border to 2px was the heaviest edge on the page for what is only
+   a checkbox being ticked. */
+.fw .choice[data-on="1"] { border-color:var(--brand); background:var(--card); box-shadow:inset 0 0 0 1px var(--brand); }
+/* A square box with a tick, not a filled circle.
+   Two reasons. A circle is the established shape for "one of several", and this
+   is a single on/off answer, so the shape was promising a choice that is not
+   there. And --radius:0 is the first rule of this system: a 50% radius was the
+   one curve in the whole interface.
+   The mark is a real tick rather than a filled square, which reads as "yes" at
+   15px in a way a dot does not. The dashboard's setup markers already use this
+   square, so the two now agree. */
+.fw .tick { width:15px; height:15px; border-radius:0; border:1.5px solid var(--line);
+  flex:none; margin-top:3px; position:relative; background:var(--card); }
+.fw .choice:hover .tick { border-color:var(--ink-3); }
+.fw .choice[data-on="1"] .tick { border-color:var(--brand); background:var(--brand); }
+.fw .choice[data-on="1"] .tick::after {
+  content:""; position:absolute; left:4px; top:1px; width:4px; height:8px;
+  border:solid var(--reverse); border-width:0 1.5px 1.5px 0; transform:rotate(45deg); }
 
 /* table */
 .fw .tbl { width:100%; border-collapse:collapse; }
@@ -337,6 +396,11 @@ export const CSS = `
 .fw .vd { font-size:var(--fs-2); font-weight:var(--fw-med); white-space:nowrap; }
 .fw .vd-ok { color:var(--pine); } .fw .vd-no { color:var(--clay); } .fw .vd-off { color:var(--ink-3); }
 .fw .reqlist { border-top:1px solid var(--ink); }
+/* One boundary, one line. A .reqlist opening a card drew its own dark rule a
+   padding-gap below the header's rule, so every such card showed two
+   separators for the same edge. The header already closes itself. */
+.fw .card-b > .reqlist:first-child,
+.fw .card-b > .tblwrap:first-child > .tbl { border-top:0; }
 .fw .reqrow { display:flex; align-items:center; gap:var(--sp-4); padding:var(--sp-2) 0;
   border-bottom:1px solid var(--line); }
 .fw .req-t { display:block; font-size:var(--fs-3); font-weight:var(--fw-med); }

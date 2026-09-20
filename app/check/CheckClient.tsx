@@ -6,10 +6,10 @@
  * arithmetic over the two tables below, run entirely in the browser.
  *
  * The design system lives in app/_ui/css.ts and app/_ui/marks.tsx, shared with
- * the other pages. Everything here is copied verbatim from the prototype,
- * unmodified — including the parts that look inconsistent on their own
- * (Notice's inline borderRadius: 8, for one) but are the prototype's actual
- * current state, not mine to fix here.
+ * the other pages. This began as a verbatim copy of the prototype, including
+ * the parts that were inconsistent on their own; those have since been brought
+ * into line with the system rather than preserved as-found. Notice's 8px
+ * corner was the last of them.
  */
 
 import { useState } from "react";
