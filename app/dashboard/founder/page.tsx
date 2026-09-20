@@ -34,6 +34,7 @@ import { DashNav, Section, EmptyState, SUPPORT_EMAIL, fmtDate } from "@/app/_ui/
 import InviteGuardian, { ResendInvite } from "./InviteGuardian";
 import Notifications from "@/app/_ui/Notifications";
 import NewProduct from "./NewProduct";
+import ProductRows from "./ProductRows";
 import RequestPayout from "./RequestPayout";
 import {
   BusinessHeader, RevenueCard, GuardianStatus, PaymentStatus, PrimaryAction,
@@ -109,7 +110,6 @@ function activityLine(row: AuditRow): string | null {
 
 const TX_BADGE: Record<string, string> = { COMPLETED: "b-pine", PENDING: "b-amber", REFUNDED: "b-grey" };
 const TX_LABEL: Record<string, string> = { COMPLETED: "Paid", PENDING: "Settling", REFUNDED: "Refunded" };
-const PRODUCT_BADGE: Record<string, string> = { LIVE: "b-pine", DRAFT: "b-amber", ARCHIVED: "b-grey" };
 const PAYOUT_BADGE: Record<string, string> = {
   REQUESTED: "b-amber", APPROVED: "b-slate", SENT: "b-pine", FAILED: "b-clay",
 };
@@ -150,7 +150,7 @@ export default async function FounderDashboard() {
 
   const founderId = user.id;
 
-  const [consent, account, products, transactions, wallet, activity, payouts, notifications] =
+  const [consent, account, products, transactions, wallet, activity, payouts, notifications, salesByProduct] =
     await Promise.all([
     db.guardianConsent.findUnique({
       where: { founderId },
@@ -182,6 +182,14 @@ export default async function FounderDashboard() {
       orderBy: [{ readAt: { sort: "asc", nulls: "first" } }, { createdAt: "desc" }],
       take: 6,
     }),
+    // How many payments each product has taken, for the warning shown when a
+    // price is edited. One grouped query rather than one per row, and counted
+    // over every transaction rather than the twenty the table below shows.
+    db.founderTransaction.groupBy({
+      by: ["productId"],
+      where: { founderId, status: "COMPLETED" },
+      _count: { _all: true },
+    }),
   ]);
 
   const state = consentState(consent);
@@ -189,6 +197,17 @@ export default async function FounderDashboard() {
 
   // Dates cross to the client as ISO strings: a Date would be serialised
   // anyway, and being explicit keeps the component's props honest about it.
+  const salesFor = new Map(salesByProduct.map((r) => [r.productId, r._count._all]));
+  const productRows = products.map((p) => ({
+    id: p.id,
+    name: p.name,
+    description: p.description,
+    priceMinor: p.priceMinor,
+    currency: p.currency,
+    status: p.status,
+    sales: salesFor.get(p.id) ?? 0,
+  }));
+
   const notificationRows = notifications.map((n) => ({
     id: n.id,
     title: n.title,
@@ -620,45 +639,7 @@ export default async function FounderDashboard() {
                   <p className="body" style={{ margin: 0 }}>Nothing listed yet.</p>
                 </EmptyState>
               ) : (
-                <div className="tblwrap">
-                  <table className="tbl">
-                    <thead>
-                      <tr>
-                        <th scope="col">Product</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Checkout</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {products.map((p) => {
-                        const live = p.status === "LIVE";
-                        return (
-                          <tr key={p.id} style={live ? undefined : { color: "var(--ink-3)" }}>
-                            <td>{p.name}</td>
-                            <td className="num">{formatMinor(p.priceMinor, p.currency)}</td>
-                            <td>
-                              <span className={"badge " + (PRODUCT_BADGE[p.status] ?? "b-grey")}>
-                                {p.status === "LIVE" ? "Live" : p.status === "DRAFT" ? "Draft" : "Archived"}
-                              </span>
-                            </td>
-                            <td>
-                              {live ? (
-                                <Link className="linkbtn" href={`/pay/${founderId}/${p.id}`}>
-                                  Open checkout
-                                </Link>
-                              ) : (
-                                // Checkout refuses anything not LIVE, so a link
-                                // here would only be a dead end.
-                                <span className="tiny">(not published)</span>
-                              )}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
+                <ProductRows founderId={founderId} products={productRows} />
               )}
             </Section>
 

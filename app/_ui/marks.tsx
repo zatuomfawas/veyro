@@ -16,6 +16,10 @@ export const ICONS: Record<string, string> = {
   list: "M5.5 4.2h8M5.5 8h8M5.5 11.8h8M2.5 4.2h.01M2.5 8h.01M2.5 11.8h.01",
   check: "M2.8 8.4 6.2 11.8l7-7.6",
   back: "M9.5 3.5 L5 8 L9.5 12.5",
+  // Drawn on the same 16px grid and the same 1.35 stroke as the rest, so it
+  // sits with them rather than looking imported: nib, shaft, and the rule the
+  // pencil rests on.
+  pencil: "M2.5 13.5h3l7.2-7.2a1.4 1.4 0 0 0 0-2l-1-1a1.4 1.4 0 0 0-2 0L2.5 10.5zM9.3 3.9l2.8 2.8",
 };
 
 export function Icon({ name, size = 15 }: { name: string; size?: number }) {

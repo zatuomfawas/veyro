@@ -7,17 +7,15 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { audit } from "@/lib/auth";
 import { resolveScope, isResponse, readJson, cap } from "../_scope";
+import {
+  validateProductFields, NAME_MAX, DESCRIPTION_MAX, type ProductStatus,
+} from "@/lib/product-rules";
 
 export const runtime = "nodejs";
 
-const STATUSES = ["DRAFT", "LIVE", "ARCHIVED"] as const;
-
-// The same bounds the form shows, enforced where it counts. The browser
-// capped the price at $999,999.99 and the server accepted any non-negative
-// integer, so anyone posting straight to this route could create a product
-// priced in the billions. A client-side limit is a hint, not a control.
-const PRICE_MIN_MINOR = 1;          // $0.01
-const PRICE_MAX_MINOR = 99_999_999; // $999,999.99
+// The bounds live in lib/product-rules.ts, shared with the edit route. The
+// browser capping the price at $999,999.99 is a hint; this is the control, and
+// an edit must not be a way around it.
 
 export async function POST(req: Request) {
   const body = await readJson(req);
@@ -32,25 +30,16 @@ export async function POST(req: Request) {
     );
   }
 
-  const name = cap(body.name, 120);
-  const description = cap(body.description, 500);
+  const name = cap(body.name, NAME_MAX);
+  const description = cap(body.description, DESCRIPTION_MAX);
   const currency = (cap(body.currency, 3) || "USD").toUpperCase();
   const priceMinor = Number(body.priceMinor ?? 0);
   const priceRecurring = body.priceRecurring === true;
-  const status = (cap(body.status, 20).toUpperCase() || "DRAFT") as (typeof STATUSES)[number];
+  const status = (cap(body.status, 20).toUpperCase() || "DRAFT") as ProductStatus;
 
-  const errors: Record<string, string> = {};
-  if (name.length < 2) errors.name = "Give the product a name.";
-  if (description.length < 10) errors.description = "Describe what the customer is paying for.";
-  if (!Number.isInteger(priceMinor)) {
-    errors.priceMinor = "Price must be a whole number of minor units.";
-  } else if (priceMinor < PRICE_MIN_MINOR || priceMinor > PRICE_MAX_MINOR) {
-    // Reported in the {errors: {field}} shape the form maps to its price input,
-    // so the message lands beside the field rather than as a banner.
-    errors.priceMinor = "Price must be between $0.01 and $999,999.99.";
-  }
-  if (!/^[A-Z]{3}$/.test(currency)) errors.currency = "Currency must be a three-letter code.";
-  if (!STATUSES.includes(status)) errors.status = "Choose a valid status.";
+  // Reported in the {errors: {field}} shape the form maps to its inputs, so a
+  // message lands beside the field rather than as a banner.
+  const errors = validateProductFields({ name, description, priceMinor, currency, status });
   if (Object.keys(errors).length) return NextResponse.json({ errors }, { status: 400 });
 
   const product = await db.founderProduct.create({
