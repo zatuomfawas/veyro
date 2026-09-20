@@ -40,7 +40,7 @@ export default function ResendForm() {
   // for real addresses and something else for unknown ones would undo that.
   if (sent) {
     return (
-      <Notice tone="pine" head="Check your email">
+      <Notice tone="pine" head="Check your email" live>
         If that address has an unverified account, a new link is on its way. It lasts 24 hours.
         Look in spam before asking us: a first message from a new sender often lands there.
       </Notice>
@@ -51,7 +51,7 @@ export default function ResendForm() {
     <form onSubmit={onSubmit} noValidate>
       {formError && (
         <div style={{ marginBottom: 12 }}>
-          <Notice tone="clay" head="That didn&rsquo;t work">{formError}</Notice>
+          <Notice tone="clay" head="That didn&rsquo;t work" live>{formError}</Notice>
         </div>
       )}
       <Field label="Your email address" error={errors.email}

@@ -68,7 +68,7 @@ export default function SigninForm({
               flat refusal. */}
           <Notice
             tone={needsVerification ? "amber" : "clay"}
-            head={needsVerification ? "Verify your email first" : "Could not sign you in"}
+            head={needsVerification ? "Verify your email first" : "Could not sign you in"} live
             action={
               needsVerification ? (
                 <Link className="btn btn-2 btn-sm" href="/auth/resend-verification">

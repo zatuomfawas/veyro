@@ -42,10 +42,12 @@ const LABEL: Record<string, string> = { LIVE: "Live", DRAFT: "Draft", ARCHIVED: 
 
 
 function Editor({
-  product, founderId, onDone, onCancel,
+  product, founderId, active, onDone, onCancel,
 }: {
   product: ProductRow;
   founderId: string;
+  /** True once the panel has expanded. Focus waits for it. */
+  active: boolean;
   onDone: (message: string) => void;
   onCancel: () => void;
 }) {
@@ -60,8 +62,12 @@ function Editor({
   // Opening the editor puts the caret in it. Without this the form appears
   // below a button that still has focus, so a keyboard or screen-reader user
   // has to go looking for what the button just opened.
+  //
+  // Waits for `active` rather than firing on mount: the panel mounts collapsed
+  // and expands a frame later, and focusing something inside a zero-height box
+  // makes the browser scroll to find it.
   const firstField = useRef<HTMLInputElement>(null);
-  useEffect(() => { firstField.current?.focus(); }, []);
+  useEffect(() => { if (active) firstField.current?.focus(); }, [active]);
 
   const priceMinor = parseMinor(price, product.currency);
   const priceChanged = priceMinor !== null && priceMinor !== product.priceMinor;
@@ -120,7 +126,7 @@ function Editor({
     <form onSubmit={save} noValidate>
       {formError && (
         <div style={{ marginBottom: 12 }}>
-          <Notice tone="clay" head="That didn&rsquo;t work">{formError}</Notice>
+          <Notice tone="clay" head="That didn&rsquo;t work" live>{formError}</Notice>
         </div>
       )}
 
@@ -167,7 +173,7 @@ function Editor({
           see from here, and both are things they are allowed to do. */}
       {priceChanged && product.sales > 0 && (
         <div style={{ marginTop: 12 }}>
-          <Notice tone="amber" head="This product has sales">
+          <Notice tone="amber" head="This product has sales" live>
             {product.sales === 1 ? "One person has" : `${product.sales} people have`} already paid{" "}
             {formatMinor(product.priceMinor, product.currency)} for this. Changing the price only
             affects people who buy from now on; what they paid stays as it was.
@@ -177,7 +183,7 @@ function Editor({
 
       {goingDark && (
         <div style={{ marginTop: 12 }}>
-          <Notice tone="clay" head="This will turn off your checkout link">
+          <Notice tone="clay" head="This will turn off your checkout link" live>
             The link you have shared stops working while this is not live, and anyone who opens it
             is told the item is not available. The link itself is not lost — setting this back to
             Live makes the same link work again.
@@ -199,8 +205,45 @@ export default function ProductRows({
   founderId, products,
 }: { founderId: string; products: ProductRow[] }) {
   const router = useRouter();
-  const [editing, setEditing] = useState<string | null>(null);
+
+  // Two pieces of state, because a panel that unmounts the instant you close it
+  // cannot animate on the way out. `mounted` is which row's editor is in the
+  // DOM; `open` is whether it is expanded. Opening mounts it closed and expands
+  // on the next frame, so the browser has a start value to transition from;
+  // closing collapses it and unmounts once the transition has run.
+  const [mounted, setMounted] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
   const [saved, setSaved] = useState<string | null>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // The button that opened the panel, so focus can go back to it rather than
+  // being dropped on the body when the panel unmounts.
+  const opener = useRef<HTMLButtonElement | null>(null);
+
+  // Read the duration from the stylesheet rather than repeating it here, so the
+  // unmount can never drift out of step with the transition it is waiting for.
+  const collapseMs = () => {
+    if (typeof window === "undefined") return 170;
+    const raw = getComputedStyle(document.documentElement).getPropertyValue("--t-2").trim();
+    const ms = raw.endsWith("ms") ? parseFloat(raw) : raw.endsWith("s") ? parseFloat(raw) * 1000 : NaN;
+    return Number.isFinite(ms) ? ms : 170;
+  };
+
+  const openEditor = (id: string) => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setSaved(null);
+    setMounted(id);
+    // Next frame: the row exists at 0fr, so this is a change to transition.
+    requestAnimationFrame(() => requestAnimationFrame(() => setOpen(true)));
+  };
+
+  const closeEditor = () => {
+    setOpen(false);
+    opener.current?.focus();
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setMounted(null), collapseMs());
+  };
+
+  useEffect(() => () => { if (closeTimer.current) clearTimeout(closeTimer.current); }, []);
 
   return (
     <>
@@ -224,7 +267,8 @@ export default function ProductRows({
           <tbody>
             {products.map((p) => {
               const live = p.status === "LIVE";
-              const open = editing === p.id;
+              const isOpen = mounted === p.id && open;
+              const isMounted = mounted === p.id;
               return (
                 <Fragment key={p.id}>
                   <tr style={live ? undefined : { color: "var(--ink-3)" }}>
@@ -244,28 +288,44 @@ export default function ProductRows({
                       <button
                         type="button"
                         className="btn btn-2 btn-sm"
-                        aria-expanded={open}
+                        ref={(el) => { if (isMounted) opener.current = el; }}
+                        aria-expanded={isOpen}
                         aria-controls={`edit-${p.id}`}
-                        onClick={() => { setSaved(null); setEditing(open ? null : p.id); }}
+                        onClick={() => (isMounted ? closeEditor() : openEditor(p.id))}
                       >
                         <Icon name="pencil" size={13} />
-                        {open ? "Close" : "Edit"}
+                        {isMounted ? "Close" : "Edit"}
                       </button>
                     </td>
                   </tr>
-                  {open && (
-                    <tr>
-                      <td colSpan={5} id={`edit-${p.id}`} style={{ background: "var(--surface)" }}>
-                        <Editor
-                          product={p}
-                          founderId={founderId}
-                          onCancel={() => setEditing(null)}
-                          onDone={(message) => {
-                            setEditing(null);
-                            setSaved(message);
-                            router.refresh();
-                          }}
-                        />
+                  {isMounted && (
+                    // data-panel keeps the hover highlight off this row: it
+                    // holds a form, not a line of data to point at. The cell
+                    // has no padding of its own so the panel can collapse to
+                    // nothing; the padding lives inside, where it collapses too.
+                    <tr data-panel="1">
+                      <td
+                        colSpan={5}
+                        id={`edit-${p.id}`}
+                        style={{ background: "var(--surface)", padding: 0 }}
+                      >
+                        <div className="expand" data-open={isOpen ? "1" : undefined}>
+                          <div>
+                            <div style={{ padding: "var(--sp-4) var(--sp-3)" }}>
+                              <Editor
+                                product={p}
+                                founderId={founderId}
+                                active={isOpen}
+                                onCancel={closeEditor}
+                                onDone={(message) => {
+                                  closeEditor();
+                                  setSaved(message);
+                                  router.refresh();
+                                }}
+                              />
+                            </div>
+                          </div>
+                        </div>
                       </td>
                     </tr>
                   )}

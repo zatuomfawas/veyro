@@ -105,14 +105,29 @@ export const CSS = `
 .fw .page-h .d2 + .small { margin-top:5px; }
 .fw .rail-sec { padding:16px 8px 6px; font-size:var(--fs-1); color:var(--ink-3); }
 /* Motion.
-   One duration and one curve, used everywhere, so the whole interface changes
-   state at the same speed. 120ms is under the threshold where a transition
-   starts to feel like a delay, which is the point: it should register as the
-   control responding, not as an animation playing.
-   Only colour and border change. Nothing moves, nothing scales, nothing fades
-   in on load — this is an interface for looking at money, and movement it did
-   not ask for reads as instability. */
-.fw { --t: 120ms cubic-bezier(.4,0,.2,1); }
+   One curve and two durations, so everything moves as though one hand drew it.
+   The curve is a standard decelerate: quick to start, easing into place, which
+   is what makes a change read as settling rather than stopping.
+
+   --t-1 is for a control answering you — a hover, a focus ring, a pressed
+   segment. 110ms is under the threshold where a transition starts to feel like
+   a delay, which is the point: it should read as the control responding, not
+   as an animation playing.
+
+   --t-2 is for something arriving or leaving: a panel opening, a message
+   appearing. A larger change needs longer or it snaps, but past about 200ms it
+   starts to feel like waiting.
+
+   Nothing animates on page load, and nothing moves that was not asked to move.
+   This is an interface for looking at money, and motion nobody triggered reads
+   as instability. Motion that answers a click is the opposite: it says the
+   click landed. --t stays as the shorthand the controls already use. */
+.fw {
+  --ease: cubic-bezier(.4, 0, .2, 1);
+  --t-1: 110ms;
+  --t-2: 170ms;
+  --t: var(--t-1) var(--ease);
+}
 .fw .btn, .fw .linkbtn, .fw .input, .fw .select, .fw .ta,
 .fw .choice, .fw .tick, .fw .tick::after, .fw a.card, .fw .mobmenu {
   transition: background-color var(--t), border-color var(--t), color var(--t), box-shadow var(--t);
@@ -260,6 +275,37 @@ export const CSS = `
 .fw .charcount[data-over="1"] { color:var(--clay); font-weight:var(--fw-med); }
 .fw .hint { display:block; margin-top:5px; font-size:var(--fs-2); color:var(--ink-3); }
 .fw .err { display:block; margin-top:5px; font-size:var(--fs-2); color:var(--clay); }
+/* Something arriving because you asked for it.
+   A confirmation, an error, a panel that just opened. It rises 4px and fades,
+   which is about the smallest movement that still reads as "this is new"
+   rather than "this was always here and you missed it". Entrance only: there
+   is no exit, because an element that has already gone is not worth waiting
+   for. The global reduced-motion rule zeroes the duration, so it still
+   appears, instantly. */
+@keyframes veyro-reveal {
+  from { opacity:0; transform:translateY(-4px); }
+  to   { opacity:1; transform:none; }
+}
+.fw .reveal { animation:veyro-reveal var(--t-2) var(--ease) both; }
+
+/* A panel that opens and closes in place, height and all.
+   grid-template-rows 0fr -> 1fr is the one way to transition to an unknown
+   height without measuring it in JavaScript, and it is already how the FAQ
+   accordion works, so this is that pattern and not a second one. */
+.fw .expand { display:grid; grid-template-rows:0fr; opacity:0;
+  transition:grid-template-rows var(--t-2) var(--ease), opacity var(--t-2) var(--ease); }
+.fw .expand[data-open="1"] { grid-template-rows:1fr; opacity:1; }
+.fw .expand > * { overflow:hidden; min-height:0; }
+
+/* Rows answer the cursor. Only where a cursor exists — on a touch screen
+   :hover sticks to whatever was tapped last, which leaves a row looking
+   selected for no reason. The panel row is excluded: it is a container for a
+   form, not a row of data to point at. */
+@media (hover: hover) {
+  .fw .tbl tbody tr:not([data-panel]) { transition:background-color var(--t); }
+  .fw .tbl tbody tr:not([data-panel]):hover { background:var(--surface); }
+}
+
 /* Code.
    .mono is the UI face with tabular figures, which is right for an account id
    inside a sentence and wrong for a block of markup: it has no real monospace
@@ -526,7 +572,7 @@ export const CSS = `
 .fw .stage-body { border:1px solid var(--line); background:var(--card); padding:var(--sp-6);
   min-height:430px; animation:stagein 170ms cubic-bezier(.4,0,.2,1) both; }
 @keyframes stagein { from { opacity:0; } to { opacity:1; } }
-.fw .stagebar button { transition:background 140ms ease, color 140ms ease; }
+.fw .stagebar button { transition:background-color var(--t), color var(--t); }
 @media (prefers-reduced-motion: reduce) {
   .fw .stage-body { animation:none; }
   .fw .stagebar button { transition:none; }
@@ -711,7 +757,7 @@ export const CSS2 = `
 .fw .disc-sign::before, .fw .disc-sign::after { content:""; position:absolute; background:var(--ink-3); }
 .fw .disc-sign::before { left:0; right:0; top:5px; height:1.5px; }
 .fw .disc-sign::after { top:0; bottom:0; left:5px; width:1.5px;
-  transition:transform 180ms cubic-bezier(.4,0,.2,1), opacity 180ms cubic-bezier(.4,0,.2,1); }
+  transition:transform var(--t-2) var(--ease), opacity var(--t-2) var(--ease); }
 .fw .disc[data-open="1"] .disc-sign::after { transform:scaleY(0); opacity:0; }
 .fw details.disc[open] .disc-sign::after { transform:scaleY(0); opacity:0; }
 .fw details.disc[open] .disc-q { color:var(--brand); }
@@ -720,7 +766,7 @@ export const CSS2 = `
 .fw .disc[data-open="1"] .disc-q { color:var(--brand); }
 /* 0fr to 1fr animates to the content's real height with no JS measurement */
 .fw .disc-panel { display:grid; grid-template-rows:0fr;
-  transition:grid-template-rows 180ms cubic-bezier(.4,0,.2,1); }
+  transition:grid-template-rows var(--t-2) var(--ease); }
 .fw .disc[data-open="1"] .disc-panel { grid-template-rows:1fr; }
 .fw .disc-panel > div { overflow:hidden; }
 .fw .disc-a { margin:0; padding:0 0 var(--sp-4); font-size:var(--fs-3); line-height:var(--lh-body);

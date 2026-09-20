@@ -44,7 +44,7 @@ function TokenReveal({
   }
 
   return (
-    <Notice tone="pine" head={`Invite emailed to ${email}`}>
+    <Notice tone="pine" head={`Invite emailed to ${email}`} live>
       <p style={{ margin: "0 0 10px" }}>
         The same link is below in case the email does not arrive. This is the only time it is
         shown: Veyro stores a hash of the code, not the code itself, so it cannot be looked up
@@ -107,7 +107,7 @@ export function ResendInvite({ email, founderId }: { email: string; founderId: s
     <div>
       {error && (
         <div style={{ marginBottom: 12 }}>
-          <Notice tone="clay" head="That didn&rsquo;t work">{error}</Notice>
+          <Notice tone="clay" head="That didn&rsquo;t work" live>{error}</Notice>
         </div>
       )}
       <Btn
@@ -191,7 +191,7 @@ export default function InviteGuardian({ founderId }: { founderId: string }) {
     <form onSubmit={onSubmit} noValidate>
       {formError && (
         <div style={{ marginBottom: 12 }}>
-          <Notice tone="clay" head="That didn&rsquo;t work">{formError}</Notice>
+          <Notice tone="clay" head="That didn&rsquo;t work" live>{formError}</Notice>
         </div>
       )}
 

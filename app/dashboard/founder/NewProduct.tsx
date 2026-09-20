@@ -140,7 +140,7 @@ export default function NewProduct({ founderId }: { founderId: string }) {
       + `/pay/${founderId}/${created.id}`;
 
     return (
-      <Notice tone="pine" head={`“${created.name}” is ready`}>
+      <Notice tone="pine" head={`“${created.name}” is ready`} live>
         <p style={{ margin: "0 0 10px" }}>
           {formatMinor(created.priceMinor, created.currency)}
           {live
@@ -188,7 +188,7 @@ export default function NewProduct({ founderId }: { founderId: string }) {
     <form onSubmit={onSubmit} noValidate>
       {formError && (
         <div style={{ marginBottom: 12 }}>
-          <Notice tone="clay" head="That didn&rsquo;t work">{formError}</Notice>
+          <Notice tone="clay" head="That didn&rsquo;t work" live>{formError}</Notice>
         </div>
       )}
 

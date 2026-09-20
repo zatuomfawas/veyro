@@ -40,7 +40,7 @@ export default function ForgotForm() {
   // addresses and something softer for unknown ones would undo that.
   if (sent) {
     return (
-      <Notice tone="pine" head="Check your email">
+      <Notice tone="pine" head="Check your email" live>
         <p style={{ margin: "0 0 8px" }}>
           If that address has an account, a reset link is on its way. It works for one hour and
           can be used once.
@@ -57,7 +57,7 @@ export default function ForgotForm() {
     <form onSubmit={onSubmit} noValidate>
       {formError && (
         <div style={{ marginBottom: 12 }}>
-          <Notice tone="clay" head="That didn&rsquo;t work">{formError}</Notice>
+          <Notice tone="clay" head="That didn&rsquo;t work" live>{formError}</Notice>
         </div>
       )}
       <Field

@@ -28,7 +28,7 @@ export default function RequestNewLink({
 
   if (state === "sent") {
     return (
-      <Notice tone="pine" head="Asked">
+      <Notice tone="pine" head="Asked" live>
         {founderName} has been told you need a new link, by email and on their dashboard. They
         send it; the new link will arrive at this same address. Nothing else is needed from you.
       </Notice>
@@ -39,7 +39,7 @@ export default function RequestNewLink({
     <div>
       {error && (
         <div style={{ marginBottom: 12 }}>
-          <Notice tone="clay" head="That didn&rsquo;t go through">{error}</Notice>
+          <Notice tone="clay" head="That didn&rsquo;t go through" live>{error}</Notice>
         </div>
       )}
       <Btn

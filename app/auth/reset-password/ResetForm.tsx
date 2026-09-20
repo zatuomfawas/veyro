@@ -53,7 +53,7 @@ export default function ResetForm({ token }: { token: string }) {
 
   if (done) {
     return (
-      <Notice tone="pine" head="Password changed">
+      <Notice tone="pine" head="Password changed" live>
         <p style={{ margin: "0 0 12px" }}>
           Every device that was signed in has been signed out, including this one. Sign in with
           your new password.
@@ -65,7 +65,7 @@ export default function ResetForm({ token }: { token: string }) {
 
   if (expired) {
     return (
-      <Notice tone="amber" head="This link has expired">
+      <Notice tone="amber" head="This link has expired" live>
         <p style={{ margin: "0 0 12px" }}>
           Reset links last one hour and work once. Your password has not changed, and asking for
           another takes a moment.
@@ -79,7 +79,7 @@ export default function ResetForm({ token }: { token: string }) {
     <form onSubmit={onSubmit} noValidate>
       {formError && (
         <div style={{ marginBottom: 12 }}>
-          <Notice tone="clay" head="That didn&rsquo;t work">{formError}</Notice>
+          <Notice tone="clay" head="That didn&rsquo;t work" live>{formError}</Notice>
         </div>
       )}
       <PasswordField

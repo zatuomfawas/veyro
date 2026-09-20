@@ -145,7 +145,7 @@ export default function SignupForm({ next }: { next?: string | null }) {
     <form onSubmit={onSubmit} noValidate>
       {formError && (
         <div style={{ marginBottom: 16 }}>
-          <Notice tone="clay" head="That didn&rsquo;t work">{formError}</Notice>
+          <Notice tone="clay" head="That didn&rsquo;t work" live>{formError}</Notice>
         </div>
       )}
 

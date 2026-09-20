@@ -106,6 +106,11 @@ export function Notice({
   return (
     <div
       role={live ? "status" : undefined}
+      // `live` marks a notice that arrived because of something the reader just
+      // did, which is the same condition that makes a reveal right: it should
+      // read as new. A notice rendered with the page was always there and
+      // animating it in would be motion nobody asked for.
+      className={live ? "reveal" : undefined}
       style={{ background: NOTICE_BG[tone], border: "1px solid " + NOTICE_BORDER[tone], borderRadius: 0, padding: "14px 16px" }}
     >
       <div style={{ fontSize: "var(--fs-3)", fontWeight: 560, marginBottom: 4 }}>{head}</div>
