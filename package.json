@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/migrate.mjs && next build",
+    "build": "next build",
+    "migrate": "node scripts/migrate.mjs",
     "start": "next start",
     "lint": "eslint",
     "postinstall": "prisma generate"
