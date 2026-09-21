@@ -5,6 +5,7 @@ import { defaultLandingFor } from "@/lib/next-path";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink, Icon } from "@/app/_ui/marks";
 import { HeroPreview } from "@/app/_ui/HeroPreview";
+import { CheckoutPreview } from "@/app/_ui/CheckoutPreview";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
@@ -240,6 +241,34 @@ export default async function Home() {
         </section>
 
         {/* ---------------- the wallet ---------------- */}
+        {/* ---------------- what the customer sees ---------------- */}
+        <section className="lp" id="checkout">
+          <div className="wrap-lp">
+            <div className="truthgrid">
+              <div>
+                <span className="lp-eyebrow">Your customer</span>
+                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                  This is the page they pay on.
+                </h2>
+                <p className="body" style={{ marginTop: 16 }}>
+                  You send a link. It opens this. Your name is on it, your product is on it, and
+                  the card form belongs to Stripe — neither you nor Veyro ever sees the number
+                  typed into it.
+                </p>
+                <p className="small" style={{ marginTop: 16 }}>
+                  There is nothing to design and nothing to install. Adding a product gives you the
+                  link, and the link works anywhere you can paste one.
+                </p>
+                <p className="small" style={{ marginTop: 16 }}>
+                  <Link className="linkbtn" href="/get-started">The steps, in order</Link>
+                </p>
+              </div>
+
+              <CheckoutPreview />
+            </div>
+          </div>
+        </section>
+
         <section className="lp" id="wallet">
           <div className="wrap-lp">
             <div className="truthgrid">

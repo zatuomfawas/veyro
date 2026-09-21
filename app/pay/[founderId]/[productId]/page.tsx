@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { resolvePurchasable, isPurchasable, REASON_TEXT, formatMinor } from "@/lib/checkout";
@@ -6,9 +5,15 @@ import { buildViewport } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import PayClient from "./PayClient";
+import {
+  CheckoutHeading, CheckoutSummary, CheckoutAssurance, CheckoutUnavailable,
+} from "@/app/_ui/checkout-parts";
 
 export const viewport = buildViewport();
 
+// The visible parts come from app/_ui/checkout-parts.tsx, shared with the
+// preview on the home page so the two cannot describe this page differently.
+//
 // A stranger with the link is the audience, so nothing here needs a session.
 // Rendered per request: a price or a product's status can change between the
 // founder sharing the link and a customer opening it.
@@ -53,46 +58,17 @@ export default async function PayPage({ params }: Params) {
 
       <main id="main" className="wrap-s" style={{ marginTop: 8, marginBottom: 90 }}>
         {!isPurchasable(resolved) ? (
-          <>
-            <h1 className="d2" style={{ fontSize: "var(--fs-7)" }}>Not available</h1>
-            <p className="body" style={{ marginTop: 12 }}>{REASON_TEXT[resolved]}</p>
-            <p className="body" style={{ marginTop: 16 }}>
-              You have not been charged and nothing has been taken from your card.{" "}
-              {seller?.name
-                ? `Ask ${seller.name} for an up-to-date link; only they can change this.`
-                : "Ask whoever sent you this link for an up-to-date one."}
-            </p>
-            {/* A stranger who followed a link to a page that does not work deserves
-                to know whose site they are on. Without this the page is a dead end
-                that also looks like a scam. */}
-            <p className="tiny" style={{ marginTop: 16 }}>
-              Veyro is the software this seller uses to take payments.{" "}
-              <Link className="linkbtn" href="/">What Veyro is</Link>
-            </p>
-          </>
+          <CheckoutUnavailable reason={REASON_TEXT[resolved]} sellerName={seller?.name} />
         ) : (
           <>
-            <h1 className="d2" style={{ fontSize: "var(--fs-7)" }}>{resolved.product.name}</h1>
-            {seller?.name && (
-              <p className="tiny" style={{ marginTop: 4 }}>
-                Sold by {seller.name}, through Veyro
-              </p>
-            )}
+            <CheckoutHeading name={resolved.product.name} sellerName={seller?.name} />
 
-            <div className="card" style={{ marginTop: 20 }}>
-              <div className="card-b">
-                <p className="small">{resolved.product.description}</p>
-                <div className="row-b" style={{ marginTop: 16, paddingTop: 12, borderTop: "1px solid var(--line)" }}>
-                  <span className="lbl">Total</span>
-                  <span className="num" style={{ fontSize: "var(--fs-6)", fontWeight: 600 }}>
-                    {formatMinor(resolved.product.priceMinor, resolved.product.currency)}
-                    {resolved.product.priceRecurring && (
-                      <span className="tiny" style={{ marginLeft: 4 }}>per month</span>
-                    )}
-                  </span>
-                </div>
-              </div>
-            </div>
+            <CheckoutSummary
+              description={resolved.product.description}
+              priceMinor={resolved.product.priceMinor}
+              currency={resolved.product.currency}
+              recurring={resolved.product.priceRecurring}
+            />
 
             <div style={{ marginTop: 16 }}>
               <PayClient
@@ -102,25 +78,7 @@ export default async function PayPage({ params }: Params) {
               />
             </div>
 
-            <div className="statusblock" style={{ marginTop: 20 }}>
-              <div className="row" style={{ alignItems: "flex-start", gap: 12 }}>
-                <span className="sb-mark sb-mark-pine" />
-                <div>
-                  <div className="sb-head">Where your money and your card details go</div>
-                  <p className="sb-body">
-                    Your card details are entered on Stripe&rsquo;s own form and are never seen by
-                    Veyro or by the seller. The payment goes directly to the seller&rsquo;s Stripe
-                    account. Veyro never holds it and takes no percentage of it.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <p className="tiny" style={{ marginTop: 16, maxWidth: "var(--m-body)" }}>
-              This seller is under 18 and has a parent or guardian named on the payment account, as
-              the provider requires. Questions about a payment? Email{" "}
-              <a className="linkbtn" href="mailto:hello@withveyro.com">hello@withveyro.com</a>.
-            </p>
+            <CheckoutAssurance />
           </>
         )}
       </main>
