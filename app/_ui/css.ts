@@ -72,6 +72,10 @@ export const CSS = `
   /* Landing only. The application keeps the smaller dashboard scale. */
   --lp-1:64px; --lp-2:40px; --lp-3:26px; --lp-lead:19px;
   --lp-gut:32px; --lp-max:1600px;
+  /* Section rhythm and the tail a page leaves under itself, as tokens so a
+     full-bleed closing band can cancel the tail exactly rather than
+     guessing at it. */
+  --lp-pad:48px; --tail:56px;
   /* One gutter, fluid. 16px on a small phone, growing to 48px on a wide
      desktop. Replaces four hand-written padding values that each needed
      their own breakpoint. */
@@ -557,6 +561,15 @@ export const CSS = `
 .fw .lp-dark .lp-note { color:#8b877c; }
 .fw .lp-dark .btn { background:var(--reverse); border-color:var(--reverse); color:var(--ink); }
 .fw .lp-dark .btn:hover { background:#fff; border-color:#fff; }
+/* On paper the secondary button is a lighter fill; on ink that reads as the
+   same button twice, because both end up pale on dark. It becomes an outline
+   here so the hierarchy survives the inversion — one filled, one drawn. */
+.fw .lp-dark .btn-2 { background:transparent; border-color:#6d6a61; color:var(--reverse); }
+.fw .lp-dark .btn-2:hover { background:rgba(244,242,236,.09); border-color:var(--reverse); color:var(--reverse); }
+.fw .lp-dark .btn-2:active { background:rgba(244,242,236,.15); border-color:var(--reverse); }
+.fw .lp-dark .linkbtn { color:#8fc4ac; }
+.fw .lp-dark .linkbtn:hover { color:#a8d4c0; }
+.fw .lp-dark :focus-visible { outline-color:var(--reverse); }
 .fw .dlist li > span:last-child { margin-left:auto; }
 @media (max-width:900px) { .fw .ddemo-ctl { flex-direction:column; } }
 .fw .stagebar { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); border:1px solid var(--line);
@@ -636,11 +649,12 @@ export const CSS = `
    86px rule below on mobile and so had to stay larger than the bar whether or
    not that suited the page. With both values in the stylesheet, desktop can be
    tight and mobile still reserves room for the bar. */
-.fw .has-sticky { padding-bottom:56px; }
+.fw .has-sticky { padding-bottom:var(--tail); }
 @media (max-width: 760px) {
   .fw .stickycta { display:block; position:fixed; left:0; right:0; bottom:0; z-index:75;
     background:var(--card); border-top:1px solid var(--ink); padding:11px 16px 13px; }
-  .fw .has-sticky { padding-bottom:86px; }
+  .fw { --tail:86px; }
+  .fw .has-sticky { padding-bottom:var(--tail); }
   .fw .shell { flex-direction:column; }
   .fw .rail { width:100%; border-right:0; border-bottom:1px solid var(--line); }
   .fw .nav { flex-direction:row; overflow-x:auto; padding:6px 10px; gap:4px; }
@@ -722,7 +736,7 @@ export const CSS2 = `
    been padded out. 48 is still an unmistakable break — there is a rule line at
    every boundary doing that work — while putting the next section's first line
    most of a screen earlier on a long page. */
-.fw section.lp { padding:48px 0; border-top:1px solid var(--line);
+.fw section.lp { padding:var(--lp-pad) 0; border-top:1px solid var(--line);
   scroll-margin-top:calc(var(--nav-h) + var(--sp-4)); }
 .fw [id]:focus { outline:none; }
 .fw #main { scroll-margin-top:calc(var(--nav-h) + var(--sp-4)); }
@@ -866,6 +880,13 @@ export const CSS2 = `
 .fw .hrow-t { display:block; font-size:var(--fs-3); font-weight:var(--fw-med); }
 .fw .hrow-s { display:block; font-size:var(--fs-1); color:var(--ink-3); margin-top:1px; }
 .fw .lp-dark { background:var(--ink); border-top:0; }
+/* When the dark band is the last thing on the page, main's tail padding would
+   show a strip of paper beneath it and make the band look misplaced rather
+   than like the floor of the page. It absorbs that padding instead, so the
+   colour runs to the footer while the space the sticky bar needs is kept. */
+.fw main > section.lp-dark:last-child {
+  margin-bottom:calc(-1 * var(--tail));
+  padding-bottom:calc(var(--lp-pad) + var(--tail)); }
 .fw .lp-dark .d1, .fw .lp-dark .d2, .fw .lp-dark h2, .fw .lp-dark .statement { color:var(--reverse); }
 .fw .lp-dark .body, .fw .lp-dark .small, .fw .lp-dark .lead { color:#b4b0a4; }
 .fw .lp-dark .tiny { color:#8b877c; }
@@ -906,6 +927,7 @@ export const CSS2 = `
   .fw .wordmark-hero { font-size:var(--wm-md); font-stretch:114%; }
   .fw .tagline { font-size:var(--fs-6); }
   .fw .lp-links button.hide-s { display:none; }
-  .fw section.lp { padding:32px 0; }
+  .fw { --lp-pad:32px; }
+  .fw section.lp { padding:var(--lp-pad) 0; }
 }
 `;

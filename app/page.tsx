@@ -376,7 +376,12 @@ export default async function Home() {
         </section>
 
         {/* ---------------- closing ---------------- */}
-        <section className="lp">
+        {/* The one dark band on the page. .lp-dark was fully designed in the
+            stylesheet — ground, headings, body, eyebrow, buttons — and never
+            used by anything, so this is the palette's own black rather than a
+            new colour. It sits on the closing question, where the change of
+            ground is the page saying "this is the part to answer". */}
+        <section className="lp lp-dark">
           <div className="wrap-lp lp-center">
             <h2 className="lp-h2">Find out in twenty seconds.</h2>
             <p className="body" style={{ marginTop: 12, marginLeft: "auto", marginRight: "auto" }}>
