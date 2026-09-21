@@ -2,6 +2,9 @@
 
 # dependencies
 /node_modules
+# Nested too: the rooted pattern above only covers the top level, so a
+# workspace package's dependencies would otherwise be committed.
+**/node_modules
 /.pnp
 .pnp.*
 .yarn/*
@@ -47,3 +50,7 @@ next-env.d.ts
 /cookies.txt
 /guardian_cookies.txt
 *.cookies.txt
+
+# built SDK artefacts — produced by `npm run build` in packages/sdk
+packages/sdk/dist/
+packages/sdk/*.tgz

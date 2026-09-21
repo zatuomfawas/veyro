@@ -362,6 +362,11 @@ export function BuyButton() {
 }`}</pre>
 
           <p className="small" style={{ marginTop: "var(--sp-4)", maxWidth: "var(--m-body)" }}>
+            Building with React and want a button that tells you when the money lands?{" "}
+            <Link className="linkbtn" href="/docs/sdk">Use the SDK instead</Link>.
+          </p>
+
+          <p className="small" style={{ marginTop: "var(--sp-4)", maxWidth: "var(--m-body)" }}>
             <strong>rel=&ldquo;noopener noreferrer&rdquo;</strong> is not decoration. Without it the
             page you open can reach back into yours through <span className="mono">window.opener</span>.
             Any link with <span className="mono">target=&ldquo;_blank&rdquo;</span> should carry it,

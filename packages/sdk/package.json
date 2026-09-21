@@ -1,0 +1,41 @@
+{
+  "name": "@veyro/sdk",
+  "version": "0.1.0",
+  "description": "Take payments in your app with Veyro. One product ID, one button.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": ["dist", "README.md"],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "import": "./dist/react.js",
+      "require": "./dist/react.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "react": { "optional": true }
+  },
+  "devDependencies": {
+    "tsup": "^8.5.0",
+    "typescript": "^5",
+    "@types/react": "^19"
+  },
+  "keywords": ["payments", "stripe", "checkout", "veyro"],
+  "publishConfig": { "access": "public" }
+}

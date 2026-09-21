@@ -15,11 +15,17 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 
-type Props = { founderId: string; productId: string; amountLabel: string };
+type Props = {
+  founderId: string;
+  productId: string;
+  amountLabel: string;
+  /** An intent the SDK already created, so one payment spans click to charge. */
+  intentHint?: string;
+};
 
 type Intent = { clientSecret: string; stripeAccount: string };
 
-export default function PayClient({ founderId, productId, amountLabel }: Props) {
+export default function PayClient({ founderId, productId, amountLabel, intentHint }: Props) {
   const [intent, setIntent] = useState<Intent | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -40,7 +46,7 @@ export default function PayClient({ founderId, productId, amountLabel }: Props) 
           {
             method: "POST",
             headers: { "content-type": "application/json" },
-            body: JSON.stringify({ attempt }),
+            body: JSON.stringify({ attempt, intent: intentHint }),
           },
         );
         const body = await res.json();
@@ -55,7 +61,7 @@ export default function PayClient({ founderId, productId, amountLabel }: Props) 
       }
     })();
     return () => { cancelled = true; };
-  }, [founderId, productId, attempt]);
+  }, [founderId, productId, attempt, intentHint]);
 
   // Recreated only when the account changes, never on every render.
   const stripePromise = useMemo(() => {

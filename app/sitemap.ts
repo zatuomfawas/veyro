@@ -7,6 +7,7 @@ const EXTRA: { path: string; priority: number }[] = [
   // High: it is the page that answers "how do I actually use this", which is
   // the question most people arrive with.
   { path: "/get-started", priority: 0.9 },
+  { path: "/docs/sdk", priority: 0.8 },
   { path: "/wallet", priority: 0.8 },
   { path: "/for-founders", priority: 0.7 },
   { path: "/faq", priority: 0.7 },

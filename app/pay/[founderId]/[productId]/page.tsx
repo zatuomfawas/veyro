@@ -19,7 +19,10 @@ export const viewport = buildViewport();
 // founder sharing the link and a customer opening it.
 export const dynamic = "force-dynamic";
 
-type Params = { params: Promise<{ founderId: string; productId: string }> };
+type Params = {
+  params: Promise<{ founderId: string; productId: string }>;
+  searchParams?: Promise<{ intent?: string | string[] }>;
+};
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { founderId, productId } = await params;
@@ -35,8 +38,15 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   };
 }
 
-export default async function PayPage({ params }: Params) {
+export default async function PayPage({ params, searchParams }: Params) {
   const { founderId, productId } = await params;
+
+  // An intent minted by POST /api/checkout/create, carried here by the SDK so
+  // the customer pays the one the integrator is waiting on. Passed along as a
+  // hint only — checkout-intent re-reads it from Stripe and refuses one whose
+  // metadata does not name this product, so a pasted id buys nothing.
+  const rawIntent = (await searchParams)?.intent;
+  const intentHint = (Array.isArray(rawIntent) ? rawIntent[0] : rawIntent)?.trim();
   const resolved = await resolvePurchasable(founderId, productId);
 
   const seller = await db.user.findUnique({
@@ -74,6 +84,7 @@ export default async function PayPage({ params }: Params) {
               <PayClient
                 founderId={founderId}
                 productId={productId}
+                intentHint={intentHint}
                 amountLabel={formatMinor(resolved.product.priceMinor, resolved.product.currency)}
               />
             </div>

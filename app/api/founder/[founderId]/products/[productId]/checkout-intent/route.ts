@@ -76,6 +76,54 @@ export async function POST(
 
   const { product, stripeAccountId } = resolved;
 
+  // An intent the caller already holds, from POST /api/checkout/create.
+  //
+  // Without this the SDK is broken in the worst way: create() would mint one
+  // intent, the page would mint a second on load, the customer would pay the
+  // second, and the SDK would poll the first forever — a real payment reported
+  // as a failure. Reusing the id keeps one intent from the click to the charge.
+  //
+  // The id alone is not trusted. It is retrieved from the connected account and
+  // its metadata must name this founder and this product, so an id belonging to
+  // another product cannot be replayed here to read its secret.
+  const reuse = typeof body?.intent === "string" && /^pi_[A-Za-z0-9_]+$/.test(body.intent)
+    ? body.intent
+    : null;
+
+  if (reuse) {
+    try {
+      const existing = await stripe.paymentIntents.retrieve(
+        reuse, {}, { stripeAccount: stripeAccountId },
+      );
+      const owns =
+        existing.metadata?.veyroFounderId === founderId
+        && existing.metadata?.veyroProductId === productId;
+      // Already paid, or cancelled: sending its secret back would render a form
+      // that can never succeed. Falling through creates a fresh one instead.
+      const usable = existing.status === "requires_payment_method"
+        || existing.status === "requires_confirmation"
+        || existing.status === "requires_action";
+
+      if (owns && usable && existing.amount === product.priceMinor) {
+        return NextResponse.json({
+          ok: true,
+          clientSecret: existing.client_secret,
+          intentId: existing.id,
+          stripeAccount: stripeAccountId,
+          product: {
+            name: product.name,
+            description: product.description,
+            priceMinor: product.priceMinor,
+            currency: product.currency,
+          },
+        });
+      }
+    } catch {
+      // Unknown or unreadable id. Not an error worth showing a customer: the
+      // page simply starts a new payment below.
+    }
+  }
+
   let intent: Stripe.PaymentIntent;
   try {
     intent = await stripe.paymentIntents.create(
