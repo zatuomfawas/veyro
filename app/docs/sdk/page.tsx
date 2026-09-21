@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 
 // The package name in one place, so the install line, the imports and the AI
 // prompts cannot disagree about what to type.
-const PKG = "@veyro/sdk";
+const PKG = "veyro-sdk";
 
 /** True once the package is on npm. Until then the docs say so. */
 const PUBLISHED = false;

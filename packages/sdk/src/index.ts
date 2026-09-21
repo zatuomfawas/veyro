@@ -1,4 +1,4 @@
-// @veyro/sdk — take a payment from your own app.
+// veyro-sdk — take a payment from your own app.
 //
 // The whole surface is: give it a product id, get told when the money lands.
 // Everything the payment itself needs — the amount, the currency, the seller's

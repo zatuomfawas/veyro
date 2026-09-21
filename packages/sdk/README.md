@@ -1,13 +1,13 @@
-# @veyro/sdk
+# veyro-sdk
 
 Take payments in your app. One product ID, one button.
 
 ```bash
-npm install @veyro/sdk
+npm install veyro-sdk
 ```
 
 ```tsx
-import { VeyroCheckout } from "@veyro/sdk/react";
+import { VeyroCheckout } from "veyro-sdk/react";
 
 <VeyroCheckout productId="your-product-id" onSuccess={(id) => console.log(id)} />
 ```
@@ -15,7 +15,7 @@ import { VeyroCheckout } from "@veyro/sdk/react";
 Not using React:
 
 ```js
-import { openCheckout } from "@veyro/sdk";
+import { openCheckout } from "veyro-sdk";
 
 button.addEventListener("click", () => {
   openCheckout("your-product-id", {

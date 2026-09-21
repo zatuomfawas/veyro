@@ -1,5 +1,5 @@
 {
-  "name": "@veyro/sdk",
+  "name": "veyro-sdk",
   "version": "0.1.0",
   "description": "Take payments in your app with Veyro. One product ID, one button.",
   "license": "MIT",
