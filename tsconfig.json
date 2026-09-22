@@ -11,6 +11,12 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    // scripts/*.test.ts are run by `node --test`, which strips types but does
+    // not resolve extensions, so their imports must name the .ts file. tsc
+    // rejects that unless this is on, and this is only legal because noEmit is
+    // true above. The alternative was excluding scripts/ from the project,
+    // which would leave the tests unchecked — the opposite of the point.
+    "allowImportingTsExtensions": true,
     "jsx": "react-jsx",
     "incremental": true,
     "plugins": [

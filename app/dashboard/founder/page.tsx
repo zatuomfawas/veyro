@@ -20,6 +20,7 @@ import { buildViewport } from "@/lib/seo";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { foldWallet } from "@/lib/ledger";
+import { foldAnalytics } from "@/lib/analytics";
 import { consentState } from "@/lib/consent";
 import { describeRequirements } from "@/lib/stripe-account";
 import { formatMinor } from "@/lib/checkout";
@@ -37,6 +38,7 @@ import InviteGuardian, { ResendInvite } from "./InviteGuardian";
 import Notifications from "@/app/_ui/Notifications";
 import NewProduct, { NAME_FIELD_ID } from "./NewProduct";
 import ProductRows from "./ProductRows";
+import { Analytics } from "./Analytics";
 import RequestPayout from "./RequestPayout";
 import {
   BusinessHeader, RevenueCard, GuardianStatus, PaymentStatus, PrimaryAction,
@@ -152,7 +154,7 @@ export default async function FounderDashboard() {
 
   const founderId = user.id;
 
-  const [consent, account, products, transactions, wallet, activity, payouts, notifications, salesByProduct] =
+  const [consent, account, products, transactions, wallet, activity, payouts, notifications, salesByProduct, analytics] =
     await Promise.all([
     db.guardianConsent.findUnique({
       where: { founderId },
@@ -192,6 +194,9 @@ export default async function FounderDashboard() {
       where: { founderId, status: "COMPLETED" },
       _count: { _all: true },
     }),
+    // Joins the same Promise.all rather than awaiting after it: it reads three
+    // tables of its own and there is no reason for the page to wait twice.
+    foldAnalytics(founderId, 30),
   ]);
 
   const state = consentState(consent);
@@ -550,6 +555,14 @@ export default async function FounderDashboard() {
                   <a className="linkbtn" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
                 </Notice>
               )}
+            </Section>
+
+            {/* ---------------- last 30 days ---------------- */}
+            {/* Above the wallet on purpose. The wallet answers "where is my
+                money"; this answers "is any of this working", which is the
+                question you arrive with. */}
+            <Section title="Last 30 days">
+              <Analytics fold={analytics} hasProducts={products.length > 0} />
             </Section>
 
             {/* ---------------- 4. wallet ---------------- */}

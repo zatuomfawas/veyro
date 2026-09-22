@@ -5,6 +5,7 @@ import { buildViewport } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import PayClient from "./PayClient";
+import RecordView from "./RecordView";
 import {
   CheckoutHeading, CheckoutSummary, CheckoutAssurance, CheckoutUnavailable,
 } from "@/app/_ui/checkout-parts";
@@ -90,6 +91,11 @@ export default async function PayPage({ params, searchParams }: Params) {
             </div>
 
             <CheckoutAssurance />
+
+            {/* Counts this page load, from the browser. Inside the purchasable
+                branch on purpose: a view of something nobody could have bought
+                is not a missed sale and does not belong in the denominator. */}
+            <RecordView founderId={founderId} productId={productId} />
           </>
         )}
       </main>

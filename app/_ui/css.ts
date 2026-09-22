@@ -478,6 +478,18 @@ export const CSS = `
 /* landing */
 .fw .lp-nav { height:62px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); }
 .fw .hero { padding-block:52px 44px; }
+/* Dashboard figures. Wraps rather than fixing a column count, because the
+   revenue cell disappears when nothing has sold and a fixed grid would leave a
+   hole where it was. minmax(0,...) so a long currency line shrinks instead of
+   pushing the row wider than the card. */
+.fw .metrics { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(148px,100%),1fr));
+  gap:var(--sp-5) var(--sp-6); }
+.fw .metrics .m-n { display:block; font-size:var(--fs-7); font-weight:var(--fw-bold);
+  letter-spacing:-0.022em; font-variant-numeric:tabular-nums; }
+/* Unknown is not zero, and must not look like a number. */
+.fw .metrics .m-n[data-unknown="1"] { color:var(--ink-3); font-weight:var(--fw-med); }
+.fw .metrics .m-l { display:block; font-size:var(--fs-2); line-height:1.45; color:var(--ink-3); margin-top:5px; }
+.fw .metrics .m-s { display:block; font-size:var(--fs-2); line-height:1.4; color:var(--ink-3); margin-top:3px; }
 .fw .herofacts { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--sp-6); }
 .fw .herofacts .hf-n { display:block; font-size:var(--fs-7); font-weight:var(--fw-bold); letter-spacing:-0.022em; }
 .fw .herofacts .hf-l { display:block; font-size:var(--fs-2); line-height:1.45; color:var(--ink-3); margin-top:5px; }

@@ -71,6 +71,7 @@ model User {
 
   products       FounderProduct[]       @relation("FounderProducts")
   transactions   FounderTransaction[]   @relation("FounderTransactions")
+  checkoutViews  CheckoutView[]         @relation("FounderCheckoutViews")
   payoutRequests FounderPayoutRequest[] @relation("FounderPayoutRequests")
   paymentAccount FounderPaymentAccount? @relation("FounderPaymentAccount")
 
@@ -121,8 +122,46 @@ model FounderProduct {
   createdAt      DateTime      @default(now())
 
   transactions FounderTransaction[]
+  views        CheckoutView[]
 
   @@index([founderId, status])
+}
+
+// -------------------------------------------------------------- checkout views
+
+/// One row per product per day, holding a count.
+///
+/// Not one row per view. A checkout page can be opened far more often than it
+/// is paid, and storing every hit would grow without bound to answer a question
+/// nobody asks at that resolution: the dashboard reports days, so days are what
+/// is stored. An upsert per view keeps this to one row per product per day
+/// forever.
+///
+/// What a "view" is, exactly, because the conversion rate depends on it: one
+/// browser session opening one product's checkout page. Reloads inside the same
+/// session are not counted again, so the denominator is closer to "people who
+/// looked" than "pages served". It is recorded from the browser rather than
+/// during render, which keeps prefetches, crawlers and Next's own re-renders
+/// out of the number.
+///
+/// No visitor identity is stored, here or anywhere: dedupe uses sessionStorage
+/// in the customer's own browser and nothing crosses the wire but the product.
+model CheckoutView {
+  id        String         @id @default(cuid())
+  founderId String
+  founder   User           @relation("FounderCheckoutViews", fields: [founderId], references: [id], onDelete: Cascade)
+  productId String
+  // Cascade, unlike FounderTransaction: a view count is not a record of money
+  // and nothing is owed to anyone if it goes when its product does.
+  product   FounderProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  /// Midnight UTC of the day counted. Date, not timestamp: the grain IS a day,
+  /// and a time component would let two rows exist for one day.
+  day   DateTime @db.Date
+  count Int      @default(0)
+
+  @@unique([productId, day])
+  @@index([founderId, day])
 }
 
 // ---------------------------------------------------------------- money in
