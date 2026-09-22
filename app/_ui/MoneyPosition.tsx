@@ -174,7 +174,10 @@ export function MoneyPosition({
           <div style={{ marginTop: 20 }}>
             <EmptyState
               heading="Nothing available to pay out yet"
-              action={{ label: "How payouts work", href: "/wallet" }}
+              /* Secondary, not primary. This explains a wait rather than
+                 offering a way to end it, and a black button here would outweigh
+                 Request a payout — the one real action in this column. */
+              secondary={{ label: "How payouts work", href: "/wallet" }}
             >
               Available money is what Stripe has settled and not yet paid out. Payments settle on
               Stripe&rsquo;s own schedule, and the first payout to a new account takes longer than
