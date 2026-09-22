@@ -98,7 +98,9 @@ export function Section({
   );
 }
 
-/** The "nothing here yet" state, centred, for empty tables and lists. */
-export function EmptyState({ children }: { children: React.ReactNode }) {
-  return <div className="empty">{children}</div>;
-}
+/* EmptyState used to live here as a centred box taking only `children`. It is
+   now app/_ui/EmptyState.tsx: left-aligned, and it requires a heading and an
+   action, because the old one let a caller ship a dead end by passing a
+   sentence and nothing else. Re-exported so the import sites that treat
+   dash.tsx as the one furniture module keep working. */
+export { EmptyState } from "@/app/_ui/EmptyState";

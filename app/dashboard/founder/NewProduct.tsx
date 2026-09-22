@@ -58,6 +58,9 @@ function checkField(field: "name" | "description" | "price", value: string): str
 
 type Created = { id: string; name: string; priceMinor: number; currency: string; status: string };
 
+/** The product-name input. Exported so the empty state can focus it by id. */
+export const NAME_FIELD_ID = "new-product-name";
+
 export default function NewProduct({ founderId }: { founderId: string }) {
   const router = useRouter();
 
@@ -192,8 +195,13 @@ export default function NewProduct({ founderId }: { founderId: string }) {
         </div>
       )}
 
+      {/* The id goes on the input, NOT on Field. Field only clones the child to
+          wire aria-invalid and aria-describedby when it is generating the id
+          itself; hand it one and it steps back and leaves that to the caller,
+          which would have cost this field its error announcement in exchange
+          for a focus target. The input carries both perfectly well. */}
       <Field label="What are you selling?" error={errors.name || undefined}>
-        <input className="input" value={name} maxLength={NAME_MAX}
+        <input id={NAME_FIELD_ID} className="input" value={name} maxLength={NAME_MAX}
           onBlur={blur("name", name)}
           onChange={(e) => { setName(e.target.value); clear("name"); }}
           placeholder="Sticker pack" />

@@ -501,8 +501,23 @@ export const CSS = `
   .fw .footbase { margin-top:28px; }
 }
 
-.fw .empty { padding:var(--sp-8) var(--sp-5); text-align:center; }
-.fw .empty .mark { margin:0 auto var(--sp-4); opacity:.4; }
+/* Empty states. Left-aligned on the same axis as the content that will
+   replace them, so the column does not shift its optical centre the moment one
+   item exists. The top rule is the only chrome: no card, no fill, no faded
+   mark. The heading is a real heading rather than bold body text, because on
+   an empty dashboard it is the only thing in the section and screen-reader
+   users navigating by heading would otherwise skip past an empty region with
+   no idea what it was. */
+.fw .estate { border-top:1px solid var(--line); padding-top:var(--sp-5); }
+.fw .estate-h { font-size:var(--fs-5); font-weight:var(--fw-bold); color:var(--ink);
+  letter-spacing:-0.012em; margin:0; }
+.fw .estate-b { font-size:var(--fs-3); line-height:1.55; color:var(--ink-3);
+  margin:6px 0 0; max-width:var(--m-lead); }
+.fw .estate-a { margin-top:var(--sp-4); display:flex; flex-wrap:wrap; align-items:center;
+  gap:var(--sp-3) var(--sp-4); }
+/* A notice raised by the action (a copied link) belongs under the row, not
+   beside the button, so it never squeezes the control that produced it. */
+.fw .estate-a > [role="status"] { flex:1 0 100%; }
 .fw .vd { font-size:var(--fs-2); font-weight:var(--fw-med); white-space:nowrap; }
 .fw .vd-ok { color:var(--pine); } .fw .vd-no { color:var(--clay); } .fw .vd-off { color:var(--ink-3); }
 .fw .reqlist { border-top:1px solid var(--ink); }

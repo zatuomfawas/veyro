@@ -1,5 +1,6 @@
 import type { CurrencyFold } from "@/lib/ledger";
 import { formatMinor } from "@/lib/money";
+import { EmptyState } from "@/app/_ui/EmptyState";
 
 // The money position: what came in, what was taken out, and exactly where the
 // rest of it is.
@@ -161,6 +162,27 @@ export function MoneyPosition({
         </div>
 
         <Band fold={fold} />
+
+        {/* Earned something, but none of it is drawable yet.
+            This lives per currency rather than beside the section heading,
+            because a founder can be paid in two currencies and have one settled
+            and the other not. The section-level state answers "no sales at
+            all"; this answers "sales, nothing available", and they need
+            different words. Example folds are illustrative and never in this
+            position, so they are excluded. */}
+        {!example && fold.earned > 0 && fold.available <= 0 && (
+          <div style={{ marginTop: 20 }}>
+            <EmptyState
+              heading="Nothing available to pay out yet"
+              action={{ label: "How payouts work", href: "/wallet" }}
+            >
+              Available money is what Stripe has settled and not yet paid out. Payments settle on
+              Stripe&rsquo;s own schedule, and the first payout to a new account takes longer than
+              later ones. Veyro doesn&rsquo;t hold the money &mdash; Stripe does, and pays out to
+              the bank account on file.
+            </EmptyState>
+          </div>
+        )}
 
         <p className="tiny" style={{ marginTop: 16, marginBottom: 0 }}>
           Stripe deducts its fee before the money reaches your account, so it was never part of a

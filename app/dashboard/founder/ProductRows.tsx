@@ -24,6 +24,7 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Btn, Field, Notice } from "@/app/_ui/form";
 import { Icon } from "@/app/_ui/marks";
+import { CopyLink } from "@/app/_ui/CopyLink";
 import { formatMinor, parseMinor, toMajorInput } from "@/lib/money";
 
 export type ProductRow = {
@@ -277,9 +278,22 @@ export default function ProductRows({
                     <td><span className={"badge " + (BADGE[p.status] ?? "b-grey")}>{LABEL[p.status]}</span></td>
                     <td>
                       {live ? (
-                        <a className="linkbtn" href={`/pay/${founderId}/${p.id}`}>
-                          Open checkout
-                        </a>
+                        /* Opening the checkout and sending it to someone are
+                           different jobs. The link was the only affordance
+                           here, which meant sharing a product involved opening
+                           it and copying out of the address bar. */
+                        <span className="row" style={{ gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+                          <a className="linkbtn" href={`/pay/${founderId}/${p.id}`}>
+                            Open checkout
+                          </a>
+                          <CopyLink
+                            path={`/pay/${founderId}/${p.id}`}
+                            label="Copy link"
+                            variant="2"
+                            size="sm"
+                            compact
+                          />
+                        </span>
                       ) : (
                         <span className="tiny">(not published)</span>
                       )}

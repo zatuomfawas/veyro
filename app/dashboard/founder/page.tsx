@@ -29,11 +29,13 @@ import { Notice } from "@/app/_ui/form";
 import { Requirements } from "@/app/_ui/Requirements";
 import { MoneyPosition } from "@/app/_ui/MoneyPosition";
 import { SIGNUP_COUNTRIES } from "@/app/_ui/countries";
+import { CopyLink } from "@/app/_ui/CopyLink";
+import { FocusButton } from "@/app/_ui/FocusButton";
 import { DashNav, Section, EmptyState, SUPPORT_EMAIL, fmtDate } from "@/app/_ui/dash";
 
 import InviteGuardian, { ResendInvite } from "./InviteGuardian";
 import Notifications from "@/app/_ui/Notifications";
-import NewProduct from "./NewProduct";
+import NewProduct, { NAME_FIELD_ID } from "./NewProduct";
 import ProductRows from "./ProductRows";
 import RequestPayout from "./RequestPayout";
 import {
@@ -231,6 +233,16 @@ export default async function FounderDashboard() {
 
   const firstLive = products.find((p) => p.status === "LIVE");
 
+  // What "copy your payment link" should copy, and whether it can copy at all.
+  //
+  // A founder can have several products, so "your link" has to resolve to one:
+  // the first live one, which is almost always the one they just made. A DRAFT
+  // has no working checkout, so a founder holding only drafts gets told to make
+  // one live rather than handed a URL that does not take money. The three cases
+  // are distinct and each needs different words.
+  const payPath = firstLive ? `/pay/${founderId}/${firstLive.id}` : null;
+  const draftsOnly = products.length > 0 && !firstLive;
+
   // Setup progress, derived from the same state the steps render. Nothing is
   // stored, so a step cannot claim complete while its subject is not.
   const setupFlags = [
@@ -410,13 +422,18 @@ export default async function FounderDashboard() {
                   the adult Stripe verifies, and they open the payment account for you.
                 </p>
               ) : state === "none" ? (
-                <div className="stack">
-                  <p className="body" style={{ margin: 0 }}>
-                    Invite a guardian to get started. They are the adult the payment provider
-                    verifies, not the owner of your business.
-                  </p>
-                  <InviteGuardian founderId={founderId} />
-                </div>
+                /* The invite form is the action, handed to EmptyState rather
+                   than replaced by a link. There is no separate invite route,
+                   and swapping a working form for a button that goes looking
+                   for one would be a step backwards dressed as a redesign. */
+                <EmptyState
+                  heading="You need a parent or guardian"
+                  action={<InviteGuardian founderId={founderId} />}
+                >
+                  Stripe requires a verified adult because you&rsquo;re under 18. Your guardian
+                  makes their own login and completes Stripe&rsquo;s checks. You keep control of
+                  products and links.
+                </EmptyState>
               ) : (
                 <div className="stack">
                   {state === "pending" && consent && (
@@ -538,10 +555,22 @@ export default async function FounderDashboard() {
             {/* ---------------- 4. wallet ---------------- */}
             <Section title="Wallet">
               {wallet.currencies.length === 0 ? (
-                <EmptyState>
-                  <p className="body" style={{ margin: 0 }}>
-                    Nothing yet. Money appears here once a customer pays.
-                  </p>
+                <EmptyState
+                  heading="No sales yet"
+                  action={
+                    payPath
+                      ? <CopyLink path={payPath} />
+                      : draftsOnly
+                        /* The blocker is an unpublished product, not a missing
+                           one. Offering "add another" would send someone to
+                           make a second draft. */
+                        ? { label: "Go to your products", href: "#products" }
+                        : <FocusButton target={NAME_FIELD_ID} label="Create your first product" />
+                  }
+                >
+                  {draftsOnly
+                    ? "Your product is still a draft. Make it live and you\u2019ll get a link you can send."
+                    : "When someone pays, money appears here. Share your checkout link to get started."}
                 </EmptyState>
               ) : (
                 <div className="stack">
@@ -610,8 +639,12 @@ export default async function FounderDashboard() {
             {/* ---------------- 7. recent activity ---------------- */}
             <Section title="Recent activity">
               {activityLines.length === 0 ? (
-                <EmptyState>
-                  <p className="body" style={{ margin: 0 }}>Nothing has happened yet.</p>
+                /* Not one of the four in the brief, but it used the same
+                   component and said even less. Activity is a record of things
+                   the other sections cause, so it points at the first of them
+                   rather than inventing an action of its own. */
+                <EmptyState heading="Nothing has happened yet">
+                  Invites, payments and payouts are listed here as they happen, newest first.
                 </EmptyState>
               ) : (
                 <div className="reqlist">
@@ -638,8 +671,16 @@ export default async function FounderDashboard() {
               <hr className="rule" style={{ margin: "24px 0 18px" }} />
 
               {products.length === 0 ? (
-                <EmptyState>
-                  <p className="body" style={{ margin: 0 }}>Nothing listed yet.</p>
+                <EmptyState
+                  heading="No products yet"
+                  action={
+                    <FocusButton target={NAME_FIELD_ID} label="Create your first product" />
+                  }
+                  secondary={{ label: "See what checkout looks like", href: "/get-started" }}
+                >
+                  A product is the thing someone pays for &mdash; a commission slot, a digital
+                  file, a one-off service. Create one and you get a payment link you can send
+                  anywhere.
                 </EmptyState>
               ) : (
                 <ProductRows founderId={founderId} products={productRows} />
@@ -649,12 +690,37 @@ export default async function FounderDashboard() {
             {/* ---------------- 6. transactions ---------------- */}
             <Section title="Transactions">
               {transactions.length === 0 ? (
-                <EmptyState>
-                  <p className="body" style={{ margin: 0 }}>
-                    No transactions yet. Every completed payment is recorded here from
-                    Stripe&rsquo;s own signed webhook, never from the customer&rsquo;s browser.
-                  </p>
-                </EmptyState>
+                /* Three different situations, not one. With no products at all
+                   this would be the second dead end in a column that already
+                   says "no products yet", so it points at that one instead of
+                   repeating it. With only drafts there is nothing to copy. */
+                products.length === 0 ? (
+                  <EmptyState
+                    heading="No payments yet"
+                    action={
+                      <FocusButton target={NAME_FIELD_ID} label="Create your first product" />
+                    }
+                  >
+                    Payments show up here once you have something to sell. Start with a product,
+                    and the link it gives you is what customers pay through.
+                  </EmptyState>
+                ) : draftsOnly ? (
+                  <EmptyState
+                    heading="No payments yet"
+                    secondary={{ label: "Go to your products", href: "#products" }}
+                  >
+                    Your product is still a draft. Make it live and you&rsquo;ll get a link you
+                    can send.
+                  </EmptyState>
+                ) : (
+                  <EmptyState
+                    heading="No payments yet"
+                    action={<CopyLink path={payPath!} />}
+                  >
+                    When someone pays, it appears here within seconds &mdash; amount, product,
+                    and Stripe&rsquo;s fee.
+                  </EmptyState>
+                )
               ) : (
                 <div className="tblwrap">
                   <table className="tbl">

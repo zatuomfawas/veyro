@@ -154,15 +154,14 @@ export default async function GuardianDashboard() {
 
         {consents.length === 0 ? (
           <Section title="Nothing to oversee yet">
-            <EmptyState>
-              <p className="body" style={{ marginTop: 0 }}>
-                You are not the guardian of record for anyone. A founder invites you from their own
-                dashboard, and their invite link brings you to a page where you can accept.
-              </p>
-              <p className="small" style={{ marginBottom: 0 }}>
-                If you were expecting an invitation, ask them to send it again. Links expire after
-                fourteen days, and sending a new one replaces the old.
-              </p>
+            {/* A guardian cannot act here: only a founder can invite them, so
+                the honest next step is one they take away from this screen.
+                The state gets no button rather than a button that does
+                nothing. */}
+            <EmptyState heading="You are not overseeing anyone yet">
+              A founder invites you from their own dashboard, and their link brings you to a page
+              where you can accept. If you were expecting one, ask them to send it again &mdash;
+              links expire after fourteen days, and a new one replaces the old.
             </EmptyState>
           </Section>
         ) : (
