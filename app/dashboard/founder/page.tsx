@@ -696,7 +696,7 @@ export default async function FounderDashboard() {
                   anywhere.
                 </EmptyState>
               ) : (
-                <ProductRows founderId={founderId} products={productRows} />
+                <ProductRows founderId={founderId} founderName={user.name} products={productRows} />
               )}
             </Section>
 

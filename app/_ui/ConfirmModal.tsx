@@ -16,6 +16,7 @@ import { Btn } from "@/app/_ui/form";
 
 export function ConfirmModal({
   open, title, confirmLabel, cancelLabel = "Cancel", tone = "1", busy = false,
+  initialFocus = "confirm", dismissOnBackdrop = true,
   onConfirm, onCancel, children,
 }: {
   open: boolean;
@@ -25,6 +26,21 @@ export function ConfirmModal({
   /** "d" for a destructive confirm, "1" for an ordinary one. */
   tone?: "1" | "d";
   busy?: boolean;
+  /**
+   * Where focus lands when the dialog opens. "confirm" is right when the only
+   * question is yes or no. "body" is right when the dialog contains something
+   * to work with — an editable message, say — and landing on the button would
+   * put the caret nowhere and make the first thing a keyboard user does be
+   * shift-tab.
+   */
+  initialFocus?: "confirm" | "body";
+  /**
+   * Whether a click on the backdrop cancels. True suits a confirm step, where
+   * the only state is the answer. False suits a dialog holding text someone
+   * has written, where a stray click on the scrim would throw their work away
+   * with no warning and no undo.
+   */
+  dismissOnBackdrop?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
   children: React.ReactNode;
@@ -37,7 +53,23 @@ export function ConfirmModal({
   useEffect(() => {
     if (!open) return;
     const previous = document.activeElement as HTMLElement | null;
-    confirmRef.current?.focus();
+    if (initialFocus === "body") {
+      // The first thing in the body that can take focus, which is the control
+      // the dialog is actually about. Falls back to the confirm button so a
+      // body with nothing focusable still moves focus into the dialog.
+      const target = panel.current?.querySelector<HTMLElement>(
+        '.card-b textarea, .card-b input, .card-b select',
+      );
+      (target ?? confirmRef.current)?.focus();
+      // A textarea opened with prepared text: put the caret at the end rather
+      // than selecting everything, so typing appends instead of wiping it.
+      if (target instanceof HTMLTextAreaElement) {
+        const end = target.value.length;
+        target.setSelectionRange(end, end);
+      }
+    } else {
+      confirmRef.current?.focus();
+    }
 
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape" && !busy) {
@@ -67,7 +99,7 @@ export function ConfirmModal({
       document.removeEventListener("keydown", onKey);
       previous?.focus();
     };
-  }, [open, busy, onCancel]);
+  }, [open, busy, onCancel, initialFocus]);
 
   if (!open) return null;
 
@@ -76,7 +108,7 @@ export function ConfirmModal({
       className="scrim"
       // A click on the backdrop cancels, the same as Escape. Clicks inside the
       // panel must not, hence the stopPropagation below.
-      onClick={() => { if (!busy) onCancel(); }}
+      onClick={() => { if (!busy && dismissOnBackdrop) onCancel(); }}
     >
       <div
         className="modal"

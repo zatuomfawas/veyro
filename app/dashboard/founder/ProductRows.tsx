@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation";
 import { Btn, Field, Notice } from "@/app/_ui/form";
 import { Icon } from "@/app/_ui/marks";
 import { CopyLink } from "@/app/_ui/CopyLink";
+import { ShareTemplate } from "./ShareTemplate";
 import { formatMinor, parseMinor, toMajorInput } from "@/lib/money";
 
 export type ProductRow = {
@@ -203,8 +204,8 @@ function Editor({
 }
 
 export default function ProductRows({
-  founderId, products,
-}: { founderId: string; products: ProductRow[] }) {
+  founderId, founderName, products,
+}: { founderId: string; founderName: string; products: ProductRow[] }) {
   const router = useRouter();
 
   // Two pieces of state, because a panel that unmounts the instant you close it
@@ -214,7 +215,10 @@ export default function ProductRows({
   // closing collapses it and unmounts once the transition has run.
   const [mounted, setMounted] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
-  const [saved, setSaved] = useState<string | null>(null);
+  // Heading as well as body: this banner is raised by the inline editor and
+  // by the share modal, and "Product updated" would be a false heading over
+  // "Message copied".
+  const [saved, setSaved] = useState<{ head: string; body: string } | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   // The button that opened the panel, so focus can go back to it rather than
   // being dropped on the body when the panel unmounts.
@@ -250,7 +254,7 @@ export default function ProductRows({
     <>
       {saved && (
         <div style={{ marginBottom: 12 }}>
-          <Notice tone="pine" head="Product updated" live>{saved}</Notice>
+          <Notice tone="pine" head={saved.head} live>{saved.body}</Notice>
         </div>
       )}
 
@@ -300,16 +304,26 @@ export default function ProductRows({
                           <span className="sr-only"> (opens in a new tab)</span>
                         </a>
                         {live && (
-                          /* Live only. A draft's URL does not take money, and
-                             handing someone a link that cannot be paid is the
-                             dead end Feature 2 set out to remove. */
-                          <CopyLink
-                            path={`/pay/${founderId}/${p.id}`}
-                            label="Copy link"
-                            variant="2"
-                            size="sm"
-                            compact
-                          />
+                          <>
+                            {/* Bare URL and written message are different
+                                errands: one goes into a DM, the other into a
+                                post. Both are live-only, because a draft's URL
+                                cannot take money — the dead end Feature 2 set
+                                out to remove. */}
+                            <CopyLink
+                              path={`/pay/${founderId}/${p.id}`}
+                              label="Copy link"
+                              variant="2"
+                              size="sm"
+                              compact
+                            />
+                            <ShareTemplate
+                              productName={p.name}
+                              founderName={founderName}
+                              path={`/pay/${founderId}/${p.id}`}
+                              onCopied={(body) => setSaved({ head: "Message copied", body })}
+                            />
+                          </>
                         )}
                       </span>
                     </td>
@@ -348,7 +362,7 @@ export default function ProductRows({
                                 onCancel={closeEditor}
                                 onDone={(message) => {
                                   closeEditor();
-                                  setSaved(message);
+                                  setSaved({ head: "Product updated", body: message });
                                   router.refresh();
                                 }}
                               />
