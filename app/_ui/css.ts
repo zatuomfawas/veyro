@@ -81,12 +81,14 @@ export const CSS = `
      x-height, so this pulls the following letter into that wedge. One number. */
   --wm-kern:-0.085em;
   /* Landing only. The application keeps the smaller dashboard scale. */
-  --lp-1:64px; --lp-2:40px; --lp-3:26px; --lp-lead:19px;
+  --lp-1:64px; --lp-2:44px; --lp-3:26px; --lp-lead:19px;
   --lp-gut:32px; --lp-max:1600px;
   /* Section rhythm and the tail a page leaves under itself, as tokens so a
      full-bleed closing band can cancel the tail exactly rather than
-     guessing at it. */
-  --lp-pad:48px; --tail:56px;
+     guessing at it.
+     72px, not the 48px it was: eleven sections at 48 read as one continuous
+     column of text, and the hairline between them did all the separating. */
+  --lp-pad:72px; --tail:56px;
   /* One gutter, fluid. 16px on a small phone, growing to 48px on a wide
      desktop. Replaces four hand-written padding values that each needed
      their own breakpoint. */
@@ -162,7 +164,7 @@ export const CSS = `
 .fw .h3 { font-size:var(--fs-6); line-height:1.32; letter-spacing:-0.016em; font-weight:var(--fw-bold); }
 .fw .h4 { font-size:var(--fs-4); line-height:1.4; letter-spacing:-0.008em; font-weight:var(--fw-bold); }
 .fw .lead { font-size:var(--fs-5); line-height:1.58; color:var(--ink-2); max-width:var(--m-lead); }
-.fw .body { font-size:var(--fs-4); line-height:1.6; color:var(--ink-2); max-width:70ch; }
+.fw .body { font-size:var(--fs-4); line-height:1.5; color:var(--ink-2); max-width:70ch; }
 .fw .small { font-size:var(--fs-3); line-height:1.5; color:var(--ink-2); }
 .fw .tiny { font-size:var(--fs-2); line-height:1.45; color:var(--ink-3); }
 .fw .lbl { font-size:var(--fs-2); color:var(--ink-3); letter-spacing:0.004em; }
@@ -174,7 +176,12 @@ export const CSS = `
 .fw .wrap { max-width:1280px; margin:0 auto; padding:0 var(--gut); }
 .fw .wrap-lp { max-width:var(--lp-max); margin:0 auto; padding:0 var(--gut); }
 .fw .lp-h1 { font-size:var(--lp-1); line-height:1.02; letter-spacing:-0.035em; font-weight:var(--fw-bold); }
-.fw .lp-h2 { font-size:var(--lp-2); line-height:1.1; letter-spacing:-0.028em; font-weight:var(--fw-bold); max-width:18ch; }
+/* text-wrap:balance for the same reason the hero tagline has it: at 44px an
+   18ch measure drops the last word onto a line of its own — "is.", "made." —
+   which reads as a mistake rather than as a line break. Browsers without it
+   wrap exactly as before. */
+.fw .lp-h2 { font-size:var(--lp-2); line-height:1.1; letter-spacing:-0.028em;
+  font-weight:var(--fw-bold); max-width:18ch; text-wrap:balance; }
 .fw .lp-h3 { font-size:var(--lp-3); line-height:1.2; letter-spacing:-0.02em; font-weight:var(--fw-bold); }
 .fw .lp-lead { font-size:var(--lp-lead); line-height:1.55; color:var(--ink-2); max-width:56ch; }
 .fw .lp-note { font-size:var(--fs-2); line-height:1.5; color:var(--ink-3); max-width:var(--m-wide); }
@@ -182,7 +189,8 @@ export const CSS = `
 .fw section.lp-pad-md { padding:var(--lp-pad-md) 0; }
 .fw section.lp-pad-sm { padding:var(--lp-pad-sm) 0; }
 @media (max-width:900px) {
-  .fw { --lp-1:40px; --lp-2:30px; --lp-3:21px; --lp-lead:17px; --lp-gut:20px;
+  .fw { --lp-1:40px; --lp-2:32px; --lp-3:21px; --lp-lead:17px; --lp-gut:20px;
+        --lp-pad:48px;
         --lp-pad-lg:64px; --lp-pad-md:48px; --lp-pad-sm:36px; }
   .fw .lp-h2 { max-width:24ch; }
 }
@@ -523,7 +531,7 @@ export const CSS = `
 
 /* landing */
 .fw .lp-nav { height:62px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); }
-.fw .hero { padding-block:52px 44px; }
+.fw .hero { padding-block:76px 60px; }
 /* Dashboard figures. Wraps rather than fixing a column count, because the
    revenue cell disappears when nothing has sold and a fixed grid would leave a
    hole where it was. minmax(0,...) so a long currency line shrinks instead of
@@ -757,7 +765,7 @@ export const CSS = `
   .fw .page { padding:20px 16px 60px; }
   .fw .topbar { padding:0 16px; }
   .fw .d2 { font-size:var(--fs-7); }
-  .fw .hero { padding-block:34px 28px; }
+  .fw .hero { padding-block:44px 36px; }
   .fw .tbl th, .fw .tbl td { padding:10px 12px; }
   .fw .hide-s { display:none; }
   .fw .grid-4 > * { border-right:0 !important; border-bottom:1px solid var(--line-soft); }
