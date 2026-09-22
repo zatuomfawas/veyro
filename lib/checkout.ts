@@ -7,31 +7,14 @@
 // charge. The page just avoids showing a form that would fail.
 import { db } from "./db";
 import { formatMinor } from "./money";
+import { saleBlockers, type NotPurchasable } from "./sale-rules";
 
-// Re-exported so server callers keep one import site; the implementation lives in
-// lib/money.ts, which has no database import and is safe for client components.
+// Re-exported so server callers keep one import site; the implementations live in
+// lib/money.ts and lib/sale-rules.ts, neither of which imports the database, so
+// both are safe for client components and for `node --test`.
 export { formatMinor };
-
-/** Stripe's own floor is currency-specific; these are the common ones in minor units. */
-const MINIMUM_MINOR: Record<string, number> = {
-  USD: 50, EUR: 50, GBP: 30, CAD: 50, AUD: 50, CHF: 50,
-  NOK: 300, SEK: 300, DKK: 250, SGD: 50, HKD: 400, JPY: 50, MXN: 1000,
-};
-
-export type NotPurchasable =
-  | "product_not_found"
-  | "product_not_live"
-  | "price_not_set"
-  | "price_below_minimum"
-  | "payments_not_set_up";
-
-export const REASON_TEXT: Record<NotPurchasable, string> = {
-  product_not_found: "This link doesn't point at anything we can sell.",
-  product_not_live: "This isn't on sale right now.",
-  price_not_set: "This doesn't have a price yet.",
-  price_below_minimum: "The price is below the card network's minimum charge.",
-  payments_not_set_up: "This seller hasn't finished setting up payments yet.",
-};
+export { saleBlockers, REASON_TEXT, OWNER_REASON_TEXT } from "./sale-rules";
+export type { NotPurchasable, PricedProduct, SellerAccount } from "./sale-rules";
 
 export type Purchasable = {
   product: Awaited<ReturnType<typeof db.founderProduct.findUnique>> & object;
@@ -54,13 +37,18 @@ export async function resolvePurchasable(
   // stranger something they have no business knowing.
   if (!product || product.founderId !== founderId) return "product_not_found";
   if (product.status !== "LIVE") return "product_not_live";
+
+  // The account is only read once the product itself is worth selling, so an
+  // unpriced draft still costs one query rather than two.
   if (product.priceMinor <= 0) return "price_not_set";
 
-  const minimum = MINIMUM_MINOR[product.currency.toUpperCase()] ?? 50;
-  if (product.priceMinor < minimum) return "price_below_minimum";
-
   const account = await db.founderPaymentAccount.findUnique({ where: { founderId } });
-  if (!account?.providerAccountId || account.status !== "ACTIVE") return "payments_not_set_up";
+  const blocked = saleBlockers(product, account);
+  if (blocked.length > 0) return blocked[0];
+
+  // saleBlockers already established the account is usable; this narrows it for
+  // the type system rather than re-deciding anything.
+  if (!account?.providerAccountId) return "payments_not_set_up";
 
   return { product, stripeAccountId: account.providerAccountId };
 }

@@ -277,15 +277,32 @@ export default function ProductRows({
                     <td className="num">{formatMinor(p.priceMinor, p.currency)}</td>
                     <td><span className={"badge " + (BADGE[p.status] ?? "b-grey")}>{LABEL[p.status]}</span></td>
                     <td>
-                      {live ? (
-                        /* Opening the checkout and sending it to someone are
-                           different jobs. The link was the only affordance
-                           here, which meant sharing a product involved opening
-                           it and copying out of the address bar. */
-                        <span className="row" style={{ gap: 10, flexWrap: "wrap", alignItems: "center" }}>
-                          <a className="linkbtn" href={`/pay/${founderId}/${p.id}`}>
-                            Open checkout
-                          </a>
+                      {/* Preview and share are different jobs, and every
+                          product gets the first one. A draft used to say
+                          "(not published)" and offer nothing, which is exactly
+                          backwards: the moment a founder most wants to look at
+                          their checkout is before they publish it. Live goes to
+                          the real page, because for a live product the real
+                          page is the truth; anything else goes to the
+                          dashboard's own preview.
+
+                          An anchor rather than window.open: it survives popup
+                          blockers, supports cmd- and middle-click, and is
+                          announced as a link instead of a button. */}
+                      <span className="row" style={{ gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+                        <a
+                          className="linkbtn"
+                          href={live ? `/pay/${founderId}/${p.id}` : `/dashboard/founder/preview/${p.id}`}
+                          target="_blank"
+                          rel="noopener"
+                        >
+                          Preview
+                          <span className="sr-only"> (opens in a new tab)</span>
+                        </a>
+                        {live && (
+                          /* Live only. A draft's URL does not take money, and
+                             handing someone a link that cannot be paid is the
+                             dead end Feature 2 set out to remove. */
                           <CopyLink
                             path={`/pay/${founderId}/${p.id}`}
                             label="Copy link"
@@ -293,10 +310,8 @@ export default function ProductRows({
                             size="sm"
                             compact
                           />
-                        </span>
-                      ) : (
-                        <span className="tiny">(not published)</span>
-                      )}
+                        )}
+                      </span>
                     </td>
                     <td style={{ textAlign: "right" }}>
                       <button
