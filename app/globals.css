@@ -45,7 +45,9 @@ body {
    * The literal is unavoidable: the design tokens are scoped to .fw on purpose,
    * so body cannot read var(--paper). It has to be set here anyway, because .fw
    * is a div that only spans its own content. On any page shorter than the
-   * viewport, the ivory stopped where the content stopped and the browser's
-   * default white showed underneath, which read as a page split in half. */
-  background: #f2f0ea;
+   * viewport, the page ground stopped where the content stopped and the
+   * browser's default white showed underneath, reading as a page split in
+   * half. Now that --paper is #ffffff the seam is invisible, but the rule
+   * stays: --paper is the one value allowed to change here. */
+  background: #ffffff;
 }

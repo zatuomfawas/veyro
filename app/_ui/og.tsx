@@ -17,9 +17,9 @@ export const OG_CONTENT_TYPE = "image/png";
 // Brand tokens and the accent-mark clip-path, both taken from app/_ui/css.ts
 // (--brand, --reverse, and the polygon used by .dmark) so the card matches the
 // design system rather than approximating it.
-const BRAND = "#1e4636";
-const REVERSE = "#f4f2ec";
-const MUTED = "#c9c4b6";
+const BRAND = "#111315";
+const REVERSE = "#ffffff";
+const MUTED = "#b8b8b9";
 const MARK_CLIP = "polygon(0 0, 26% 0, 45% 62%, 64% 0, 100% 0, 58% 100%, 43% 100%)";
 
 export function ogImage({

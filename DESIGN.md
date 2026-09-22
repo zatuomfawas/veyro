@@ -67,26 +67,52 @@ dashboards, `.wrap-n` 768px for prose, `.wrap-s` 560px for auth. Gutter is
 
 ## Colour
 
-The background is never pure white. `--paper` (#f2f0ea) is the page,
-`--card` (#faf9f5) is raised surfaces, `--surface` and `--surface-2` are recessed
-ones. This is consistent across every page, marketing and application alike.
+Monochrome first, and cool rather than warm. The palette was ivory through
+September 2026; it now reads as neutral paper, which is what the rest of
+financial software looks like and what a parent assessing the product expects.
 
-- Brand `#1e4636`, hover `#2a5c48`
-- Ink `#191814`, with `--ink-2` and `--ink-3` for secondary and tertiary text
+`--paper` (#ffffff) is the page. `--card` (#ffffff) is raised surfaces: on a
+white page it cannot be lighter than the page, so a raised surface earns its
+edge from `--line` instead of from a fill. `--surface` (#f7f7f6) and
+`--surface-2` (#eeeeec) are recessed. One consequence to remember: alternating
+landing sections use `--surface`, not `--card`, because `--card` no longer
+differs from the page.
+
+- Brand `#111315`, hover `#2b2f33` — **black, not green.**
+- Ink `#111315`, with `--ink-2` and `--ink-3` for secondary and tertiary text
 - Status families, each with a text colour and a line colour: pine (good),
   amber (attention), clay (bad), slate (informational), grey (neutral)
 
+**Green means money.** `--pine` (#12513a) marks settled, available funds and
+nothing else. It never appears on a button, a focus ring, a link or the
+wordmark. A colour that means one thing everywhere is worth more than a colour
+that is merely on brand, and money is the thing this product is about.
+
 No pastels. No gradients of any kind. No coloured left-border stripe on cards.
+
+### Two thresholds, not one
+
+`--line` (#e3e3e0) is for dividers, which are decorative and may be quiet.
+`--control-line` (#878d92) is for the resting border of anything you have to
+find and operate — inputs, selects, textareas, the `.tick` checkbox. WCAG 1.4.11
+wants 3:1 for a UI component boundary, and `--line` measures 1.29:1 on white, so
+the two cannot be the same token. Do not "tidy" controls back onto `--line`.
+
+Run `npm run contrast` after touching any colour. It parses the tokens straight
+out of `css.ts` and fails the build on a regression, so the numbers in this
+document stay true rather than becoming folklore. The tightest text pair is
+`--ink-3` on `--surface-2` at 4.99:1, against a 4.5:1 floor.
 
 ---
 
 ## Rules that do not bend
 
-**Border radius is 0.** `--radius: 0`. The only exceptions are three uses of
-`border-radius: 50%`, which are circles by definition: the radio tick in
-`.choice`, and the timeline dot in `.tl .pt`. A circle is not a rounded
-rectangle. Nothing else gets a radius, including anything pasted in from a
-component library.
+**Border radius is 0.** `--radius: 0`. There is exactly one exception,
+`.tl .pt`, the timeline dot, which is a circle by definition rather than a
+rounded rectangle. The `.choice` tick used to be a second one and is now a
+square, because the question it answers is on/off rather than one-of-several.
+Nothing else gets a radius, including anything pasted in from a component
+library.
 
 **No drop shadows.** Elevation is a border or a fill change, never blur.
 

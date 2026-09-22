@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
-    "migrate": "node scripts/migrate.mjs",
-    "start": "next start",
+    "contrast": "node scripts/contrast.mjs",
+    "dev": "next dev",
     "lint": "eslint",
-    "postinstall": "prisma generate"
+    "migrate": "node scripts/migrate.mjs",
+    "postinstall": "prisma generate",
+    "start": "next start"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.0",

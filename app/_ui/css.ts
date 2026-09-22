@@ -48,19 +48,30 @@ export const CSS = `
   /* Layout: one asymmetric split, used everywhere a section has two parts */
   --split-a:minmax(0,5fr); --split-b:minmax(0,7fr);
 
-  --paper:#f2f0ea; --surface:#ebe8df; --surface-2:#e4e0d5;
-  --card:#faf9f5; --reverse:#f4f2ec;
-  --line:#d3cec1; --line-soft:#e0dbcd;
-  --brand:#1e4636; --brand-h:#2a5c48;
-  /* --ink-3 was #726d61, which measured 4.21:1 on --surface: below WCAG AA's
-     4.5:1 for normal text, and --surface is the hero band's background, where
-     .tiny and .hf-l both use it. Darkened 9% to clear AA on every background
-     in the palette, worst case 4.55:1 on --surface-2. See DESIGN.md. */
-  --ink:#191814; --ink-2:#4c483f; --ink-3:#676358;
-  --pine:#245040; --pine-bg:transparent; --pine-line:#a9bdb1;
-  --amber:#7a4e10; --amber-bg:transparent; --amber-line:#cbb489;
-  --slate:#2a4763; --slate-bg:transparent; --slate-line:#a6b6c6;
-  --clay:#8a2e21; --clay-bg:transparent; --clay-line:#c9a49c;
+  --paper:#ffffff; --surface:#f7f7f6; --surface-2:#eeeeec;
+  /* --card is the raised content surface. On a white page it cannot be lighter
+     than --paper, so it matches it and every .card earns its edge from --line
+     instead. The alternating landing sections that used to rely on card being
+     lighter than paper now use --surface. */
+  --card:#ffffff; --reverse:#ffffff;
+  --line:#e3e3e0; --line-soft:#eeeeec;
+  /* Dividers are decorative, so --line may stay quiet. An input border is a UI
+     component boundary and WCAG 1.4.11 wants 3:1 for it; --line measured
+     1.29:1 on white, so controls get their own token. #878d92 is 3.36:1 on
+     --paper and 3.13:1 on --surface, the two grounds inputs sit on. */
+  --control-line:#878d92;
+  /* Black, not green. Green now means settled money and nothing else, so it
+     never appears on a button, a focus ring or the wordmark. */
+  --brand:#111315; --brand-h:#2b2f33;
+  /* --ink-3 is the quietest text in the system and --surface-2 the darkest
+     ground it lands on, so that pair sets the floor. It measures 4.99:1 there,
+     clearing WCAG AA's 4.5:1 with room; every other text pair is higher. Do
+     not lighten these without re-running the measurement. See DESIGN.md. */
+  --ink:#111315; --ink-2:#4a4f54; --ink-3:#61666b;
+  --pine:#12513a; --pine-bg:transparent; --pine-line:#acc2ba;
+  --amber:#8a5a12; --amber-bg:transparent; --amber-line:#cdb899;
+  --slate:#22456b; --slate-bg:transparent; --slate-line:#adbac8;
+  --clay:#9c2b22; --clay-bg:transparent; --clay-line:#d5a6a2;
   /* Display face, wordmark only. Never for interface text. */
   --display: var(--font-archivo), "Archivo", "Helvetica Neue", "Arial Black", Helvetica, Arial, sans-serif;
   --display-wdth: 118%; --display-wght: 800;
@@ -101,7 +112,7 @@ export const CSS = `
 /* Selected text was the browser's default blue, the one colour on the page
    from outside this palette — and it shows up constantly here, because people
    select amounts, account ids and invite links to copy them. */
-.fw ::selection { background:#cfdcd4; color:var(--ink); }
+.fw ::selection { background:#e2e3e3; color:var(--ink); }
 .fw button, .fw input, .fw select, .fw textarea { font: inherit; color: inherit; }
 .fw a { color: inherit; text-decoration: none; }
 .fw :focus-visible { outline:2px solid var(--brand); outline-offset:2px; border-radius:0; }
@@ -211,15 +222,15 @@ export const CSS = `
   white-space:nowrap;
 }
 .fw .btn:hover { background:var(--brand-h); border-color:var(--brand-h); }
-.fw .btn:active { background:#0c3527; border-color:#0c3527; }
+.fw .btn:active { background:#000000; border-color:#000000; }
 .fw .btn[aria-busy="true"] { background:var(--brand-h); border-color:var(--brand-h); opacity:.85; cursor:progress; }
 .fw .btn[aria-busy="true"]::before { content:""; width:var(--marker); height:var(--marker); background:var(--reverse); flex:none; }
 .fw .btn-2:active { background:var(--surface-2); border-color:var(--ink-3); }
 .fw .btn-q:active { background:var(--surface-2); }
-.fw .btn-d:active { background:#f0d9d5; }
+.fw .btn-d:active { background:#f3e6e4; }
 /* Disabled is a state, not a faded version of the enabled one.
-   This was opacity .38 over the brand green, which rendered white text on a
-   washed-out green at roughly 2:1 — the label was the least readable thing on
+   This was opacity .38 over the brand, green at the time, which rendered
+   white text on a washed-out green at roughly 2:1 — the label was the least readable thing on
    the page at the moment someone is trying to work out why they cannot submit.
    A neutral surface with muted text reads as "not yet" and clears AA. */
 .fw .btn:disabled, .fw .btn:disabled:hover {
@@ -230,7 +241,7 @@ export const CSS = `
 .fw .nav button:not(.btn)[data-on="1"] { font-weight:var(--fw-med); }
 /* (the disabled rule lives above; a second one here used to override it) */
 .fw .btn-2 { background:var(--paper); color:var(--ink); border-color:var(--line); }
-.fw .btn-2:hover { background:var(--surface); border-color:#d5d5d1; }
+.fw .btn-2:hover { background:var(--surface); border-color:#d4d4d1; }
 .fw .btn-q { background:transparent; border-color:transparent; color:var(--ink-2); }
 .fw .btn-q:hover { background:var(--surface-2); border-color:transparent; color:var(--ink); }
 .fw .btn-d { background:var(--paper); color:var(--clay); border-color:var(--clay-line); }
@@ -262,12 +273,12 @@ export const CSS = `
 .fw .field { display:block; margin-bottom:14px; }
 .fw .field > .lbl { display:block; margin-bottom:6px; color:var(--ink); font-size:var(--fs-3); font-weight:var(--fw-med); }
 .fw .input, .fw .select, .fw .ta {
-  width:100%; height:var(--h-md); padding:0 var(--sp-3); border:1px solid var(--line); border-radius:0;
+  width:100%; height:var(--h-md); padding:0 var(--sp-3); border:1px solid var(--control-line); border-radius:0;
   background:var(--card); font-size:var(--fs-3);
 }
 .fw .ta { height:auto; padding:9px 11px; resize:vertical; line-height:1.5; }
 .fw .input:focus, .fw .select:focus, .fw .ta:focus { outline:none; border-color:var(--brand); box-shadow:inset 0 0 0 1px var(--brand); }
-.fw .input::placeholder, .fw .ta::placeholder { color:#a8adb1; }
+.fw .input::placeholder, .fw .ta::placeholder { color:#6b7075; }
 .fw .input:hover:not(:focus):not(:disabled), .fw .select:hover:not(:focus):not(:disabled) { border-color:var(--ink-3); }
 .fw .input:disabled, .fw .select:disabled, .fw .ta:disabled {
   background:var(--surface); color:var(--ink-3); cursor:not-allowed; border-color:var(--line-soft); }
@@ -365,10 +376,10 @@ export const CSS = `
 
 .fw .choice { display:flex; gap:10px; align-items:flex-start; padding:12px 13px; border:1px solid var(--line); cursor:pointer; background:var(--card); text-align:left; width:100%; }
 .fw .choice:hover { border-color:var(--ink-3); }
-/* Selected borrows the brand, not near-black. The tick inside is brand green,
-   so a black surround made one control answer in two colours, and doubling a
-   near-black border to 2px was the heaviest edge on the page for what is only
-   a checkbox being ticked. */
+/* Selected borrows --brand, which is now near-black itself: green was retired
+   from interface colour and means settled money and nothing else. One control
+   still answers in one colour, and the edge stays 1px rather than doubling to
+   2px, which was the heaviest line on the page for a checkbox being ticked. */
 .fw .choice[data-on="1"] { border-color:var(--brand); background:var(--card); box-shadow:inset 0 0 0 1px var(--brand); }
 /* A square box with a tick, not a filled circle.
    Two reasons. A circle is the established shape for "one of several", and this
@@ -378,7 +389,7 @@ export const CSS = `
    The mark is a real tick rather than a filled square, which reads as "yes" at
    15px in a way a dot does not. The dashboard's setup markers already use this
    square, so the two now agree. */
-.fw .tick { width:15px; height:15px; border-radius:0; border:1.5px solid var(--line);
+.fw .tick { width:15px; height:15px; border-radius:0; border:1.5px solid var(--control-line);
   flex:none; margin-top:3px; position:relative; background:var(--card); }
 .fw .choice:hover .tick { border-color:var(--ink-3); }
 .fw .choice[data-on="1"] .tick { border-color:var(--brand); background:var(--brand); }
@@ -388,7 +399,13 @@ export const CSS = `
 
 /* table */
 .fw .tbl { width:100%; border-collapse:collapse; }
-.fw .tbl th { text-align:left; font-size:var(--fs-2); font-weight:var(--fw-med); color:var(--ink-3); padding:var(--sp-2) var(--sp-5); border-bottom:1px solid var(--line); background:var(--surface); }
+.fw .tbl th { text-align:left; font-size:var(--fs-2); font-weight:var(--fw-med); color:var(--ink-3); padding:var(--sp-2) var(--sp-5); border-bottom:1px solid var(--line); }
+/* The tinted ground belongs to a COLUMN header, where it spans the row. A
+   row-scoped th (scope="row") is one cell, so the same rule painted a grey
+   block across half the row and read as a half-filled bar. The warm palette
+   hid it because --surface sat a hair off --card; on white it is plain. */
+.fw .tbl thead th { background:var(--surface); }
+.fw .tbl tbody th { color:var(--ink-2); }
 .fw .tbl td { padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--line-soft); font-size:var(--fs-3); vertical-align:middle; }
 .fw .tbl tr:last-child td { border-bottom:0; }
 .fw .tbl .r { text-align:right; }
@@ -421,10 +438,10 @@ export const CSS = `
 .fw .page-h { margin-bottom:20px; }
 
 /* env bar */
-.fw .env { height:30px; background:var(--ink); color:#e8e8e6; display:flex; align-items:center; justify-content:center; gap:10px; font-size:var(--fs-2); padding:0 16px; }
+.fw .env { height:30px; background:var(--ink); color:#e2e3e3; display:flex; align-items:center; justify-content:center; gap:10px; font-size:var(--fs-2); padding:0 16px; }
 .fw .env b { font-weight:560; color:var(--reverse); }
-.fw .env .sep { width:1px; height:12px; background:#3d4145; }
-.fw .env button:not(.btn) { background:transparent; border:0; color:#b9bec2; cursor:pointer; font-size:var(--fs-2);
+.fw .env .sep { width:1px; height:12px; background:#454748; }
+.fw .env button:not(.btn) { background:transparent; border:0; color:#b8b8b9; cursor:pointer; font-size:var(--fs-2);
   text-decoration:underline; text-underline-offset:2px; padding:0; }
 .fw .env button:not(.btn):hover { color:var(--reverse); }
 
@@ -515,7 +532,7 @@ export const CSS = `
 @media (max-width:900px) { .fw .reality { grid-template-columns:1fr; gap:0; } }
 .fw .lp-eyebrow { display:block; font-size:var(--fs-2); font-weight:var(--fw-med); letter-spacing:0.02em;
   color:var(--brand); }
-.fw .lp-dark .lp-eyebrow { color:#8fc4ac; }
+.fw .lp-dark .lp-eyebrow { color:#aeafaf; }
 .fw .sec-lead { max-width:62ch; }
 .fw .cardgrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
   gap:var(--sp-6); align-items:stretch; }
@@ -538,37 +555,37 @@ export const CSS = `
 }
 .fw .ddemo-ctl { display:flex; gap:var(--sp-4); align-items:stretch; flex-wrap:wrap; }
 .fw .dtoggle { display:flex; gap:12px; align-items:flex-start; padding:14px 16px; background:transparent;
-  border:1px solid rgba(244,242,236,.28); cursor:pointer; text-align:left; flex:1 1 300px; font-family:inherit; }
-.fw .dtoggle:hover { border-color:rgba(244,242,236,.5); }
+  border:1px solid rgba(255,255,255,.28); cursor:pointer; text-align:left; flex:1 1 300px; font-family:inherit; }
+.fw .dtoggle:hover { border-color:rgba(255,255,255,.5); }
 .fw .dtoggle[data-on="1"] { border-color:var(--reverse); }
-.fw .dtoggle-box { width:15px; height:15px; border:1.5px solid rgba(244,242,236,.5); flex:none; margin-top:2px; position:relative; }
+.fw .dtoggle-box { width:15px; height:15px; border:1.5px solid rgba(255,255,255,.5); flex:none; margin-top:2px; position:relative; }
 .fw .dtoggle[data-on="1"] .dtoggle-box { border-color:var(--reverse); }
 .fw .dtoggle[data-on="1"] .dtoggle-box::after { content:""; position:absolute; inset:3px; background:var(--reverse); }
 .fw .dtoggle-t { display:block; font-size:var(--fs-3); font-weight:var(--fw-med); color:var(--reverse); }
-.fw .dtoggle-d { display:block; font-size:var(--fs-2); color:#b4b0a4; margin-top:2px; }
-.fw .ddemo-out { margin-top:var(--sp-6); border-top:1px solid rgba(244,242,236,.2); padding-top:var(--sp-5); }
+.fw .dtoggle-d { display:block; font-size:var(--fs-2); color:#bcbdbd; margin-top:2px; }
+.fw .ddemo-out { margin-top:var(--sp-6); border-top:1px solid rgba(255,255,255,.2); padding-top:var(--sp-5); }
 .fw .ddemo-sum { display:flex; gap:14px; align-items:baseline; flex-wrap:wrap; margin-bottom:var(--sp-4); }
 .fw .dlist { list-style:none; margin:0; padding:0; }
 .fw .dlist li { display:flex; gap:14px; align-items:flex-start; padding:12px 0;
-  border-top:1px solid rgba(244,242,236,.16); }
+  border-top:1px solid rgba(255,255,255,.16); }
 .fw .dmark { width:9px; height:9px; flex:none; margin-top:5px;
   clip-path:polygon(0 0, 26% 0, 45% 62%, 64% 0, 100% 0, 58% 100%, 43% 100%); }
-.fw .dlist li[data-ok="1"] .dmark { background:#7fb79c; }
-.fw .dlist li[data-ok="0"] .dmark { background:#d98b7f; }
+.fw .dlist li[data-ok="1"] .dmark { background:#a5bdb4; }
+.fw .dlist li[data-ok="0"] .dmark { background:#d9aeab; }
 .fw .dlabel { display:block; font-size:var(--fs-3); font-weight:var(--fw-med); color:var(--reverse); }
-.fw .ddetail { display:block; font-size:var(--fs-2); color:#b4b0a4; margin-top:3px; max-width:56ch; }
-.fw .lp-dark .vd-ok { color:#7fb79c; } .fw .lp-dark .vd-no { color:#d98b7f; }
-.fw .lp-dark .lp-note { color:#8b877c; }
+.fw .ddetail { display:block; font-size:var(--fs-2); color:#bcbdbd; margin-top:3px; max-width:56ch; }
+.fw .lp-dark .vd-ok { color:#a5bdb4; } .fw .lp-dark .vd-no { color:#d9aeab; }
+.fw .lp-dark .lp-note { color:#9b9c9d; }
 .fw .lp-dark .btn { background:var(--reverse); border-color:var(--reverse); color:var(--ink); }
 .fw .lp-dark .btn:hover { background:#fff; border-color:#fff; }
 /* On paper the secondary button is a lighter fill; on ink that reads as the
    same button twice, because both end up pale on dark. It becomes an outline
    here so the hierarchy survives the inversion — one filled, one drawn. */
-.fw .lp-dark .btn-2 { background:transparent; border-color:#6d6a61; color:var(--reverse); }
-.fw .lp-dark .btn-2:hover { background:rgba(244,242,236,.09); border-color:var(--reverse); color:var(--reverse); }
-.fw .lp-dark .btn-2:active { background:rgba(244,242,236,.15); border-color:var(--reverse); }
-.fw .lp-dark .linkbtn { color:#8fc4ac; }
-.fw .lp-dark .linkbtn:hover { color:#a8d4c0; }
+.fw .lp-dark .btn-2 { background:transparent; border-color:#676869; color:var(--reverse); }
+.fw .lp-dark .btn-2:hover { background:rgba(255,255,255,.09); border-color:var(--reverse); color:var(--reverse); }
+.fw .lp-dark .btn-2:active { background:rgba(255,255,255,.15); border-color:var(--reverse); }
+.fw .lp-dark .linkbtn { color:#e2e3e3; }
+.fw .lp-dark .linkbtn:hover { color:#ffffff; }
 .fw .lp-dark :focus-visible { outline-color:var(--reverse); }
 .fw .dlist li > span:last-child { margin-left:auto; }
 @media (max-width:900px) { .fw .ddemo-ctl { flex-direction:column; } }
@@ -740,7 +757,7 @@ export const CSS2 = `
   scroll-margin-top:calc(var(--nav-h) + var(--sp-4)); }
 .fw [id]:focus { outline:none; }
 .fw #main { scroll-margin-top:calc(var(--nav-h) + var(--sp-4)); }
-.fw section.lp:nth-of-type(even) { background:var(--card); }
+.fw section.lp:nth-of-type(even) { background:var(--surface); }
 .fw section.lp.lp-dark { background:var(--ink); }
 .fw section.lp:first-of-type { border-top:0; }
 .fw .skiplink { position:absolute; left:-9999px; top:0; z-index:200; background:var(--brand); color:var(--reverse);
@@ -888,8 +905,8 @@ export const CSS2 = `
   margin-bottom:calc(-1 * var(--tail));
   padding-bottom:calc(var(--lp-pad) + var(--tail)); }
 .fw .lp-dark .d1, .fw .lp-dark .d2, .fw .lp-dark h2, .fw .lp-dark .statement { color:var(--reverse); }
-.fw .lp-dark .body, .fw .lp-dark .small, .fw .lp-dark .lead { color:#b4b0a4; }
-.fw .lp-dark .tiny { color:#8b877c; }
+.fw .lp-dark .body, .fw .lp-dark .small, .fw .lp-dark .lead { color:#bcbdbd; }
+.fw .lp-dark .tiny { color:#9b9c9d; }
 .fw .lp-center { text-align:center; }
 .fw .lp-center .mark { margin-left:auto; margin-right:auto; }
 .fw .lp-center .statement, .fw .lp-center .statement-sub, .fw .lp-center .d2 { margin-left:auto; margin-right:auto; }
@@ -897,7 +914,7 @@ export const CSS2 = `
 .fw .lp-center .lp-h2, .fw .lp-center .lp-h1, .fw .lp-center .body,
 .fw .lp-center .lead, .fw .lp-center .sec-lead { margin-left:auto; margin-right:auto; }
 .fw .lp-tall { padding:var(--sp-10) 0; }
-.fw .lp-dark .statement-sub { color:#b4b0a4; }
+.fw .lp-dark .statement-sub { color:#bcbdbd; }
 /* The mark's own stroke angle, reused as a section divider */
 @media (max-width:760px) {
   .fw .lp-tall { padding:var(--sp-9) 0; }

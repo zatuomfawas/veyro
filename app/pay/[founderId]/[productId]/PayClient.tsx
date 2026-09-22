@@ -96,10 +96,10 @@ export default function PayClient({ founderId, productId, amountLabel, intentHin
         appearance: {
           // Match the design system rather than shipping Stripe's default look.
           variables: {
-            colorPrimary: "#1e4636",
-            colorBackground: "#faf9f5",
-            colorText: "#191814",
-            colorDanger: "#8a2e21",
+            colorPrimary: "#111315",
+            colorBackground: "#ffffff",
+            colorText: "#111315",
+            colorDanger: "#9c2b22",
             borderRadius: "0px",
             fontSizeBase: "14px",
             spacingUnit: "4px",

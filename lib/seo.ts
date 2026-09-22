@@ -25,15 +25,15 @@ import type { Metadata, Viewport } from "next";
 // all. Overridable per environment, but it defaults to production on purpose:
 // a preview deployment should still name production as canonical.
 export const SITE = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://withveyro.com").replace(/\/$/, "");
-export const BRAND_COLOR = "#1e4636";
+export const BRAND_COLOR = "#111315";
 
 // The mark, as a data URI — identical to prototype/veyro.jsx's FAVICON constant.
 export const FAVICON =
   "data:image/svg+xml," +
   encodeURIComponent(
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">' +
-      '<rect width="100" height="100" fill="#1e4636"/>' +
-      '<path d="M18 26 L32 26 L48 60 L64 26 L86 26 L59 80 L46 80 Z" fill="#f4f2ec"/></svg>',
+      '<rect width="100" height="100" fill="#111315"/>' +
+      '<path d="M18 26 L32 26 L48 60 L64 26 L86 26 L59 80 L46 80 Z" fill="#ffffff"/></svg>',
   );
 
 export type SeoRouteKey =
