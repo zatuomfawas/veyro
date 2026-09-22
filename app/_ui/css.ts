@@ -405,9 +405,12 @@ export const CSS = `
    block across half the row and read as a half-filled bar. The warm palette
    hid it because --surface sat a hair off --card; on white it is plain. */
 .fw .tbl thead th { background:var(--surface); }
-.fw .tbl tbody th { color:var(--ink-2); }
+/* A row header is a label cell, so it takes the body divider (--line-soft),
+   not the heavier --line a column header draws. Mismatched, one row was
+   divided by two different greys across its width. */
+.fw .tbl tbody th { color:var(--ink-2); border-bottom-color:var(--line-soft); }
 .fw .tbl td { padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--line-soft); font-size:var(--fs-3); vertical-align:middle; }
-.fw .tbl tr:last-child td { border-bottom:0; }
+.fw .tbl tr:last-child td, .fw .tbl tr:last-child th { border-bottom:0; }
 .fw .tbl .r { text-align:right; }
 .fw .tbl-c tbody tr { cursor:pointer; }
 .fw .tbl-c tbody tr:hover { background:var(--surface); }
