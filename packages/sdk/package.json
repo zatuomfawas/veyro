@@ -37,8 +37,5 @@
     "@types/react": "^19"
   },
   "keywords": ["payments", "stripe", "checkout", "veyro"],
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://npm.pkg.github.com"
-  }
+  "publishConfig": { "access": "public" }
 }
