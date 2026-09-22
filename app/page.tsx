@@ -6,6 +6,9 @@ import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink, Icon } from "@/app/_ui/marks";
 import { HeroPreview } from "@/app/_ui/HeroPreview";
 import { CheckoutPreview } from "@/app/_ui/CheckoutPreview";
+import { IntegrationPanel } from "@/app/_ui/IntegrationPanel";
+import { GuardianStatus } from "@/app/_ui/GuardianStatus";
+import { WalletTabs } from "@/app/_ui/WalletTabs";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
@@ -15,20 +18,25 @@ import { FAQ } from "@/app/_ui/faq";
 export const metadata = buildMetadata("landing");
 export const viewport = buildViewport();
 
-// Server Component. No client JS on the marketing surface: the section links
-// are plain anchors and the FAQ is <details>, so everything below works with
-// JavaScript switched off.
+// Server Component. Three islands of client JS and nothing else: the wallet
+// tabs, the integration panel and the mobile nav. The section links are plain
+// anchors and the FAQ is <details>, so the page still reads end to end with
+// JavaScript switched off — only the tabs and the prompt generator need it.
+//
+// The order is the product's order rather than the argument's. It used to open
+// by explaining Stripe's age policy, which answers a question nobody has asked
+// yet. What a visitor actually arrives with is "I built something — can I sell
+// it?", so the page now answers that first and reaches the eligibility rules
+// once they matter.
 //
 // currentUser() reads the session cookie, which opts this route out of static
 // rendering. For anonymous traffic, which is nearly all of it, that costs a
 // cookie read and no database query: currentUser() returns null before it
 // touches the db.
 //
-// This page sells what Veyro does. It used to open by explaining Stripe's age
-// policy, which is the answer to a question nobody has yet asked. The evidence
-// still matters and still exists in full on /how-it-works: the verbatim Stripe
-// reply, the country grading, and what they would not confirm. It is linked
-// from here rather than argued here.
+// The Stripe evidence still matters and still exists in full on /how-it-works:
+// the verbatim reply, the country grading, and what they would not confirm. It
+// is linked from here rather than argued here.
 
 /** One row of the who-does-what list. */
 function Role({ icon, who, children }: { icon: string; who: string; children: React.ReactNode }) {
@@ -89,7 +97,8 @@ export default async function Home() {
           <nav className="lp-nav" aria-label="Main">
             <Link href="/" aria-label="Veyro, home"><Wordmark size={20} /></Link>
             <div className="lp-links">
-              <Link className="btn btn-q btn-sm hide-s" href="#roles">How it works</Link>
+              <Link className="btn btn-q btn-sm hide-s" href="#connect">Connect your app</Link>
+              <Link className="btn btn-q btn-sm hide-s" href="#wallet">Founder Wallet</Link>
               <Link className="btn btn-q btn-sm hide-s" href="/for-guardians">For parents</Link>
               {user ? (
                 <Link className="btn btn-sm" href={defaultLandingFor(user.role)}>
@@ -98,13 +107,15 @@ export default async function Home() {
               ) : (
                 <>
                   <Link className="btn btn-q btn-sm hide-s" href="/auth/signin">Sign in</Link>
-                  <Link className="btn btn-sm" href="/check">Check eligibility</Link>
+                  <Link className="btn btn-sm" href="/get-started">Get started</Link>
                 </>
               )}
               <MobileNav
                 items={[
-                  { href: "#roles", label: "How it works" },
-                  { href: "#wallet", label: "Where your money goes" },
+                  { href: "#connect", label: "Connect your app" },
+                  { href: "#how", label: "How it works" },
+                  { href: "#wallet", label: "Founder Wallet" },
+                  { href: "#guardian", label: "Your guardian" },
                   { href: "/for-guardians", label: "For parents" },
                   { href: "/how-it-works", label: "What Stripe told us" },
                   { href: "#faq", label: "Questions" },
@@ -124,26 +135,29 @@ export default async function Home() {
               <div>
                 <h1 className="hero-h">
                   <Wordmark hero />
-                  <span className="tagline">Build something people will pay for.</span>
+                  <span className="tagline">You built something people will pay for.</span>
                 </h1>
 
                 <p className="lead" style={{ marginTop: "var(--sp-5)" }}>
-                  Veyro helps young founders navigate payment setup, guardian involvement and the
-                  financial side of running an online business.
+                  Veyro gives young founders the financial infrastructure to turn what they built
+                  into something they can actually sell.
                 </p>
 
+                {/* Supporting, not the headline. The age rules are why Veyro
+                    exists, but they are not what someone arrives wanting to
+                    read; the checker two clicks away answers them properly. */}
                 <p className="foldwho">
                   Built for young founders. Guardian involvement may be required depending on your
                   setup.
                 </p>
 
                 <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap" }}>
-                  <Link className="btn btn-lg" href="/check">Check my eligibility</Link>
-                  <Link className="btn btn-2 btn-lg" href="#roles">See how it works</Link>
+                  <Link className="btn btn-lg" href="/get-started">Get started</Link>
+                  <Link className="btn btn-2 btn-lg" href="/check">Check eligibility</Link>
                 </div>
 
                 <p className="tiny" style={{ marginTop: 12 }}>
-                  Two questions. No account, no email address.
+                  The checker takes two questions. No account, no email address.
                 </p>
 
                 <div style={{ marginTop: 32, paddingTop: 16, borderTop: "1px solid var(--line)" }}>
@@ -175,30 +189,206 @@ export default async function Home() {
           </div>
         </div>
 
-        {/* ---------------- why it exists ---------------- */}
-        <section className="lp" id="why">
+        {/* ---------------- already built it ---------------- */}
+        {/* Directly after the hero, because "I have already made the thing"
+            is the state most people arrive in, and the old page made them
+            read to the bottom before it addressed them. */}
+        <section className="lp" id="connect">
+          <div className="wrap-lp">
+            <div className="truthgrid" style={{ alignItems: "start" }}>
+              <div>
+                <span className="lp-eyebrow">Already built it?</span>
+                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                  Add Veyro to what you made.
+                </h2>
+                <p className="lp-lead" style={{ marginTop: 16 }}>
+                  Your website or app does not need rebuilding. Connect Veyro to what you already
+                  have and add a payment flow without becoming a payment engineer.
+                </p>
+                <p className="body" style={{ marginTop: 16 }}>
+                  It is two HTTP calls: one to start a checkout, one to ask whether it was paid.
+                  If you built with an AI coding tool, the prompt does the wiring for you.
+                </p>
+                <p className="small" style={{ marginTop: 16 }}>
+                  Prefer to read it yourself?{" "}
+                  <Link className="linkbtn" href="/docs/sdk">The integration docs</Link>
+                </p>
+              </div>
+
+              <IntegrationPanel />
+            </div>
+          </div>
+        </section>
+
+        {/* ---------------- build to paid ---------------- */}
+        <section className="lp" id="how">
+          <div className="wrap-lp">
+            <span className="lp-eyebrow">Build to paid</span>
+            <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>Five steps, in order.</h2>
+            <p className="sec-lead body" style={{ marginTop: 12, marginBottom: 24 }}>
+              Nothing can take a payment until each one is done. That sequence is the payment
+              provider&rsquo;s, not ours.
+            </p>
+
+            <ol className="steps">
+              <li>
+                <span className="st-n">01</span>
+                <span className="st-t">Build</span>
+                <span className="st-d">Make the website, app, product or service. However you like.</span>
+              </li>
+              <li>
+                <span className="st-n">02</span>
+                <span className="st-t">Connect</span>
+                <span className="st-d">Add Veyro to what you already built, or use a payment link and skip the code.</span>
+              </li>
+              <li>
+                <span className="st-n">03</span>
+                <span className="st-t">Set up</span>
+                <span className="st-d">Invite your guardian. They complete the checks the provider requires of an adult.</span>
+              </li>
+              <li>
+                <span className="st-n">04</span>
+                <span className="st-t">Sell</span>
+                <span className="st-d">Customers pay on a page with your name and your product on it.</span>
+              </li>
+              <li>
+                <span className="st-n">05</span>
+                <span className="st-t">Understand</span>
+                <span className="st-d">See what came in, what Stripe took, what is settling and what you can draw.</span>
+              </li>
+            </ol>
+
+            <p className="lp-note" style={{ marginTop: 20 }}>
+              <Link className="linkbtn" href="/get-started">The same five steps, with the detail</Link>
+            </p>
+          </div>
+        </section>
+
+        <section className="lp" id="wallet">
+          <div className="wrap-lp">
+            <div className="truthgrid" style={{ alignItems: "start" }}>
+              <div>
+                <span className="lp-eyebrow">Founder Wallet</span>
+                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                  Know where every dollar is.
+                </h2>
+                <p className="lp-lead" style={{ marginTop: 16 }}>
+                  Revenue should not disappear into a payment dashboard. Founder Wallet shows what
+                  was collected, what Stripe took, what is settling, what you can draw today and
+                  what has already been paid out.
+                </p>
+                <p className="body" style={{ marginTop: 16 }}>
+                  Every figure is folded from your own payment records each time you look. No
+                  balance is stored anywhere, so it cannot drift from the payments behind it.
+                </p>
+
+                <div className="reqlist" style={{ marginTop: 20 }}>
+                  <Flow label="Earned">A customer paid, and it cleared.</Flow>
+                  <Flow label="Still settling">Paid, not yet cleared by the provider.</Flow>
+                  <Flow label="Refunded">Sent back to a customer.</Flow>
+                  <Flow label="Committed">You have asked for it, so it cannot be spent twice.</Flow>
+                  <Flow label="Available">What you can request today.</Flow>
+                  <Flow label="Paid out">Already in the bank account on the payment account.</Flow>
+                </div>
+
+                <p className="small" style={{ marginTop: 16 }}>
+                  <Link className="linkbtn" href="/wallet">How the wallet is calculated</Link>
+                </p>
+              </div>
+
+              <WalletTabs />
+            </div>
+          </div>
+        </section>
+
+        {/* ---------------- the wallet ---------------- */}
+        {/* ---------------- what the customer sees ---------------- */}
+        <section className="lp" id="checkout">
           <div className="wrap-lp">
             <div className="truthgrid">
               <div>
-                <span className="lp-eyebrow">Why this exists</span>
+                <span className="lp-eyebrow">Your customer</span>
                 <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
-                  Building it was never the hard part.
+                  This is the page they pay on.
                 </h2>
-              </div>
-              <div>
-                <p className="lp-lead">
-                  I built Veyro after watching my brother hit the same wall over and over. Building
-                  the business was the easy part. Getting the financial infrastructure to run it
-                  wasn&rsquo;t.
-                </p>
                 <p className="body" style={{ marginTop: 16 }}>
-                  A capable fifteen-year-old can ship a product months before anyone will let them
-                  charge for it. Veyro closes that gap.
+                  You send a link. It opens this. Your name is on it, your product is on it, and
+                  the card form belongs to Stripe — neither you nor Veyro ever sees the number
+                  typed into it.
                 </p>
                 <p className="small" style={{ marginTop: 16 }}>
-                  Mike Daniels &middot;{" "}
-                  <Link className="linkbtn" href="/about">Read the full story</Link>
+                  There is nothing to design and nothing to install. Adding a product gives you the
+                  link, and the link works anywhere you can paste one.
                 </p>
+                <p className="small" style={{ marginTop: 16 }}>
+                  <Link className="linkbtn" href="/get-started">The steps, in order</Link>
+                </p>
+              </div>
+
+              <CheckoutPreview />
+            </div>
+          </div>
+        </section>
+
+        {/* ---------------- guardian ---------------- */}
+        <section className="lp" id="guardian">
+          <div className="wrap-lp">
+            <div className="truthgrid" style={{ alignItems: "start" }}>
+              <div>
+                <span className="lp-eyebrow">Your guardian</span>
+                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                  An adult on the account, not on your business.
+                </h2>
+                <p className="body" style={{ marginTop: 16 }}>
+                  Under 18, the payment provider requires a verified adult. Your guardian makes
+                  their own login, completes Stripe&rsquo;s identity checks on Stripe&rsquo;s own
+                  form, and is notified of every payout request.
+                </p>
+                <p className="body" style={{ marginTop: 16 }}>
+                  What they do not get is your business. You keep the products, the links and the
+                  decisions, and on this account type a guardian cannot block a payout.
+                </p>
+                <p className="small" style={{ marginTop: 16 }}>
+                  <Link className="linkbtn" href="/for-guardians">What a guardian is agreeing to</Link>
+                </p>
+              </div>
+
+              <GuardianStatus />
+            </div>
+          </div>
+        </section>
+
+        {/* ---------------- eligibility ---------------- */}
+        <section className="lp" id="eligibility">
+          <div className="wrap-lp">
+            <div className="truthgrid" style={{ alignItems: "start" }}>
+              <div>
+                <span className="lp-eyebrow">Before you build around it</span>
+                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                  Find out if this applies to you.
+                </h2>
+                <p className="lp-lead" style={{ marginTop: 16 }}>
+                  Two questions, no account and no email address. Where you live and how old you
+                  are decide which route is open, and whether you need Veyro at all.
+                </p>
+                <div className="row" style={{ marginTop: 20, gap: 8, flexWrap: "wrap" }}>
+                  <Link className="btn btn-lg" href="/check">Check eligibility</Link>
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-b">
+                  <p className="small" style={{ marginTop: 0 }}>
+                    The checker tells you when the answer is no. Provider availability and the age
+                    at which you can enter a contract both vary by country, and both change; where
+                    Stripe would not confirm something, the result says so rather than guessing.
+                  </p>
+                  <p className="small" style={{ marginBottom: 0 }}>
+                    <Link className="linkbtn" href="/how-it-works">
+                      What Stripe told us, quoted in full
+                    </Link>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -237,65 +427,6 @@ export default async function Home() {
               <Link className="linkbtn" href="/how-it-works">/how-it-works</Link> quotes the
               provider&rsquo;s written policy in full.
             </p>
-          </div>
-        </section>
-
-        {/* ---------------- the wallet ---------------- */}
-        {/* ---------------- what the customer sees ---------------- */}
-        <section className="lp" id="checkout">
-          <div className="wrap-lp">
-            <div className="truthgrid">
-              <div>
-                <span className="lp-eyebrow">Your customer</span>
-                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
-                  This is the page they pay on.
-                </h2>
-                <p className="body" style={{ marginTop: 16 }}>
-                  You send a link. It opens this. Your name is on it, your product is on it, and
-                  the card form belongs to Stripe — neither you nor Veyro ever sees the number
-                  typed into it.
-                </p>
-                <p className="small" style={{ marginTop: 16 }}>
-                  There is nothing to design and nothing to install. Adding a product gives you the
-                  link, and the link works anywhere you can paste one.
-                </p>
-                <p className="small" style={{ marginTop: 16 }}>
-                  <Link className="linkbtn" href="/get-started">The steps, in order</Link>
-                </p>
-              </div>
-
-              <CheckoutPreview />
-            </div>
-          </div>
-        </section>
-
-        <section className="lp" id="wallet">
-          <div className="wrap-lp">
-            <div className="truthgrid">
-              <div>
-                <span className="lp-eyebrow">Your money</span>
-                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
-                  Where your money goes.
-                </h2>
-                <p className="body" style={{ marginTop: 16 }}>
-                  Every figure is folded from your own records each time you look. No balance is
-                  stored anywhere, so it cannot drift from the payments behind it.
-                </p>
-                <p className="small" style={{ marginTop: 16 }}>
-                  Stripe takes its processing fee on its own side, before the money reaches your
-                  balance. Veyro takes nothing.
-                </p>
-              </div>
-
-              <div className="reqlist">
-                <Flow label="Earned">A customer paid, and it cleared.</Flow>
-                <Flow label="Still settling">Paid, not yet cleared by the provider.</Flow>
-                <Flow label="Refunded">Sent back to a customer.</Flow>
-                <Flow label="Committed">You have asked for it, so it cannot be spent twice.</Flow>
-                <Flow label="Available">What you can request today.</Flow>
-                <Flow label="Paid out">Already in the bank account on the payment account.</Flow>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -372,6 +503,35 @@ export default async function Home() {
           </div>
         </section>
 
+        {/* ---------------- why it exists ---------------- */}
+        <section className="lp" id="why">
+          <div className="wrap-lp">
+            <div className="truthgrid">
+              <div>
+                <span className="lp-eyebrow">Why this exists</span>
+                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                  Building it was never the hard part.
+                </h2>
+              </div>
+              <div>
+                <p className="lp-lead">
+                  I built Veyro after watching my brother hit the same wall over and over. Building
+                  the business was the easy part. Getting the financial infrastructure to run it
+                  wasn&rsquo;t.
+                </p>
+                <p className="body" style={{ marginTop: 16 }}>
+                  A capable fifteen-year-old can ship a product months before anyone will let them
+                  charge for it. Veyro closes that gap.
+                </p>
+                <p className="small" style={{ marginTop: 16 }}>
+                  Mike Daniels &middot;{" "}
+                  <Link className="linkbtn" href="/about">Read the full story</Link>
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="lp" id="faq">
           <div className="wrap-lp">
             {/* truthgrid, like every other section on this page. Stacking the
@@ -412,21 +572,22 @@ export default async function Home() {
             ground is the page saying "this is the part to answer". */}
         <section className="lp lp-dark">
           <div className="wrap-lp lp-center">
-            <h2 className="lp-h2">Find out in twenty seconds.</h2>
+            <h2 className="lp-h2">You built it. Now make it sellable.</h2>
             <p className="body" style={{ marginTop: 12, marginLeft: "auto", marginRight: "auto" }}>
-              Two questions. No account, no email address. A straight answer, including the ones you
-              might not want.
+              Connect what you made, complete the setup with your guardian, and start taking
+              payments. If you are not sure the route is open where you live, check first &mdash;
+              it takes two questions and no account.
             </p>
             <div className="row" style={{ marginTop: 20, gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
-              <Link className="btn btn-lg" href="/check">Check my eligibility</Link>
-              {!user && <Link className="btn btn-2 btn-lg" href="/auth/signup">Create your account</Link>}
+              <Link className="btn btn-lg" href="/get-started">Get started</Link>
+              <Link className="btn btn-2 btn-lg" href="/check">Check eligibility</Link>
             </div>
           </div>
         </section>
       </main>
 
       <ScrollTop />
-      <StickyCta label="Check my eligibility" note="Two questions. No account." />
+      <StickyCta href="/get-started" label="Get started" note="Or check eligibility first. No account." />
       <SiteFooter />
     </div>
   );

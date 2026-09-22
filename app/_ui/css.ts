@@ -370,9 +370,55 @@ export const CSS = `
   padding:0 var(--sp-3); height:26px; white-space:nowrap;
   transition: background-color var(--t), color var(--t); }
 .fw .seg > button + button { border-left:1px solid var(--line); }
-.fw .seg > button:hover:not([aria-pressed="true"]) { background:var(--surface); color:var(--ink); }
-.fw .seg > button[aria-pressed="true"] { background:var(--brand); color:var(--reverse); }
+.fw .seg > button:hover:not([aria-pressed="true"]):not([aria-selected="true"]) { background:var(--surface); color:var(--ink); }
+/* Two attributes for one look: a segmented picker uses aria-pressed, a
+   tablist uses aria-selected, and aria-pressed is invalid on role="tab". */
+.fw .seg > button[aria-pressed="true"],
+.fw .seg > button[aria-selected="true"] { background:var(--brand); color:var(--reverse); }
 @media (pointer: coarse) { .fw .seg > button { height:var(--tap); } }
+
+/* A segmented control with six options cannot stay on one line on a phone, and
+   a horizontal scroller hides the options nobody scrolled to. It wraps, and the
+   left border that separates buttons is reset per row so a wrapped row does not
+   start with a doubled edge. */
+.fw .segwrap { display:flex; flex-wrap:wrap; border-width:1px 0 0 1px; }
+.fw .segwrap > button { border-right:1px solid var(--line); border-bottom:1px solid var(--line); }
+.fw .segwrap > button + button { border-left:0; }
+
+/* A long generated prompt. Scrolls in its own box rather than setting the width
+   of the page, and is focusable so it can be reached and read by keyboard. */
+.fw .codescroll { max-height:280px; overflow:auto; white-space:pre-wrap; word-break:break-word;
+  margin:0; -webkit-overflow-scrolling:touch; }
+
+/* Integration checks. The mark is decorative: every row states its condition in
+   words, so none of this depends on seeing a colour. */
+.fw .cklist { display:grid; gap:12px; }
+.fw .ck { display:flex; gap:10px; align-items:flex-start; }
+.fw .ck-m { width:9px; height:9px; flex:none; margin-top:6px; border:1px solid var(--line); }
+.fw .ck-y { background:var(--pine); border-color:var(--pine); }
+.fw .ck-n { background:transparent; border-color:var(--ink-3); }
+.fw .ck-t { display:block; font-size:var(--fs-3); font-weight:var(--fw-med); }
+.fw .ck-s { font-size:var(--fs-2); font-weight:var(--fw-reg); color:var(--ink-3); margin-left:8px; }
+.fw .ck-d { display:block; font-size:var(--fs-2); line-height:1.45; color:var(--ink-3); margin-top:2px;
+  max-width:60ch; }
+
+/* The five-step story. A numbered progression with a hairline connector, not
+   five cards: cards would give equal visual weight to five things that are one
+   sequence. */
+.fw .steps { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:0;
+  border-top:1px solid var(--ink); }
+.fw .steps > li { list-style:none; padding:16px 18px 18px 0; border-right:1px solid var(--line); }
+.fw .steps > li:last-child { border-right:0; }
+.fw .steps > li > * { min-width:0; }
+.fw .steps .st-n { display:block; font-size:var(--fs-1); letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--ink-3); font-variant-numeric:tabular-nums; }
+.fw .steps .st-t { display:block; font-size:var(--fs-4); font-weight:var(--fw-bold); margin-top:8px; }
+.fw .steps .st-d { display:block; font-size:var(--fs-2); line-height:1.5; color:var(--ink-3); margin-top:4px; }
+@media (max-width:900px) {
+  .fw .steps { grid-template-columns:1fr; border-top:0; }
+  .fw .steps > li { border-right:0; border-top:1px solid var(--line); padding:14px 0; }
+  .fw .steps > li:first-child { border-top:1px solid var(--ink); }
+}
 
 .fw .choice { display:flex; gap:10px; align-items:flex-start; padding:12px 13px; border:1px solid var(--line); cursor:pointer; background:var(--card); text-align:left; width:100%; }
 .fw .choice:hover { border-color:var(--ink-3); }
@@ -768,8 +814,13 @@ export const CSS2 = `
 .fw .wm-v { display:inline-block; vertical-align:baseline; height:0.72em; width:auto;
   margin-right:var(--wm-kern); letter-spacing:normal; }
 .fw .wm-rest { display:inline; }
+/* text-wrap:balance evens the two lines instead of letting the last word fall
+   alone. The headline changed from four words to eight and a 26ch measure left
+   "for." orphaned on its own line, which reads as a mistake at hero size.
+   Browsers without it simply wrap as before. */
 .fw .tagline { display:block; font-size:var(--fs-6); line-height:1.36; letter-spacing:-0.014em;
-  font-weight:var(--fw-reg); color:var(--ink-2); margin-top:var(--sp-5); max-width:26ch; }
+  font-weight:var(--fw-reg); color:var(--ink-2); margin-top:var(--sp-5); max-width:30ch;
+  text-wrap:balance; }
 .fw h1.hero-h { margin:0; }
 .fw .mark { display:block; flex:none; }
 .fw .brand { display:inline-block; line-height:1; }
