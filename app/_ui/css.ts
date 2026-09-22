@@ -532,6 +532,31 @@ export const CSS = `
 /* landing */
 .fw .lp-nav { height:62px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); }
 .fw .hero { padding-block:76px 60px; }
+
+/* The one accent on the page.
+   Pine is reserved for money — see DESIGN.md — and this is the single
+   deliberate exception, documented there rather than left to rot the rule. It
+   sits on the hero's text column, not on the full-bleed band: a 4px stripe at
+   the very edge of the viewport reads as a rendering artifact rather than as a
+   decision. */
+.fw .hero-accent { border-left:4px solid var(--pine); padding-left:var(--sp-6); }
+@media (max-width:760px) { .fw .hero-accent { padding-left:var(--sp-5); } }
+
+/* Three value props. A plain row of hairline-separated columns, not cards:
+   cards would put a box around three sentences and call it a feature grid. */
+.fw .props { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0;
+  border-top:1px solid var(--ink); }
+.fw .props > div { padding:18px 20px 4px 0; border-right:1px solid var(--line); }
+.fw .props > div:last-child { border-right:0; }
+.fw .props > div > * { min-width:0; }
+.fw .props .pr-t { display:block; font-size:var(--fs-4); font-weight:var(--fw-bold); }
+.fw .props .pr-d { display:block; font-size:var(--fs-3); line-height:1.5; color:var(--ink-2);
+  margin-top:6px; max-width:38ch; }
+@media (max-width:900px) {
+  .fw .props { grid-template-columns:1fr; border-top:0; }
+  .fw .props > div { border-right:0; border-top:1px solid var(--line); padding:16px 0 4px; }
+  .fw .props > div:first-child { border-top:1px solid var(--ink); }
+}
 /* Dashboard figures. Wraps rather than fixing a column count, because the
    revenue cell disappears when nothing has sold and a fixed grid would leave a
    hole where it was. minmax(0,...) so a long currency line shrinks instead of

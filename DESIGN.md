@@ -88,6 +88,11 @@ nothing else. It never appears on a button, a focus ring, a link or the
 wordmark. A colour that means one thing everywhere is worth more than a colour
 that is merely on brand, and money is the thing this product is about.
 
+There is exactly one exception, and it is written down here so it stays an
+exception: `.hero-accent`, the 4px rule beside the landing page's opening
+paragraph. It is the single accent on the page. If a second one is ever wanted,
+the honest move is to retire this rule rather than quietly add to the list.
+
 No pastels. No gradients of any kind. No coloured left-border stripe on cards.
 
 ### Two thresholds, not one

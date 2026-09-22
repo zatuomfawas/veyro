@@ -135,13 +135,23 @@ export default async function Home() {
               <div>
                 <h1 className="hero-h">
                   <Wordmark hero />
-                  <span className="tagline">You built something people will pay for.</span>
+                  <span className="tagline">You built something. Now get paid.</span>
                 </h1>
 
-                <p className="lead" style={{ marginTop: "var(--sp-5)" }}>
-                  Veyro gives young founders the financial infrastructure to turn what they built
-                  into something they can actually sell.
-                </p>
+                {/* The subheading says "in your own name", not "without an adult
+                    on the account". A guardian IS named on the payment account
+                    and IS accountable for what sells through it — /for-guardians
+                    says so in as many words — and a hero that implies otherwise
+                    is the first thing a parent would catch us on. What is
+                    actually true is stronger anyway: separate logins, and a
+                    guardian who cannot stop a payout. */}
+                <div className="hero-accent" style={{ marginTop: "var(--sp-5)" }}>
+                  <p className="lead" style={{ margin: 0 }}>
+                    Veyro lets founders take payments from 13, into an account in their own name.
+                    A parent is the verified adult the payment provider requires &mdash; not the
+                    owner of your business, and not someone who can block a payout.
+                  </p>
+                </div>
 
                 {/* Supporting, not the headline. The age rules are why Veyro
                     exists, but they are not what someone arrives wanting to
@@ -189,6 +199,108 @@ export default async function Home() {
           </div>
         </div>
 
+        {/* ---------------- the problem ---------------- */}
+        {/* Not "processors require you to be 18": they don't, and the stat
+            three inches above this says so with Stripe's written confirmation
+            behind it. The real problem is whose account it ends up being. */}
+        <section className="lp" id="problem">
+          <div className="wrap-lp">
+            <div className="truthgrid" style={{ alignItems: "start" }}>
+              <div>
+                <span className="lp-eyebrow">The problem</span>
+                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                  Whose account is it?
+                </h2>
+              </div>
+              <div>
+                <p className="lp-lead">
+                  Under 18, no payment provider will open an account for you on your own. The usual
+                  workaround is to use an adult&rsquo;s account instead &mdash; their login, their
+                  dashboard, their name on everything you sell.
+                </p>
+                <p className="body" style={{ marginTop: 16 }}>
+                  That works, and it costs you every bit of visibility into your own money. Veyro
+                  keeps the account in your name, gives you your own login, and puts an adult where
+                  the provider actually requires one.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ---------------- how it works ---------------- */}
+        <section className="lp" id="how">
+          <div className="wrap-lp">
+            <span className="lp-eyebrow">How it works</span>
+            <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>Four steps.</h2>
+            <p className="sec-lead body" style={{ marginTop: 12, marginBottom: 24 }}>
+              Nothing can take a payment until each one is done. That order is the payment
+              provider&rsquo;s, not ours.
+            </p>
+
+            <ol className="steps">
+              <li>
+                <span className="st-n">01</span>
+                <span className="st-t">Build it</span>
+                <span className="st-d">You have done this part already.</span>
+              </li>
+              <li>
+                <span className="st-n">02</span>
+                <span className="st-t">Invite a parent</span>
+                <span className="st-d">They make their own login and complete the provider&rsquo;s checks.</span>
+              </li>
+              <li>
+                <span className="st-n">03</span>
+                <span className="st-t">Add payments</span>
+                <span className="st-d">A payment link needs no code. A button in your app takes two calls.</span>
+              </li>
+              <li>
+                <span className="st-n">04</span>
+                <span className="st-t">Get paid</span>
+                <span className="st-d">Money settles into the account in your name, and you can see all of it.</span>
+              </li>
+            </ol>
+
+            <p className="lp-note" style={{ marginTop: 20 }}>
+              <Link className="linkbtn" href="/get-started">The same steps, with the detail</Link>
+            </p>
+          </div>
+        </section>
+
+        {/* ---------------- what you get ---------------- */}
+        <section className="lp" id="value">
+          <div className="wrap-lp">
+            <span className="lp-eyebrow">What you get</span>
+            <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)", marginBottom: 24 }}>
+              Three things that are yours.
+            </h2>
+
+            <div className="props">
+              <div>
+                <span className="pr-t">See every payment</span>
+                <span className="pr-d">
+                  Each sale, each fee Stripe reported, what is still settling and what you can
+                  draw today. Folded from your own records, never a stored number.
+                </span>
+              </div>
+              <div>
+                <span className="pr-t">Your account, your login</span>
+                <span className="pr-d">
+                  Opened in your name. You and your guardian have separate logins, and on this
+                  account type they cannot block a payout.
+                </span>
+              </div>
+              <div>
+                <span className="pr-t">No cut</span>
+                <span className="pr-d">
+                  Veyro takes no percentage and charges no platform fee. Stripe charges its own
+                  processing fees, which Stripe sets and deducts.
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* ---------------- already built it ---------------- */}
         {/* Directly after the hero, because "I have already made the thing"
             is the state most people arrive in, and the old page made them
@@ -217,50 +329,6 @@ export default async function Home() {
 
               <IntegrationPanel />
             </div>
-          </div>
-        </section>
-
-        {/* ---------------- build to paid ---------------- */}
-        <section className="lp" id="how">
-          <div className="wrap-lp">
-            <span className="lp-eyebrow">Build to paid</span>
-            <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>Five steps, in order.</h2>
-            <p className="sec-lead body" style={{ marginTop: 12, marginBottom: 24 }}>
-              Nothing can take a payment until each one is done. That sequence is the payment
-              provider&rsquo;s, not ours.
-            </p>
-
-            <ol className="steps">
-              <li>
-                <span className="st-n">01</span>
-                <span className="st-t">Build</span>
-                <span className="st-d">Make the website, app, product or service. However you like.</span>
-              </li>
-              <li>
-                <span className="st-n">02</span>
-                <span className="st-t">Connect</span>
-                <span className="st-d">Add Veyro to what you already built, or use a payment link and skip the code.</span>
-              </li>
-              <li>
-                <span className="st-n">03</span>
-                <span className="st-t">Set up</span>
-                <span className="st-d">Invite your guardian. They complete the checks the provider requires of an adult.</span>
-              </li>
-              <li>
-                <span className="st-n">04</span>
-                <span className="st-t">Sell</span>
-                <span className="st-d">Customers pay on a page with your name and your product on it.</span>
-              </li>
-              <li>
-                <span className="st-n">05</span>
-                <span className="st-t">Understand</span>
-                <span className="st-d">See what came in, what Stripe took, what is settling and what you can draw.</span>
-              </li>
-            </ol>
-
-            <p className="lp-note" style={{ marginTop: 20 }}>
-              <Link className="linkbtn" href="/get-started">The same five steps, with the detail</Link>
-            </p>
           </div>
         </section>
 
