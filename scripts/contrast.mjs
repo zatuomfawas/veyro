@@ -56,5 +56,24 @@ for (const [what, hex] of [["dark-band body", "#bcbdbd"], ["dark-band note", "#9
 // Placeholders carry information, so they are text, not decoration.
 check("input placeholder", "#6b7075", tok("card"), 4.5);
 
+// Pine now carries identity as well as money: the wordmark, links and the
+// focus ring. Links are text; a focus indicator is a non-text UI element, so
+// 1.4.11's 3:1 applies to it rather than 4.5:1.
+check("link on paper", tok("pine"), tok("paper"), 4.5);
+check("link on surface", tok("pine"), tok("surface"), 4.5);
+check("link hover on paper", tok("pine-h"), tok("paper"), 4.5);
+check("focus ring on paper", tok("pine"), tok("paper"), 3);
+check("focus ring on surface", tok("pine"), tok("surface"), 3);
+
+// And the reason .lp-dark overrides both. Pine on ink is 2.01:1, so the dark
+// band must keep using white for focus and for links. This asserts the
+// override is still necessary rather than that it exists — if pine ever
+// becomes light enough to pass here, the override can go.
+const onInk = ratio(tok("pine"), tok("ink"));
+if (onInk >= 3) {
+  console.log(`  NOTE  pine on ink is now ${onInk.toFixed(2)}:1 — the .lp-dark focus override may no longer be needed`);
+}
+check("dark-band focus ring stays white", tok("reverse"), tok("ink"), 3);
+
 if (failed) { console.error(`\n${failed} contrast failure(s).`); process.exit(1); }
 console.log("contrast: all pairs pass WCAG AA");

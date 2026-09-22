@@ -68,7 +68,7 @@ export const CSS = `
      clearing WCAG AA's 4.5:1 with room; every other text pair is higher. Do
      not lighten these without re-running the measurement. See DESIGN.md. */
   --ink:#111315; --ink-2:#4a4f54; --ink-3:#61666b;
-  --pine:#12513a; --pine-bg:transparent; --pine-line:#acc2ba;
+  --pine:#12513a; --pine-h:#0b3a29; --pine-bg:transparent; --pine-line:#acc2ba;
   --amber:#8a5a12; --amber-bg:transparent; --amber-line:#cdb899;
   --slate:#22456b; --slate-bg:transparent; --slate-line:#adbac8;
   --clay:#9c2b22; --clay-bg:transparent; --clay-line:#d5a6a2;
@@ -117,7 +117,11 @@ export const CSS = `
 .fw ::selection { background:#e2e3e3; color:var(--ink); }
 .fw button, .fw input, .fw select, .fw textarea { font: inherit; color: inherit; }
 .fw a { color: inherit; text-decoration: none; }
-.fw :focus-visible { outline:2px solid var(--brand); outline-offset:2px; border-radius:0; }
+/* Focus is pine. On the dark band .lp-dark overrides it back to white a few
+   hundred lines below, and must keep doing so: pine on --ink measures 2.01:1,
+   under the 3:1 a focus indicator has to clear, so a green ring there would be
+   a ring only sighted users in good light could find. */
+.fw :focus-visible { outline:2px solid var(--pine); outline-offset:2px; border-radius:0; }
 .fw .page-h { padding-bottom:2px; }
 .fw .page-h .d2 + .small { margin-top:5px; }
 .fw .rail-sec { padding:16px 8px 6px; font-size:var(--fs-1); color:var(--ink-3); }
@@ -254,9 +258,9 @@ export const CSS = `
 .fw .btn-q:hover { background:var(--surface-2); border-color:transparent; color:var(--ink); }
 .fw .btn-d { background:var(--paper); color:var(--clay); border-color:var(--clay-line); }
 .fw .btn-d:hover { background:var(--clay-bg); border-color:var(--clay-line); }
-.fw .linkbtn { background:none; border:0; padding:0; font:inherit; color:var(--brand); cursor:pointer;
+.fw .linkbtn { background:none; border:0; padding:0; font:inherit; color:var(--pine); cursor:pointer;
   text-decoration:underline; text-underline-offset:2px; }
-.fw .linkbtn:hover { color:var(--brand-h); }
+.fw .linkbtn:hover { color:var(--pine-h); }
 .fw .btn-lg { height:var(--h-lg); padding:0 var(--sp-5); font-size:var(--fs-4); }
 .fw .btn-sm { height:var(--h-sm); padding:0 var(--sp-3); font-size:var(--fs-2); border-radius:0; }
 .fw .btn-w { width:100%; }
@@ -474,7 +478,7 @@ export const CSS = `
 .fw .linkrow:active { background:var(--surface-2); }
 .fw .footgrid button:active { color:var(--brand-h); }
 .fw .choice:active { background:var(--surface); }
-.fw .linkbtn:active { color:var(--brand-h); }
+.fw .linkbtn:active { color:var(--pine-h); }
 
 /* app shell */
 .fw .shell { display:flex; min-height:100vh; align-items:stretch; }
@@ -539,7 +543,7 @@ export const CSS = `
    sits on the hero's text column, not on the full-bleed band: a 4px stripe at
    the very edge of the viewport reads as a rendering artifact rather than as a
    decision. */
-.fw .hero-accent { border-left:4px solid var(--pine); padding-left:var(--sp-6); }
+.fw .hero-accent { border-left:6px solid var(--pine); padding-left:var(--sp-6); }
 @media (max-width:760px) { .fw .hero-accent { padding-left:var(--sp-5); } }
 
 /* Three value props. A plain row of hairline-separated columns, not cards:

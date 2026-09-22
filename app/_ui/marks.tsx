@@ -36,7 +36,7 @@ export function Wordmark({ size, hero, reversed }: { size?: number; hero?: boole
   return (
     <span className={"wordmark" + (hero ? " wordmark-hero" : "")} style={size ? { fontSize: size } : undefined}>
       <svg className="wm-v" viewBox="10 18 80 66" aria-hidden="true" focusable="false">
-        <path d={V_PATH} fill={reversed ? "var(--reverse)" : "var(--brand)"} />
+        <path d={V_PATH} fill={reversed ? "var(--reverse)" : "var(--pine)"} />
       </svg>
       <span className="wm-rest" style={{ color: reversed ? "var(--reverse)" : "var(--ink)" }}>eyro</span>
     </span>

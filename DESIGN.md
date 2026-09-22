@@ -83,15 +83,30 @@ differs from the page.
 - Status families, each with a text colour and a line colour: pine (good),
   amber (attention), clay (bad), slate (informational), grey (neutral)
 
-**Green means money.** `--pine` (#12513a) marks settled, available funds and
-nothing else. It never appears on a button, a focus ring, a link or the
-wordmark. A colour that means one thing everywhere is worth more than a colour
-that is merely on brand, and money is the thing this product is about.
+**Green is the brand, and green is money.** `--pine` (#12513a) does two jobs.
 
-There is exactly one exception, and it is written down here so it stays an
-exception: `.hero-accent`, the 4px rule beside the landing page's opening
-paragraph. It is the single accent on the page. If a second one is ever wanted,
-the honest move is to retire this rule rather than quietly add to the list.
+It is the identity: the V in the wordmark, every link, the focus ring, and the
+6px rule beside the landing page's opening paragraph.
+
+It is also the settled-money state: the `b-pine` badge, the available segment
+of the money band, and the available figure in `MoneyPosition`.
+
+This used to be one job. Through September 2026 pine marked money and nothing
+else — not a link, not a focus ring, not the wordmark — on the argument that a
+colour meaning one thing is worth more than a colour that is merely on brand.
+That was reversed deliberately, and the cost is real and worth naming: where a
+green badge used to be the only green on screen, it now sits on pages that
+also have green links. The badge is still legible because **no financial state
+has ever been carried by colour alone** — `b-pine` reads "Available", the band
+segment is labelled, the ledger line says "Available" in words. Keep it that
+way. The moment a state is signalled only by being green, this palette stops
+working.
+
+**Where pine must not go.** Anything on `--ink`. Pine on ink measures 2.01:1,
+under the 3:1 a focus indicator has to clear and nowhere near text contrast, so
+`.lp-dark` overrides links and the focus ring back to white and must keep doing
+so. A green border on the black primary button is the same number and would be
+an accent nobody could see. `npm run contrast` asserts all of this.
 
 No pastels. No gradients of any kind. No coloured left-border stripe on cards.
 
