@@ -136,21 +136,26 @@ export default async function Home() {
               <div>
                 <h1 className="hero-h">
                   <Wordmark hero />
-                  <span className="tagline">You built something. Now get paid.</span>
+                  <span className="tagline">You built something people want to pay for.</span>
                 </h1>
 
-                {/* The subheading says "in your own name", not "without an adult
-                    on the account". A guardian IS named on the payment account
-                    and IS accountable for what sells through it — /for-guardians
-                    says so in as many words — and a hero that implies otherwise
-                    is the first thing a parent would catch us on. What is
-                    actually true is stronger anyway: separate logins, and a
-                    guardian who cannot stop a payout. */}
+                {/* Two clauses here are deliberately not the ones first drafted.
+                    "Processors block you at 18" is contradicted by our own
+                    figure three sections down — 13, with Stripe's written
+                    policy behind it — and a hero that argues with the evidence
+                    the site publishes costs more than it wins. "Won't open an
+                    account for anyone under 18 alone" is the same punch and is
+                    true. "In 5 minutes" is a number nobody has measured; the
+                    two calls are countable and land harder with a developer.
+                    "No adult owns your business" stays exactly as written: the
+                    account and the business are different things, the guardian
+                    is named on the first and not the second, and this page says
+                    so in three other places. */}
                 <div className="hero-accent" style={{ marginTop: "var(--sp-5)" }}>
                   <p className="lead" style={{ margin: 0 }}>
-                    Veyro lets founders take payments from 13, into an account in their own name.
-                    A parent is the verified adult the payment provider requires &mdash; not the
-                    owner of your business, and not someone who can block a payout.
+                    Payment processors won&rsquo;t open an account for anyone under 18 alone. Veyro
+                    gets you paid &mdash; your account, your control, your money. Two API calls,
+                    nothing to install. No adult owns your business.
                   </p>
                 </div>
 
