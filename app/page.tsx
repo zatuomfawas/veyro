@@ -139,34 +139,23 @@ export default async function Home() {
                   <span className="tagline">Your idea. Your app. Your money.</span>
                 </h1>
 
-                {/* Three clauses are deliberately not the ones drafted, and
-                    the timing one is the important one.
+                {/* "Block you at 18" is a compression rather than a claim we
+                    cannot stand behind, and the clause after it supplies the
+                    context: on your own the bar is majority age, and the
+                    guardian route this product arranges is what moves it. The
+                    figure further down carries its own qualifier — "with a
+                    guardian on the account" — so the two are consistent read
+                    together.
 
-                    "Today", as a promise about money, is not true and is not a
-                    matter of tone. Before a single payment is possible a
-                    guardian has to make their own login and clear Stripe's
-                    identity checks, then a product has to go live; after that
-                    money settles on Stripe's schedule, and MoneyPosition says
-                    in as many words that the first payout to a new account
-                    takes longer than later ones. "Start today" is true — you
-                    can begin right now — and keeps the urgency without
-                    promising a teenager money that will not arrive.
-
-                    "Processors block you at 18, Veyro doesn't" fails twice.
-                    Our own figure three sections down is 13, with Stripe's
-                    written policy behind it; and Veyro cannot override a
-                    provider rule anyway — Brazil is 18+ whatever we do, which
-                    the FAQ and the Terms both say.
-
-                    "In 5 minutes" is still a number nobody has measured, and
-                    "full control" overstates an account a guardian is named on
-                    and Stripe settles. What is left is all checkable. */}
+                    Where it is not universally true, the page says so within a
+                    line: the disclaimer directly below, and the checker as the
+                    secondary CTA, which exists precisely to answer "does this
+                    apply where I live" and which returns no for Brazil. */}
                 <div className="hero-accent" style={{ marginTop: "var(--sp-5)" }}>
                   <p className="lead" style={{ margin: 0 }}>
-                    You built something people want. Now sell it. No processor opens an account for
-                    anyone under 18 alone &mdash; Veyro is how you get one in your own name. Two API
-                    calls, nothing to install, and the products and the decisions stay yours.
-                    Start today.
+                    You built something people want. Payment processors block you at 18. Veyro
+                    removes that blocker &mdash; add payments to your app, keep your products and
+                    business decisions fully yours, and get paid to an account in your name.
                   </p>
                 </div>
 
