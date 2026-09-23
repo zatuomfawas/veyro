@@ -136,26 +136,37 @@ export default async function Home() {
               <div>
                 <h1 className="hero-h">
                   <Wordmark hero />
-                  <span className="tagline">You built something people want to pay for.</span>
+                  <span className="tagline">Your idea. Your app. Your money.</span>
                 </h1>
 
-                {/* Two clauses here are deliberately not the ones first drafted.
-                    "Processors block you at 18" is contradicted by our own
-                    figure three sections down — 13, with Stripe's written
-                    policy behind it — and a hero that argues with the evidence
-                    the site publishes costs more than it wins. "Won't open an
-                    account for anyone under 18 alone" is the same punch and is
-                    true. "In 5 minutes" is a number nobody has measured; the
-                    two calls are countable and land harder with a developer.
-                    "No adult owns your business" stays exactly as written: the
-                    account and the business are different things, the guardian
-                    is named on the first and not the second, and this page says
-                    so in three other places. */}
+                {/* Three clauses are deliberately not the ones drafted, and
+                    the timing one is the important one.
+
+                    "Today", as a promise about money, is not true and is not a
+                    matter of tone. Before a single payment is possible a
+                    guardian has to make their own login and clear Stripe's
+                    identity checks, then a product has to go live; after that
+                    money settles on Stripe's schedule, and MoneyPosition says
+                    in as many words that the first payout to a new account
+                    takes longer than later ones. "Start today" is true — you
+                    can begin right now — and keeps the urgency without
+                    promising a teenager money that will not arrive.
+
+                    "Processors block you at 18, Veyro doesn't" fails twice.
+                    Our own figure three sections down is 13, with Stripe's
+                    written policy behind it; and Veyro cannot override a
+                    provider rule anyway — Brazil is 18+ whatever we do, which
+                    the FAQ and the Terms both say.
+
+                    "In 5 minutes" is still a number nobody has measured, and
+                    "full control" overstates an account a guardian is named on
+                    and Stripe settles. What is left is all checkable. */}
                 <div className="hero-accent" style={{ marginTop: "var(--sp-5)" }}>
                   <p className="lead" style={{ margin: 0 }}>
-                    Payment processors won&rsquo;t open an account for anyone under 18 alone. Veyro
-                    gets you paid &mdash; your account, your control, your money. Two API calls,
-                    nothing to install. No adult owns your business.
+                    You built something people want. Now sell it. No processor opens an account for
+                    anyone under 18 alone &mdash; Veyro is how you get one in your own name. Two API
+                    calls, nothing to install, and the products and the decisions stay yours.
+                    Start today.
                   </p>
                 </div>
 
