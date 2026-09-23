@@ -298,6 +298,16 @@ export const CSS = `
 .fw .input.bad, .fw .select.bad, .fw .ta.bad { border-color:var(--clay); box-shadow:inset 0 0 0 1px var(--clay); }
 .fw .input.bad:focus, .fw .ta.bad:focus { border-color:var(--clay); box-shadow:inset 0 0 0 1px var(--clay); }
 .fw .input.good { border-color:var(--pine); }
+/* The eligibility form sits in a wide column on both the landing page and
+   /check, and its fields were inheriting that width: a 742px input for a
+   four-digit year, and a country select wider than most sentences on the page.
+   A field should be about as wide as what goes in it — long ones are harder to
+   scan and make a short answer look like a mistake. The card keeps its width;
+   only the controls are capped. */
+.fw .checkform .field { max-width:var(--m-tight); }
+.fw .checkform .field > .hint, .fw .checkform .field > .err { max-width:var(--m-lead); }
+/* The submit stays full width: it is the one thing on the card that should be
+   impossible to miss, and it closes the form rather than collecting anything. */
 .fw .charcount { float:right; font-size:var(--fs-1); color:var(--ink-3); font-variant-numeric:tabular-nums; }
 .fw .charcount[data-near="1"] { color:var(--amber); }
 .fw .charcount[data-over="1"] { color:var(--clay); font-weight:var(--fw-med); }
@@ -418,9 +428,23 @@ export const CSS = `
 /* The five-step story. A numbered progression with a hairline connector, not
    five cards: cards would give equal visual weight to five things that are one
    sequence. */
-.fw .steps { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:0;
-  border-top:1px solid var(--ink); }
+/* The column count follows the item count rather than being declared.
+   It was repeat(5,...) from when there were five steps; dropping to four left
+   a 261px column standing empty at the right end with the top rule running
+   across it, which read as a missing step. auto-flow cannot go stale that
+   way. */
+.fw .steps { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(0,1fr); gap:0;
+  border-top:1px solid var(--ink);
+  /* An <ol> brings padding-inline-start:40px and a 1em block margin of its
+     own. Without this reset the whole row sat 40px right of the heading above
+     it at every width — the numbers are rendered as text here, so the marker
+     box it was reserving was space for nothing. */
+  margin:0; padding:0; }
 .fw .steps > li { list-style:none; padding:16px 18px 18px 0; border-right:1px solid var(--line); }
+/* Every cell had padding-left:0, which is right for the first — it lines up
+   with the page's own left edge — and wrong for the rest, whose text sat hard
+   against the divider belonging to the cell before it. */
+.fw .steps > li + li { padding-left:var(--sp-5); }
 .fw .steps > li:last-child { border-right:0; }
 .fw .steps > li > * { min-width:0; }
 .fw .steps .st-n { display:block; font-size:var(--fs-1); letter-spacing:0.08em; text-transform:uppercase;
@@ -428,8 +452,12 @@ export const CSS = `
 .fw .steps .st-t { display:block; font-size:var(--fs-4); font-weight:var(--fw-bold); margin-top:8px; }
 .fw .steps .st-d { display:block; font-size:var(--fs-2); line-height:1.5; color:var(--ink-3); margin-top:4px; }
 @media (max-width:900px) {
-  .fw .steps { grid-template-columns:1fr; border-top:0; }
+  .fw .steps { grid-auto-flow:row; grid-template-columns:1fr; border-top:0; }
   .fw .steps > li { border-right:0; border-top:1px solid var(--line); padding:14px 0; }
+  /* Stacked, there is no divider to clear, and the indent would just push the
+     text off the page's left margin. Same specificity as the rule above and
+     later in the file, so it wins. */
+  .fw .steps > li + li { padding-left:0; }
   .fw .steps > li:first-child { border-top:1px solid var(--ink); }
 }
 
@@ -549,17 +577,19 @@ export const CSS = `
 
 /* Three value props. A plain row of hairline-separated columns, not cards:
    cards would put a box around three sentences and call it a feature grid. */
-.fw .props { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0;
+.fw .props { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(0,1fr); gap:0;
   border-top:1px solid var(--ink); }
 .fw .props > div { padding:18px 20px 4px 0; border-right:1px solid var(--line); }
+.fw .props > div + div { padding-left:var(--sp-5); }
 .fw .props > div:last-child { border-right:0; }
 .fw .props > div > * { min-width:0; }
 .fw .props .pr-t { display:block; font-size:var(--fs-4); font-weight:var(--fw-bold); }
 .fw .props .pr-d { display:block; font-size:var(--fs-3); line-height:1.5; color:var(--ink-2);
   margin-top:6px; max-width:38ch; }
 @media (max-width:900px) {
-  .fw .props { grid-template-columns:1fr; border-top:0; }
+  .fw .props { grid-auto-flow:row; grid-template-columns:1fr; border-top:0; }
   .fw .props > div { border-right:0; border-top:1px solid var(--line); padding:16px 0 4px; }
+  .fw .props > div + div { padding-left:0; }
   .fw .props > div:first-child { border-top:1px solid var(--ink); }
 }
 /* Dashboard figures. Wraps rather than fixing a column count, because the
