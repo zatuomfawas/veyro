@@ -54,7 +54,7 @@ export function CheckoutPreview() {
           <span className="tiny">Payments secured by Stripe</span>
         </div>
 
-        <CheckoutHeading name={DEMO.name} sellerName={DEMO.sellerName} />
+        <CheckoutHeading as="h3" name={DEMO.name} sellerName={DEMO.sellerName} />
 
         <CheckoutSummary
           description={DEMO.description}

@@ -14,10 +14,24 @@ import Link from "next/link";
 import { formatMinor } from "@/lib/money";
 
 /** Product name, and who is selling it. */
-export function CheckoutHeading({ name, sellerName }: { name: string; sellerName?: string | null }) {
+export function CheckoutHeading({
+  name, sellerName, as: Tag = "h1",
+}: {
+  name: string;
+  sellerName?: string | null;
+  /**
+   * The heading level. h1 on /pay, where the product IS the page.
+   *
+   * The landing page previews this component inside a page that already has an
+   * h1, which gave that page two top-level headings — someone navigating by
+   * heading would meet the demo product as a peer of the site's own title.
+   * Previews pass a lower level.
+   */
+  as?: "h1" | "h3";
+}) {
   return (
     <>
-      <h1 className="d2" style={{ fontSize: "var(--fs-7)" }}>{name}</h1>
+      <Tag className="d2" style={{ fontSize: "var(--fs-7)" }}>{name}</Tag>
       {sellerName && (
         <p className="tiny" style={{ marginTop: 4 }}>
           Sold by {sellerName}, through Veyro

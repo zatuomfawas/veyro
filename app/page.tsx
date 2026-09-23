@@ -9,6 +9,7 @@ import { CheckoutPreview } from "@/app/_ui/CheckoutPreview";
 import { IntegrationPanel } from "@/app/_ui/IntegrationPanel";
 import { GuardianStatus } from "@/app/_ui/GuardianStatus";
 import { WalletTabs } from "@/app/_ui/WalletTabs";
+import { EligibilityInline } from "@/app/check/CheckClient";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
@@ -170,34 +171,41 @@ export default async function Home() {
                   The checker takes two questions. No account, no email address.
                 </p>
 
-                <div style={{ marginTop: 32, paddingTop: 16, borderTop: "1px solid var(--line)" }}>
-                  <div className="herofacts">
-                    <div>
-                      <span className="hf-n">13</span>
-                      <span className="hf-l">
-                        The real minimum age with a guardian on the account, not 18
-                      </span>
-                    </div>
-                    <div>
-                      <span className="hf-n">43</span>
-                      <span className="hf-l">
-                        Countries the payment provider supports for self-serve signup
-                      </span>
-                    </div>
-                    <div>
-                      <span className="hf-n">0%</span>
-                      <span className="hf-l">
-                        Veyro&rsquo;s cut of what you earn. Stripe&rsquo;s own fees still apply
-                      </span>
-                    </div>
-                  </div>
-                </div>
               </div>
 
               <HeroPreview />
             </div>
           </div>
         </div>
+
+        {/* ---------------- the three numbers ---------------- */}
+        {/* Out of the hero, which was carrying six things against one preview
+            card. On their own they get read; stacked under two buttons they
+            were scenery. */}
+        <section className="lp lp-pad-sm" id="facts">
+          <div className="wrap-lp">
+            <div className="herofacts">
+              <div>
+                <span className="hf-n">13</span>
+                <span className="hf-l">
+                  The real minimum age with a guardian on the account, not 18
+                </span>
+              </div>
+              <div>
+                <span className="hf-n">43</span>
+                <span className="hf-l">
+                  Countries the payment provider supports for self-serve signup
+                </span>
+              </div>
+              <div>
+                <span className="hf-n">0%</span>
+                <span className="hf-l">
+                  Veyro&rsquo;s cut of what you earn. Stripe&rsquo;s own fees still apply
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* ---------------- the problem ---------------- */}
         {/* Not "processors require you to be 18": they don't, and the stat
@@ -439,25 +447,23 @@ export default async function Home() {
                   Two questions, no account and no email address. Where you live and how old you
                   are decide which route is open, and whether you need Veyro at all.
                 </p>
-                <div className="row" style={{ marginTop: 20, gap: 8, flexWrap: "wrap" }}>
-                  <Link className="btn btn-lg" href="/check">Check eligibility</Link>
-                </div>
+                <p className="body" style={{ marginTop: 16 }}>
+                  It tells you when the answer is no. Provider availability and the age at which
+                  you can enter a contract both vary by country and both change; where Stripe would
+                  not confirm something, the result says so rather than guessing.
+                </p>
+                <p className="small" style={{ marginTop: 16 }}>
+                  <Link className="linkbtn" href="/how-it-works">
+                    What Stripe told us, quoted in full
+                  </Link>
+                </p>
               </div>
 
-              <div className="card">
-                <div className="card-b">
-                  <p className="small" style={{ marginTop: 0 }}>
-                    The checker tells you when the answer is no. Provider availability and the age
-                    at which you can enter a contract both vary by country, and both change; where
-                    Stripe would not confirm something, the result says so rather than guessing.
-                  </p>
-                  <p className="small" style={{ marginBottom: 0 }}>
-                    <Link className="linkbtn" href="/how-it-works">
-                      What Stripe told us, quoted in full
-                    </Link>
-                  </p>
-                </div>
-              </div>
+              {/* The checker itself, not a button that goes to it. This is the
+                  question every visitor arrives with, and it is two dropdowns
+                  and a year — cheap enough to answer here rather than spending
+                  a page load on it. Same component /check renders. */}
+              <EligibilityInline />
             </div>
           </div>
         </section>

@@ -191,6 +191,7 @@ export const CSS = `
 .fw .lp-note { font-size:var(--fs-2); line-height:1.5; color:var(--ink-3); max-width:var(--m-wide); }
 .fw section.lp-pad-lg { padding:var(--lp-pad-lg) 0; }
 .fw section.lp-pad-md { padding:var(--lp-pad-md) 0; }
+.fw section.lp.lp-pad-sm { padding:var(--lp-pad-sm) 0; }
 .fw section.lp-pad-sm { padding:var(--lp-pad-sm) 0; }
 @media (max-width:900px) {
   .fw { --lp-1:40px; --lp-2:32px; --lp-3:21px; --lp-lead:17px; --lp-gut:20px;
@@ -1052,7 +1053,15 @@ export const CSS2 = `
   .fw .frame-main { min-height:0; }
 }
 .fw .grid-4 > :last-child { border-right:0 !important; }
+/* Centred, not top-aligned.
+   The left column lost its three figures to their own band below, and against
+   a preview card that runs the full height of the band that left roughly 240px
+   of empty ground under the buttons — a hole rather than breathing room. With
+   the columns centred the same whitespace is split above and below, which
+   reads as air. Only from 940px up, where the two are side by side; below that
+   they stack and there is nothing to centre against. */
 .fw .hero-grid { align-items:start; }
+@media (min-width:941px) { .fw .hero-grid { align-items:center; } }
 /* minmax(0,1fr), not 1fr: a bare 1fr track is floored at its item's min-content,
    so one long unbreakable line in the hero widened the track past the viewport
    and body's overflow-x:clip cut the hero off instead of scrolling. The !important

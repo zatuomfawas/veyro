@@ -155,7 +155,21 @@ function eligibility(code: string, age: number | null, region: string): Eligibil
   return { ...ctx, route: "guardian" };
 }
 
-function EligibilityCheck({ go }: { go: (route: string) => void }) {
+function EligibilityCheck({
+  go, embedded = false,
+}: {
+  go: (route: string) => void;
+  /**
+   * Render the form and its result on their own, for the landing page.
+   *
+   * The standalone page brings a <main id="main">, a nav and an <h1>. Dropped
+   * into a page that already has all three, that is a duplicate id — which
+   * breaks the skip link, since it targets #main — and a second first-level
+   * heading. Embedded mode renders neither, and leaves the long "how we work
+   * this out" note to the full page it belongs on.
+   */
+  embedded?: boolean;
+}) {
   const [code, setCode] = useState("");
   const [region, setRegion] = useState("");
   const [year, setYear] = useState("");
@@ -166,20 +180,33 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
   const ready = code !== "" && age !== null && age > 4 && age < 100 && (!regions || region !== "");
   const reset = () => setR(null);
 
+  const Shell = embedded ? "div" : "main";
+
   return (
-    <main id="main" style={{ minHeight: "100vh", background: "var(--surface)" }}>
-      <div className="wrap-n"><div className="lp-nav" style={{ borderBottom: 0 }}>
-        <Brand onClick={() => go("landing")} />
-        <Btn variant="2" size="sm" onClick={() => go("landing")}>
-          <Icon name="back" size={13} />Back to home
-        </Btn>
-      </div></div>
-      <div className="wrap-n" style={{ marginTop: 8, marginBottom: 90 }}>
-        <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>Check what applies to you</h1>
-        <p className="body" style={{ marginTop: 8, fontSize: "var(--fs-4)" }}>
-          Where you live and how old you are decide which route is open, and whether you need us at all.
-          No account, no email address.
-        </p>
+    <Shell
+      {...(embedded ? {} : { id: "main", style: { minHeight: "100vh", background: "var(--surface)" } })}
+    >
+      {!embedded && (
+        <div className="wrap-n"><div className="lp-nav" style={{ borderBottom: 0 }}>
+          <Brand onClick={() => go("landing")} />
+          <Btn variant="2" size="sm" onClick={() => go("landing")}>
+            <Icon name="back" size={13} />Back to home
+          </Btn>
+        </div></div>
+      )}
+      <div
+        className={embedded ? undefined : "wrap-n"}
+        style={embedded ? undefined : { marginTop: 8, marginBottom: 90 }}
+      >
+        {!embedded && (
+          <>
+            <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>Check what applies to you</h1>
+            <p className="body" style={{ marginTop: 8, fontSize: "var(--fs-4)" }}>
+              Where you live and how old you are decide which route is open, and whether you need us at all.
+              No account, no email address.
+            </p>
+          </>
+        )}
 
         <div className="card" style={{ marginTop: 20 }}><div className="card-b">
           <Field label="Where do you live?">
@@ -331,7 +358,9 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
           </div>
         )}
 
-        <div style={{ marginTop: 24 }}>
+        {/* The workings belong on the page devoted to this question. On the
+            landing page the section around this already links to them. */}
+        {!embedded && <div style={{ marginTop: 24 }}>
           <div className="lbl" style={{ marginBottom: 8 }}>How we work this out</div>
           <p className="tiny" style={{ maxWidth: "var(--m-body)" }}>
             Two filters, and a default. First, how the payment provider reaches your country: 43 countries can sign
@@ -345,9 +374,28 @@ function EligibilityCheck({ go }: { go: (route: string) => void }) {
             is availability country by country, and the result above says so where it applies. Terms change, and none
             of this is legal or tax advice.
           </p>
-        </div>
+        </div>}
       </div>
-    </main>
+    </Shell>
+  );
+}
+
+/**
+ * The checker, for the landing page: the form and its answer, no page chrome.
+ *
+ * The same component the /check page renders, not a copy of it. A second
+ * implementation of a country-and-age table would be two tables to keep
+ * correct, and this one carries Stripe's written confirmation behind it.
+ */
+export function EligibilityInline() {
+  const router = useRouter();
+  return (
+    <EligibilityCheck
+      embedded
+      // "landing" is where we already are, so that branch does nothing rather
+      // than pushing a route that reloads the page under the reader.
+      go={(route) => { if (route === "signup") router.push("/auth/signup"); }}
+    />
   );
 }
 
