@@ -216,6 +216,61 @@ export const CSS = `
   .fw .hero-grid > div:last-child .card { animation:none !important; }
 }
 
+/* ---- the step sequence's own line ---------------------------------------
+   The rule above the four steps draws itself left to right as the section
+   arrives, then the steps follow it in. It reads as a path being laid down,
+   which is what the section is describing.
+
+   The static border is kept and simply made transparent while motion is on, so
+   the line occupies the same pixel either way and nothing shifts. Without the
+   flag — no JS, reduced motion — the border is just a border, as now. */
+.fw[data-motion="on"] .steps[data-reveal] { position:relative; border-top-color:transparent; }
+.fw[data-motion="on"] .steps[data-reveal]::before {
+  content:""; position:absolute; left:0; right:0; top:-1px; height:1px;
+  background:var(--ink); transform:scaleX(0); transform-origin:left center;
+  transition:transform var(--t-4) var(--ease-out);
+}
+.fw[data-motion="on"] .steps[data-reveal][data-shown="1"]::before { transform:scaleX(1); }
+/* The steps themselves come after the line has been drawn, not alongside it. */
+.fw[data-motion="on"] .steps[data-reveal] > li {
+  opacity:0; transition:opacity var(--t-3) var(--ease-out);
+}
+.fw[data-motion="on"] .steps[data-reveal][data-shown="1"] > li { opacity:1; }
+.fw[data-motion="on"] .steps[data-reveal][data-shown="1"] > li:nth-child(1) { transition-delay:240ms; }
+.fw[data-motion="on"] .steps[data-reveal][data-shown="1"] > li:nth-child(2) { transition-delay:330ms; }
+.fw[data-motion="on"] .steps[data-reveal][data-shown="1"] > li:nth-child(3) { transition-delay:420ms; }
+.fw[data-motion="on"] .steps[data-reveal][data-shown="1"] > li:nth-child(4) { transition-delay:510ms; }
+@media (prefers-reduced-motion: reduce) {
+  .fw .steps { border-top-color:var(--ink) !important; }
+  .fw .steps::before { display:none !important; }
+  .fw .steps > li { opacity:1 !important; }
+}
+
+/* ---- the money band, growing into place --------------------------------
+   The proportions are the point of this component — how much is settled
+   against how much is still moving — and a bar that draws itself from the left
+   makes that read as a quantity rather than as a decorative stripe.
+
+   scaleX, not width, so it never triggers layout: the segments keep their real
+   proportions and the browser only composites. transform-origin is the left
+   edge so the bar fills in reading order, and each segment follows the one
+   before it so the eye travels along it once rather than watching four things
+   grow at once.
+
+   Only under [data-motion="on"], which is the landing page. The dashboard's
+   own wallet is left alone. */
+.fw[data-motion="on"] [data-reveal] .band-fill > span {
+  transform:scaleX(0); transform-origin:left center;
+  transition:transform var(--t-4) var(--ease-out);
+}
+.fw[data-motion="on"] [data-reveal][data-shown="1"] .band-fill > span { transform:scaleX(1); }
+.fw[data-motion="on"] [data-reveal][data-shown="1"] .band-fill > span:nth-child(2) { transition-delay:90ms; }
+.fw[data-motion="on"] [data-reveal][data-shown="1"] .band-fill > span:nth-child(3) { transition-delay:180ms; }
+.fw[data-motion="on"] [data-reveal][data-shown="1"] .band-fill > span:nth-child(4) { transition-delay:270ms; }
+@media (prefers-reduced-motion: reduce) {
+  .fw .band-fill > span { transform:none !important; }
+}
+
 /* ---- reveal on scroll ----------------------------------------------------
    Opt-in, and off unless JavaScript has said otherwise. The hidden state lives
    behind [data-motion="on"], which Reveal.tsx puts on the wrapper after it

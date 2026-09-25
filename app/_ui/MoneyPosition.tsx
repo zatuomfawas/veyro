@@ -78,6 +78,12 @@ function Band({ fold }: { fold: CurrencyFold }) {
   return (
     <div style={{ marginTop: 16 }}>
       <div
+        // band-fill is a hook for the landing page's reveal animation, which
+        // grows each segment from the left as the card comes into view. The
+        // rule lives behind [data-motion="on"], a flag only the landing page
+        // sets, so the dashboard's own wallet never animates — money that
+        // moves while you are reading it is the opposite of reassuring.
+        className="band-fill"
         style={{ display: "flex", height: 10, border: "1px solid var(--ink)", overflow: "hidden" }}
         role="img"
         aria-label={parts.map((p) => `${p.label} ${formatMinor(p.value, fold.currency)}`).join(", ")}
