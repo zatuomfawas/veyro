@@ -49,7 +49,7 @@ export const FAQ: FaqEntry[] = [
   },
   {
     q: "What does it cost?",
-    homepage: true,
+    
     a: (
       <>
       Veyro takes no percentage of what you earn today. Stripe charges its own fees on
@@ -60,7 +60,7 @@ export const FAQ: FaqEntry[] = [
   },
   {
     q: "How does age verification actually work?",
-    homepage: true,
+    
     a: (
       <>
       More weakly than the phrase suggests. The founder&rsquo;s birthdate is
@@ -84,7 +84,7 @@ export const FAQ: FaqEntry[] = [
   },
   {
     q: "Which countries are supported, and how do I check?",
-    homepage: true,
+    
     a: (
       <>
       Use the <Link className="linkbtn" href="/check">eligibility checker</Link>. Two
@@ -96,7 +96,7 @@ export const FAQ: FaqEntry[] = [
   },
   {
     q: "Why does Stripe ask all these business-sounding questions?",
-    homepage: true,
+    
     a: (
       <>
       Because Stripe verifies the adult on the account and has to understand what the

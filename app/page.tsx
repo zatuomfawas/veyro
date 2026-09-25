@@ -445,8 +445,12 @@ GET  /api/checkout/status?intent=...
                 {FAQ.filter((f) => f.homepage).map((f) => (
                   <Faq key={f.q} q={f.q}>{f.a}</Faq>
                 ))}
+                {/* Five here, nine there. Saying the number gives the link a
+                    reason to be clicked rather than being a polite full stop. */}
                 <p className="small" style={{ marginTop: 16 }}>
-                  <Link className="linkbtn" href="/faq">Every question, with the longer answers</Link>
+                  <Link className="linkbtn" href="/faq">
+                    See all nine questions, with the longer answers
+                  </Link>
                 </p>
               </div>
             </div>
