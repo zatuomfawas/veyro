@@ -510,7 +510,14 @@ export const CSS = `
    swapped for different glyphs. The arrows are decorative: the list itself
    carries the order for anyone not looking at it. */
 .fw .flow { display:flex; align-items:stretch; flex-wrap:wrap; list-style:none; margin:0; padding:0; }
-.fw .flow-step { flex:1 1 170px; min-width:0; border:1px solid var(--ink);
+/* 140, not 170, and the reason is a browser that has neither :has() nor
+   container queries — anything older than about Chrome 105 or Safari 16. There
+   the container rule below never applies, so this basis is what decides
+   whether four stops fit. At 140px they fit a 719px card on one line
+   (4x140 + 3x34 = 662); at 170 they wrapped to three and a stranded fourth.
+   Modern browsers stack the same diagram via the container query long before
+   the basis matters, so nothing changes for them. */
+.fw .flow-step { flex:1 1 140px; min-width:0; border:1px solid var(--ink);
   background:var(--card); padding:13px 15px; }
 .fw .flow-step .fs-n { display:block; font-size:var(--fs-1); letter-spacing:0.06em;
   text-transform:uppercase; color:var(--ink-3); margin-bottom:5px; }
