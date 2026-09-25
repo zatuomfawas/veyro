@@ -216,34 +216,8 @@ export const CSS = `
   .fw .hero-grid > div:last-child .card { animation:none !important; }
 }
 
-/* ---- the step sequence's own line ---------------------------------------
-   The rule above the four steps draws itself left to right as the section
-   arrives, then the steps follow it in. It reads as a path being laid down,
-   which is what the section is describing.
-
-   The static border is kept and simply made transparent while motion is on, so
-   the line occupies the same pixel either way and nothing shifts. Without the
-   flag — no JS, reduced motion — the border is just a border, as now. */
-.fw[data-motion="on"] .steps[data-reveal] { position:relative; border-top-color:transparent; }
-.fw[data-motion="on"] .steps[data-reveal]::before {
-  content:""; position:absolute; left:0; right:0; top:-1px; height:1px;
-  background:var(--ink); transform:scaleX(0); transform-origin:left center;
-  transition:transform var(--t-4) var(--ease-out);
-}
-.fw[data-motion="on"] .steps[data-reveal][data-shown="1"]::before { transform:scaleX(1); }
 /* The steps themselves come after the line has been drawn, not alongside it. */
-.fw[data-motion="on"] .steps[data-reveal] > li {
   opacity:0; transition:opacity var(--t-3) var(--ease-out);
-}
-.fw[data-motion="on"] .steps[data-reveal][data-shown="1"] > li { opacity:1; }
-.fw[data-motion="on"] .steps[data-reveal][data-shown="1"] > li:nth-child(1) { transition-delay:240ms; }
-.fw[data-motion="on"] .steps[data-reveal][data-shown="1"] > li:nth-child(2) { transition-delay:330ms; }
-.fw[data-motion="on"] .steps[data-reveal][data-shown="1"] > li:nth-child(3) { transition-delay:420ms; }
-.fw[data-motion="on"] .steps[data-reveal][data-shown="1"] > li:nth-child(4) { transition-delay:510ms; }
-@media (prefers-reduced-motion: reduce) {
-  .fw .steps { border-top-color:var(--ink) !important; }
-  .fw .steps::before { display:none !important; }
-  .fw .steps > li { opacity:1 !important; }
 }
 
 /* ---- the money band, growing into place --------------------------------
@@ -617,50 +591,26 @@ export const CSS = `
 .fw .ck-d { display:block; font-size:var(--fs-2); line-height:1.45; color:var(--ink-3); margin-top:2px;
   max-width:60ch; }
 
-/* The five-step story. A numbered progression with a hairline connector, not
-   five cards: cards would give equal visual weight to five things that are one
-   sequence. */
 /* The column count follows the item count rather than being declared.
    It was repeat(5,...) from when there were five steps; dropping to four left
    a 261px column standing empty at the right end with the top rule running
    across it, which read as a missing step. auto-flow cannot go stale that
    way. */
-.fw .steps { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(0,1fr); gap:0;
   border-top:1px solid var(--ink);
   /* An <ol> brings padding-inline-start:40px and a 1em block margin of its
      own. Without this reset the whole row sat 40px right of the heading above
      it at every width — the numbers are rendered as text here, so the marker
      box it was reserving was space for nothing. */
   margin:0; padding:0; }
-.fw .steps > li { list-style:none; padding:16px 18px 18px 0; border-right:1px solid var(--line); }
 /* Every cell had padding-left:0, which is right for the first — it lines up
    with the page's own left edge — and wrong for the rest, whose text sat hard
    against the divider belonging to the cell before it. */
-.fw .steps > li + li { padding-left:var(--sp-5); }
-.fw .steps > li:last-child { border-right:0; }
-.fw .steps > li > * { min-width:0; }
-.fw .steps .st-n { display:block; font-size:var(--fs-1); letter-spacing:0.08em; text-transform:uppercase;
   color:var(--ink-3); font-variant-numeric:tabular-nums; }
-.fw .steps .st-t { display:block; font-size:var(--fs-4); font-weight:var(--fw-bold); margin-top:8px; }
-.fw .steps .st-d { display:block; font-size:var(--fs-2); line-height:1.5; color:var(--ink-3); margin-top:4px; }
 /* The miniature. Pushed to the bottom of the cell so all four line up along one
    baseline however long the description above them runs — four fragments at
    four different heights would read as clutter rather than as a row. */
-.fw .steps > li { display:flex; flex-direction:column; }
-.fw .steps .st-v { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:auto; padding-top:12px; }
-.fw .steps .st-url { font-size:var(--fs-1); color:var(--ink-2); background:var(--surface);
   border:1px solid var(--line); padding:3px 6px; max-width:100%; overflow:hidden;
   text-overflow:ellipsis; white-space:nowrap; }
-.fw .steps .st-amt { font-size:var(--fs-3); font-weight:var(--fw-bold); }
-@media (max-width:900px) {
-  .fw .steps { grid-auto-flow:row; grid-template-columns:1fr; border-top:0; }
-  .fw .steps > li { border-right:0; border-top:1px solid var(--line); padding:14px 0; }
-  /* Stacked, there is no divider to clear, and the indent would just push the
-     text off the page's left margin. Same specificity as the rule above and
-     later in the file, so it wins. */
-  .fw .steps > li + li { padding-left:0; }
-  .fw .steps > li:first-child { border-top:1px solid var(--ink); }
-}
 
 .fw .choice { display:flex; gap:10px; align-items:flex-start; padding:12px 13px; border:1px solid var(--line); cursor:pointer; background:var(--card); text-align:left; width:100%; }
 .fw .choice:hover { border-color:var(--ink-3); }
@@ -1007,9 +957,6 @@ export const CSS = `
 .fw .sb-loading .sb-head::after { content:"…"; }
 
 
-
-@media (max-width: 940px) {
-}
 /* Default off. The 760px query below turns it on, and nothing later overrides it. */
 .fw .stickycta { display:none; }
 /* Tail padding for pages that carry the sticky bar, declared here rather than
@@ -1149,7 +1096,6 @@ export const CSS2 = `
 .fw section.ch-surface { background:var(--surface); }
 .fw section.ch-ink { background:var(--ink); }
 
-.fw section.ch-1 { padding:76px 0 60px; }
 .fw section.ch-2 { padding:52px 0 56px; }
 .fw section.ch-3 { padding:120px 0; }
 .fw section.ch-4 { padding:56px 0 48px; }
@@ -1163,7 +1109,6 @@ export const CSS2 = `
    still gets the most room and the ending still gets the second most — but a
    176px gap on a phone is a screenful of nothing. */
 @media (max-width:900px) {
-  .fw section.ch-1 { padding:44px 0 36px; }
   .fw section.ch-2 { padding:32px 0 34px; }
   .fw section.ch-3 { padding:70px 0; }
   .fw section.ch-4 { padding:34px 0 30px; }
@@ -1224,9 +1169,6 @@ export const CSS2 = `
 .fw .states dd { margin:2px 0 0; font-size:var(--fs-2); line-height:1.45; color:var(--ink-3); }
 @media (max-width:760px) { .fw .states { grid-template-columns:1fr; } }
 
-/* The checkout preview under its own stop in the flow, capped so it reads as
-   an illustration of one node rather than as a second hero. */
-.fw .checkout-under { margin-top:28px; max-width:520px; }
 
 .fw .commits { list-style:none; margin:0; padding:0; display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px var(--sp-8); }
@@ -1456,7 +1398,16 @@ export const CSS2 = `
    reads as air. Only from 940px up, where the two are side by side; below that
    they stack and there is nothing to centre against. */
 .fw .hero-grid { align-items:start; }
-@media (min-width:941px) { .fw .hero-grid { align-items:center; } }
+@media (min-width:941px) {
+  .fw .hero-grid { align-items:center; }
+  /* The hero was a precise 50/50 at every width — 650 against 638 at 1440 —
+     which is the symmetric "text one side, dashboard the other" arrangement
+     rather than a composition with a subject. The product takes the larger
+     half now. The text column keeps more than enough for its own measures:
+     the tagline caps at 30ch and the lead at 56ch, both of which fit inside
+     what is left at 1024 and up. */
+  .fw .hero-grid { grid-template-columns:minmax(0,0.88fr) minmax(0,1.12fr); }
+}
 /* minmax(0,1fr), not 1fr: a bare 1fr track is floored at its item's min-content,
    so one long unbreakable line in the hero widened the track past the viewport
    and body's overflow-x:clip cut the hero off instead of scrolling. The !important
