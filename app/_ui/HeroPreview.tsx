@@ -1,4 +1,5 @@
 import { Icon } from "@/app/_ui/marks";
+import { CountUp } from "@/app/_ui/CountUp";
 
 // The product, shown rather than described.
 //
@@ -24,8 +25,11 @@ export function HeroPreview() {
         </div>
         <div className="card-b">
           <div style={{ marginBottom: 12 }}>
-            <span className="num" style={{ fontSize: "var(--fs-7)", fontWeight: "var(--fw-bold)", letterSpacing: "-0.022em" }}>
-              $240.00
+            {/* The one figure on the page that counts. Server-rendered as
+                $240.00 and only moved by JS after it has checked the motion
+                setting, so the real number is in the HTML either way. */}
+            <span style={{ fontSize: "var(--fs-7)", fontWeight: "var(--fw-bold)", letterSpacing: "-0.022em" }}>
+              <CountUp amountMinor={24000} currency="USD" />
             </span>
             <span className="tiny" style={{ display: "block", marginTop: 4 }}>
               available to pay out

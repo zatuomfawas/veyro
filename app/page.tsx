@@ -252,26 +252,46 @@ export default async function Home() {
               provider&rsquo;s, not ours.
             </p>
 
+            {/* Each step carries a small piece of the real interface rather
+                than an illustration of one: the same .badge, .mono and .num
+                classes the dashboard uses, at the size a step allows. It shows
+                what you would actually be looking at, and it cannot drift from
+                the product the way a drawing would. */}
             <ol className="steps">
               <li>
                 <span className="st-n">01</span>
                 <span className="st-t">Build it</span>
                 <span className="st-d">You have done this part already.</span>
+                <span className="st-v">
+                  <span className="badge b-grey">Your app</span>
+                  <span className="badge b-grey">Your domain</span>
+                </span>
               </li>
               <li>
                 <span className="st-n">02</span>
                 <span className="st-t">Invite a parent</span>
                 <span className="st-d">They make their own login and complete the provider&rsquo;s checks.</span>
+                <span className="st-v">
+                  <span className="badge b-pine">Consented</span>
+                  <span className="tiny">Their own login</span>
+                </span>
               </li>
               <li>
                 <span className="st-n">03</span>
                 <span className="st-t">Add payments</span>
                 <span className="st-d">A payment link needs no code. A button in your app takes two calls.</span>
+                <span className="st-v">
+                  <span className="mono st-url">/pay/&hellip;/sticker-pack</span>
+                </span>
               </li>
               <li>
                 <span className="st-n">04</span>
                 <span className="st-t">Get paid</span>
                 <span className="st-d">Money settles into the account in your name, and you can see all of it.</span>
+                <span className="st-v">
+                  <span className="num st-amt">+$25.00</span>
+                  <span className="badge b-pine">Available</span>
+                </span>
               </li>
             </ol>
 

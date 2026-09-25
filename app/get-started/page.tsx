@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FlowDiagram } from "@/app/_ui/FlowDiagram";
 import type { Metadata } from "next";
 import { buildViewport, SITE } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
@@ -183,20 +184,7 @@ export default function GetStarted() {
             takes its box out of the flex row, so the step and the arrow after it
             become siblings of the other steps and the row lays out evenly. The
             visible box is the div inside. */}
-        <ol className="flow" style={{ marginTop: 20 }} aria-label="Payment flow, in order">
-          {FLOW.map((s, i) => (
-            <li key={s.n} style={{ display: "contents" }}>
-              <div className="flow-step" data-you={s.you ? "1" : undefined}>
-                <span className="fs-n">{s.n}</span>
-                <span className="fs-t">{s.t}</span>
-                <span className="fs-d">{s.d}</span>
-              </div>
-              {i < FLOW.length - 1 && (
-                <span className="flow-arrow" aria-hidden="true">&rarr;</span>
-              )}
-            </li>
-          ))}
-        </ol>
+        <FlowDiagram stops={FLOW} label="Payment flow, in order" style={{ marginTop: 20 }} />
 
         <p className="tiny" style={{ marginTop: 12 }}>
           The two outlined in green are the parts you touch. Veyro keeps the record and shows you

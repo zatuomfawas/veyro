@@ -518,9 +518,49 @@ export const CSS = `
   letter-spacing:-0.01em; }
 .fw .flow-step .fs-d { display:block; font-size:var(--fs-2); color:var(--ink-2); margin-top:4px; }
 .fw .flow-step[data-you="1"] { border-color:var(--brand); box-shadow:inset 0 0 0 1px var(--brand); }
+
+/* An interactive diagram. The stops become buttons, so they reset the browser
+   defaults a button brings and pick up the pointer. */
+.fw button.flow-step { font:inherit; color:inherit; text-align:left; cursor:pointer;
+  transition:border-color var(--t), box-shadow var(--t), opacity var(--t-1) var(--ease); }
+/* Quietening the others is what makes the highlight read as "this one". Opacity
+   rather than a colour change, so nothing in the diagram has to invent a shade
+   that is not in the palette, and never below .5 — a dimmed stop is still text
+   somebody may be reading. */
+.fw .flow[data-dim="1"] button.flow-step { opacity:.5; }
+.fw .flow[data-dim="1"] button.flow-step[data-active="1"] { opacity:1; }
+.fw button.flow-step[data-active="1"] { border-color:var(--ink); box-shadow:inset 0 0 0 1px var(--ink); }
+.fw button.flow-step[data-you="1"][data-active="1"] { border-color:var(--brand); box-shadow:inset 0 0 0 2px var(--brand); }
+@media (prefers-reduced-motion: reduce) { .fw button.flow-step { transition:none; } }
+
+/* The connectors drawing themselves as the diagram arrives. The arrow is the
+   only part that says these stops are a sequence rather than a list. */
+.fw[data-motion="on"] [data-reveal] .flow-arrow {
+  opacity:0; transition:opacity var(--t-3) var(--ease-out); }
+.fw[data-motion="on"] [data-reveal][data-shown="1"] .flow-arrow { opacity:1; }
+.fw[data-motion="on"] [data-reveal][data-shown="1"] .flow-arrow:nth-of-type(1) { transition-delay:180ms; }
+.fw[data-motion="on"] [data-reveal][data-shown="1"] .flow-arrow:nth-of-type(2) { transition-delay:280ms; }
+.fw[data-motion="on"] [data-reveal][data-shown="1"] .flow-arrow:nth-of-type(3) { transition-delay:380ms; }
+@media (prefers-reduced-motion: reduce) { .fw .flow-arrow { opacity:1 !important; } }
 .fw .flow-arrow { flex:0 0 34px; display:flex; align-items:center; justify-content:center;
   color:var(--ink-3); font-size:var(--fs-5); }
 @media (max-width:760px) {
+  .fw .flow { flex-direction:column; }
+  .fw .flow-step { flex:1 1 auto; }
+  .fw .flow-arrow { flex:0 0 26px; transform:rotate(90deg); }
+}
+/* A four-stop diagram inside a card is narrow while the viewport is wide, so a
+   media query is the wrong instrument: on a 1440px screen the integration card
+   is about 740px and the row wrapped to three stops and a lone fourth, with an
+   arrow left pointing at the wrap. The question is how much room the diagram
+   has, not how big the screen is, which is what a container query asks.
+   Scoped with :has so only cards that actually contain one become containers. */
+.fw .card-b:has(> .flow) { container-type:inline-size; }
+/* 780, not 640. Four stops at a 170px basis plus three 34px arrows need about
+   780px to sit on one line; below that the row wrapped to three and a lone
+   fourth, which is worse than stacking because the sequence stops reading in
+   order. */
+@container (max-width: 780px) {
   .fw .flow { flex-direction:column; }
   .fw .flow-step { flex:1 1 auto; }
   .fw .flow-arrow { flex:0 0 26px; transform:rotate(90deg); }
@@ -596,6 +636,15 @@ export const CSS = `
   color:var(--ink-3); font-variant-numeric:tabular-nums; }
 .fw .steps .st-t { display:block; font-size:var(--fs-4); font-weight:var(--fw-bold); margin-top:8px; }
 .fw .steps .st-d { display:block; font-size:var(--fs-2); line-height:1.5; color:var(--ink-3); margin-top:4px; }
+/* The miniature. Pushed to the bottom of the cell so all four line up along one
+   baseline however long the description above them runs — four fragments at
+   four different heights would read as clutter rather than as a row. */
+.fw .steps > li { display:flex; flex-direction:column; }
+.fw .steps .st-v { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:auto; padding-top:12px; }
+.fw .steps .st-url { font-size:var(--fs-1); color:var(--ink-2); background:var(--surface);
+  border:1px solid var(--line); padding:3px 6px; max-width:100%; overflow:hidden;
+  text-overflow:ellipsis; white-space:nowrap; }
+.fw .steps .st-amt { font-size:var(--fs-3); font-weight:var(--fw-bold); }
 @media (max-width:900px) {
   .fw .steps { grid-auto-flow:row; grid-template-columns:1fr; border-top:0; }
   .fw .steps > li { border-right:0; border-top:1px solid var(--line); padding:14px 0; }

@@ -51,3 +51,19 @@ body {
    * stays: --paper is the one value allowed to change here. */
   background: #ffffff;
 }
+
+/* Route transition. See app/template.tsx.
+ *
+ * Lives here rather than in css.ts because the wrapper sits outside .fw, where
+ * that stylesheet's rules do not reach.
+ *
+ * No starting opacity is declared anywhere: the element is opaque by default
+ * and the keyframe only moves it from 0 to 1 while it runs. If the animation
+ * never runs the page is simply visible, which is the correct failure. */
+@keyframes route-in { from { opacity: 0; } to { opacity: 1; } }
+
+.route-in { animation: route-in 160ms cubic-bezier(.22, 1, .36, 1); }
+
+@media (prefers-reduced-motion: reduce) {
+  .route-in { animation: none; }
+}

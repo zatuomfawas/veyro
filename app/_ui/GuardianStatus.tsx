@@ -16,24 +16,19 @@
 // business.
 
 import { Icon } from "@/app/_ui/marks";
+import { FlowDiagram, type FlowStop } from "@/app/_ui/FlowDiagram";
 
-function Step({ done, label, detail }: { done: boolean; label: string; detail: string }) {
-  return (
-    <div className="reqrow">
-      <div>
-        <span className="req-t">
-          {label}
-          {/* The word, not just the mark: state is never carried by colour or
-              by a glyph alone. */}
-          <span className="badge b-grey" style={{ marginLeft: 8 }}>
-            {done ? "Done" : "Waiting"}
-          </span>
-        </span>
-        <span className="req-d">{detail}</span>
-      </div>
-    </div>
-  );
-}
+// Who does what, in the order it happens. The same four-stop shape the
+// payment path uses, because it is the same kind of fact: a sequence with
+// exactly one party responsible at each point. The two outlined stops are the
+// founder's — which is the answer to the question this section exists for.
+const SETUP: FlowStop[] = [
+  { n: "Founder", t: "Invites", d: "You send one invitation.", you: true },
+  { n: "Guardian", t: "Verifies", d: "On Stripe's own form." },
+  { n: "Stripe", t: "Opens the account", d: "In your name." },
+  { n: "Founder", t: "Gets paid", d: "You request a payout.", you: true },
+];
+
 
 export function GuardianStatus() {
   return (
@@ -47,30 +42,20 @@ export function GuardianStatus() {
       </div>
 
       <div className="card-b">
+        <FlowDiagram stops={SETUP} label="Guardian setup, in order" style={{ marginBottom: 20 }} />
+
         <div style={{ marginBottom: 14 }}>
           <span style={{ fontSize: "var(--fs-5)", fontWeight: "var(--fw-bold)" }}>Sam Taylor</span>
-          <span className="tiny" style={{ display: "block", marginTop: 2 }}>
-            Guardian on the payment account
+          <span className="badge b-pine" style={{ marginLeft: 10 }}>Setup complete</span>
+          <span className="tiny" style={{ display: "block", marginTop: 4 }}>
+            Guardian on the payment account. All three checks done.
           </span>
         </div>
 
-        <div className="reqlist">
-          <Step
-            done
-            label="Invitation accepted"
-            detail="They made their own Veyro login. Yours and theirs stay separate."
-          />
-          <Step
-            done
-            label="Identity verified by Stripe"
-            detail="On Stripe's own form. Veyro never sees the documents."
-          />
-          <Step
-            done
-            label="Payment account connected"
-            detail="Money settles into the account in your name."
-          />
-        </div>
+        {/* The three step rows that were here said Invitation accepted,
+            Identity verified, Payment account connected — which is the diagram
+            above rewritten as a checklist. One statement of state is enough,
+            and the diagram is the one that also explains the order. */}
 
         <p className="small" style={{ marginTop: 16, marginBottom: 0 }}>
           Your guardian is the verified adult the payment provider requires. They are notified of

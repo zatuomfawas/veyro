@@ -26,6 +26,7 @@
 import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
 import { Btn, Field, Notice } from "@/app/_ui/form";
 import { useCopy } from "@/app/_ui/useCopy";
+import { FlowDiagram, type FlowStop } from "@/app/_ui/FlowDiagram";
 
 type ToolId = "claude" | "cursor" | "lovable" | "bolt" | "replit" | "other";
 
@@ -39,6 +40,25 @@ const TOOLS: { id: ToolId; label: string; where: string }[] = [
   { id: "replit", label: "Replit", where: "Paste it into Replit's AI panel with your Repl open." },
   { id: "other", label: "Other", where: "Paste it into whichever AI coding tool you built with." },
 ];
+
+// The four stops a payment passes through, and what each one costs the
+// integrator. Only two of them are work: the first and the last. That is the
+// actual claim this section makes, and the diagram is the fastest way to make
+// it — the middle two are Veyro's hosted page and Stripe, and the founder
+// writes nothing for either.
+const STOPS: FlowStop[] = [
+  { id: "app", n: "Your app", t: "A buy button", d: "You add this.", you: true },
+  { id: "veyro", n: "Veyro", t: "Hosted checkout", d: "Opened by the first call." },
+  { id: "stripe", n: "Stripe", t: "The payment", d: "Takes the card, holds the money." },
+  { id: "back", n: "Your app", t: "The answer", d: "You read this.", you: true },
+];
+
+const STOP_NOTE: Record<string, string> = {
+  app: "One button. When it is clicked you POST to /api/checkout/create with the product id, and send the customer to the checkoutUrl that comes back.",
+  veyro: "Veyro's own page, with your name and price on it. Nothing to build and no card details anywhere near your project.",
+  stripe: "Stripe takes the card and settles into the account in your name. Neither you nor Veyro sees the number typed in.",
+  back: "GET /api/checkout/status with the intent id. It answers pending, completed or refunded — that is the whole of the second call.",
+};
 
 /** The observable half of an integration-test response. */
 type TestResult = {
@@ -118,6 +138,7 @@ function Check({ ok, label, detail }: { ok: boolean; label: string; detail: stri
 
 export function IntegrationPanel() {
   const [tool, setTool] = useState<ToolId>("claude");
+  const [stop, setStop] = useState<string | null>(null);
   const [productId, setProductId] = useState("");
   const [result, setResult] = useState<TestResult | null>(null);
   const [busy, setBusy] = useState(false);
@@ -163,6 +184,22 @@ export function IntegrationPanel() {
         <p className="small" style={{ marginTop: 0 }}>
           Veyro is a REST API, so there is nothing to install. Paste the prompt below into the tool
           you built with and it will add a working checkout.
+        </p>
+
+        {/* The two outlined stops are the two calls. Hover or tab through them
+            and the line below says what each one costs you. */}
+        <FlowDiagram
+          stops={STOPS}
+          label="What a payment passes through"
+          activeId={stop}
+          onFocusStop={setStop}
+          onLeave={() => setStop(null)}
+          style={{ marginTop: 16 }}
+        />
+        <p className="hint" style={{ marginTop: 10, minHeight: "2.6em" }} aria-live="polite">
+          {stop
+            ? STOP_NOTE[stop]
+            : "Two of the four are yours: the button that starts a checkout and the check that asks whether it was paid. Hover a stop for what it involves."}
         </p>
 
         <div style={{ marginTop: 18 }}>
