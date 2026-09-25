@@ -134,10 +134,18 @@ square, because the question it answers is on/off rather than one-of-several.
 Nothing else gets a radius, including anything pasted in from a component
 library.
 
-**No drop shadows.** Elevation is a border or a fill change, never blur.
+**No drop shadows at rest.** Elevation is a border or a fill change, never
+blur — while an element is sitting still.
 
-There are five `box-shadow` declarations and all five are `inset` with **zero
-blur radius**. They are borders drawn inside the element's box, used where a
+There is one blurred shadow, `--lift`, and nothing wears it at rest. It appears
+on `.btn:hover` and `a.card:hover` and goes again on `:active`, paired with a
+1–2px translate. It is there to answer a pointer, which is the one thing a
+border cannot do as legibly, and it is on the two things that are actually
+clickable. Note what does **not** get it: `.card` on its own. The wallet
+preview and the guardian panel are cards you read, not cards you click, and
+lifting them under the pointer would promise a click that is not there.
+
+Every other `box-shadow` in the system is `inset` with **zero blur radius**. They are borders drawn inside the element's box, used where a
 real border would shift layout:
 
 - `.ta:focus`, `.ta.bad` — the focus and error ring on a textarea

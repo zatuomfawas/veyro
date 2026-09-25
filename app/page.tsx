@@ -10,6 +10,7 @@ import { IntegrationPanel } from "@/app/_ui/IntegrationPanel";
 import { GuardianStatus } from "@/app/_ui/GuardianStatus";
 import { WalletTabs } from "@/app/_ui/WalletTabs";
 import { EligibilityInline } from "@/app/check/CheckClient";
+import { Reveal } from "@/app/_ui/Reveal";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
@@ -664,6 +665,16 @@ export default async function Home() {
           </div>
         </section>
       </main>
+
+      {/* Scroll entrances for everything below the hero, which has its own
+          CSS entrance. One observer for the page; the selector is here rather
+          than inside the component so what moves is readable where it is
+          decided. */}
+      <Reveal
+        scope=".fw"
+        select="section.lp > .wrap-lp > *, section.lp .truthgrid > *"
+        stagger=".props, .steps, .herofacts"
+      />
 
       <ScrollTop />
       <StickyCta href="/get-started" label="Get started" note="Or check eligibility first. No account." />

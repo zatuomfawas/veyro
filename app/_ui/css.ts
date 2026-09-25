@@ -139,15 +139,36 @@ export const CSS = `
    appearing. A larger change needs longer or it snaps, but past about 200ms it
    starts to feel like waiting.
 
-   Nothing animates on page load, and nothing moves that was not asked to move.
-   This is an interface for looking at money, and motion nobody triggered reads
-   as instability. Motion that answers a click is the opposite: it says the
-   click landed. --t stays as the shorthand the controls already use. */
+   Inside the product nothing animates on page load and nothing moves that was
+   not asked to move. This is an interface for looking at money, and motion
+   nobody triggered reads as instability. Motion that answers a click is the
+   opposite: it says the click landed. --t stays as the shorthand the controls
+   already use.
+
+   The landing page is a different room. There, content arriving as you reach
+   it is the convention rather than a surprise, and it is doing a job: it paces
+   a long page and points at what to read next. Those are --t-3 and --t-4 on
+   --ease-out, a decelerate that travels further before settling, which is what
+   makes a larger movement read as deliberate rather than merely slow. They are
+   used only on .lp sections and the hero. Nothing in the dashboard touches
+   them, and every one of them is off under prefers-reduced-motion. */
 .fw {
   --ease: cubic-bezier(.4, 0, .2, 1);
   --t-1: 110ms;
   --t-2: 170ms;
   --t: var(--t-1) var(--ease);
+
+  /* Landing only. Entrances and the larger product transitions. */
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --t-3: 320ms;
+  --t-4: 560ms;
+  /* How far a revealed element travels. One number, so every entrance on the
+     page agrees. */
+  --rise: 14px;
+  /* The only blurred shadow in the system, and it exists to answer a pointer
+     rather than to decorate a resting state. Nothing wears it until it is
+     hovered. See DESIGN.md. */
+  --lift: 0 1px 2px rgba(17,19,21,.06), 0 4px 12px rgba(17,19,21,.07);
 }
 .fw .btn, .fw .linkbtn, .fw .input, .fw .select, .fw .ta,
 .fw .choice, .fw .tick, .fw .tick::after, .fw a.card, .fw .mobmenu {
@@ -158,7 +179,63 @@ export const CSS = `
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior:auto !important; }
   .fw *, .fw *::before, .fw *::after { transition-duration:0ms !important; animation-duration:0ms !important; }
+  /* Duration 0 alone would leave a revealed element sitting at its start
+     transform forever, which is how "reduced motion" turns into "invisible
+     content". Everything is placed and opaque instead. */
+  .fw [data-reveal] { opacity:1 !important; transform:none !important; }
 }
+
+/* ---- the hero's entrance -------------------------------------------------
+   CSS, not the observer, and deliberately so. A load entrance driven by
+   JavaScript means the first thing anyone sees is hidden until hydration
+   finishes — the page paying for its own animation. A keyframe runs from the
+   first paint, costs no script, and cannot leave the headline invisible if
+   something further down the bundle throws.
+
+   animation-fill-mode both holds the start frame, so the stagger reads as one
+   movement arriving rather than five things appearing. The preview follows
+   the copy: the words
+   say what this is, the picture confirms it. */
+@keyframes veyro-rise { from { opacity:0; transform:translateY(var(--rise)); } to { opacity:1; transform:none; } }
+
+.fw .hero-grid > div > *,
+.fw .hero-grid > div:last-child {
+  animation:veyro-rise var(--t-4) var(--ease-out) both;
+}
+.fw .hero-grid > div:first-child > *:nth-child(2) { animation-delay:60ms; }
+.fw .hero-grid > div:first-child > *:nth-child(3) { animation-delay:120ms; }
+.fw .hero-grid > div:first-child > *:nth-child(4) { animation-delay:180ms; }
+.fw .hero-grid > div:first-child > *:nth-child(5) { animation-delay:240ms; }
+.fw .hero-grid > div:last-child { animation-delay:200ms; }
+/* The preview's own rows follow it in. Capped at four: past that a stagger
+   stops reading as one movement and starts reading as a queue. */
+.fw .hero-grid > div:last-child .card { animation:veyro-rise var(--t-4) var(--ease-out) both; }
+.fw .hero-grid > div:last-child .card:nth-of-type(2) { animation-delay:300ms; }
+@media (prefers-reduced-motion: reduce) {
+  .fw .hero-grid > div > *, .fw .hero-grid > div:last-child,
+  .fw .hero-grid > div:last-child .card { animation:none !important; }
+}
+
+/* ---- reveal on scroll ----------------------------------------------------
+   Opt-in, and off unless JavaScript has said otherwise. The hidden state lives
+   behind [data-motion="on"], which Reveal.tsx puts on the wrapper after it
+   mounts and after it has checked the reduced-motion query. Without that flag
+   — no JS, a crawler, an old browser — every element renders exactly as it
+   does today, placed and opaque, because the rule that hides it never matches.
+   That ordering is the whole design: content is never hidden by default and
+   then waiting on a script to bring it back. */
+.fw[data-motion="on"] [data-reveal] {
+  opacity:0;
+  transform:translateY(var(--rise));
+  transition:opacity var(--t-4) var(--ease-out), transform var(--t-4) var(--ease-out);
+}
+.fw[data-motion="on"] [data-reveal][data-shown="1"] { opacity:1; transform:none; }
+/* A second and third element in the same group follow the first rather than
+   arriving together, which is what makes a row read as one movement. Kept to
+   three steps: past that it stops being a stagger and becomes a queue. */
+.fw[data-motion="on"] [data-reveal][data-delay="1"] { transition-delay:70ms; }
+.fw[data-motion="on"] [data-reveal][data-delay="2"] { transition-delay:140ms; }
+.fw[data-motion="on"] [data-reveal][data-delay="3"] { transition-delay:210ms; }
 
 /* type */
 .fw h1,.fw h2,.fw h3,.fw h4 { margin:0; font-weight:var(--fw-bold); letter-spacing:-0.016em; font-family:inherit; }
@@ -235,6 +312,13 @@ export const CSS = `
   white-space:nowrap;
 }
 .fw .btn:hover { background:var(--brand-h); border-color:var(--brand-h); }
+/* One pixel, and it goes back on press. More than that and a button reads as
+   floating rather than as answering. transform is listed explicitly because
+   the shared transition above covers colour and shadow only. */
+.fw .btn:hover:not(:disabled) { transform:translateY(-1px); box-shadow:var(--lift); }
+.fw .btn:active:not(:disabled) { transform:translateY(0); box-shadow:none; }
+.fw .btn { transition:background-color var(--t), border-color var(--t), color var(--t),
+  box-shadow var(--t), transform var(--t); }
 .fw .btn:active { background:#000000; border-color:#000000; }
 .fw .btn[aria-busy="true"] { background:var(--brand-h); border-color:var(--brand-h); opacity:.85; cursor:progress; }
 .fw .btn[aria-busy="true"]::before { content:""; width:var(--marker); height:var(--marker); background:var(--reverse); flex:none; }
@@ -268,6 +352,12 @@ export const CSS = `
 
 /* surfaces */
 .fw .card { background:var(--card); border:1px solid var(--line); }
+/* a.card only: the wallet preview and the guardian panel are cards you read,
+   not cards you click, and lifting them would promise something that is not
+   there. */
+.fw a.card { transition:border-color var(--t), box-shadow var(--t), transform var(--t); }
+.fw a.card:hover { border-color:var(--ink-3); box-shadow:var(--lift); transform:translateY(-2px); }
+.fw a.card:active { transform:translateY(0); box-shadow:none; }
 .fw .card-h { padding:var(--sp-3) var(--sp-5); min-height:45px; border-bottom:1px solid var(--line-soft); display:flex; align-items:center; justify-content:space-between; gap:12px; }
 .fw .card-b { padding:var(--sp-5); }
 .fw .card-f { padding:var(--sp-3) var(--sp-5); border-top:1px solid var(--line-soft); background:transparent; }
@@ -922,7 +1012,26 @@ export const CSS2 = `
 .fw .totop-mark { width:23px; height:23px; background:var(--brand); display:flex; align-items:center;
   justify-content:center; flex:none; }
 .fw .lp-nav { border-bottom:1px solid transparent; }
-.fw .navbar { position:sticky; top:0; z-index:60; background:var(--paper); }
+.fw .navbar { position:sticky; top:0; z-index:60; background:var(--paper);
+  border-bottom:1px solid transparent; }
+/* A scroll-driven animation, so the nav gains its edge as the page moves under
+   it without a scroll listener, a re-render or a single line of JavaScript.
+   Behind @supports because Safari and Firefox do not have it yet: there, the
+   nav simply stays as it is, which is the state it has today. Nothing is
+   hidden or broken by its absence. */
+@supports (animation-timeline: scroll()) {
+  @keyframes veyro-nav {
+    to { border-bottom-color:var(--line); background:rgba(255,255,255,.88);
+         backdrop-filter:saturate(1.4) blur(10px); }
+  }
+  .fw .navbar { animation:veyro-nav linear both; animation-timeline:scroll();
+    animation-range:0 96px; }
+  /* The blur is the expensive part and the least of the effect. Asked for less
+     motion, the nav keeps its hairline and drops the rest. */
+  @media (prefers-reduced-motion: reduce) {
+    .fw .navbar { animation:none; border-bottom-color:var(--line); backdrop-filter:none; }
+  }
+}
 .fw .lp-nav.sticky { background:transparent; }
 .fw .lp-nav.sticky[data-scrolled="1"] { border-bottom-color:var(--line); }
 .fw .tblwrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
