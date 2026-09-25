@@ -151,7 +151,7 @@ export default async function Home() {
                     hero, which gave three facts the same weight as the wallet.
                     Folded in here they are what they are: supporting detail
                     beside the product, read after it rather than instead. */}
-                <div className="herofacts herofacts-sm" style={{ marginTop: "var(--sp-5)" }}>
+                <div className="herofacts herofacts-sm" style={{ marginTop: "var(--sp-3)" }}>
                   <div>
                     <span className="hf-n">13</span>
                     <span className="hf-l">Minimum age with a guardian on the account, not 18</span>

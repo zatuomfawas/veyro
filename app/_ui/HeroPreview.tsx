@@ -57,7 +57,7 @@ export function HeroPreview() {
         </div>
       </div>
 
-      <div className="card" style={{ marginTop: 12 }}>
+      <div className="card" style={{ marginTop: 10 }}>
         <div className="card-h">
           <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
             <Icon name="card" size={14} />

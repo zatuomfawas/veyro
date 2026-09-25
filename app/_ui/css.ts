@@ -715,7 +715,15 @@ export const CSS = `
 
 /* landing */
 .fw .lp-nav { height:62px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); }
-.fw .hero { padding-block:76px 60px; }
+/* 52/44, down from 76/60.
+   The hero and the wallet had come out within five pixels of each other, which
+   makes the opening and the climax the same size and leaves the page without a
+   subject. The height is driven entirely by the right column — the preview at
+   540 plus the figures at 88 — so this comes out of the surrounding space
+   rather than out of the product or the three figures, both of which earn
+   their place in the first viewport. About 54px in total, across four places
+   so nothing is gutted to find it. */
+.fw .hero { padding-block:52px 44px; }
 
 /* The one accent on the page.
    Pine is reserved for money — see DESIGN.md — and this is the single
@@ -761,7 +769,7 @@ export const CSS = `
 /* Folded into the hero beside the product rather than standing as their own
    chapter, so they are sized as supporting detail: the figure drops from the
    display scale to interface scale and the whole row sits under the preview. */
-.fw .herofacts-sm { gap:var(--sp-5); padding-top:var(--sp-5); border-top:1px solid var(--line); }
+.fw .herofacts-sm { gap:var(--sp-5); padding-top:var(--sp-4); border-top:1px solid var(--line); }
 .fw .herofacts-sm .hf-n { font-size:var(--fs-6); }
 .fw .herofacts-sm .hf-l { font-size:var(--fs-1); line-height:1.4; }
 @media (max-width:760px) { .fw .herofacts { grid-template-columns:1fr; gap:14px; }
@@ -1092,11 +1100,23 @@ export const CSS2 = `
    (0,2,0) and lose to .fw section.lp at (0,2,1), which is how the first
    attempt shipped nine chapters all still 72px apart — every measured gap came
    back 144px and identical. */
-.fw section.ch { background:transparent; }
+/* No rule at the top of a chapter.
+   Every boundary was being signalled twice: the ground changes AND a 1px
+   hairline draws across it. The hairline is 1.29:1 against white where the
+   tint is only 1.072:1, so the line was doing most of the work — and two
+   separators at every single boundary is what turns rhythm into a metronome,
+   the page reading as ruled-off sections rather than one surface that shifts.
+   The tonal change alone is enough, and it is quiet enough to feel continuous.
+   Chapter 9 needs no help either; ink against paper is not subtle. */
+.fw section.ch { background:transparent; border-top:0; }
 .fw section.ch-surface { background:var(--surface); }
 .fw section.ch-ink { background:var(--ink); }
 
-.fw section.ch-2 { padding:52px 0 56px; }
+/* 68 on top, not 52. The hero's bottom padding came down from 60 to 44 when
+   it was compressed, which would have quietly dropped this boundary from the
+   published 112 to 96. The gap is the thing that was specified, so it is held
+   from this side instead. */
+.fw section.ch-2 { padding:68px 0 56px; }
 .fw section.ch-3 { padding:120px 0; }
 .fw section.ch-4 { padding:56px 0 48px; }
 .fw section.ch-5 { padding:48px 0; }
