@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CheckoutPreview } from "@/app/_ui/CheckoutPreview";
 import { FlowDiagram } from "@/app/_ui/FlowDiagram";
 import type { Metadata } from "next";
 import { buildViewport, SITE } from "@/lib/seo";
@@ -190,6 +191,15 @@ export default function GetStarted() {
           The two outlined in green are the parts you touch. Veyro keeps the record and shows you
           the position; it is never in the path of the money.
         </p>
+
+        {/* The middle stop, shown. Moved here from the landing page's
+            money-flow chapter, where it was a second composition inside a
+            chapter that is meant to be one diagram — and where it made that
+            chapter taller than the wallet the page is built around. This page
+            already walks the payment path, so it is the right home. */}
+        <div style={{ marginTop: 26, maxWidth: 560 }}>
+          <CheckoutPreview />
+        </div>
 
         <hr className="rule" style={{ margin: "30px 0" }} />
 

@@ -808,6 +808,12 @@ export const CSS = `
 .fw .herofacts { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--sp-6); }
 .fw .herofacts .hf-n { display:block; font-size:var(--fs-7); font-weight:var(--fw-bold); letter-spacing:-0.022em; }
 .fw .herofacts .hf-l { display:block; font-size:var(--fs-2); line-height:1.45; color:var(--ink-3); margin-top:5px; }
+/* Folded into the hero beside the product rather than standing as their own
+   chapter, so they are sized as supporting detail: the figure drops from the
+   display scale to interface scale and the whole row sits under the preview. */
+.fw .herofacts-sm { gap:var(--sp-5); padding-top:var(--sp-5); border-top:1px solid var(--line); }
+.fw .herofacts-sm .hf-n { font-size:var(--fs-6); }
+.fw .herofacts-sm .hf-l { font-size:var(--fs-1); line-height:1.4; }
 @media (max-width:760px) { .fw .herofacts { grid-template-columns:1fr; gap:14px; }
   .fw .herofacts > div { display:flex; gap:12px; align-items:baseline; }
   .fw .herofacts .hf-n { font-size:var(--fs-6); }
@@ -1108,6 +1114,134 @@ export const CSS2 = `
 .fw [id]:focus { outline:none; }
 .fw #main { scroll-margin-top:calc(var(--nav-h) + var(--sp-4)); }
 .fw section.lp:nth-of-type(even) { background:var(--surface); }
+
+/* ---- chapters -----------------------------------------------------------
+   The landing page is nine chapters, not fifteen sections, and the spacing
+   between them is the thing that says so. Every section used to carry the same
+   72px top and bottom, which is 144px between every pair — a uniform rhythm
+   that reads as a list however different the content is.
+
+   Each chapter now states its own top and bottom, and the gap between two
+   chapters is the sum of the pair. The ladder, desktop:
+
+     1 -> 2   112px   large
+     2 -> 3   176px   the largest on the page
+     3 -> 4   176px   the largest on the page
+     4 -> 5    96px   moderate
+     5 -> 6    96px   moderate
+     6 -> 7   144px   large
+     7 -> 8   104px   moderate
+     8 -> 9   160px   second largest
+
+   The two 176s bracket the wallet, which is the chapter everything else is
+   arranged around. The 160 before the final call is the page arriving
+   somewhere rather than continuing.
+
+   .ch also turns off the nth-of-type(even) striping, because a chapter's
+   ground is a decision about that chapter, not about whether it happens to be
+   even.
+
+   The selectors name the element deliberately. Written as .fw .ch-3 they are
+   (0,2,0) and lose to .fw section.lp at (0,2,1), which is how the first
+   attempt shipped nine chapters all still 72px apart — every measured gap came
+   back 144px and identical. */
+.fw section.ch { background:transparent; }
+.fw section.ch-surface { background:var(--surface); }
+.fw section.ch-ink { background:var(--ink); }
+
+.fw section.ch-1 { padding:76px 0 60px; }
+.fw section.ch-2 { padding:52px 0 56px; }
+.fw section.ch-3 { padding:120px 0; }
+.fw section.ch-4 { padding:56px 0 48px; }
+.fw section.ch-5 { padding:48px 0; }
+.fw section.ch-6 { padding:48px 0 56px; }
+.fw section.ch-7 { padding:88px 0 56px; }
+.fw section.ch-8 { padding:48px 0 64px; }
+.fw section.ch-9 { padding:96px 0; }
+
+/* Roughly 0.6 of the desktop ladder. The proportions are kept — the wallet
+   still gets the most room and the ending still gets the second most — but a
+   176px gap on a phone is a screenful of nothing. */
+@media (max-width:900px) {
+  .fw section.ch-1 { padding:44px 0 36px; }
+  .fw section.ch-2 { padding:32px 0 34px; }
+  .fw section.ch-3 { padding:70px 0; }
+  .fw section.ch-4 { padding:34px 0 30px; }
+  .fw section.ch-5 { padding:30px 0; }
+  .fw section.ch-6 { padding:30px 0 34px; }
+  .fw section.ch-7 { padding:52px 0 34px; }
+  .fw section.ch-8 { padding:30px 0 40px; }
+  .fw section.ch-9 { padding:58px 0; }
+}
+
+/* ---- chapter 5's diagram: labels on a rule, no boxes --------------------
+   Chapters 4, 5 and 6 are all diagrams and must not be the same diagram three
+   times. Four is bordered stops and arrowheads, laid out horizontally. Six is
+   a vertical spine with circular dots. This is the third language: no boxes at
+   all, just three labels sitting on one hairline, sized to sit quietly above a
+   code block rather than to be looked at on its own. It is deliberately the
+   lightest thing on the page. */
+.fw .nodes { display:flex; align-items:stretch; border-top:1px solid var(--ink); margin:0; padding:0;
+  list-style:none; }
+.fw .nodes > li { flex:1 1 0; min-width:0; padding:14px 18px 0 0; position:relative; }
+.fw .nodes > li + li { padding-left:var(--sp-5); }
+.fw .nodes > li + li::before { content:"→"; position:absolute; left:-2px; top:14px;
+  color:var(--ink-3); font-size:var(--fs-3); line-height:1.2; }
+.fw .nodes .nd-n { display:block; font-size:var(--fs-1); letter-spacing:0.06em;
+  text-transform:uppercase; color:var(--ink-3); }
+.fw .nodes .nd-t { display:block; font-size:var(--fs-4); font-weight:var(--fw-bold);
+  letter-spacing:-0.01em; margin-top:4px; }
+.fw .nodes .nd-d { display:block; font-size:var(--fs-2); line-height:1.45; color:var(--ink-3);
+  margin-top:3px; }
+@media (max-width:700px) {
+  .fw .nodes { flex-direction:column; }
+  .fw .nodes > li { padding:14px 0 0; }
+  .fw .nodes > li + li { padding-left:0; border-top:1px solid var(--line); }
+  .fw .nodes > li + li::before { display:none; }
+}
+
+/* ---- chapter 6: the relationship spine ----------------------------------
+   .tl was written into this stylesheet and never used by anything. It is a
+   vertical spine with circular dots, which is the right shape for "who is
+   involved" — a relationship rather than a sequence — and the wrong shape for
+   both of the other two diagrams. These add only what it needs to carry a
+   title and a line of detail. */
+.fw .tl .tl-t { display:block; font-size:var(--fs-4); font-weight:var(--fw-bold); letter-spacing:-0.01em; }
+.fw .tl .tl-d { display:block; font-size:var(--fs-2); line-height:1.5; color:var(--ink-3); margin-top:3px;
+  max-width:56ch; }
+.fw .tl li { padding-bottom:var(--sp-6); }
+
+/* ---- chapter 8: the commitments, one line each --------------------------
+   Six paragraphs became six lines. The full versions are on /about, which the
+   chapter links. */
+/* The six money states, beside the wallet. A definition list because that is
+   what it is: a term and what it means. Two columns so six rows do not run the
+   height of the card next to them. */
+.fw .states { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px var(--sp-7);
+  margin:0; }
+.fw .states > div { min-width:0; border-top:1px solid var(--line); padding-top:10px; }
+.fw .states dt { font-size:var(--fs-3); font-weight:var(--fw-med); }
+.fw .states dd { margin:2px 0 0; font-size:var(--fs-2); line-height:1.45; color:var(--ink-3); }
+@media (max-width:760px) { .fw .states { grid-template-columns:1fr; } }
+
+/* The checkout preview under its own stop in the flow, capped so it reads as
+   an illustration of one node rather than as a second hero. */
+.fw .checkout-under { margin-top:28px; max-width:520px; }
+
+.fw .commits { list-style:none; margin:0; padding:0; display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px var(--sp-8); }
+.fw .commits li { display:flex; gap:10px; align-items:baseline; font-size:var(--fs-3);
+  line-height:1.5; color:var(--ink-2); }
+.fw .commits .ck-t { color:var(--pine); flex:none; font-weight:var(--fw-bold); }
+@media (max-width:760px) { .fw .commits { grid-template-columns:1fr; } }
+
+/* ---- chapter 8: the story, with nothing around it -----------------------
+   Five chapters of product interface, then one quote on open ground. The reset
+   is the point, so it gets no card, no border and no figure. */
+.fw .story { max-width:30ch; font-size:var(--lp-3); line-height:1.35; letter-spacing:-0.018em;
+  font-weight:var(--fw-bold); }
+.fw .story-by { display:block; font-size:var(--fs-2); color:var(--ink-3); margin-top:var(--sp-5);
+  font-weight:var(--fw-reg); letter-spacing:0; }
 .fw section.lp.lp-dark { background:var(--ink); }
 .fw section.lp:first-of-type { border-top:0; }
 .fw .skiplink { position:absolute; left:-9999px; top:0; z-index:200; background:var(--brand); color:var(--reverse);

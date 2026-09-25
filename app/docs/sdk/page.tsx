@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { IntegrationPanel } from "@/app/_ui/IntegrationPanel";
 import type { Metadata } from "next";
 import { buildViewport, SITE } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
@@ -246,6 +247,16 @@ document.querySelector("#buy").addEventListener("click", () => {
           <span className="mono">readyToLaunch: true</span> means a customer opening your link
           right now would get a payment form.
         </p>
+
+        {/* The same check without the console, moved here from the landing
+            page. It was a developer tool sitting in the middle of marketing —
+            a tool picker, a product id field, a live test and a REST
+            reference — which made the homepage read as four different kinds of
+            page stacked together. Here it is beside the docs it belongs to and
+            in front of the people who want it. */}
+        <div style={{ marginTop: 22, maxWidth: "var(--m-wide)" }}>
+          <IntegrationPanel />
+        </div>
 
         {/* ---------------- 5 ---------------- */}
         <h2 className="h3" style={{ marginTop: 34 }}>5. Go live</h2>
