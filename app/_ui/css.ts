@@ -1190,7 +1190,18 @@ export const CSS2 = `
 .fw .searchbar .input { height:32px; font-size:var(--fs-3); max-width:260px; }
 @media (max-width:760px) {
   .fw .lp-links button.mobmenu { display:inline-flex; }
-  .fw .mobpanel { display:block; border-top:1px solid var(--line); padding:4px 0 18px; }
+  /* Dropped beneath the bar, not laid inside it.
+     As a plain block it became a flex item in .lp-links alongside the Menu
+     button, and .lp-nav is a fixed 62px row with align-items:center — so a
+     222px-tall panel centred the button against itself and pushed it to
+     y=-209, outside the visible bar. On a phone that meant you could open the
+     menu and then had nothing left to tap to close it. Absolute, anchored to
+     the sticky .navbar, so the button never moves. */
+  .fw .navbar { position:sticky; }
+  .fw .mobpanel { display:block; position:absolute; top:100%; left:0; right:0;
+    background:var(--paper); border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line); padding:4px var(--gut) 18px;
+    max-height:calc(100dvh - 62px); overflow-y:auto; z-index:59; }
   .fw .totop { bottom:152px; right:14px; }
 }
 @media print {

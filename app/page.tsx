@@ -524,8 +524,10 @@ export default async function Home() {
               Availability and the exact requirements vary by country.{" "}
               <Link className="linkbtn" href="/check">The checker</Link> gives the answer for where
               you live, and{" "}
-              <Link className="linkbtn" href="/how-it-works">/how-it-works</Link> quotes the
-              provider&rsquo;s written policy in full.
+              <Link className="linkbtn" href="/how-it-works">
+                Stripe&rsquo;s written policy
+              </Link>{" "}
+              is quoted in full.
             </p>
           </div>
         </section>

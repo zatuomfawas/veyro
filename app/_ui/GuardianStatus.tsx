@@ -57,10 +57,13 @@ export function GuardianStatus() {
             above rewritten as a checklist. One statement of state is enough,
             and the diagram is the one that also explains the order. */}
 
+        {/* The section beside this card already says the guardian is notified
+            of every payout, does not own the business and cannot block a
+            payout. Saying it twice on one screen reads as insisting. What is
+            left is the part the card alone is placed to answer. */}
         <p className="small" style={{ marginTop: 16, marginBottom: 0 }}>
-          Your guardian is the verified adult the payment provider requires. They are notified of
-          every payout request. They do not own your business, and on this account type they cannot
-          block a payout.
+          Separate logins throughout. Your guardian never sees your dashboard, and you never see
+          theirs.
         </p>
       </div>
 
