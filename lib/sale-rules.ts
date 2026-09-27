@@ -66,6 +66,20 @@ export function saleBlockers(product: PricedProduct, account: SellerAccount): No
     const minimum = MINIMUM_MINOR[product.currency.toUpperCase()] ?? 50;
     if (product.priceMinor < minimum) out.push("price_below_minimum");
   }
-  if (!account?.providerAccountId || account.status !== "ACTIVE") out.push("payments_not_set_up");
+  if (!canTakePayment(account)) out.push("payments_not_set_up");
   return out;
+}
+
+/**
+ * Whether the account behind a product could take a card at all, ignoring the
+ * product itself.
+ *
+ * Pulled out of saleBlockers rather than written a second time next to it. The
+ * dashboard needs this same question to warn a founder that a product they are
+ * about to publish cannot be paid for, and two copies of "connected and ACTIVE"
+ * is two places for the definition to drift — which is exactly how a checkout
+ * gate and a dashboard end up disagreeing about whether someone can sell.
+ */
+export function canTakePayment(account: SellerAccount): boolean {
+  return Boolean(account?.providerAccountId) && account?.status === "ACTIVE";
 }

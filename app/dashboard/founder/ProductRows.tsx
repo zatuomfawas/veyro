@@ -22,6 +22,7 @@
 
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Btn, Field, Notice } from "@/app/_ui/form";
 import { Icon } from "@/app/_ui/marks";
 import { CopyLink } from "@/app/_ui/CopyLink";
@@ -44,10 +45,12 @@ const LABEL: Record<string, string> = { LIVE: "Live", DRAFT: "Draft", ARCHIVED: 
 
 
 function Editor({
-  product, founderId, active, onDone, onCancel,
+  product, founderId, active, paymentsReady, onDone, onCancel,
 }: {
   product: ProductRow;
   founderId: string;
+  /** Whether the account can take a card at all. See ProductRows. */
+  paymentsReady: boolean;
   /** True once the panel has expanded. Focus waits for it. */
   active: boolean;
   onDone: (message: string) => void;
@@ -183,6 +186,25 @@ function Editor({
         </div>
       )}
 
+      {/* Going Live onto an account that cannot take a card. Same shape as the
+          two above: a consequence the founder cannot see from this form, and
+          one they are allowed to proceed with — under 18 the Stripe step is
+          the guardian's, so refusing here would block something they have no
+          way to fix. The checkout gate still refuses the payment, so no
+          customer is ever charged for a product in this state. */}
+      {status === "LIVE" && product.status !== "LIVE" && !paymentsReady && (
+        <div style={{ marginTop: 12 }}>
+          <Notice tone="clay" head="This will be Live, but nobody can pay yet" live>
+            Your payment setup is not finished, so anyone who opens the link is told the item is
+            not available and no card is charged. Setting this Live is still worth doing — the
+            link starts working the moment the account is ready, with nothing to change here.{" "}
+            <Link className="linkbtn" href="/dashboard/founder#payments">
+              See what your payment setup still needs
+            </Link>
+          </Notice>
+        </div>
+      )}
+
       {goingDark && (
         <div style={{ marginTop: 12 }}>
           <Notice tone="clay" head="This will turn off your checkout link" live>
@@ -204,8 +226,17 @@ function Editor({
 }
 
 export default function ProductRows({
-  founderId, founderName, products,
-}: { founderId: string; founderName: string; products: ProductRow[] }) {
+  founderId, founderName, products, paymentsReady,
+}: {
+  founderId: string; founderName: string; products: ProductRow[];
+  /**
+   * Whether the account behind these products can take a card at all. From
+   * canTakePayment in lib/sale-rules, the same predicate the checkout gate
+   * uses, so a row cannot claim a product is sellable while the gate refuses
+   * it.
+   */
+  paymentsReady: boolean;
+}) {
   const router = useRouter();
 
   // Two pieces of state, because a panel that unmounts the instant you close it
@@ -279,7 +310,22 @@ export default function ProductRows({
                   <tr style={live ? undefined : { color: "var(--ink-3)" }}>
                     <td>{p.name}</td>
                     <td className="num">{formatMinor(p.priceMinor, p.currency)}</td>
-                    <td><span className={"badge " + (BADGE[p.status] ?? "b-grey")}>{LABEL[p.status]}</span></td>
+                    <td>
+                      <span className={"badge " + (BADGE[p.status] ?? "b-grey")}>{LABEL[p.status]}</span>
+                      {/* The unmissable half. A founder who published before the account
+                          was ready will not reopen the editor to be told again, so the row
+                          says it every time they look at the list, and keeps saying it
+                          until the account goes ACTIVE. */}
+                      {live && !paymentsReady && (
+                            <span
+                              className="badge b-clay"
+                              style={{ display: "block", marginTop: 4, whiteSpace: "nowrap" }}
+                              title="Payment setup is not finished, so this link cannot take money yet."
+                            >
+                              Not payable
+                            </span>
+                          )}
+                    </td>
                     <td>
                       {/* Preview and share are different jobs, and every
                           product gets the first one. A draft used to say
@@ -359,6 +405,7 @@ export default function ProductRows({
                                 product={p}
                                 founderId={founderId}
                                 active={isOpen}
+                                paymentsReady={paymentsReady}
                                 onCancel={closeEditor}
                                 onDone={(message) => {
                                   closeEditor();

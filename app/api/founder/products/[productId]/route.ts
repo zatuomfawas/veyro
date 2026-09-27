@@ -16,6 +16,7 @@ import { resolveScope, isResponse, readJson, cap } from "../../_scope";
 import {
   validateProductFields, NAME_MAX, DESCRIPTION_MAX, type ProductStatus,
 } from "@/lib/product-rules";
+import { canTakePayment } from "@/lib/sale-rules";
 
 export const runtime = "nodejs";
 
@@ -78,6 +79,27 @@ export async function PATCH(
   const errors = validateProductFields(next);
   if (Object.keys(errors).length) return NextResponse.json({ errors }, { status: 400 });
 
+  // Publishing onto an account that cannot take a card yet.
+  //
+  // Not blocked. Under 18 the Stripe step belongs to the guardian, so refusing
+  // here would stop a founder doing something they have no way to fix — and the
+  // checkout gate already refuses the payment itself, so nobody is ever charged
+  // for a product in this state. What was wrong was the silence: the product
+  // flipped to Live, the founder shared the link, and the first they heard of it
+  // was a customer telling them it did not work.
+  //
+  // canTakePayment is the same predicate saleBlockers uses for
+  // "payments_not_set_up", imported rather than restated, so the dashboard and
+  // the checkout cannot come to different conclusions about the same account.
+  const goingLive = next.status === "LIVE" && existing.status !== "LIVE";
+  const account = goingLive
+    ? await db.founderPaymentAccount.findUnique({
+        where: { founderId: scope.founderId },
+        select: { providerAccountId: true, status: true },
+      })
+    : null;
+  const liveWithoutPayments = goingLive && !canTakePayment(account);
+
   const product = await db.founderProduct.update({ where: { id: productId }, data: next });
 
   // Price and status are the two that change what a customer is charged and
@@ -102,7 +124,25 @@ export async function PATCH(
   await audit(scope.user.id, "product.updated", product.id, scope.founderId, {
     name: product.name,
     ...changes,
+    // On the record, so "why was this live and unpayable for a week" has an
+    // answer that does not depend on anyone remembering.
+    ...(liveWithoutPayments ? { liveWithoutPayments: true } : {}),
   });
 
-  return NextResponse.json({ ok: true, product });
+  // The client decides how loudly to say it; the API's job is not to imply the
+  // product is ready when it is not.
+  return NextResponse.json({
+    ok: true,
+    product,
+    ...(liveWithoutPayments
+      ? {
+          warning: {
+            code: "payments_not_set_up" as const,
+            message:
+              "This is Live, but your payment setup isn't finished, so anyone who opens the "
+              + "link is told the item is not available and no card is charged.",
+          },
+        }
+      : {}),
+  });
 }

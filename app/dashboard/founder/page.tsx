@@ -23,6 +23,7 @@ import { foldWallet } from "@/lib/ledger";
 import { foldAnalytics } from "@/lib/analytics";
 import { consentState } from "@/lib/consent";
 import { describeRequirements } from "@/lib/stripe-account";
+import { canTakePayment } from "@/lib/sale-rules";
 import { formatMinor } from "@/lib/checkout";
 
 import { CSS, CSS2 } from "@/app/_ui/css";
@@ -696,7 +697,12 @@ export default async function FounderDashboard() {
                   anywhere.
                 </EmptyState>
               ) : (
-                <ProductRows founderId={founderId} founderName={user.name} products={productRows} />
+                <ProductRows
+                  founderId={founderId}
+                  founderName={user.name}
+                  products={productRows}
+                  paymentsReady={canTakePayment(account)}
+                />
               )}
             </Section>
 

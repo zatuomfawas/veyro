@@ -9,7 +9,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  saleBlockers, REASON_TEXT, OWNER_REASON_TEXT,
+  saleBlockers, canTakePayment, REASON_TEXT, OWNER_REASON_TEXT,
   type SellerAccount,
 } from "../lib/sale-rules.ts";
 
@@ -109,4 +109,32 @@ test("owner wording never calls the founder a seller in the third person", () =>
   for (const text of Object.values(OWNER_REASON_TEXT)) {
     assert.ok(!/\bseller\b/i.test(text), `owner text should not say "seller": ${text}`);
   }
+});
+
+// The dashboard and the checkout gate must answer "can this account take a
+// card" the same way. That is the whole reason canTakePayment was pulled out
+// of saleBlockers rather than written twice.
+test("canTakePayment agrees with the payments_not_set_up blocker", () => {
+  const product = { priceMinor: 1200, currency: "USD" };
+  const cases = [
+    null,
+    { providerAccountId: null, status: "ACTIVE" },
+    { providerAccountId: "acct_1", status: "REQUIREMENTS_DUE" },
+    { providerAccountId: "acct_1", status: "RESTRICTED" },
+    { providerAccountId: "acct_1", status: "ACTIVE" },
+  ];
+  for (const account of cases) {
+    const blocked = saleBlockers(product, account).includes("payments_not_set_up");
+    assert.equal(
+      canTakePayment(account), !blocked,
+      `disagreement for ${JSON.stringify(account)}`,
+    );
+  }
+});
+
+test("canTakePayment needs both a connected account and ACTIVE", () => {
+  assert.equal(canTakePayment({ providerAccountId: "acct_1", status: "ACTIVE" }), true);
+  assert.equal(canTakePayment({ providerAccountId: "acct_1", status: "REQUIREMENTS_DUE" }), false);
+  assert.equal(canTakePayment({ providerAccountId: null, status: "ACTIVE" }), false);
+  assert.equal(canTakePayment(null), false);
 });
