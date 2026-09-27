@@ -307,15 +307,27 @@ export default async function Home() {
             node carried moved into the lead, where it is a precondition
             rather than a step. */}
         <section className="lp ch ch-5 ch-surface" id="connect">
-          <div className="wrap-lp offset-r">
-            <div>
-              <span className="lp-eyebrow">Already built it?</span>
-              <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>Two calls.</h2>
-              <p className="sec-lead body" style={{ marginTop: 12, marginBottom: 22 }}>
-                Your app does not need rebuilding and there is no package to install. You add a
-                buy button; these two calls do the rest.
-              </p>
-            </div>
+          <div className="wrap-lp">
+            {/* Head beside the calls, not above them and not pushed into the
+                outer two thirds. The offset version left 528px of empty
+                ground on a 1920 screen, which reads as a documentation column
+                shoved right rather than as composition. The asymmetry now
+                comes from the 5/7 split the rest of the page uses, so the
+                chapter still leans without wasting the canvas. */}
+            <div className="calls-grid">
+              <div className="calls-head">
+                <span className="lp-eyebrow">Already built it?</span>
+                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>Two calls.</h2>
+                <p className="body" style={{ marginTop: 12 }}>
+                  Your app does not need rebuilding and there is no package to install. You add a
+                  buy button; these two calls do the rest.
+                </p>
+                <p className="small" style={{ marginTop: 20 }}>
+                  <Link className="linkbtn" href="/docs/sdk">The full integration guide</Link>
+                  {" \u00b7 "}
+                  <Link className="linkbtn" href="/get-started">The steps, without the code</Link>
+                </p>
+              </div>
 
             <ol className="calls">
               <li>
@@ -340,12 +352,7 @@ export default async function Home() {
   -> { "status": "pending" | "completed" | "refunded" }`}</pre>
               </li>
             </ol>
-
-            <p className="small" style={{ marginTop: 20 }}>
-              <Link className="linkbtn" href="/docs/sdk">The full integration guide</Link>
-              {" \u00b7 "}
-              <Link className="linkbtn" href="/get-started">The steps, without the code</Link>
-            </p>
+            </div>
           </div>
         </section>
 
@@ -541,7 +548,7 @@ export default async function Home() {
           decided. */}
       <Reveal
         scope=".fw"
-        select="section.lp > .wrap-lp > *, section.lp .truthgrid > *, section.lp .band-side > *"
+        select="section.lp > .wrap-lp > *, section.lp .truthgrid > *, section.lp .band-side > *, section.lp .calls-grid > *"
         stagger=".props, .commits, .calls, .tl"
       />
 

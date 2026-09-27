@@ -264,8 +264,6 @@ export const CSS = `
    of x on one chapter: enough to feel, not enough to notice. Everything else
    on the page still rises straight up — cards coming in from four directions
    is the failure mode this avoids, not the effect it wants. */
-.fw[data-motion="on"] .offset-r > [data-reveal] { transform:translate(10px, var(--rise)); }
-.fw[data-motion="on"] .offset-r > [data-reveal][data-shown="1"] { transform:none; }
 /* Two more, one per composition, and both are the transform that is already
    there rather than a new animation. The flow arrives across, because across
    is the direction it asks the eye to travel. The wallet settles instead of
@@ -1536,14 +1534,22 @@ export const CSS2 = `
     grid-template-columns:repeat(3,minmax(0,1fr)); column-gap:var(--sp-8); }
 }
 
-/* 5. The one right-weighted chapter, and the reason the rest can be centred
-   without the page flattening. Everything sits in the outer two thirds, so
-   the heading starts around x=523 instead of 48 and the mono still finishes
-   on the page's right gutter. The empty third is the composition, not a
-   gap left over. */
-.fw .offset-r { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr);
-  gap:0 var(--sp-8); }
-.fw .offset-r > * { grid-column:2; min-width:0; }
+/* 5. Head beside the calls. This chapter used to push everything into the
+   outer two thirds, which held its own at 1440 but left 528px of dead
+   ground at 1920 — a documentation column shoved right rather than a
+   composition. It leans on the same --split-a/--split-b as the rest of the
+   page instead, so it is still asymmetric and still not centred, but it
+   uses the whole canvas.
+
+   Inside the 7fr column the calls stack their words above their request:
+   splitting them again would give the mono about 366px at 1280 against a
+   390px longest line, and a code block that scrolls sideways on a desktop
+   is worse than one that sits under its own sentence. */
+.fw .calls-grid { display:grid; grid-template-columns:var(--split-a) var(--split-b);
+  gap:var(--sp-8); align-items:start; }
+.fw .calls-grid > * { min-width:0; }
+.fw .calls-grid .calls { gap:var(--sp-7); }
+.fw .calls-grid .calls > li { grid-template-columns:minmax(0,1fr); gap:9px; }
 
 /* 6. The spine down the middle. 460px keeps the dots near the optical centre
    while the lines of detail stay a comfortable measure. The connector between
@@ -1581,7 +1587,7 @@ export const CSS2 = `
   /* Mobile gets its own composition rather than the desktop one folded flat:
      the offset chapter returns to full width, the sidebar heading sits back
      above its grid, and the centred blocks stay centred. */
-  .fw .offset-r { display:block; }
+  .fw .calls-grid { grid-template-columns:minmax(0,1fr); gap:var(--sp-6); }
   .fw .band-side { grid-template-columns:minmax(0,1fr); gap:var(--sp-6); }
   .fw .stage, .fw .tool, .fw .readcol { max-width:none; }
   .fw section.ch-3 { --stage-w:none; }
