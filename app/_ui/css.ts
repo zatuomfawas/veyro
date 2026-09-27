@@ -694,6 +694,11 @@ export const CSS = `
 .fw .tbl tbody th { color:var(--ink-2); border-bottom-color:var(--line-soft); }
 .fw .tbl td { padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--line-soft); font-size:var(--fs-3); vertical-align:middle; }
 .fw .tbl tr:last-child td, .fw .tbl tr:last-child th { border-bottom:0; }
+/* A badge is a label, not a paragraph. In the transactions table, which sits
+   in a half-width column with six columns of its own, "Still settling" and
+   "Refunded" were wrapping mid-word and rendering as "Settlin" and "Refun"
+   with the rest clipped off the cell. */
+.fw .tbl td .badge, .fw .tbl th .badge { white-space:nowrap; }
 .fw .tbl .r { text-align:right; }
 .fw .tbl-c tbody tr { cursor:pointer; }
 .fw .tbl-c tbody tr:hover { background:var(--surface); }
@@ -1592,6 +1597,70 @@ export const CSS2 = `
   .fw .stage, .fw .tool, .fw .readcol { max-width:none; }
   .fw section.ch-3 { --stage-w:none; }
   .fw section.ch-6 .tl { max-width:none; }
+}
+
+/* ==== founder dashboard: hierarchy by container, not by repetition =======
+   Nine <Section> cards in two columns, every one the same border, the same
+   padding and the same visual weight — and the wallet rendered twice, once as
+   a $207.00 card at the top and again as a $186.27 fold halfway down. A
+   founder opening this could not tell what mattered, and the two money
+   figures actively contradicted each other.
+
+   These are the containers that break the stack: one dark hero for the money,
+   a rail of unboxed figures for the numbers that are context rather than
+   content, and a spine for payouts, which are a sequence and were a table. */
+
+/* The money, as the one thing on the page with real scale. Dark because
+   nothing else here is: on a page of white cards a dark band is the only
+   hierarchy signal that cannot be missed, and it is the same reversal the
+   marketing page ends on, so the product looks like what was promised. */
+.fw .wallethero { background:var(--ink); color:var(--reverse); padding:var(--sp-8) var(--sp-7);
+  margin-bottom:var(--sp-7); }
+.fw .wallethero .wh-label { display:block; font-size:var(--fs-2); letter-spacing:0.02em;
+  color:#9b9c9d; }
+.fw .wallethero .wh-big { display:block; font-size:var(--fs-10); line-height:1.02;
+  letter-spacing:-0.03em; font-weight:var(--fw-bold); font-variant-numeric:tabular-nums;
+  margin-top:var(--sp-2); }
+.fw .wallethero .wh-sub { display:block; font-size:var(--fs-3); color:#bcbdbd; margin-top:var(--sp-3);
+  max-width:46ch; }
+/* The breakdown, on one rule. Every figure a founder might question about the
+   big number above, in the order the money actually moves through them. */
+.fw .wh-break { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(0,1fr);
+  gap:var(--sp-5); margin-top:var(--sp-7); padding-top:var(--sp-5);
+  border-top:1px solid rgba(255,255,255,.17); }
+.fw .wh-break > div { min-width:0; }
+.fw .wh-break dt { display:block; font-size:var(--fs-2); color:#9b9c9d; }
+.fw .wh-break dd { display:block; margin:3px 0 0; font-size:var(--fs-5); font-weight:var(--fw-med);
+  font-variant-numeric:tabular-nums; }
+/* Settled money is pine everywhere else on the site, so it is pine here. On
+   this ground the light tint carries it; --pine itself is 2.01:1 on ink. */
+.fw .wh-break dd[data-tone="settled"] { color:#a5bdb4; }
+.fw .wh-break dd[data-tone="out"] { color:#d9aeab; }
+.fw .wallethero .row { margin-top:var(--sp-7); }
+@media (max-width:760px) {
+  .fw .wallethero { padding:var(--sp-7) var(--sp-5); }
+  .fw .wallethero .wh-big { font-size:var(--fs-9); }
+  .fw .wh-break { grid-auto-flow:row; grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:var(--sp-5) var(--sp-6); }
+}
+
+/* Context figures. Deliberately not cards: these are things a founder glances
+   at, and giving each one a border would put four more boxes on a page whose
+   problem is boxes. */
+.fw .stattiles { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(0,1fr);
+  gap:0; border-top:1px solid var(--ink); margin-bottom:var(--sp-7); }
+.fw .stattiles > div { min-width:0; padding:var(--sp-5) var(--sp-5) var(--sp-4) 0;
+  border-right:1px solid var(--line); }
+.fw .stattiles > div:last-child { border-right:0; }
+.fw .stattiles > div + div { padding-left:var(--sp-5); }
+.fw .stattiles .st-n { display:block; font-size:var(--fs-7); font-weight:var(--fw-bold);
+  letter-spacing:-0.02em; font-variant-numeric:tabular-nums; }
+.fw .stattiles .st-l { display:block; font-size:var(--fs-2); color:var(--ink-3); margin-top:4px; }
+@media (max-width:760px) {
+  .fw .stattiles { grid-auto-flow:row; grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .fw .stattiles > div { border-right:0; border-bottom:1px solid var(--line); padding:var(--sp-4) 0; }
+  .fw .stattiles > div + div { padding-left:0; }
+  .fw .stattiles > div:nth-child(odd) { padding-right:var(--sp-5); }
 }
 
 .fw .lp-tall { padding:var(--sp-10) 0; }

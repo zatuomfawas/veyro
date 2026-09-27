@@ -29,7 +29,6 @@ import { formatMinor } from "@/lib/checkout";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Notice } from "@/app/_ui/form";
 import { Requirements } from "@/app/_ui/Requirements";
-import { MoneyPosition } from "@/app/_ui/MoneyPosition";
 import { SIGNUP_COUNTRIES } from "@/app/_ui/countries";
 import { CopyLink } from "@/app/_ui/CopyLink";
 import { FocusButton } from "@/app/_ui/FocusButton";
@@ -39,10 +38,9 @@ import InviteGuardian, { ResendInvite } from "./InviteGuardian";
 import Notifications from "@/app/_ui/Notifications";
 import NewProduct, { NAME_FIELD_ID } from "./NewProduct";
 import ProductRows from "./ProductRows";
-import { Analytics } from "./Analytics";
 import RequestPayout from "./RequestPayout";
 import {
-  BusinessHeader, RevenueCard, GuardianStatus, PaymentStatus, PrimaryAction,
+  BusinessHeader, GuardianStatus, PaymentStatus, PrimaryAction,
   overallStatus as computeOverall,
 } from "./Overview";
 
@@ -306,17 +304,91 @@ export default async function FounderDashboard() {
         {/* stretch, not start: two cards of different heights side by side read
             as an accident. Matched frames read as a pair, and the one action in
             the right-hand card sits on its floor rather than halfway up. */}
-        <div className="grid-2" style={{ gap: "var(--sp-7)", alignItems: "stretch", marginBottom: "var(--sp-7)" }}>
-          <RevenueCard
-            fold={primaryFold}
-            monthMinor={monthMinor}
-            otherCurrencies={otherFolds}
-            hasTransactions={transactions.length > 0}
-            firstLiveHref={firstLive ? `/pay/${founderId}/${firstLive.id}` : null}
-          />
+          {/* ---------------- the money, once ----------------
+              This was two things: a RevenueCard here reading $207.00 earned,
+              and a Wallet section halfway down the left column reading $186.27
+              net. Two money summaries on one screen, different figures,
+              neither obviously the answer to "how much do I have". The fold is
+              the real one, so it comes up here and the duplicate below goes.
 
-          <div className="card" style={{ display: "flex", flexDirection: "column" }}>
-            <div className="card-b" style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+              Dark, and the full width of the page. On a page that was nine
+              identical white cards this is the only container that says "start
+              here", and it is the reversal the marketing page ends on, so the
+              product looks like what was promised. */}
+          {primaryFold && (
+            <div className="wallethero">
+              <span className="wh-label">Available to request &middot; {primaryFold.currency}</span>
+              <span className="wh-big">{formatMinor(primaryFold.available, primaryFold.currency)}</span>
+              <span className="wh-sub">
+                {primaryFold.available > 0
+                  ? "Cleared, yours, and nothing is holding it. Requesting sends it to the bank account on your payment account."
+                  : "Nothing has cleared yet. Money lands here once a payment settles."}
+              </span>
+
+              <dl className="wh-break">
+                <div><dt>Earned</dt><dd>{formatMinor(primaryFold.earned, primaryFold.currency)}</dd></div>
+                <div><dt>Stripe fees</dt><dd data-tone="out">&minus;{formatMinor(primaryFold.fees, primaryFold.currency)}</dd></div>
+                <div><dt>Refunded</dt><dd data-tone="out">&minus;{formatMinor(primaryFold.refunded, primaryFold.currency)}</dd></div>
+                <div><dt>Still settling</dt><dd>{formatMinor(primaryFold.pending, primaryFold.currency)}</dd></div>
+                <div><dt>Paid out</dt><dd data-tone="settled">{formatMinor(primaryFold.paidOut, primaryFold.currency)}</dd></div>
+              </dl>
+
+              {/* Never summed with the figure above: a minor-unit integer means
+                  nothing without its currency, and adding JPY to USD would be a
+                  lie with a decimal point in it. */}
+              {otherFolds.length > 0 && (
+                <p className="wh-sub" style={{ marginTop: "var(--sp-5)" }}>
+                  Also holding{" "}
+                  {otherFolds.map((f, i) => (
+                    <span key={f.currency}>
+                      {i > 0 ? ", " : ""}
+                      {formatMinor(f.available, f.currency)} available in {f.currency}
+                    </span>
+                  ))}
+                  . Each currency is kept on its own.
+                </p>
+              )}
+
+              {primaryAvailable > 0 && (
+                <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
+                  <Link className="btn" href="#payouts">Request a payout</Link>
+                  {firstLive && (
+                    <Link className="btn btn-2" href={`/pay/${founderId}/${firstLive.id}`} target="_blank" rel="noreferrer">
+                      Open your checkout
+                    </Link>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Context, not content. Figures a founder glances at, so they sit on
+              a rule rather than inside four more bordered cards on a page whose
+              whole problem is bordered cards. */}
+          <div className="stattiles">
+            <div>
+              <span className="st-n">{analytics.views}</span>
+              <span className="st-l">Checkout views &middot; last {analytics.days} days</span>
+            </div>
+            <div>
+              <span className="st-n">{analytics.purchases}</span>
+              <span className="st-l">Purchases</span>
+            </div>
+            <div>
+              <span className="st-n">{analytics.conversion === null ? "—" : Math.round(analytics.conversion * 100) + "%"}</span>
+              <span className="st-l">{analytics.conversion === null ? "Conversion, once anyone looks" : "Of views that bought"}</span>
+            </div>
+            <div>
+              <span className="st-n">{formatMinor(monthMinor, primaryFold?.currency ?? "USD")}</span>
+              <span className="st-l">This month, cleared</span>
+            </div>
+          </div>
+
+          {/* What is left of the old top row: the half that answers "what
+              happens next". A strip now, not a column, because the money it
+              used to sit beside has moved above it. */}
+          <div className="card" style={{ marginBottom: "var(--sp-7)" }}>
+            <div className="card-b">
               <div className="reqlist">
                 <GuardianStatus
                   state={state}
@@ -332,17 +404,12 @@ export default async function FounderDashboard() {
                   connectedAt={account?.connectedAt}
                 />
               </div>
-
-              {/* marginTop:auto pushes the action to the bottom of the card, so
-                  it lands in the same place whether the status list above it is
-                  one line or four. */}
-              <div style={{ marginTop: "auto", paddingTop: "var(--sp-5)" }}>
+              <div style={{ marginTop: "var(--sp-5)" }}>
                 <PrimaryAction state={state} accountStatus={account?.status} />
               </div>
-
             </div>
           </div>
-        </div>
+
 
         {/* Below revenue, above the working sections. An unread "Payment setup
             needs redoing" is urgent, but not more urgent than the number the
@@ -562,42 +629,23 @@ export default async function FounderDashboard() {
             {/* Above the wallet on purpose. The wallet answers "where is my
                 money"; this answers "is any of this working", which is the
                 question you arrive with. */}
-            <Section title="Last 30 days">
-              <Analytics fold={analytics} hasProducts={products.length > 0} />
-            </Section>
+            {/* "Last 30 days" stood here and repeated the four figures now on the
+                rule at the top of the page. What it had that the rail does not is
+                the best seller and the caveat about how views are counted, so that
+                is what is left of it. */}
+            {analytics.topProduct && (
+              <p className="small" style={{ marginTop: "calc(-1 * var(--sp-5))", marginBottom: "var(--sp-7)" }}>
+                Best seller: <strong>{analytics.topProduct.name}</strong>, {analytics.topProduct.purchases}
+                {analytics.topProduct.purchases === 1 ? " sale" : " sales"} totalling{" "}
+                {formatMinor(analytics.topProduct.grossMinor, analytics.topProduct.currency)}. Views are
+                counted once per browser session, and amounts are gross, before Stripe&rsquo;s fee.
+              </p>
+            )}
 
-            {/* ---------------- 4. wallet ---------------- */}
-            <Section title="Wallet">
-              {wallet.currencies.length === 0 ? (
-                <EmptyState
-                  heading="No sales yet"
-                  action={
-                    payPath
-                      ? <CopyLink path={payPath} />
-                      : draftsOnly
-                        /* The blocker is an unpublished product, not a missing
-                           one. Offering "add another" would send someone to
-                           make a second draft. */
-                        ? { label: "Go to your products", href: "#products" }
-                        : <FocusButton target={NAME_FIELD_ID} label="Create your first product" />
-                  }
-                >
-                  {draftsOnly
-                    ? "Your product is still a draft. Make it live and you\u2019ll get a link you can send."
-                    : "When someone pays, money appears here. Share your checkout link to get started."}
-                </EmptyState>
-              ) : (
-                <div className="stack">
-                  {wallet.currencies.map((c) => (
-                    <MoneyPosition key={c.currency} fold={c} />
-                  ))}
-                  <p className="tiny" style={{ margin: 0 }}>
-                    Folded from your own records. No balance is stored, so this cannot drift from
-                    the transactions beside it.
-                  </p>
-                </div>
-              )}
-            </Section>
+            {/* The Wallet section stood here. It is the dark hero at the top of
+                the page now: it was the second money summary on one screen, with a
+                different figure from the first, and two answers to "how much do I
+                have" is worse than either alone. */}
 
             {/* ---------------- payouts ---------------- */}
             <div id="payouts" />
