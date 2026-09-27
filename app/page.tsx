@@ -500,7 +500,10 @@ export default async function Home() {
               </p>
             </div>
 
-            <div className="readcol" style={{ marginTop: 64 }}>
+            {/* id="faq": the mobile menu has linked to #faq since it was
+                written, but the target was lost when the page became nine
+                chapters, so that item silently did nothing. */}
+            <div className="readcol" id="faq" style={{ marginTop: 64 }}>
               <h3 className="h4 centred-note" style={{ marginTop: 0, marginBottom: 16 }}>Questions</h3>
               {FAQ.filter((f) => f.homepage).map((f) => (
                 <Faq key={f.q} q={f.q}>{f.a}</Faq>

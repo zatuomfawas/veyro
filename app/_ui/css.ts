@@ -524,11 +524,12 @@ export const CSS = `
 /* 140, not 170, and the reason is a browser that has neither :has() nor
    container queries — anything older than about Chrome 105 or Safari 16. There
    the container rule below never applies, so this basis is what decides
-   whether four stops fit. At 140px they fit a 719px card on one line
-   (4x140 + 3x34 = 662); at 170 they wrapped to three and a stranded fourth.
+   whether the stops fit. At 132px four fit a 719px card on one line
+   (4x132 + 3x34 = 630) and five fit the homepage band down to 901px
+   (5x132 + 4x34 = 796); at 170 four wrapped to three and a stranded fourth.
    Modern browsers stack the same diagram via the container query long before
    the basis matters, so nothing changes for them. */
-.fw .flow-step { flex:1 1 140px; min-width:0; border:1px solid var(--ink);
+.fw .flow-step { flex:1 1 132px; min-width:0; border:1px solid var(--ink);
   background:var(--card); padding:13px 15px; }
 .fw .flow-step .fs-n { display:block; font-size:var(--fs-1); letter-spacing:0.06em;
   text-transform:uppercase; color:var(--ink-3); margin-bottom:5px; }
@@ -562,7 +563,16 @@ export const CSS = `
 @media (prefers-reduced-motion: reduce) { .fw .flow-arrow { opacity:1 !important; } }
 .fw .flow-arrow { flex:0 0 34px; display:flex; align-items:center; justify-content:center;
   color:var(--ink-3); font-size:var(--fs-5); }
-@media (max-width:760px) {
+/* 900, not 760. That number was set when this diagram had four stops; the
+   homepage flow has five, which need 5x132 + 4x34 = 796px of basis, and
+   between 761 and about 911 the row wrapped to four and a lone fifth — the
+   fifth stretched by flex-grow to the full width, ending further right than
+   the row above it, with the fourth arrow stranded at the end of row one
+   pointing at nothing. Stacking at the same 900 every other two-column
+   block on this page uses closes that band, and the basis drop from 140
+   keeps five on one line at 901px (829px of content against 796 of basis)
+   instead of leaving a 10px strip where it still wraps. */
+@media (max-width:900px) {
   .fw .flow { flex-direction:column; }
   .fw .flow-step { flex:1 1 auto; }
   .fw .flow-arrow { flex:0 0 26px; transform:rotate(90deg); }
