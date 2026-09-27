@@ -277,51 +277,56 @@ export default async function Home() {
         </section>
 
         {/* ================= 5. add it to your app ================= */}
-        {/* The lightest thing on the page, and deliberately so. The tool picker,
-            product id field, live test and REST reference moved to /docs/sdk,
-            which is the integration guide and where a developer is already
-            looking. Three labels on a rule and the two calls. */}
+        {/* The lightest thing on the page in weight, if not in height: no
+            boxes, no frames, no card. The tool picker, product id field, live
+            test and REST reference moved to /docs/sdk, which is the
+            integration guide and where a developer is already looking.
+
+            This was a rail of three arrowed labels beside a bordered code
+            slab, which measured as chapter 4's flow in the same type at the
+            same size one chapter down \u2014 and showed three stops under a
+            heading that says two. It is now what the heading says: the two
+            calls, each paired with what it does. The buy button the first
+            node carried moved into the lead, where it is a precondition
+            rather than a step. */}
         <section className="lp ch ch-5 ch-surface" id="connect">
           <div className="wrap-lp">
             <span className="lp-eyebrow">Already built it?</span>
             <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>Two calls.</h2>
             <p className="sec-lead body" style={{ marginTop: 12, marginBottom: 22 }}>
-              Your app does not need rebuilding. There is no package to install.
+              Your app does not need rebuilding and there is no package to install. You add a buy
+              button; these two calls do the rest.
             </p>
 
-            <div className="truthgrid" style={{ alignItems: "start" }}>
-              <div>
-                <ol className="nodes">
-                  <li>
-                    <span className="nd-n">Your app</span>
-                    <span className="nd-t">A buy button</span>
-                    <span className="nd-d">You add this.</span>
-                  </li>
-                  <li>
-                    <span className="nd-n">Veyro</span>
-                    <span className="nd-t">Hosted checkout</span>
-                    <span className="nd-d">Opened by the first call.</span>
-                  </li>
-                  <li>
-                    <span className="nd-n">Payment</span>
-                    <span className="nd-t">The answer</span>
-                    <span className="nd-d">Read by the second.</span>
-                  </li>
-                </ol>
-                <p className="small" style={{ marginTop: 20 }}>
-                  <Link className="linkbtn" href="/docs/sdk">The full integration guide</Link>
-                  {" \u00b7 "}
-                  <Link className="linkbtn" href="/get-started">The steps, without the code</Link>
-                </p>
-              </div>
-
-              <pre className="code" style={{ margin: 0 }}>{`POST /api/checkout/create
+            <ol className="calls">
+              <li>
+                <div>
+                  <h3 className="cl-t"><span className="cl-n">1</span>Open a checkout</h3>
+                  <p className="cl-d">
+                    Veyro hosts the page. Send your customer to the URL it returns.
+                  </p>
+                </div>
+                <pre className="cl-c">{`POST /api/checkout/create
   { "productId": "prod_..." }
-  -> { "checkoutUrl": "...", "intentId": "..." }
-
-GET  /api/checkout/status?intent=...
+  -> { "checkoutUrl": "...", "intentId": "..." }`}</pre>
+              </li>
+              <li>
+                <div>
+                  <h3 className="cl-t"><span className="cl-n">2</span>Read the answer</h3>
+                  <p className="cl-d">
+                    Unlock what you sold once the status comes back completed.
+                  </p>
+                </div>
+                <pre className="cl-c">{`GET /api/checkout/status?intent=...
   -> { "status": "pending" | "completed" | "refunded" }`}</pre>
-            </div>
+              </li>
+            </ol>
+
+            <p className="small" style={{ marginTop: 20 }}>
+              <Link className="linkbtn" href="/docs/sdk">The full integration guide</Link>
+              {" \u00b7 "}
+              <Link className="linkbtn" href="/get-started">The steps, without the code</Link>
+            </p>
           </div>
         </section>
 
@@ -480,7 +485,7 @@ GET  /api/checkout/status?intent=...
       <Reveal
         scope=".fw"
         select="section.lp > .wrap-lp > *, section.lp .truthgrid > *"
-        stagger=".props, .commits, .herofacts"
+        stagger=".props, .commits, .herofacts, .calls"
       />
 
       <ScrollTop />

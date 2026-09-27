@@ -425,8 +425,27 @@ export const CSS = `
    only the controls are capped. */
 .fw .checkform .field { max-width:var(--m-tight); }
 .fw .checkform .field > .hint, .fw .checkform .field > .err { max-width:var(--m-lead); }
-/* The submit stays full width: it is the one thing on the card that should be
-   impossible to miss, and it closes the form rather than collecting anything. */
+/* The same checker is embedded on the homepage, where its card is 761px wide
+   while --m-tight caps each field at 317px. Measured, that left 402px of
+   empty card to the right of the inputs and a Check button stretched to 719px
+   — more than twice the width of the fields it belongs to. Two columns at
+   that width instead, so the thing reads as a tool rather than as a form
+   dropped into a box. Scoped to #eligibility: /check itself is narrower and
+   already right. */
+@media (min-width:901px) {
+  .fw #eligibility .checkform { display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 var(--sp-6); align-items:start; }
+  .fw #eligibility .checkform .field { max-width:none; }
+  /* The button shares a row with a field whenever the region question is
+     showing, so it aligns on the control, not on the label above it: the
+     same 14px .field leaves under itself, so Check sits level with the input
+     beside it rather than with that input's caption. */
+  .fw #eligibility .checkform > .btn { align-self:end; margin-bottom:14px; }
+}
+/* The submit fills its column: it is the one thing on the card that should be
+   impossible to miss, and it closes the form rather than collecting anything.
+   On /check that column is the whole card; embedded on the homepage the rule
+   above gives it one of two. */
 .fw .charcount { float:right; font-size:var(--fs-1); color:var(--ink-3); font-variant-numeric:tabular-nums; }
 .fw .charcount[data-near="1"] { color:var(--amber); }
 .fw .charcount[data-over="1"] { color:var(--clay); font-weight:var(--fw-med); }
@@ -1139,30 +1158,46 @@ export const CSS2 = `
   .fw section.ch-9 { padding:58px 0; }
 }
 
-/* ---- chapter 5's diagram: labels on a rule, no boxes --------------------
-   Chapters 4, 5 and 6 are all diagrams and must not be the same diagram three
-   times. Four is bordered stops and arrowheads, laid out horizontally. Six is
-   a vertical spine with circular dots. This is the third language: no boxes at
-   all, just three labels sitting on one hairline, sized to sit quietly above a
-   code block rather than to be looked at on its own. It is deliberately the
-   lightest thing on the page. */
-.fw .nodes { display:flex; align-items:stretch; border-top:1px solid var(--ink); margin:0; padding:0;
-  list-style:none; }
-.fw .nodes > li { flex:1 1 0; min-width:0; padding:14px 18px 0 0; position:relative; }
-.fw .nodes > li + li { padding-left:var(--sp-5); }
-.fw .nodes > li + li::before { content:"→"; position:absolute; left:-2px; top:14px;
-  color:var(--ink-3); font-size:var(--fs-3); line-height:1.2; }
-.fw .nodes .nd-n { display:block; font-size:var(--fs-1); letter-spacing:0.06em;
-  text-transform:uppercase; color:var(--ink-3); }
-.fw .nodes .nd-t { display:block; font-size:var(--fs-4); font-weight:var(--fw-bold);
-  letter-spacing:-0.01em; margin-top:4px; }
-.fw .nodes .nd-d { display:block; font-size:var(--fs-2); line-height:1.45; color:var(--ink-3);
-  margin-top:3px; }
-@media (max-width:700px) {
-  .fw .nodes { flex-direction:column; }
-  .fw .nodes > li { padding:14px 0 0; }
-  .fw .nodes > li + li { padding-left:0; border-top:1px solid var(--line); }
-  .fw .nodes > li + li::before { display:none; }
+/* ---- chapter 5: the two calls -------------------------------------------
+   This chapter used to be three labels on a rule with an arrow between each,
+   which claimed in its own comment to be a third diagram language. Measured,
+   it was not: it used the same 11.5px uppercase label, the same 15.5px bold
+   title and the same 12.5px grey line as chapter 4's flow, one chapter below
+   it, and it was arrowed and horizontal too. Two arrowed sequences in the
+   same typography read as one idea told twice. It also showed three stops
+   under a heading that says "Two calls."
+
+   So this is not a sequence. Two rows, numbered, each pairing what a call
+   does with what it looks like. Mono is the medium and nothing else on the
+   page uses it, which is what makes the chapter unmistakable at a glance.
+
+   No border on the request blocks. The chapter already sits on its own
+   ground, so a framed slab here would be the fourth boxed diagram — and the
+   old one was 761px wide against a 543px rail, which made the code the
+   larger half of a section that is not the documentation.
+
+   The columns are --split-a / --split-b: the same split every other chapter
+   uses, so the mono lands on the page's right-hand edge rather than near it.
+   min-width:0 on both cells, because a pre with white-space:pre reports its
+   content width as its minimum and would otherwise widen the whole grid. */
+.fw .calls { list-style:none; margin:0; padding:0; display:grid; gap:var(--sp-6); }
+.fw .calls > li { display:grid; grid-template-columns:var(--split-a) var(--split-b);
+  gap:0 var(--sp-8); align-items:baseline; }
+.fw .calls > li > * { min-width:0; }
+.fw .cl-t { font-size:var(--fs-4); font-weight:var(--fw-bold); letter-spacing:-0.01em; }
+.fw .cl-n { display:inline-block; min-width:1.8ch; color:var(--ink-3);
+  font-weight:var(--fw-med); font-variant-numeric:tabular-nums; }
+.fw .cl-d { margin:5px 0 0; font-size:var(--fs-2); line-height:1.5; color:var(--ink-3); }
+.fw .cl-c { margin:0; font-family:var(--code); font-size:var(--fs-2); line-height:1.7;
+  color:var(--ink-2); white-space:pre; overflow-x:auto; tab-size:2; }
+/* 900, not 760: that is where .truthgrid stacks, and two adjacent sections
+   changing shape at different widths is the kind of seam nobody can name but
+   everybody feels. Wrapping rather than scrolling below it, because the
+   status line is 361px against a 288px column on a small phone and a code
+   block you have to drag sideways is worse than one that wraps. */
+@media (max-width:900px) {
+  .fw .calls > li { grid-template-columns:minmax(0,1fr); gap:10px; }
+  .fw .cl-c { white-space:pre-wrap; word-break:break-word; }
 }
 
 /* ---- chapter 6: the relationship spine ----------------------------------
@@ -1380,6 +1415,14 @@ export const CSS2 = `
 .fw main > section.lp-dark:last-child {
   margin-bottom:calc(-1 * var(--tail));
   padding-bottom:calc(var(--lp-pad) + var(--tail)); }
+/* --lp-pad is the pre-ladder section padding, 72px. The closing chapter has
+   had its own 96px since the rebuild, so the rule above was quietly giving
+   the ending 96px of air above the heading and 72 below the button. The
+   ending should not taper. */
+.fw main > section.lp-dark.ch-9:last-child { padding-bottom:calc(96px + var(--tail)); }
+@media (max-width:900px) {
+  .fw main > section.lp-dark.ch-9:last-child { padding-bottom:calc(58px + var(--tail)); }
+}
 .fw .lp-dark .d1, .fw .lp-dark .d2, .fw .lp-dark h2, .fw .lp-dark .statement { color:var(--reverse); }
 .fw .lp-dark .body, .fw .lp-dark .small, .fw .lp-dark .lead { color:#bcbdbd; }
 .fw .lp-dark .tiny { color:#9b9c9d; }
