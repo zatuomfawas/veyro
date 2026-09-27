@@ -538,7 +538,14 @@ export default async function Home() {
       />
 
       <ScrollTop />
-      <StickyCta href="/get-started" label="Get started" note="Or check eligibility first. No account." />
+      {/* The checker, not "Get started". The navbar is sticky on a phone and
+          already carries "Get started" at every scroll position, so a second
+          fixed bar saying the same thing was duplication the whole way down
+          the page — and at the foot it put four identical buttons on one
+          screen: navbar, the closing CTA, the footer link and this. The bar
+          is worth keeping for the action the page keeps offering as the
+          lower-commitment one. */}
+      <StickyCta note="Two questions. No account, no email address." />
       <SiteFooter />
     </div>
   );

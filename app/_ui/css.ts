@@ -885,6 +885,11 @@ export const CSS = `
   color:var(--brand); }
 .fw .lp-dark .lp-eyebrow { color:#aeafaf; }
 .fw .sec-lead { max-width:62ch; }
+/* Five paragraphs ended on one short word — "fees.", "returns.", "name." —
+   the worst at 32px under a 408px line. pretty is the property written for
+   that, and where it is not supported the text wraps exactly as it does now. */
+.fw .lp-lead, .fw .sec-lead, .fw .props .pr-d, .fw .cl-d, .fw .tl .tl-d,
+.fw .states dd, .fw .story-by, .fw main .body { text-wrap:pretty; }
 .fw .cardgrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
   gap:var(--sp-6); align-items:stretch; }
 .fw .cardgrid > * { min-width:0; }
@@ -1020,6 +1025,12 @@ export const CSS = `
     background:var(--card); border-top:1px solid var(--ink); padding:11px 16px 13px; }
   .fw { --tail:86px; }
   .fw .has-sticky { padding-bottom:var(--tail); }
+  /* has-sticky reserves the bar's space inside main, but the footer comes
+     after main and got no reservation at all — measured, the bar covered
+     the contact address and two footer links at the bottom of the scroll and
+     elementFromPoint said they could not be tapped. The sibling selector
+     means only a page that actually renders the bar pays for it. */
+  .fw .stickycta ~ .foot { padding-bottom:calc(var(--tail) + 28px); }
   .fw .shell { flex-direction:column; }
   .fw .rail { width:100%; border-right:0; border-bottom:1px solid var(--line); }
   .fw .nav { flex-direction:row; overflow-x:auto; padding:6px 10px; gap:4px; }

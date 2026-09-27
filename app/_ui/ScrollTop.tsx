@@ -6,6 +6,13 @@
 // been out of sight long enough that scrolling back by hand is a chore. No
 // bounce, no pulse, no fade: it is either there or it is not.
 //
+// And it stands down over the last stretch of the page. Measured on a phone at
+// full scroll, it sat on top of two footer links and elementFromPoint said a
+// tap at their centre hit the button, not the link. A floating control covers
+// something at every scroll position, which is the deal you make with one, but
+// the bottom of the document is the one place the reader has actually arrived
+// and the footer's own links are what they came for.
+//
 // The scroll itself asks for smooth behaviour unless the reader has said they
 // prefer reduced motion, in which case it jumps. The CSS makes the same
 // promise for anchor links; this is the JavaScript half of it.
@@ -16,7 +23,12 @@ export function ScrollTop({ label = "Top" }: { label?: string }) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setShow(window.scrollY > window.innerHeight);
+    const onScroll = () => {
+      const y = window.scrollY;
+      const vh = window.innerHeight;
+      const fromBottom = document.documentElement.scrollHeight - (y + vh);
+      setShow(y > vh && fromBottom > 220);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
