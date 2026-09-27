@@ -406,7 +406,12 @@ export default async function Home() {
             </ol>
 
             <div className="headc" style={{ marginTop: 34 }}>
-              <p className="sec-lead body" style={{ margin: 0 }}>
+              {/* marginTop, not margin. The shorthand also zeroed the auto
+                  side margins .headc uses to centre its children, and an
+                  inline style beats any selector — so this paragraph rendered
+                  flush left at x=48 while the heading, the spine and the link
+                  above and below it were all centred on 720. */}
+              <p className="sec-lead body" style={{ marginTop: 0 }}>
                 Under 18 the payment provider requires a verified adult. What they do not get is
                 your business: you keep the products, the links and the decisions.
               </p>

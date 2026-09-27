@@ -1507,8 +1507,20 @@ export const CSS2 = `
    .segwrap stretches so its tabs can wrap on a narrow screen; at 920 that
    left a third of the strip as empty chrome, so here it hugs its tabs and
    only fills when it actually has to wrap. */
-.fw .stage { max-width:920px; margin-left:auto; margin-right:auto; }
+.fw section.ch-3 { --stage-w:920px; }
+.fw .stage { max-width:var(--stage-w,920px); margin-left:auto; margin-right:auto; }
 .fw .stage .segwrap { width:fit-content; max-width:100%; }
+/* The closing sentence is a caption for the product, so it takes the
+   product's width. Measured, it ran as a single 1072px line under a 920px
+   wallet — wider than the thing it explains, which reads as a page-level
+   paragraph that happens to sit there rather than as the wallet's own note.
+   One custom property, so the two cannot drift apart. */
+.fw section.ch-3 .centred-note { max-width:var(--stage-w); margin-left:auto; margin-right:auto;
+  text-wrap:balance; }
+/* The link is one phrase, so it wraps as one. At the caption's new width it
+   otherwise broke after "How", which reads as a typo rather than a line
+   break. 190px at 14px, against 288px of container on the narrowest phone. */
+.fw section.ch-3 .centred-note .linkbtn { white-space:nowrap; }
 @media (min-width:901px) {
   .fw section.ch-3 .states { max-width:1100px; margin-left:auto; margin-right:auto;
     grid-template-columns:repeat(3,minmax(0,1fr)); column-gap:var(--sp-8); }
@@ -1562,6 +1574,7 @@ export const CSS2 = `
   .fw .offset-r { display:block; }
   .fw .band-side { grid-template-columns:minmax(0,1fr); gap:var(--sp-6); }
   .fw .stage, .fw .tool, .fw .readcol { max-width:none; }
+  .fw section.ch-3 { --stage-w:none; }
   .fw section.ch-6 .tl { max-width:none; }
 }
 
