@@ -91,7 +91,8 @@ function buildPrompt(origin: string, productId: string) {
   const id = productId.trim() || "YOUR_PRODUCT_ID";
   return `Add Veyro payments to this project.
 
-Veyro is a REST API. There is no package to install.
+Veyro is a REST API. This prompt uses it directly, so there is nothing to
+install. A veyro-sdk npm package also exists if you would rather use one.
 
 1. Add a "Buy" button. When it is clicked, POST to:
    ${origin}/api/checkout/create
@@ -327,8 +328,8 @@ export function IntegrationPanel() {
       <div className="card-f">
         <p className="tiny" style={{ margin: 0 }}>
           The two endpoints in the prompt are live now. The <span className="mono">veyro-sdk</span>{" "}
-          package, which wraps them in a few lines of JavaScript, is written but not yet published
-          &mdash; the REST route above needs nothing installed and works today.
+          package wraps them in a few lines of JavaScript if you would rather install something
+          &mdash; the REST route above needs nothing installed and works either way.
         </p>
       </div>
     </div>

@@ -33,8 +33,12 @@ export const metadata: Metadata = {
 // prompts cannot disagree about what to type.
 const PKG = "veyro-sdk";
 
-/** True once the package is on npm. Until then the docs say so. */
-const PUBLISHED = false;
+/** True once the package is on npm. Until then the docs say so.
+    veyro-sdk@0.1.0 went up on 27 September 2026, so the amber notice that
+    warned npm install would 404 is retired. Nothing else is gated on this:
+    the install block and the no-package fallback below both render either
+    way, because the REST route is a genuine alternative and not a stopgap. */
+const PUBLISHED = true;
 
 const AI_PROMPTS: [string, string][] = [
   [
