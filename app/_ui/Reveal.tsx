@@ -48,11 +48,28 @@ export function Reveal({
 
     // Children of a staggered container follow each other rather than landing
     // together, which is what makes a row of three read as one movement.
+    //
+    // The container hands its entrance over and stops animating itself. Both
+    // halves matter. The delay rule in the stylesheet is
+    // [data-reveal][data-delay], so tagging the children of a container that
+    // was itself the target set an attribute nothing could match — measured,
+    // every staggered child had transition-delay: 0s and no transition at
+    // all, and the stagger had never once run. And if the container kept its
+    // own fade while its children faded too, the two opacities would
+    // multiply into something slower and dimmer than either.
     if (stagger) {
       for (const group of Array.from(root.querySelectorAll<HTMLElement>(stagger))) {
-        Array.from(group.children).forEach((child, i) => {
-          if (i === 0 || i > 3) return;
-          (child as HTMLElement).dataset.delay = String(i);
+        const at = targets.indexOf(group);
+        // Not a reveal target, so it has no entrance to hand over.
+        if (at === -1) continue;
+        const kids = Array.from(group.children) as HTMLElement[];
+        if (kids.length === 0) continue;
+        delete group.dataset.reveal;
+        targets.splice(at, 1);
+        kids.forEach((child, i) => {
+          child.dataset.reveal = "";
+          if (i > 0 && i <= 3) child.dataset.delay = String(i);
+          targets.push(child);
         });
       }
     }

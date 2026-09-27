@@ -359,16 +359,19 @@ export default async function Home() {
             {/* Centred, with the spine down the middle. Four parties in a
                 fixed order is a relationship, and a relationship has no left
                 to start from — putting a paragraph beside it made it look
-                like a sidebar illustration. */}
-            <div className="headc" style={{ marginBottom: 32 }}>
+                like a sidebar illustration.
+
+                The spine now follows the heading directly and the explanation
+                comes after it. Every other chapter on the page names itself,
+                explains itself, then shows the thing; this one shows the
+                relationship and then explains it, which is the order the
+                hierarchy actually has — and it is the only chapter where the
+                visual leads. */}
+            <div className="headc" style={{ marginBottom: 34 }}>
               <span className="lp-eyebrow">Your guardian</span>
               <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
                 An adult on the account, not on your business.
               </h2>
-              <p className="sec-lead body" style={{ marginTop: 16 }}>
-                Under 18 the payment provider requires a verified adult. What they do not get is
-                your business: you keep the products, the links and the decisions.
-              </p>
             </div>
 
             <ol className="tl" aria-label="Who is involved">
@@ -402,9 +405,15 @@ export default async function Home() {
                 </li>
             </ol>
 
-            <p className="small centred-note" style={{ marginTop: 28 }}>
-              <Link className="linkbtn" href="/for-guardians">What a guardian is agreeing to</Link>
-            </p>
+            <div className="headc" style={{ marginTop: 34 }}>
+              <p className="sec-lead body" style={{ margin: 0 }}>
+                Under 18 the payment provider requires a verified adult. What they do not get is
+                your business: you keep the products, the links and the decisions.
+              </p>
+              <p className="small" style={{ marginTop: 14 }}>
+                <Link className="linkbtn" href="/for-guardians">What a guardian is agreeing to</Link>
+              </p>
+            </div>
           </div>
         </section>
 
@@ -525,7 +534,7 @@ export default async function Home() {
       <Reveal
         scope=".fw"
         select="section.lp > .wrap-lp > *, section.lp .truthgrid > *, section.lp .band-side > *"
-        stagger=".props, .commits, .herofacts, .calls"
+        stagger=".props, .commits, .calls, .tl"
       />
 
       <ScrollTop />

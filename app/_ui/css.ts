@@ -266,6 +266,17 @@ export const CSS = `
    is the failure mode this avoids, not the effect it wants. */
 .fw[data-motion="on"] .offset-r > [data-reveal] { transform:translate(10px, var(--rise)); }
 .fw[data-motion="on"] .offset-r > [data-reveal][data-shown="1"] { transform:none; }
+/* Two more, one per composition, and both are the transform that is already
+   there rather than a new animation. The flow arrives across, because across
+   is the direction it asks the eye to travel. The wallet settles instead of
+   sliding: a product screenshot that slides reads as a carousel, and this one
+   is meant to read as the thing itself arriving. .flow keeps a single
+   entrance rather than a stagger because its list items are display:contents
+   and have no box to move. */
+.fw[data-motion="on"] .flow[data-reveal] { transform:translate(-14px, 6px); }
+.fw[data-motion="on"] .flow[data-reveal][data-shown="1"] { transform:none; }
+.fw[data-motion="on"] .stage[data-reveal] { transform:translateY(10px) scale(.994); }
+.fw[data-motion="on"] .stage[data-reveal][data-shown="1"] { transform:none; }
 /* A second and third element in the same group follow the first rather than
    arriving together, which is what makes a row read as one movement. Kept to
    three steps: past that it stops being a stagger and becomes a queue. */
@@ -769,8 +780,13 @@ export const CSS = `
 .fw .props > div:last-child { border-right:0; }
 .fw .props > div > * { min-width:0; }
 .fw .props .pr-t { display:block; font-size:var(--fs-4); font-weight:var(--fw-bold); }
+/* No measure cap. Each column is 448px at 1440 and 38ch capped the text at
+   354, so every one of the three ended ~126px short of its own column and the
+   rail read as three left-hugging blocks under a centred heading rather than
+   one rail using the width. 428px at 14px is about 61 characters, which is a
+   measure, not a sprawl. */
 .fw .props .pr-d { display:block; font-size:var(--fs-3); line-height:1.5; color:var(--ink-2);
-  margin-top:6px; max-width:38ch; }
+  margin-top:6px; }
 @media (max-width:900px) {
   .fw .props { grid-auto-flow:row; grid-template-columns:1fr; border-top:0; }
   .fw .props > div { border-right:0; border-top:1px solid var(--line); padding:16px 0 4px; }
