@@ -259,6 +259,13 @@ export const CSS = `
   transition:opacity var(--t-4) var(--ease-out), transform var(--t-4) var(--ease-out);
 }
 .fw[data-motion="on"] [data-reveal][data-shown="1"] { opacity:1; transform:none; }
+/* The one chapter that sits off to the right arrives from its own side, so
+   the movement agrees with the composition instead of contradicting it. 10px
+   of x on one chapter: enough to feel, not enough to notice. Everything else
+   on the page still rises straight up — cards coming in from four directions
+   is the failure mode this avoids, not the effect it wants. */
+.fw[data-motion="on"] .offset-r > [data-reveal] { transform:translate(10px, var(--rise)); }
+.fw[data-motion="on"] .offset-r > [data-reveal][data-shown="1"] { transform:none; }
 /* A second and third element in the same group follow the first rather than
    arriving together, which is what makes a row read as one movement. Kept to
    three steps: past that it stops being a stagger and becomes a queue. */
@@ -425,16 +432,16 @@ export const CSS = `
    only the controls are capped. */
 .fw .checkform .field { max-width:var(--m-tight); }
 .fw .checkform .field > .hint, .fw .checkform .field > .err { max-width:var(--m-lead); }
-/* The same checker is embedded on the homepage, where its card is 761px wide
-   while --m-tight caps each field at 317px. Measured, that left 402px of
-   empty card to the right of the inputs and a Check button stretched to 719px
-   — more than twice the width of the fields it belongs to. Two columns at
-   that width instead, so the thing reads as a tool rather than as a form
-   dropped into a box. Scoped to #eligibility: /check itself is narrower and
-   already right. */
+/* The same checker is embedded on the homepage, where --m-tight caps each
+   field at 317px inside a much wider card — which left most of the card empty
+   and the Check button stretched to more than twice the width of the fields
+   it belongs to. Three columns now the card is centred and compact, so the
+   whole thing is one row: location, year, Check. When the region question
+   appears the three fields take the row and Check drops below them. Scoped to
+   #eligibility, because /check itself is narrow and was already right. */
 @media (min-width:901px) {
   .fw #eligibility .checkform { display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 var(--sp-6); align-items:start; }
+    grid-template-columns:repeat(3,minmax(0,1fr)); gap:0 var(--sp-6); align-items:start; }
   .fw #eligibility .checkform .field { max-width:none; }
   /* The button shares a row with a field whenever the region question is
      showing, so it aligns on the control, not on the label above it: the
@@ -1432,6 +1439,105 @@ export const CSS2 = `
 .fw .lp-center .sec-h { margin-left:auto; margin-right:auto; }
 .fw .lp-center .lp-h2, .fw .lp-center .lp-h1, .fw .lp-center .body,
 .fw .lp-center .lead, .fw .lp-center .sec-lead { margin-left:auto; margin-right:auto; }
+/* ==== chapter compositions ==============================================
+   Every chapter opened the same way: eyebrow, heading and paragraph from
+   x=48, then the content beside or below. Measured, eight of the nine
+   headings sat on that one left edge, so the page read as one component
+   template repeated nine times however different the content was.
+
+   The shared edge is also what makes a page feel like one system rather
+   than a deck, so the variation here happens INSIDE the existing grid and
+   tokens: same container, same --split-a/--split-b, same ladder. What
+   changes is where each chapter puts its weight, chosen from what the
+   chapter is saying rather than by alternating sides.
+
+     1  hero          left, asymmetric    split, product-led
+     2  what you get  centred head        a rail distributed beneath it
+     3  the wallet    centred, monumental the product at the optical centre
+     4  money moves   centred head        the diagram owns the full width
+     5  two calls     RIGHT-WEIGHTED      the one hard directional break
+     6  the guardian  centred             a spine down the middle
+     7  eligibility   centred             a compact tool, not a chapter
+     8  commitments   sidebar heading     heading beside the grid, not above
+        the story     centred, narrow     large type on open ground
+        questions     centred, narrow     a reading column
+     9  the ending    centred, scaled     the only heading bigger than 44px
+
+   Two chapters are deliberately held off centre. Seven centred chapters in
+   a row is the same failure as nine left-aligned ones, just symmetrical. */
+
+/* Centred head block. The HEAD only: body copy under it keeps its own
+   alignment, because centred prose is measurably slower to read and this
+   page spends its length asking to be believed. */
+.fw .headc { text-align:center; }
+.fw .headc .lp-h2, .fw .headc .lp-lead, .fw .headc .sec-lead,
+.fw .headc .body, .fw .headc .small { margin-left:auto; margin-right:auto; }
+.fw .centred-note { text-align:center; }
+
+/* 3. The wallet at the optical centre. Wider than the 7fr column it used to
+   sit in, not narrower: 920px against 760. The six states become the
+   supporting band underneath rather than a left-hand reading column.
+   .segwrap stretches so its tabs can wrap on a narrow screen; at 920 that
+   left a third of the strip as empty chrome, so here it hugs its tabs and
+   only fills when it actually has to wrap. */
+.fw .stage { max-width:920px; margin-left:auto; margin-right:auto; }
+.fw .stage .segwrap { width:fit-content; max-width:100%; }
+@media (min-width:901px) {
+  .fw section.ch-3 .states { max-width:1100px; margin-left:auto; margin-right:auto;
+    grid-template-columns:repeat(3,minmax(0,1fr)); column-gap:var(--sp-8); }
+}
+
+/* 5. The one right-weighted chapter, and the reason the rest can be centred
+   without the page flattening. Everything sits in the outer two thirds, so
+   the heading starts around x=523 instead of 48 and the mono still finishes
+   on the page's right gutter. The empty third is the composition, not a
+   gap left over. */
+.fw .offset-r { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr);
+  gap:0 var(--sp-8); }
+.fw .offset-r > * { grid-column:2; min-width:0; }
+
+/* 6. The spine down the middle. 460px keeps the dots near the optical centre
+   while the lines of detail stay a comfortable measure. The connector between
+   the dots was --line at 1.29:1, which at this size read as four bullets
+   rather than one spine; --control-line is the token for a boundary that has
+   to be seen, and a relationship diagram that does not connect is just a
+   list. */
+.fw section.ch-6 .tl { max-width:460px; margin-left:auto; margin-right:auto; }
+.fw section.ch-6 .tl li::before { background:var(--control-line); }
+
+/* 7. The checker as an object rather than a chapter: one compact card in the
+   middle with location, year and Check on a single row. */
+.fw .tool { max-width:780px; margin-left:auto; margin-right:auto; }
+
+/* 8. Heading beside its grid, not above it. Full width and editorial, and
+   the page's second anchor on the left edge after the hero — without it the
+   lower half of the page is centred the whole way down. */
+.fw .band-side { display:grid; grid-template-columns:minmax(0,4fr) minmax(0,8fr);
+  gap:var(--sp-8); align-items:start; }
+.fw .band-side > * { min-width:0; }
+
+/* The story, centred and quiet. 34ch of 26px type with nothing beside it. */
+.fw .quote-c { max-width:34ch; margin-left:auto; margin-right:auto; text-align:center; }
+.fw .quote-c .story { max-width:none; }
+.fw .quote-c .story-by { margin-top:var(--sp-6); }
+
+/* The questions in a reading column, narrower than anything above them. */
+.fw .readcol { max-width:640px; margin-left:auto; margin-right:auto; }
+
+/* 9. The ending is the only heading on the page allowed past 44px. Scale is
+   what makes it read as a conclusion rather than a tenth section. */
+.fw section.ch-9 .lp-h2 { font-size:var(--lp-1); line-height:1.04; max-width:16ch; }
+
+@media (max-width:900px) {
+  /* Mobile gets its own composition rather than the desktop one folded flat:
+     the offset chapter returns to full width, the sidebar heading sits back
+     above its grid, and the centred blocks stay centred. */
+  .fw .offset-r { display:block; }
+  .fw .band-side { grid-template-columns:minmax(0,1fr); gap:var(--sp-6); }
+  .fw .stage, .fw .tool, .fw .readcol { max-width:none; }
+  .fw section.ch-6 .tl { max-width:none; }
+}
+
 .fw .lp-tall { padding:var(--sp-10) 0; }
 .fw .lp-dark .statement-sub { color:#bcbdbd; }
 /* The mark's own stroke angle, reused as a section divider */

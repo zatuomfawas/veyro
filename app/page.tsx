@@ -173,10 +173,16 @@ export default async function Home() {
         {/* ================= 2. what you get ================= */}
         <section className="lp ch ch-2" id="value">
           <div className="wrap-lp">
-            <span className="lp-eyebrow">What you get</span>
-            <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)", marginBottom: 20 }}>
-              Three things that are yours.
-            </h2>
+            {/* Centred head, rail beneath. Three parallel facts have no
+                natural left-hand argument to lead them, so the heading sits
+                over the middle of the three rather than at the start of the
+                first. */}
+            <div className="headc">
+              <span className="lp-eyebrow">What you get</span>
+              <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)", marginBottom: 20 }}>
+                Three things that are yours.
+              </h2>
+            </div>
             <div className="props">
               <div>
                 <span className="pr-t">See every payment</span>
@@ -199,40 +205,46 @@ export default async function Home() {
             120px top and bottom against its neighbours' 52 and 56, and the only
             place the full money position appears. The hero shows a balance; this
             shows where it came from. */}
+        {/* Centred and monumental. The wallet used to sit in the 7fr column
+            with a reading column beside it, which made the climax of the page
+            the same shape as the four chapters around it. Now the copy sits
+            over it, the product takes the optical centre at 920px — wider
+            than the 760 it had — and the six states become the supporting
+            band underneath rather than a competing column. */}
         <section className="lp ch ch-3 ch-surface" id="wallet">
           <div className="wrap-lp">
-            <div className="truthgrid" style={{ alignItems: "start" }}>
-              <div>
-                <span className="lp-eyebrow">Founder Wallet</span>
-                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
-                  Know where every dollar is.
-                </h2>
-                <p className="lp-lead" style={{ marginTop: 16 }}>
-                  What was collected, what Stripe took, what is settling, what you can draw today
-                  and what has already been paid out.
-                </p>
-                <p className="body" style={{ marginTop: 16 }}>
-                  Every figure is folded from your own payment records each time you look. No
-                  balance is stored anywhere, so it cannot drift from the payments behind it.
-                </p>
-                {/* The six states, restored. They were dropped in the first
-                    pass of this rebuild, which left the climax lighter than the
-                    chapter after it — the wallet was 631px against 1224px. They
-                    are wallet content and they belong to the wallet. */}
-                <dl className="states" style={{ marginTop: 24 }}>
-                  <div><dt>Earned</dt><dd>A customer paid, and it cleared.</dd></div>
-                  <div><dt>Still settling</dt><dd>Paid, not yet cleared by the provider.</dd></div>
-                  <div><dt>Refunded</dt><dd>Sent back to a customer.</dd></div>
-                  <div><dt>Committed</dt><dd>You have asked for it, so it cannot be spent twice.</dd></div>
-                  <div><dt>Available</dt><dd>What you can request today.</dd></div>
-                  <div><dt>Paid out</dt><dd>Already in the bank account on the payment account.</dd></div>
-                </dl>
-                <p className="small" style={{ marginTop: 20 }}>
-                  <Link className="linkbtn" href="/wallet">How each figure is calculated</Link>
-                </p>
-              </div>
+            <div className="headc">
+              <span className="lp-eyebrow">Founder Wallet</span>
+              <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                Know where every dollar is.
+              </h2>
+              <p className="lp-lead" style={{ marginTop: 16 }}>
+                What was collected, what Stripe took, what is settling, what you can draw today
+                and what has already been paid out.
+              </p>
+            </div>
+
+            <div className="stage" style={{ marginTop: 36 }}>
               <WalletTabs />
             </div>
+
+            {/* The six states, restored in an earlier pass and kept: they are
+                wallet content and they belong to the wallet. Three columns
+                under the product reads as a legend for it. */}
+            <dl className="states" style={{ marginTop: 40 }}>
+              <div><dt>Earned</dt><dd>A customer paid, and it cleared.</dd></div>
+              <div><dt>Still settling</dt><dd>Paid, not yet cleared by the provider.</dd></div>
+              <div><dt>Refunded</dt><dd>Sent back to a customer.</dd></div>
+              <div><dt>Committed</dt><dd>You have asked for it, so it cannot be spent twice.</dd></div>
+              <div><dt>Available</dt><dd>What you can request today.</dd></div>
+              <div><dt>Paid out</dt><dd>Already in the bank account on the payment account.</dd></div>
+            </dl>
+
+            <p className="small centred-note" style={{ marginTop: 24 }}>
+              Every figure is folded from your own payment records each time you look, so no
+              stored balance can drift from the payments behind it.{" "}
+              <Link className="linkbtn" href="/wallet">How each figure is calculated</Link>
+            </p>
           </div>
         </section>
 
@@ -243,13 +255,18 @@ export default async function Home() {
             still lives on /how-it-works. */}
         <section className="lp ch ch-4" id="how">
           <div className="wrap-lp">
-            <span className="lp-eyebrow">How money moves</span>
-            <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
-              Five stops, one direction.
-            </h2>
-            <p className="sec-lead body" style={{ marginTop: 12, marginBottom: 24 }}>
-              Veyro is the first stop and the last. The money itself only ever touches Stripe.
-            </p>
+            {/* Centred head over a diagram that spans the whole container.
+                The five stops are the composition here; the words are a
+                caption for them. */}
+            <div className="headc" style={{ marginBottom: 28 }}>
+              <span className="lp-eyebrow">How money moves</span>
+              <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                Five stops, one direction.
+              </h2>
+              <p className="sec-lead body" style={{ marginTop: 12 }}>
+                Veyro is the first stop and the last. The money itself only ever touches Stripe.
+              </p>
+            </div>
 
             <FlowDiagram
               label="Where a payment goes, in order"
@@ -268,7 +285,7 @@ export default async function Home() {
                 be arranged around. It moved to /get-started, which walks the
                 payment path and is where someone asking "what will my customer
                 see" actually is. This chapter is one diagram, as intended. */}
-            <p className="small" style={{ marginTop: 24 }}>
+            <p className="small centred-note" style={{ marginTop: 24 }}>
               <Link className="linkbtn" href="/get-started">
                 What your customer sees at the middle stop
               </Link>
@@ -290,13 +307,15 @@ export default async function Home() {
             node carried moved into the lead, where it is a precondition
             rather than a step. */}
         <section className="lp ch ch-5 ch-surface" id="connect">
-          <div className="wrap-lp">
-            <span className="lp-eyebrow">Already built it?</span>
-            <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>Two calls.</h2>
-            <p className="sec-lead body" style={{ marginTop: 12, marginBottom: 22 }}>
-              Your app does not need rebuilding and there is no package to install. You add a buy
-              button; these two calls do the rest.
-            </p>
+          <div className="wrap-lp offset-r">
+            <div>
+              <span className="lp-eyebrow">Already built it?</span>
+              <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>Two calls.</h2>
+              <p className="sec-lead body" style={{ marginTop: 12, marginBottom: 22 }}>
+                Your app does not need rebuilding and there is no package to install. You add a
+                buy button; these two calls do the rest.
+              </p>
+            </div>
 
             <ol className="calls">
               <li>
@@ -337,22 +356,22 @@ export default async function Home() {
             into the stylesheet long ago and never used. */}
         <section className="lp ch ch-6" id="guardian">
           <div className="wrap-lp">
-            <div className="truthgrid" style={{ alignItems: "start" }}>
-              <div>
-                <span className="lp-eyebrow">Your guardian</span>
-                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
-                  An adult on the account, not on your business.
-                </h2>
-                <p className="body" style={{ marginTop: 16 }}>
-                  Under 18 the payment provider requires a verified adult. What they do not get is
-                  your business: you keep the products, the links and the decisions.
-                </p>
-                <p className="small" style={{ marginTop: 16 }}>
-                  <Link className="linkbtn" href="/for-guardians">What a guardian is agreeing to</Link>
-                </p>
-              </div>
+            {/* Centred, with the spine down the middle. Four parties in a
+                fixed order is a relationship, and a relationship has no left
+                to start from — putting a paragraph beside it made it look
+                like a sidebar illustration. */}
+            <div className="headc" style={{ marginBottom: 32 }}>
+              <span className="lp-eyebrow">Your guardian</span>
+              <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                An adult on the account, not on your business.
+              </h2>
+              <p className="sec-lead body" style={{ marginTop: 16 }}>
+                Under 18 the payment provider requires a verified adult. What they do not get is
+                your business: you keep the products, the links and the decisions.
+              </p>
+            </div>
 
-              <ol className="tl" aria-label="Who is involved">
+            <ol className="tl" aria-label="Who is involved">
                 <li>
                   <span className="pt" data-on="1" aria-hidden="true" />
                   <span>
@@ -381,32 +400,39 @@ export default async function Home() {
                     <span className="tl-d">Runs the identity checks and settles the money into the account in your name.</span>
                   </span>
                 </li>
-              </ol>
-            </div>
+            </ol>
+
+            <p className="small centred-note" style={{ marginTop: 28 }}>
+              <Link className="linkbtn" href="/for-guardians">What a guardian is agreeing to</Link>
+            </p>
           </div>
         </section>
 
         {/* ================= 7. eligibility ================= */}
         {/* Isolated on purpose: one question, one form, nothing else in the
-            chapter competing with it. */}
+            chapter competing with it. Centred and compact, so it reads as an
+            object you use rather than a chapter you read — the only thing on
+            the page that answers back. */}
         <section className="lp ch ch-7 ch-surface" id="eligibility">
           <div className="wrap-lp">
-            <div className="truthgrid" style={{ alignItems: "start" }}>
-              <div>
-                <span className="lp-eyebrow">Before you build around it</span>
-                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
-                  Is Veyro available for you?
-                </h2>
-                <p className="lp-lead" style={{ marginTop: 16 }}>
-                  Two questions, no account and no email address. It tells you when the answer is
-                  no, and when you do not need Veyro at all.
-                </p>
-                <p className="small" style={{ marginTop: 16 }}>
-                  <Link className="linkbtn" href="/how-it-works">What Stripe told us, quoted in full</Link>
-                </p>
-              </div>
+            <div className="headc" style={{ marginBottom: 28 }}>
+              <span className="lp-eyebrow">Before you build around it</span>
+              <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                Is Veyro available for you?
+              </h2>
+              <p className="sec-lead body" style={{ marginTop: 14 }}>
+                Two questions, no account and no email address. It tells you when the answer is
+                no, and when you do not need Veyro at all.
+              </p>
+            </div>
+
+            <div className="tool">
               <EligibilityInline />
             </div>
+
+            <p className="small centred-note" style={{ marginTop: 20 }}>
+              <Link className="linkbtn" href="/how-it-works">What Stripe told us, quoted in full</Link>
+            </p>
           </div>
         </section>
 
@@ -416,48 +442,62 @@ export default async function Home() {
             questions collapsed. The full versions are one link away each. */}
         <section className="lp ch ch-8" id="trust">
           <div className="wrap-lp">
-            <span className="lp-eyebrow">What Veyro commits to</span>
-            <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)", marginBottom: 20 }}>
-              Six things, all checkable.
-            </h2>
-            <ul className="commits">
+            {/* Heading beside its grid rather than above it. This is the
+                page's second left anchor after the hero — without it
+                everything from the wallet down is centred, which is the same
+                repetition as nine left edges, only symmetrical. */}
+            <div className="band-side">
+              <div>
+                <span className="lp-eyebrow">What Veyro commits to</span>
+                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                  Six things, all checkable.
+                </h2>
+                <p className="small" style={{ marginTop: 18 }}>
+                  <Link className="linkbtn" href="/about">
+                    Read all six in detail, and what is not finished yet
+                  </Link>
+                </p>
+              </div>
+              <ul className="commits">
               <li><span className="ck-t" aria-hidden="true">&#10003;</span><span>Stripe verifies your guardian, and they cannot block a payout.</span></li>
               <li><span className="ck-t" aria-hidden="true">&#10003;</span><span>The money is never ours. Veyro is not in its path.</span></li>
               <li><span className="ck-t" aria-hidden="true">&#10003;</span><span>We never see your identity documents or bank details.</span></li>
               <li><span className="ck-t" aria-hidden="true">&#10003;</span><span>We take no percentage and charge no platform fee.</span></li>
               <li><span className="ck-t" aria-hidden="true">&#10003;</span><span>The eligibility checker is free and needs no account.</span></li>
               <li><span className="ck-t" aria-hidden="true">&#10003;</span><span>Software, not a bank. No court has tested this route.</span></li>
-            </ul>
-            <p className="small" style={{ marginTop: 18 }}>
-              <Link className="linkbtn" href="/about">Read all six in detail, and what is not finished yet</Link>
-            </p>
+              </ul>
+            </div>
 
             <hr className="rule" style={{ margin: "56px 0" }} />
 
-            <div className="truthgrid" style={{ alignItems: "start" }}>
-              <div>
-                <p className="story">
-                  &ldquo;Building the business was the easy part. Getting the financial
-                  infrastructure to run it wasn&rsquo;t.&rdquo;
-                  <span className="story-by">
-                    Mike Daniels, who built Veyro after watching his brother hit the same wall.{" "}
-                    <Link className="linkbtn" href="/about">The full story</Link>
-                  </span>
-                </p>
-              </div>
-              <div>
-                <h3 className="h4" style={{ marginTop: 0, marginBottom: 12 }}>Questions</h3>
-                {FAQ.filter((f) => f.homepage).map((f) => (
-                  <Faq key={f.q} q={f.q}>{f.a}</Faq>
-                ))}
-                {/* Five here, nine there. Saying the number gives the link a
-                    reason to be clicked rather than being a polite full stop. */}
-                <p className="small" style={{ marginTop: 16 }}>
-                  <Link className="linkbtn" href="/faq">
-                    See all nine questions, with the longer answers
-                  </Link>
-                </p>
-              </div>
+            {/* The quote centred on open ground, then the questions in a
+                column narrower than anything above them. Two centred blocks,
+                but nothing else on the page is 26px type with air around it
+                and nothing else is a 640px reading column, so they do not
+                read as the same composition twice. */}
+            <div className="quote-c">
+              <p className="story">
+                &ldquo;Building the business was the easy part. Getting the financial
+                infrastructure to run it wasn&rsquo;t.&rdquo;
+                <span className="story-by">
+                  Mike Daniels, who built Veyro after watching his brother hit the same wall.{" "}
+                  <Link className="linkbtn" href="/about">The full story</Link>
+                </span>
+              </p>
+            </div>
+
+            <div className="readcol" style={{ marginTop: 64 }}>
+              <h3 className="h4 centred-note" style={{ marginTop: 0, marginBottom: 16 }}>Questions</h3>
+              {FAQ.filter((f) => f.homepage).map((f) => (
+                <Faq key={f.q} q={f.q}>{f.a}</Faq>
+              ))}
+              {/* Five here, nine there. Saying the number gives the link a
+                  reason to be clicked rather than being a polite full stop. */}
+              <p className="small centred-note" style={{ marginTop: 16 }}>
+                <Link className="linkbtn" href="/faq">
+                  See all nine questions, with the longer answers
+                </Link>
+              </p>
             </div>
           </div>
         </section>
@@ -484,7 +524,7 @@ export default async function Home() {
           decided. */}
       <Reveal
         scope=".fw"
-        select="section.lp > .wrap-lp > *, section.lp .truthgrid > *"
+        select="section.lp > .wrap-lp > *, section.lp .truthgrid > *, section.lp .band-side > *"
         stagger=".props, .commits, .herofacts, .calls"
       />
 
