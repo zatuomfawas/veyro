@@ -64,7 +64,13 @@ export function FlowDiagram({
           </>
         );
         return (
-          <li key={s.n} style={{ display: "contents" }}>
+          // id when there is one, position when there is not. A flow that
+          // returns to where it started names two stops the same on purpose —
+          // "Your app" opens the checkout and "Your app" reads the answer —
+          // and keying by name gave React two children with the same key on
+          // every render of /docs/sdk. These sequences are fixed and never
+          // reorder, so position is a sound identity for the unnamed case.
+          <li key={s.id ?? `${s.n}-${i}`} style={{ display: "contents" }}>
             {interactive ? (
               <button
                 type="button"
