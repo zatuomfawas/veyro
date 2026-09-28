@@ -153,7 +153,7 @@ export default async function FounderDashboard() {
 
   const founderId = user.id;
 
-  const [consent, account, products, transactions, wallet, activity, payouts, notifications, salesByProduct, analytics] =
+  const [consent, account, products, transactions, wallet, activity, payouts, notifications, salesByProduct, viewsByProduct, analytics] =
     await Promise.all([
     db.guardianConsent.findUnique({
       where: { founderId },
@@ -193,6 +193,14 @@ export default async function FounderDashboard() {
       where: { founderId, status: "COMPLETED" },
       _count: { _all: true },
     }),
+    // Views per product, for the editor's own little analytics strip. Joins
+    // this Promise.all rather than being awaited after it: it is one indexed
+    // group-by and there is no reason for the page to wait twice.
+    db.checkoutView.groupBy({
+      by: ["productId"],
+      where: { founderId },
+      _sum: { count: true },
+    }),
     // Joins the same Promise.all rather than awaiting after it: it reads three
     // tables of its own and there is no reason for the page to wait twice.
     foldAnalytics(founderId, 30),
@@ -204,6 +212,7 @@ export default async function FounderDashboard() {
   // Dates cross to the client as ISO strings: a Date would be serialised
   // anyway, and being explicit keeps the component's props honest about it.
   const salesFor = new Map(salesByProduct.map((r) => [r.productId, r._count._all]));
+  const viewsFor = new Map(viewsByProduct.map((r) => [r.productId, r._sum.count ?? 0]));
   const productRows = products.map((p) => ({
     id: p.id,
     name: p.name,
@@ -212,6 +221,7 @@ export default async function FounderDashboard() {
     currency: p.currency,
     status: p.status,
     sales: salesFor.get(p.id) ?? 0,
+    views: viewsFor.get(p.id) ?? 0,
   }));
 
   const notificationRows = notifications.map((n) => ({
@@ -728,9 +738,11 @@ export default async function FounderDashboard() {
             {/* ---------------- 5. products ---------------- */}
             <div id="products" />
             <Section title="Products">
-              <NewProduct founderId={founderId} />
-
-              <hr className="rule" style={{ margin: "24px 0 18px" }} />
+              {/* The list first. The create form used to sit above it, which is
+                  right exactly once — the first time. Every visit after that, a
+                  founder is coming back to look at what they already made, and
+                  the form pushed it below the fold. The empty state still points
+                  at the form, so the first run is unchanged. */}
 
               {products.length === 0 ? (
                 <EmptyState
@@ -752,6 +764,11 @@ export default async function FounderDashboard() {
                   paymentsReady={canTakePayment(account)}
                 />
               )}
+
+              <hr className="rule" style={{ margin: "var(--sp-7) 0 var(--sp-5)" }} />
+              <h3 className="h4" style={{ margin: "0 0 var(--sp-4)" }}>Add another product</h3>
+              <NewProduct founderId={founderId} />
+
             </Section>
 
             {/* ---------------- 6. transactions ---------------- */}

@@ -38,6 +38,8 @@ export type ProductRow = {
   status: string;
   /** How many payments this product has taken. Drives the price warning. */
   sales: number;
+  /** Checkout views, all time. Counted once per browser session. */
+  views: number;
 };
 
 const BADGE: Record<string, string> = { LIVE: "b-pine", DRAFT: "b-amber", ARCHIVED: "b-grey" };
@@ -215,6 +217,40 @@ function Editor({
         </div>
       )}
 
+      {/* What this one product has done, under the controls that change it.
+          A founder editing a price wants to know whether anyone is looking,
+          and that was only answerable from the account-wide rail at the top of
+          the page. Conversion is an em dash, not 0%, when nothing has been
+          viewed: zero would claim people looked and none of them bought. */}
+      <div className="pdstats">
+        <div>
+          <span className="ps-n">{product.views}</span>
+          <span className="ps-l">{product.views === 1 ? "view" : "views"}</span>
+        </div>
+        <div>
+          <span className="ps-n">{product.sales}</span>
+          <span className="ps-l">{product.sales === 1 ? "sale" : "sales"}</span>
+        </div>
+        <div>
+          <span className="ps-n">
+            {product.views === 0 ? "\u2014" : Math.round((product.sales / product.views) * 100) + "%"}
+          </span>
+          <span className="ps-l">{product.views === 0 ? "no views yet" : "of views bought"}</span>
+        </div>
+        <span className="ps-spacer" />
+        <a
+          className="linkbtn"
+          href={product.status === "LIVE"
+            ? `/pay/${founderId}/${product.id}`
+            : `/dashboard/founder/preview/${product.id}`}
+          target="_blank"
+          rel="noopener"
+        >
+          See this checkout
+          <span className="sr-only"> (opens in a new tab)</span>
+        </a>
+      </div>
+
       <div className="row" style={{ marginTop: 16, gap: 8, flexWrap: "wrap" }}>
         <Btn type="submit" disabled={saving} aria-busy={saving ? "true" : undefined}>
           {saving ? "Saving…" : "Save changes"}
@@ -289,142 +325,128 @@ export default function ProductRows({
         </div>
       )}
 
-      <div className="tblwrap">
-        <table className="tbl">
-          <thead>
-            <tr>
-              <th scope="col">Product</th>
-              <th scope="col">Price</th>
-              <th scope="col">Status</th>
-              <th scope="col">Checkout</th>
-              <th scope="col"><span className="sr-only">Edit</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((p) => {
-              const live = p.status === "LIVE";
-              const isOpen = mounted === p.id && open;
-              const isMounted = mounted === p.id;
-              return (
-                <Fragment key={p.id}>
-                  <tr style={live ? undefined : { color: "var(--ink-3)" }}>
-                    <td>{p.name}</td>
-                    <td className="num">{formatMinor(p.priceMinor, p.currency)}</td>
-                    <td>
+        {/* A list of products, not a five-column table.
+            In a half-width column those columns left the name clipped, the
+            three checkout actions stacked into a vertical pile and the status
+            badges wrapping mid-word. A product is the thing a founder made, so
+            it gets a row of its own: the name at heading size, price and state
+            beside it, and its actions on one line. */}
+        <div className="prodlist">
+          {products.map((p) => {
+            const live = p.status === "LIVE";
+            const isOpen = mounted === p.id && open;
+            const isMounted = mounted === p.id;
+            return (
+              <Fragment key={p.id}>
+                <div className="prodrow" data-live={live ? "1" : "0"}>
+                  <div>
+                    <span className="pd-name">{p.name}</span>
+                    <div className="pd-meta">
+                      <span className="pd-price">{formatMinor(p.priceMinor, p.currency)}</span>
                       <span className={"badge " + (BADGE[p.status] ?? "b-grey")}>{LABEL[p.status]}</span>
-                      {/* The unmissable half. A founder who published before the account
-                          was ready will not reopen the editor to be told again, so the row
-                          says it every time they look at the list, and keeps saying it
-                          until the account goes ACTIVE. */}
+                      {/* A founder who published before the account was ready
+                          will not reopen the editor to be told again, so the row
+                          keeps saying it until the account goes ACTIVE. */}
                       {live && !paymentsReady && (
-                            <span
-                              className="badge b-clay"
-                              style={{ display: "block", marginTop: 4, whiteSpace: "nowrap" }}
-                              title="Payment setup is not finished, so this link cannot take money yet."
-                            >
-                              Not payable
-                            </span>
-                          )}
-                    </td>
-                    <td>
-                      {/* Preview and share are different jobs, and every
-                          product gets the first one. A draft used to say
-                          "(not published)" and offer nothing, which is exactly
-                          backwards: the moment a founder most wants to look at
-                          their checkout is before they publish it. Live goes to
-                          the real page, because for a live product the real
-                          page is the truth; anything else goes to the
-                          dashboard's own preview.
-
-                          An anchor rather than window.open: it survives popup
-                          blockers, supports cmd- and middle-click, and is
-                          announced as a link instead of a button. */}
-                      <span className="row" style={{ gap: 10, flexWrap: "wrap", alignItems: "center" }}>
-                        <a
-                          className="linkbtn"
-                          href={live ? `/pay/${founderId}/${p.id}` : `/dashboard/founder/preview/${p.id}`}
-                          target="_blank"
-                          rel="noopener"
+                        <span
+                          className="badge b-clay"
+                          title="Payment setup is not finished, so this link cannot take money yet."
                         >
-                          Preview
-                          <span className="sr-only"> (opens in a new tab)</span>
-                        </a>
-                        {live && (
-                          <>
-                            {/* Bare URL and written message are different
-                                errands: one goes into a DM, the other into a
-                                post. Both are live-only, because a draft's URL
-                                cannot take money — the dead end Feature 2 set
-                                out to remove. */}
-                            <CopyLink
-                              path={`/pay/${founderId}/${p.id}`}
-                              label="Copy link"
-                              variant="2"
-                              size="sm"
-                              compact
-                            />
-                            <ShareTemplate
-                              productName={p.name}
-                              founderName={founderName}
-                              path={`/pay/${founderId}/${p.id}`}
-                              onCopied={(body) => setSaved({ head: "Message copied", body })}
-                            />
-                          </>
-                        )}
-                      </span>
-                    </td>
-                    <td style={{ textAlign: "right" }}>
-                      <button
-                        type="button"
-                        className="btn btn-2 btn-sm"
-                        ref={(el) => { if (isMounted) opener.current = el; }}
-                        aria-expanded={isOpen}
-                        aria-controls={`edit-${p.id}`}
-                        onClick={() => (isMounted ? closeEditor() : openEditor(p.id))}
-                      >
-                        <Icon name="pencil" size={13} />
-                        {isMounted ? "Close" : "Edit"}
-                      </button>
-                    </td>
-                  </tr>
-                  {isMounted && (
-                    // data-panel keeps the hover highlight off this row: it
-                    // holds a form, not a line of data to point at. The cell
-                    // has no padding of its own so the panel can collapse to
-                    // nothing; the padding lives inside, where it collapses too.
-                    <tr data-panel="1">
-                      <td
-                        colSpan={5}
-                        id={`edit-${p.id}`}
-                        style={{ background: "var(--surface)", padding: 0 }}
-                      >
-                        <div className="expand" data-open={isOpen ? "1" : undefined}>
-                          <div>
-                            <div style={{ padding: "var(--sp-4) var(--sp-3)" }}>
-                              <Editor
-                                product={p}
-                                founderId={founderId}
-                                active={isOpen}
-                                paymentsReady={paymentsReady}
-                                onCancel={closeEditor}
-                                onDone={(message) => {
-                                  closeEditor();
-                                  setSaved({ head: "Product updated", body: message });
-                                  router.refresh();
-                                }}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-                </Fragment>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+                          Not payable
+                        </span>
+                      )}
+                      {p.sales > 0 && (
+                        <span className="tiny">
+                          {p.sales === 1 ? "1 sale" : `${p.sales} sales`}
+                        </span>
+                      )}
+                    </div>
+                    {p.description && <span className="pd-desc">{p.description}</span>}
+                  </div>
+
+                  <div className="pd-actions">
+                    {/* Preview and share are different jobs, and every product
+                        gets the first one. A draft used to say "(not published)"
+                        and offer nothing, which is backwards: the moment a
+                        founder most wants to look at their checkout is before
+                        they publish it. Live goes to the real page; anything
+                        else goes to the dashboard's own preview.
+
+                        An anchor rather than window.open: it survives popup
+                        blockers, supports cmd- and middle-click, and is
+                        announced as a link instead of a button. */}
+                    <a
+                      className="linkbtn"
+                      href={live ? `/pay/${founderId}/${p.id}` : `/dashboard/founder/preview/${p.id}`}
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      Preview
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                    {live && (
+                      <>
+                        {/* Bare URL and written message are different errands:
+                            one goes into a DM, the other into a post. Both are
+                            live-only, because a draft's URL cannot take money. */}
+                        <CopyLink
+                          path={`/pay/${founderId}/${p.id}`}
+                          label="Copy link"
+                          variant="2"
+                          size="sm"
+                          compact
+                        />
+                        <ShareTemplate
+                          productName={p.name}
+                          founderName={founderName}
+                          path={`/pay/${founderId}/${p.id}`}
+                          onCopied={(body) => setSaved({ head: "Message copied", body })}
+                        />
+                      </>
+                    )}
+                    <button
+                      type="button"
+                      className="btn btn-2 btn-sm"
+                      ref={(el) => { if (isMounted) opener.current = el; }}
+                      aria-expanded={isOpen}
+                      aria-controls={`edit-${p.id}`}
+                      onClick={() => (isMounted ? closeEditor() : openEditor(p.id))}
+                    >
+                      <Icon name="pencil" size={13} />
+                      {isMounted ? "Close" : "Edit"}
+                    </button>
+                  </div>
+                </div>
+
+                {isMounted && (
+                  <div
+                    id={`edit-${p.id}`}
+                    className="expand"
+                    data-open={isOpen ? "1" : undefined}
+                    style={{ background: "var(--surface)" }}
+                  >
+                    <div>
+                      <div style={{ padding: "var(--sp-5) var(--sp-4)" }}>
+                        <Editor
+                          product={p}
+                          founderId={founderId}
+                          active={isOpen}
+                          paymentsReady={paymentsReady}
+                          onCancel={closeEditor}
+                          onDone={(message) => {
+                            closeEditor();
+                            setSaved({ head: "Product updated", body: message });
+                            router.refresh();
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </Fragment>
+            );
+          })}
+        </div>
     </>
   );
 }

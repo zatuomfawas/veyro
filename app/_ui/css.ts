@@ -1663,6 +1663,47 @@ export const CSS2 = `
   .fw .stattiles > div:nth-child(odd) { padding-right:var(--sp-5); }
 }
 
+/* Products as objects, not table cells. Five columns in a half-width
+   column left the name clipped, the three checkout actions stacked into a
+   vertical pile, and the status badges wrapping. A product is the thing a
+   founder made; it gets a row of its own with the name at the size of a
+   heading and its actions on one line beside it.
+
+   Still a list, not cards: boxing each product would put three more borders
+   on the page this rework exists to de-clutter. */
+.fw .prodlist { border-top:1px solid var(--ink); }
+.fw .prodrow { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:var(--sp-4) var(--sp-6);
+  align-items:start; padding:var(--sp-5) 0; border-bottom:1px solid var(--line); }
+.fw .prodrow > * { min-width:0; }
+/* A draft is not broken, it is unpublished — quietened, not greyed out to the
+   point of looking disabled. */
+.fw .prodrow[data-live="0"] .pd-name { color:var(--ink-2); }
+.fw .pd-name { display:block; font-size:var(--fs-5); font-weight:var(--fw-bold);
+  letter-spacing:-0.012em; }
+.fw .pd-meta { display:flex; flex-wrap:wrap; gap:8px 12px; align-items:center; margin-top:6px; }
+.fw .pd-price { font-size:var(--fs-4); font-weight:var(--fw-med); font-variant-numeric:tabular-nums; }
+.fw .pd-desc { display:block; font-size:var(--fs-2); line-height:1.5; color:var(--ink-3);
+  margin-top:6px; max-width:54ch; }
+.fw .pd-actions { display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+  justify-content:flex-end; }
+@media (max-width:700px) {
+  .fw .prodrow { grid-template-columns:minmax(0,1fr); }
+  .fw .pd-actions { justify-content:flex-start; }
+}
+
+/* The editor's own footer: what this one product has actually done, and a
+   way to look at its checkout. Three figures on a rule, because a founder
+   editing a price wants to know whether anyone is looking at it, and that
+   question was previously only answerable from the whole-account rail at the
+   top of the page. */
+.fw .pdstats { display:flex; flex-wrap:wrap; align-items:baseline; gap:var(--sp-3) var(--sp-7);
+  margin-top:var(--sp-6); padding-top:var(--sp-5); border-top:1px solid var(--line); }
+.fw .pdstats > div { min-width:0; }
+.fw .pdstats .ps-n { font-size:var(--fs-5); font-weight:var(--fw-med);
+  font-variant-numeric:tabular-nums; }
+.fw .pdstats .ps-l { font-size:var(--fs-2); color:var(--ink-3); margin-left:6px; }
+.fw .pdstats .ps-spacer { flex:1 1 auto; }
+
 .fw .lp-tall { padding:var(--sp-10) 0; }
 .fw .lp-dark .statement-sub { color:#bcbdbd; }
 /* The mark's own stroke angle, reused as a section divider */
