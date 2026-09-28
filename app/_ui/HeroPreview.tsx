@@ -9,9 +9,11 @@ import { CountUp } from "@/app/_ui/CountUp";
 // UI changes and nobody notices for months. This cannot, because it is built
 // from the same CSS; if the dashboard's table changes, this changes with it.
 //
-// The numbers are illustrative and the panel says so, because a landing page
-// implying someone has already earned £240 would be a lie told in a place
-// people are deciding whether to trust you.
+// The numbers are illustrative and both panels say so, because a landing page
+// implying someone has already earned $240 would be a lie told in a place
+// people are deciding whether to trust you. The per-product Live and Draft
+// badges stay: those are product statuses, which is what the sample content is
+// about, not a claim that the figures themselves are real.
 export function HeroPreview() {
   return (
     <div aria-hidden="false">
@@ -21,7 +23,12 @@ export function HeroPreview() {
             <Icon name="wallet" size={14} />
             <span style={{ fontSize: "var(--fs-3)", fontWeight: 560 }}>Your wallet</span>
           </span>
-          <span className="badge b-pine">Live</span>
+          {/* "Live" here was a claim about the data, not a product status, and
+              it sat beside $240.00 on a page where someone is deciding whether
+              to trust us. WalletTabs labels the same figures "Example data" in
+              the wallet chapter further down; this is that label, in the place
+              it is read first. */}
+          <span className="badge b-grey">Example data</span>
         </div>
         <div className="card-b">
           <div style={{ marginBottom: 12 }}>
@@ -63,6 +70,7 @@ export function HeroPreview() {
             <Icon name="card" size={14} />
             <span style={{ fontSize: "var(--fs-3)", fontWeight: 560 }}>What you sell</span>
           </span>
+          <span className="badge b-grey">Example data</span>
         </div>
         <div className="card-b" style={{ paddingTop: 0, paddingBottom: 0 }}>
           <div className="tblwrap">
@@ -89,8 +97,8 @@ export function HeroPreview() {
         </div>
         <div className="card-f">
           <span className="tiny">
-            Illustrative figures. Your own wallet starts at zero and is folded from your real
-            payments, never stored as a number.
+            Both panels show example figures. Your own wallet starts at zero and is folded
+            from your real payments each time you look, never stored as a number.
           </span>
         </div>
       </div>

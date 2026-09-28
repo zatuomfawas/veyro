@@ -1325,6 +1325,13 @@ export const CSS2 = `
 .fw .lp-nav.sticky[data-scrolled="1"] { border-bottom-color:var(--line); }
 .fw .tblwrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
 .fw .tblwrap .tbl { min-width:520px; }
+/* Except in the hero, whose two sample tables are two and three simple
+   columns, not the dense data tables that floor was written for. At 375 the
+   520px floor pushed the amounts 205px off screen, so every phone visitor met
+   a wallet showing "Earned / Still settling / Already paid out" with nothing
+   beside them — labels and no money, on the one visual the page is built
+   around. */
+.fw .hero-band .tblwrap .tbl { min-width:0; }
 .fw .disc { border-bottom:1px solid var(--line); }
 .fw .disc-q { display:flex; width:100%; justify-content:space-between; align-items:baseline;
   gap:var(--sp-5); padding:var(--sp-4) 0; background:transparent; border:0; cursor:pointer;
