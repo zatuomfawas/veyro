@@ -1704,6 +1704,49 @@ export const CSS2 = `
 .fw .pdstats .ps-l { font-size:var(--fs-2); color:var(--ink-3); margin-left:6px; }
 .fw .pdstats .ps-spacer { flex:1 1 auto; }
 
+/* Payments as money moving, grouped by the day it moved.
+   Six numeric columns in a half-width card meant every figure was small,
+   right-aligned and identical in weight, so "what was I paid", "what did
+   Stripe take" and "what did I keep" all looked the same. Each payment is
+   now one line that reads left to right: what came in, what came off, what
+   is left — and the day above it carries that day's total, which the table
+   never showed at all. */
+.fw .txgroup + .txgroup { margin-top:var(--sp-6); }
+.fw .txday { display:flex; justify-content:space-between; align-items:baseline;
+  gap:var(--sp-4); padding-bottom:6px; border-bottom:1px solid var(--ink); }
+.fw .txday-d { font-size:var(--fs-2); font-weight:var(--fw-med); color:var(--ink-2); }
+.fw .txday-t { font-size:var(--fs-2); color:var(--ink-3); font-variant-numeric:tabular-nums; }
+.fw .txrow { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px var(--sp-5);
+  align-items:baseline; padding:var(--sp-4) 0; border-bottom:1px solid var(--line-soft); }
+.fw .txrow > * { min-width:0; }
+.fw .tx-name { font-size:var(--fs-3); font-weight:var(--fw-med); }
+.fw .tx-ref { display:block; font-size:var(--fs-1); color:var(--ink-3);
+  font-family:var(--code); margin-top:3px; word-break:break-all; }
+.fw .tx-flow { display:flex; flex-wrap:wrap; gap:4px 8px; align-items:baseline;
+  justify-content:flex-end; font-size:var(--fs-2); color:var(--ink-3);
+  font-variant-numeric:tabular-nums; }
+.fw .tx-arrow { color:var(--ink-3); }
+.fw .tx-net { font-size:var(--fs-4); font-weight:var(--fw-med); color:var(--ink); }
+/* Settled money is pine on this site, and this is the one figure on the row
+   that is actually the founder's. */
+.fw .tx-net[data-tone="settled"] { color:var(--pine); }
+.fw .tx-net[data-tone="out"] { color:var(--clay); }
+@media (max-width:700px) {
+  .fw .txrow { grid-template-columns:minmax(0,1fr); }
+  .fw .tx-flow { justify-content:flex-start; }
+}
+
+/* Payouts as a sequence, because that is what they are. The table gave a
+   requested payout and a sent one the same row and the same weight, so the
+   one thing a founder wants to know — where is my money now — had to be
+   read out of a badge. The spine is .tl, already in this stylesheet and
+   already carrying the guardian relationship on the marketing page. */
+.fw .payoutline .pt[data-on="waiting"] { border-color:var(--amber); background:var(--paper); }
+.fw .payoutline .pt[data-on="done"] { border-color:var(--pine); background:var(--pine); }
+.fw .payoutline .tl-t { display:flex; flex-wrap:wrap; gap:8px; align-items:baseline; }
+.fw .payoutline .po-amt { font-size:var(--fs-4); font-weight:var(--fw-bold);
+  font-variant-numeric:tabular-nums; letter-spacing:-0.01em; }
+
 .fw .lp-tall { padding:var(--sp-10) 0; }
 .fw .lp-dark .statement-sub { color:#bcbdbd; }
 /* The mark's own stroke angle, reused as a section divider */

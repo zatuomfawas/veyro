@@ -678,32 +678,47 @@ export default async function FounderDashboard() {
               {payouts.length > 0 && (
                 <>
                   <hr className="rule" style={{ margin: "20px 0 16px" }} />
-                  <div className="tblwrap">
-                    <table className="tbl">
-                      <thead>
-                        <tr>
-                          <th scope="col">Date</th>
-                          <th scope="col" style={{ textAlign: "right" }}>Amount</th>
-                          <th scope="col">Status</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {payouts.map((p) => (
-                          <tr key={p.id}>
-                            <td className="num">{fmtDate(p.createdAt)}</td>
-                            <td className="num" style={{ textAlign: "right" }}>
-                              {formatMinor(p.amountMinor, p.currency)}
-                            </td>
-                            <td>
-                              <span className={"badge " + (PAYOUT_BADGE[p.status] ?? "b-grey")}>
-                                {p.status.charAt(0) + p.status.slice(1).toLowerCase()}
+                    {/* A sequence, not a table. A requested payout and a sent
+                        one used to get the same row and the same weight, so
+                        "where is my money now" had to be read out of a badge.
+                        The spine is .tl, which already carries the guardian
+                        relationship on the marketing page. */}
+                    <ol className="tl payoutline" aria-label="Payout requests, newest first">
+                      {payouts.map((p) => {
+                        const done = p.status === "SENT";
+                        const failed = p.status === "FAILED";
+                        return (
+                          <li key={p.id}>
+                            <span
+                              className="pt"
+                              data-on={failed ? "bad" : done ? "done" : "waiting"}
+                              aria-hidden="true"
+                            />
+                            <span>
+                              <span className="tl-t">
+                                <span className="po-amt">
+                                  {formatMinor(p.amountMinor, p.currency)}
+                                </span>
+                                <span className={"badge " + (PAYOUT_BADGE[p.status] ?? "b-grey")}>
+                                  {p.status.charAt(0) + p.status.slice(1).toLowerCase()}
+                                </span>
                               </span>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                              <span className="tl-d">
+                                {/* What each state actually means for the money,
+                                    rather than restating the badge. */}
+                                {done
+                                  ? `Sent on ${fmtDate(p.createdAt)}. Stripe pays it into the bank account on your payment account.`
+                                  : failed
+                                    ? `Requested ${fmtDate(p.createdAt)} and did not go through. The money is still in your wallet.`
+                                    : p.status === "APPROVED"
+                                      ? `Approved, waiting on Stripe. Requested ${fmtDate(p.createdAt)}.`
+                                      : `Requested ${fmtDate(p.createdAt)}. Held out of your available balance so it cannot be spent twice.`}
+                              </span>
+                            </span>
+                          </li>
+                        );
+                      })}
+                    </ol>
                 </>
               )}
             </Section>
@@ -806,57 +821,80 @@ export default async function FounderDashboard() {
                   </EmptyState>
                 )
               ) : (
-                <div className="tblwrap">
-                  <table className="tbl">
-                    <thead>
-                      <tr>
-                        <th scope="col">Date</th>
-                        <th scope="col">Product</th>
-                        <th scope="col" style={{ textAlign: "right" }}>Paid</th>
-                        <th scope="col" style={{ textAlign: "right" }}>Fee</th>
-                        <th scope="col" style={{ textAlign: "right" }}>Net</th>
-                        <th scope="col">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {transactions.map((t) => (
-                        <tr key={t.id}>
-                          <td className="num">{fmtDate(t.createdAt)}</td>
-                          <td>
-                            {t.product?.name ?? "None"}
-                            {/* The provider's own reference, so a founder asking
-                                us about a payment can quote something Stripe
-                                recognises rather than describing it. */}
-                            <span className="req-d mono" style={{ fontSize: "var(--fs-1)" }}>
-                              {t.stripePaymentIntentId}
-                            </span>
-                          </td>
-                          <td className="num" style={{ textAlign: "right" }}>
-                            {formatMinor(t.amountMinor, t.currency)}
-                          </td>
-                          <td className="num" style={{ textAlign: "right" }}>
-                            {t.feeMinor == null
-                              ? <span className="tiny">Pending</span>
-                              : "− " + formatMinor(t.feeMinor, t.currency)}
-                          </td>
-                          <td className="num" style={{ textAlign: "right", fontWeight: 560 }}>
-                            {/* Net per row, so "paid" and "kept" can never be
-                                read as the same number. Blank rather than a
-                                guess while Stripe has not reported the fee. */}
-                            {t.feeMinor == null
-                              ? <span className="tiny">&mdash;</span>
-                              : formatMinor(t.amountMinor - t.feeMinor, t.currency)}
-                          </td>
-                          <td>
-                            <span className={"badge " + (TX_BADGE[t.status] ?? "b-grey")}>
-                              {TX_LABEL[t.status] ?? t.status}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                  <div>
+                    {/* Grouped by the day the money moved, because that is how a
+                        founder remembers a sale — "the two on Friday", not rows
+                        14 and 15. The day carries its own cleared total, which
+                        six numeric columns never showed. */}
+                    {Object.entries(
+                      transactions.reduce<Record<string, typeof transactions>>((acc, t) => {
+                        const k = fmtDate(t.createdAt);
+                        (acc[k] ??= []).push(t);
+                        return acc;
+                      }, {}),
+                    ).map(([day, rows]) => {
+                      // Only cleared money counts toward the day's figure, and
+                      // only in one currency — a day that mixed USD and EUR
+                      // would otherwise get a total that means nothing.
+                      const cur = rows[0].currency;
+                      const sameCurrency = rows.every((r) => r.currency === cur);
+                      const cleared = rows
+                        .filter((r) => r.status === "COMPLETED" && r.feeMinor != null)
+                        .reduce((n, r) => n + (r.amountMinor - (r.feeMinor ?? 0)), 0);
+                      return (
+                        <div className="txgroup" key={day}>
+                          <div className="txday">
+                            <span className="txday-d">{day}</span>
+                            {sameCurrency && cleared > 0 && (
+                              <span className="txday-t">{formatMinor(cleared, cur)} kept</span>
+                            )}
+                          </div>
+                          {rows.map((t) => {
+                            const refunded = t.status === "REFUNDED";
+                            const settled = t.status === "COMPLETED" && t.feeMinor != null;
+                            return (
+                              <div className="txrow" key={t.id}>
+                                <div>
+                                  <span className="tx-name">{t.product?.name ?? "None"}</span>
+                                  {/* Stripe's own reference, so a founder asking
+                                      about a payment can quote something Stripe
+                                      recognises rather than describing it. */}
+                                  <span className="tx-ref">{t.stripePaymentIntentId}</span>
+                                </div>
+                                <div className="tx-flow">
+                                  <span>{formatMinor(t.amountMinor, t.currency)}</span>
+                                  <span className="tx-arrow">&minus;</span>
+                                  <span>
+                                    {t.feeMinor == null
+                                      ? "fee pending"
+                                      : formatMinor(t.feeMinor, t.currency) + " fee"}
+                                  </span>
+                                  <span className="tx-arrow">&rarr;</span>
+                                  {/* Blank rather than a guess while Stripe has
+                                      not reported the fee: net is not knowable
+                                      yet and a placeholder number would be a
+                                      claim about the founder's money. */}
+                                  <span
+                                    className="tx-net"
+                                    data-tone={refunded ? "out" : settled ? "settled" : undefined}
+                                  >
+                                    {refunded
+                                      ? "refunded"
+                                      : t.feeMinor == null
+                                        ? "—"
+                                        : formatMinor(t.amountMinor - t.feeMinor, t.currency)}
+                                  </span>
+                                  <span className={"badge " + (TX_BADGE[t.status] ?? "b-grey")}>
+                                    {TX_LABEL[t.status] ?? t.status}
+                                  </span>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      );
+                    })}
+                  </div>
               )}
             </Section>
           </div>
