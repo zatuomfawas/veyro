@@ -20,7 +20,7 @@
 // that row to ask about it is working against them. Inline keeps the thing
 // being edited on screen and does not take the page hostage to do it.
 
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Btn, Field, Notice } from "@/app/_ui/form";
@@ -331,13 +331,13 @@ export default function ProductRows({
             badges wrapping mid-word. A product is the thing a founder made, so
             it gets a row of its own: the name at heading size, price and state
             beside it, and its actions on one line. */}
-        <div className="prodlist">
+        <ul className="prodlist" aria-label="Your products">
           {products.map((p) => {
             const live = p.status === "LIVE";
             const isOpen = mounted === p.id && open;
             const isMounted = mounted === p.id;
             return (
-              <Fragment key={p.id}>
+              <li key={p.id} className="proditem">
                 <div className="prodrow" data-live={live ? "1" : "0"}>
                   <div>
                     <span className="pd-name">{p.name}</span>
@@ -443,10 +443,10 @@ export default function ProductRows({
                     </div>
                   </div>
                 )}
-              </Fragment>
+              </li>
             );
           })}
-        </div>
+        </ul>
     </>
   );
 }

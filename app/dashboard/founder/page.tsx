@@ -325,7 +325,12 @@ export default async function FounderDashboard() {
               identical white cards this is the only container that says "start
               here", and it is the reversal the marketing page ends on, so the
               product looks like what was promised. */}
-          {primaryFold && (
+          {/* Rendered whether or not anything has sold. primaryFold is null
+              until the first payment, and gating the whole band on it meant a
+              founder who had just signed up got no wallet at all — the one
+              thing they opened the page for, missing, on the day it matters
+              most. The empty case shows a real zero and says what fills it. */}
+          {primaryFold ? (
             <div className="wallethero">
               <span className="wh-label">Available to request &middot; {primaryFold.currency}</span>
               <span className="wh-big">{formatMinor(primaryFold.available, primaryFold.currency)}</span>
@@ -369,6 +374,25 @@ export default async function FounderDashboard() {
                   )}
                 </div>
               )}
+            </div>
+          ) : (
+            <div className="wallethero">
+              <span className="wh-label">Available to request</span>
+              <span className="wh-big">{formatMinor(0, "USD")}</span>
+              <span className="wh-sub">
+                Nothing has sold yet. The first time someone pays, what they paid, what Stripe
+                took and what you keep all appear here &mdash; and this figure is what you can
+                request.
+              </span>
+              <div className="row" style={{ marginTop: "var(--sp-7)", gap: 8, flexWrap: "wrap" }}>
+                {firstLive
+                  ? (
+                    <Link className="btn" href={`/pay/${founderId}/${firstLive.id}`} target="_blank" rel="noreferrer">
+                      Open your checkout
+                    </Link>
+                  )
+                  : <Link className="btn" href="#products">Set up something to sell</Link>}
+              </div>
             </div>
           )}
 
@@ -780,8 +804,16 @@ export default async function FounderDashboard() {
                 />
               )}
 
-              <hr className="rule" style={{ margin: "var(--sp-7) 0 var(--sp-5)" }} />
-              <h3 className="h4" style={{ margin: "0 0 var(--sp-4)" }}>Add another product</h3>
+              {/* "Another" only once there is a first. With none, the empty
+                  state above already says "Create your first product", and a
+                  heading contradicting it directly underneath is worse than no
+                  heading at all. */}
+              {products.length > 0 && (
+                <>
+                  <hr className="rule" style={{ margin: "var(--sp-7) 0 var(--sp-5)" }} />
+                  <h3 className="h4" style={{ margin: "0 0 var(--sp-4)" }}>Add another product</h3>
+                </>
+              )}
               <NewProduct founderId={founderId} />
 
             </Section>
@@ -849,11 +881,12 @@ export default async function FounderDashboard() {
                               <span className="txday-t">{formatMinor(cleared, cur)} kept</span>
                             )}
                           </div>
+                          <ul className="txlist" aria-label={`Payments on ${day}`}>
                           {rows.map((t) => {
                             const refunded = t.status === "REFUNDED";
                             const settled = t.status === "COMPLETED" && t.feeMinor != null;
                             return (
-                              <div className="txrow" key={t.id}>
+                              <li className="txrow" key={t.id}>
                                 <div>
                                   <span className="tx-name">{t.product?.name ?? "None"}</span>
                                   {/* Stripe's own reference, so a founder asking
@@ -888,9 +921,10 @@ export default async function FounderDashboard() {
                                     {TX_LABEL[t.status] ?? t.status}
                                   </span>
                                 </div>
-                              </div>
+                              </li>
                             );
                           })}
+                          </ul>
                         </div>
                       );
                     })}

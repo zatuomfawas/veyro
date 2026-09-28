@@ -1671,7 +1671,8 @@ export const CSS2 = `
 
    Still a list, not cards: boxing each product would put three more borders
    on the page this rework exists to de-clutter. */
-.fw .prodlist { border-top:1px solid var(--ink); }
+.fw .prodlist { border-top:1px solid var(--ink); list-style:none; margin:0; padding:0; }
+.fw .proditem { min-width:0; }
 .fw .prodrow { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:var(--sp-4) var(--sp-6);
   align-items:start; padding:var(--sp-5) 0; border-bottom:1px solid var(--line); }
 .fw .prodrow > * { min-width:0; }
@@ -1712,6 +1713,7 @@ export const CSS2 = `
    is left — and the day above it carries that day's total, which the table
    never showed at all. */
 .fw .txgroup + .txgroup { margin-top:var(--sp-6); }
+.fw .txlist { list-style:none; margin:0; padding:0; }
 .fw .txday { display:flex; justify-content:space-between; align-items:baseline;
   gap:var(--sp-4); padding-bottom:6px; border-bottom:1px solid var(--ink); }
 .fw .txday-d { font-size:var(--fs-2); font-weight:var(--fw-med); color:var(--ink-2); }
