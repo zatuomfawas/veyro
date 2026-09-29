@@ -196,10 +196,34 @@ export default function GetStarted() {
 
         {/* The middle stop, shown. Moved here from the landing page's
             money-flow chapter, where it was a second composition inside a
-            chapter that is meant to be one diagram — and where it made that
-            chapter taller than the wallet the page is built around. This page
-            already walks the payment path, so it is the right home. */}
-        <div style={{ marginTop: 26, maxWidth: 560 }}>
+            chapter that is meant to be one diagram.
+
+            Paired with the text that explains it rather than left alone: at
+            560px in a 1200px column it sat against six hundred pixels of
+            nothing, which reads as a page that ran out of things to say. The
+            words beside it were already on the page, further down, saying the
+            same thing about the same picture. */}
+        <div className="sidebyside" style={{ marginTop: 26 }}>
+          <div>
+            <h3 className="h4" style={{ margin: 0 }}>What your customer sees</h3>
+            <p className="body" style={{ marginTop: 10 }}>
+              One page, your product name, your price, and a card field. It is hosted by Veyro and
+              the card form itself is Stripe&rsquo;s, so the number goes straight to them.
+            </p>
+            <p className="body" style={{ marginTop: 12 }}>
+              You do not build this, style it, or host it. You send someone to it &mdash; from a
+              link in a bio, or from a button in your app.
+            </p>
+            <ul className="ticks" style={{ marginTop: 16 }}>
+              <li>Your product name and price, not ours</li>
+              <li>Stripe&rsquo;s card form, so the number never reaches you or us</li>
+              <li>Works from a link in a bio, a DM, or a button in your app</li>
+              <li>No percentage taken by Veyro</li>
+            </ul>
+            <p className="small" style={{ marginTop: 16 }}>
+              The page is hosted for you. There is nothing here to build, style or keep running.
+            </p>
+          </div>
           <CheckoutPreview />
         </div>
 

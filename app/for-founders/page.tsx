@@ -138,7 +138,7 @@ export default function ForFounders() {
           <div>
             <h2 className="h3" style={{ marginTop: 0 }}>What stays yours</h2>
           </div>
-          <div style={{ maxWidth: "var(--m-wide)" }}>
+          <div>
             <p className="body" style={{ marginTop: 0 }}>
               The business is yours. Involving a guardian is a requirement of the payment provider,
               not a transfer of ownership, and Veyro keeps its records against you rather than
@@ -161,7 +161,7 @@ export default function ForFounders() {
           <div>
             <h2 className="h3" style={{ marginTop: 0 }}>Before you start</h2>
           </div>
-          <div style={{ maxWidth: "var(--m-wide)" }}>
+          <div>
             <ul className="arrowlist" style={{ marginTop: 0 }}>
               <li>
                 <strong>Check your country first.</strong> This route is not open everywhere, and
