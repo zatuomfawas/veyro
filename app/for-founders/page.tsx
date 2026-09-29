@@ -7,6 +7,7 @@ import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { StickyCta } from "@/app/_ui/StickyCta";
+import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 
 export const viewport = buildViewport();
 
@@ -40,6 +41,7 @@ export default function ForFounders() {
               <Link className="btn btn-q btn-sm hide-s" href="/wallet">The Wallet</Link>
               <Link className="btn btn-q btn-sm hide-s" href="/for-guardians">For parents</Link>
               <Link className="btn btn-sm" href="/check">Check eligibility</Link>
+              <ThemeToggle />
               <MobileNav
                 items={[
                   { href: "/how-it-works", label: "How it works" },

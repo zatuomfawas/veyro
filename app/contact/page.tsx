@@ -4,6 +4,7 @@ import { buildViewport, SITE } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
+import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 
 export const viewport = buildViewport();
 
@@ -31,6 +32,7 @@ export default function Contact() {
             <Link href="/" aria-label="Veyro, home"><Wordmark size={20} /></Link>
             <div className="lp-links">
               <Link className="btn btn-sm" href="/check">Check eligibility</Link>
+              <ThemeToggle />
             </div>
           </nav>
         </div>

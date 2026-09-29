@@ -7,6 +7,7 @@ import { RoleStack } from "@/app/_ui/RoleStack";
 import { ScrollProgress } from "@/app/_ui/ScrollProgress";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { StickyCta } from "@/app/_ui/StickyCta";
+import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 
 export const metadata = buildMetadata("how");
 export const viewport = buildViewport();
@@ -82,6 +83,7 @@ export default function HowItWorks() {
             <div className="lp-links">
               <Link className="btn btn-q btn-sm hide-s" href="/for-guardians">For parents</Link>
               <Link className="btn btn-2 btn-sm" href="/check">Check what applies to you</Link>
+              <ThemeToggle />
             </div>
           </nav>
         </div>

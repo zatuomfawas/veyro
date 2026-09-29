@@ -5,6 +5,7 @@ import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { Notice } from "@/app/_ui/form";
+import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 
 export const viewport = buildViewport();
 export const dynamic = "force-dynamic";
@@ -64,6 +65,7 @@ export default function Status() {
             <Link href="/" aria-label="Veyro, home"><Wordmark size={20} /></Link>
             <div className="lp-links">
               <Link className="btn btn-q btn-sm" href="/contact">Contact</Link>
+              <ThemeToggle />
             </div>
           </nav>
         </div>

@@ -10,6 +10,7 @@ import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { SDK_ERROR_TABLE } from "@/lib/sdk-errors";
 import { Copyable } from "./Copyable";
+import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 
 export const viewport = buildViewport();
 
@@ -86,6 +87,7 @@ export default function SdkDocs() {
               <Link className="btn btn-q btn-sm hide-s" href="/get-started">Get started</Link>
               <Link className="btn btn-q btn-sm hide-s" href="/how-it-works">How it works</Link>
               <Link className="btn btn-sm" href="/check">Check eligibility</Link>
+              <ThemeToggle />
               <MobileNav
                 items={[
                   { href: "/get-started", label: "Get started" },

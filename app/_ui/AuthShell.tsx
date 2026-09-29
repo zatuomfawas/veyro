@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
+import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 
 // The frame both auth pages sit in. A Server Component, so the wordmark, the
 // heading and the links are in the HTML before any JavaScript runs; only the
@@ -25,6 +26,7 @@ export function AuthShell({
           <nav className="lp-nav" aria-label="Main" style={{ borderBottom: 0 }}>
           <Link href="/" aria-label="Veyro, home"><Wordmark size={20} /></Link>
             <Link className="btn btn-q btn-sm" href="/check">Check eligibility</Link>
+            <ThemeToggle />
           </nav>
         </div>
       </div>

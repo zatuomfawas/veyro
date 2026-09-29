@@ -14,6 +14,7 @@ import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { StickyCta } from "@/app/_ui/StickyCta";
 import { FAQ } from "@/app/_ui/faq";
+import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 
 export const metadata = buildMetadata("landing");
 export const viewport = buildViewport();
@@ -78,6 +79,7 @@ export default async function Home() {
                   <Link className="btn btn-sm" href="/get-started">Get started</Link>
                 </>
               )}
+              <ThemeToggle />
               <MobileNav
                 items={[
                   { href: "#wallet", label: "Founder Wallet" },

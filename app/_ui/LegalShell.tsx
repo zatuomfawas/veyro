@@ -5,6 +5,7 @@ import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { Notice } from "@/app/_ui/form";
 import { ScrollProgress } from "@/app/_ui/ScrollProgress";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
+import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 
 export const SUPPORT_EMAIL = "hello@withveyro.com";
 
@@ -53,6 +54,7 @@ export function LegalShell({
             <div className="lp-links">
               <Link className="btn btn-q btn-sm hide-s" href="/how-it-works">How it works</Link>
               <Link className="btn btn-sm" href="/check">Check eligibility</Link>
+              <ThemeToggle />
             </div>
           </nav>
         </div>
