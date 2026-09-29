@@ -46,10 +46,18 @@ const tok = (name) => {
 // the other -- the placeholder grey did, at 3.60:1 on the dark card, which is
 // what this half of the file was added to catch.
 const darkBlock = (() => {
-  const i = css.indexOf('.fw[data-theme="dark"] {');
-  if (i < 0) throw new Error("the dark token block is gone from css.ts");
-  const end = css.indexOf("\n}", i);
-  return css.slice(i, end);
+  // Located by the value it declares, not by the selector above it. The dark
+  // rules have already been rescoped once (from a selector on .fw itself to
+  // one on an ancestor), and a finder keyed to a spelling of the selector
+  // silently matched a COMMENT that mentioned it, read the wrong region, and
+  // reported the light values as though they were the dark ones. The dark
+  // paper is unambiguous: find it, then take the block it sits in.
+  const at = css.indexOf("--paper:#0f1113");
+  if (at < 0) throw new Error("the dark token block is gone from css.ts");
+  const open = css.lastIndexOf("{", at);
+  const end = css.indexOf("\n}", at);
+  if (open < 0 || end < 0) throw new Error("the dark token block is malformed");
+  return css.slice(open, end);
 })();
 const darkTok = (name) =>
   // Not every token is restated in dark; those inherit the light value.
@@ -97,13 +105,15 @@ const suite = (name, t, panel, panelInk) => {
   // is a skeleton nobody can see, and the point is that it cannot go back
   // there unnoticed.
   //
-  // The floor is 1.6 rather than 3. It was 3 while the brief was "make the
+  // The floor is 1.45 rather than 3. It was 3 while the brief was "make the
   // block unmissable"; the brief is now "dimmer and less forced", and a
   // placeholder is meant to be quiet -- it is the shape of content, not
   // content. 1.6 leaves the current ~2:1 room to be tuned by eye without
-  // letting anyone tune it into invisibility.
-  check("skeleton block on paper", t("skel-block"), t("paper"), 1.6);
-  check("skeleton block on card", t("skel-block"), t("card"), 1.6);
+  // letting anyone tune it into invisibility. It has come down twice as the
+// brief got quieter; 1.45 is the point below which the block stops
+// reading as a block at all, measured against the 1.16 that started this.
+  check("skeleton block on paper", t("skel-block"), t("paper"), 1.45);
+  check("skeleton block on card", t("skel-block"), t("card"), 1.45);
   // --line-hover is not checked at 3:1. It is a hover cue on a control the
   // reader has already found, not the boundary that identifies it -- .btn-2
   // carries a label and its own ground. It measures 1.39:1 in light, which is

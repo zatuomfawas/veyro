@@ -68,8 +68,8 @@ export const CSS = `
      being drawn in a colour nobody could read. Dark on light here, light on
      dark below, at the same strength both ways so the wait looks the same
      whichever theme you are in. */
-  --skel-block:#b6babe;
-  --skel-sheen:rgba(255,255,255,.22);
+  --skel-block:#c5c8cb;
+  --skel-sheen:rgba(255,255,255,.14);
   /* Interaction states. These were literals, and a literal cannot invert:
      pressed-black stays black when the button itself has gone white, and a
      pale selection stays pale when the text on it has gone light. Measured
@@ -2178,18 +2178,19 @@ export const CSS2 = `
 @media (prefers-reduced-motion: reduce) {
   .fw .skel[data-shimmer="1"]::after { animation:none; }
 }
-.fw .skel-hero { background:var(--ink); padding:var(--sp-8) var(--sp-7); margin-bottom:var(--sp-7); }
-/* This one panel is dark in both themes, so its blocks are light in both --
-   the rule is "opposite of the surface", not "opposite of the theme".
-   .46 is not a guess: it is the alpha at which white over this panel lands on
-   the same grey as --skel-block does over the page, so a block inside the
-   band and a block outside it are the same brightness. At .34 the band's
-   blocks read as dimmer than the rest of the page, which made one skeleton
-   look like two. */
-.fw .skel-hero { --skel-sheen:rgba(255,255,255,.14); }
-.fw .skel-hero .skel { background:rgba(255,255,255,.22); }
+/* Deliberately NOT var(--ink), which is what the real wallet band uses.
+   Matching it put a black band across the top of a white page, so the loading
+   screen read as two screens spliced together. A placeholder holds the shape
+   and the proportions; it does not have to reproduce the colour of something
+   that is not on screen yet. One tone, whichever theme you are in. */
+.fw .skel-hero { background:var(--surface); border:1px solid var(--line-soft);
+  padding:var(--sp-8) var(--sp-7); margin-bottom:var(--sp-7); }
+/* Its blocks are the same blocks as everywhere else now. */
+/* Balance on the left, action on the right, like the band it stands for. */
+.fw .skel-herorow { display:flex; align-items:flex-start; justify-content:space-between;
+  gap:var(--sp-6); flex-wrap:wrap; }
 .fw .skel-rail { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(0,1fr);
-  border-top:1px solid var(--ink); margin-bottom:var(--sp-7); }
+  border-top:1px solid var(--line); margin-bottom:var(--sp-7); }
 .fw .skel-rail > div { padding:var(--sp-5) var(--sp-5) var(--sp-4) 0;
   border-right:1px solid var(--line); }
 .fw .skel-rail > div:last-child { border-right:0; }
@@ -2223,8 +2224,18 @@ export const CSS2 = `
    at 17% opacity. Flipping them would make a light band full of pale-grey
    text. They stay dark and take a border instead, since they can no longer
    rely on contrast with white to show their edges. */
-@media (prefers-color-scheme: dark) {
-  .fw:not([data-theme="light"]) {
+/* No prefers-color-scheme block. Dark is applied by the data-theme attribute
+   alone, so a first visit is light whatever the operating system is set to,
+   and dark is a choice someone made here.
+
+   The attribute is read from an ANCESTOR -- [data-theme="dark"] .fw -- not
+   from .fw itself. It used to be the latter, which meant every .fw on the
+   page had to have the attribute copied onto it by JavaScript, and any .fw
+   rendered without the toggle beside it never got one. A loading.tsx skeleton
+   is exactly that: its own .fw, its own <style>, no nav. On a dark page it
+   came out light while the document around it stayed dark, which is the
+   half-black half-white screen. Now it inherits, and no script is involved. */
+[data-theme="dark"] .fw {
   /* Surfaces invert; the cool monochrome character does not. Paper is a
      near-black with a trace of blue in it rather than #000, because pure
      black against a bright phone at night is a glare edge, and because every
@@ -2240,44 +2251,8 @@ export const CSS2 = `
   --ink:#e8eaec; --ink-2:#aab1b7; --ink-3:#8c949b;
   --placeholder:#8c949b;
   --nav-veil:rgba(15,17,19,.88);
-  --skel-block:#454b50;
-  --skel-sheen:rgba(255,255,255,.22);
-  /* Pressed is brighter here, not darker: --brand is already light. */
-  --brand-a:#ffffff;
-  --clay-a:#3a201d;
-  --line-hover:#3a4046;
-  --select-bg:#2e3841;
-  --scrim:rgba(0,0,0,.62);
-  /* The accents lighten. #12513a is 2.0:1 on this ground and would fail every
-     rule it passes in the light theme; these are the same hues carried up
-     until they clear 4.5:1 on --card. */
-  --pine:#5fb48f; --pine-h:#7cc9a6;
-  --pine-bg:#12251e; --pine-line:#245040;
-  --amber:#d9a441; --amber-bg:#2a2112; --amber-line:#4f3f19;
-  --slate:#83aadb; --slate-bg:#15202e; --slate-line:#294660;
-  --clay:#e39089; --clay-bg:#2b1917; --clay-line:#5d322c;
-  /* Native controls, scrollbars and form widgets follow the page. */
-  color-scheme: dark;
-  }
-}
-.fw[data-theme="dark"] {
-  /* Surfaces invert; the cool monochrome character does not. Paper is a
-     near-black with a trace of blue in it rather than #000, because pure
-     black against a bright phone at night is a glare edge, and because every
-     grey above it then has somewhere to sit. */
-  --paper:#0f1113; --surface:#16191c; --surface-2:#1e2226; --card:#14171a;
-  /* --reverse is "the colour text takes when it sits on --brand". Brand is
-     light here, so reverse is dark. Swapping these two is the whole trick. */
-  --reverse:#0f1113;
-  --line:#2a2f34; --line-soft:#22262a;
-  /* 1.4.11 wants 3:1 for a control's boundary. This measures 3.4:1 on --card. */
-  --control-line:#7b848b;
-  --brand:#e8eaec; --brand-h:#ffffff;
-  --ink:#e8eaec; --ink-2:#aab1b7; --ink-3:#8c949b;
-  --placeholder:#8c949b;
-  --nav-veil:rgba(15,17,19,.88);
-  --skel-block:#454b50;
-  --skel-sheen:rgba(255,255,255,.22);
+  --skel-block:#383d42;
+  --skel-sheen:rgba(255,255,255,.14);
   /* Pressed is brighter here, not darker: --brand is already light. */
   --brand-a:#ffffff;
   --clay-a:#3a201d;
@@ -2298,16 +2273,9 @@ export const CSS2 = `
 
 /* The two panels that were always dark. On a dark page they would otherwise
    dissolve into it, so they earn an edge. */
-@media (prefers-color-scheme: dark) {
-  .fw:not([data-theme="light"]) .wallethero,
-  .fw:not([data-theme="light"]) section.lp.lp-dark { background:#080a0b;
-    border:1px solid var(--line); color:#e8eaec; }
-  .fw:not([data-theme="light"]) .skel-hero { background:#080a0b; border:1px solid var(--line); }
-}
-.fw[data-theme="dark"] .wallethero,
-.fw[data-theme="dark"] section.lp.lp-dark { background:#080a0b; border:1px solid var(--line);
+[data-theme="dark"] .fw .wallethero,
+[data-theme="dark"] .fw section.lp.lp-dark { background:#080a0b; border:1px solid var(--line);
   color:#e8eaec; }
-.fw[data-theme="dark"] .skel-hero { background:#080a0b; border:1px solid var(--line); }
 
 /* The toggle itself. A button, not a checkbox: it performs an action rather
    than recording a value, and it says which mode it will switch TO. */
@@ -2317,25 +2285,14 @@ export const CSS2 = `
    everywhere except here, where the ground did not invert with it. The
    headline figure went near-black on near-black. The panels state their own
    ink rather than inheriting a token whose meaning flipped underneath them. */
-.fw[data-theme="dark"] .wallethero .wh-big,
-.fw[data-theme="dark"] .lp-dark .lp-h2,
-.fw[data-theme="dark"] .lp-dark h2,
-.fw[data-theme="dark"] .lp-dark .d1,
-.fw[data-theme="dark"] .lp-dark .d2,
-.fw[data-theme="dark"] .lp-dark .statement { color:#e8eaec; }
-.fw[data-theme="dark"] .lp-dark .btn { background:#e8eaec; border-color:#e8eaec; color:#0f1113; }
-.fw[data-theme="dark"] .wallethero .btn { background:#e8eaec; border-color:#e8eaec; color:#0f1113; }
-@media (prefers-color-scheme: dark) {
-  .fw:not([data-theme="light"]) .wallethero .wh-big,
-  .fw:not([data-theme="light"]) .lp-dark .lp-h2,
-  .fw:not([data-theme="light"]) .lp-dark h2,
-  .fw:not([data-theme="light"]) .lp-dark .d1,
-  .fw:not([data-theme="light"]) .lp-dark .d2,
-  .fw:not([data-theme="light"]) .lp-dark .statement { color:#e8eaec; }
-  .fw:not([data-theme="light"]) .lp-dark .btn,
-  .fw:not([data-theme="light"]) .wallethero .btn {
-    background:#e8eaec; border-color:#e8eaec; color:#0f1113; }
-}
+[data-theme="dark"] .fw .wallethero .wh-big,
+[data-theme="dark"] .fw .lp-dark .lp-h2,
+[data-theme="dark"] .fw .lp-dark h2,
+[data-theme="dark"] .fw .lp-dark .d1,
+[data-theme="dark"] .fw .lp-dark .d2,
+[data-theme="dark"] .fw .lp-dark .statement { color:#e8eaec; }
+[data-theme="dark"] .fw .lp-dark .btn { background:#e8eaec; border-color:#e8eaec; color:#0f1113; }
+[data-theme="dark"] .fw .wallethero .btn { background:#e8eaec; border-color:#e8eaec; color:#0f1113; }
 /* The theme switch. Square, because every other edge on this site is square
    and a pill here would read as imported from somewhere else. The track is a
    control boundary, so it takes --control-line and its 3:1, not --line.

@@ -43,14 +43,21 @@ export function DashboardSkeleton({ what = "your business" }: { what?: string })
           <Bar w="220px" h={26} />
           <Bar w="340px" h={12} mt={10} />
 
-          {/* The wallet band, already the right height and already dark, so
-              the page does not flash white and then invert. */}
+          {/* The wallet band. Two columns, because the real one has the
+              balance on the left and the payout button on the right, and a
+              single left-hand stack left most of a 1400px band empty -- a
+              placeholder for a wide thing should not read as a wide empty
+              thing. Shorter too: five stacked bars implied more content than
+              actually arrives. */}
           <div className="skel-hero" style={{ marginTop: 24 }}>
-            <Bar w="150px" h={12} />
-            <Bar w="260px" h={52} mt={12} />
-            <Bar w="420px" h={12} mt={16} />
-            <Bar w="180px" h={12} mt={22} />
-            <Bar w="150px" h={40} mt={20} />
+            <div className="skel-herorow">
+              <div>
+                <Bar w="150px" h={12} />
+                <Bar w="260px" h={44} mt={12} />
+                <Bar w="min(420px, 100%)" h={12} mt={16} />
+              </div>
+              <Bar w="150px" h={40} />
+            </div>
           </div>
 
           <div className="skel-rail">

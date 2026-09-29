@@ -1,48 +1,53 @@
 "use client";
 
-// Light and dark, with the system preference honoured until someone says
-// otherwise.
+// Light by default. Dark if you ask for it, and then it remembers.
 //
-// The flag goes on <html> as data-theme, and the stylesheet reads it two ways:
-// a media query guarded by :not([data-theme="light"]), so the system setting
-// applies by default but an explicit light choice still wins; and a plain
-// attribute selector, so an explicit dark choice wins on a system set to light.
-// Both directions need saying or the toggle only works one way.
+// This used to follow prefers-color-scheme until someone chose otherwise, so
+// a visitor on a dark operating system met a dark site before they had any
+// idea what the site was. Now the stylesheet reads one thing — the data-theme
+// attribute — and the absence of it is light. The system setting is no longer
+// consulted anywhere.
 //
-// The value is mirrored onto every .fw wrapper, because that is where the
-// tokens live — a page injects its own <style> and scopes everything to .fw
-// rather than :root.
+// The flag is written once, on <html>. The tokens live on .fw — a page injects
+// its own <style> and scopes everything to .fw rather than :root — but the
+// dark rules match on an ancestor carrying the attribute, so a .fw inherits it
+// wherever and whenever it mounts.
 //
 // No state is read during render. The server cannot know what is in
-// localStorage, so rendering from it would produce markup the client disagrees
-// with; useSyncExternalStore gives the server "system" and the client the real
-// answer, which is a documented value rather than a hydration mismatch.
+// localStorage, so rendering from it would produce markup the client
+// disagrees with; useSyncExternalStore gives the server "light" — which is
+// also the default, so the server is not guessing — and the client the stored
+// answer.
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
 
-type Theme = "light" | "dark" | "system";
+// Two states, not three. There used to be a "system" value that deferred to
+// prefers-color-scheme, and the stylesheet had a media query to match it. Both
+// are gone: light is what you get until you say otherwise, so the only
+// question left is whether this browser has a stored choice.
+type Theme = "light" | "dark";
 const KEY = "veyro-theme";
 
 function read(): Theme {
   try {
-    const v = localStorage.getItem(KEY);
-    return v === "light" || v === "dark" ? v : "system";
+    return localStorage.getItem(KEY) === "dark" ? "dark" : "light";
   } catch {
-    // Private windows and blocked site data both throw here. The page is
-    // perfectly usable on the system preference; it just will not remember.
-    return "system";
+    // Private windows and blocked site data both throw here. Light is the
+    // default anyway, so the page is correct; it just will not remember.
+    return "light";
   }
 }
 
-/** Puts the flag where the CSS can see it, or removes it for "system". */
+/**
+ * Puts the flag where the CSS can see it: once, on <html>.
+ *
+ * It used to be copied onto every .fw wrapper as well, because the dark rules
+ * were scoped to .fw itself. They now read it from an ancestor, so one write
+ * covers the whole document — including a .fw that mounts later, which is what
+ * a loading skeleton is and what the copying always missed.
+ */
 function apply(t: Theme) {
-  const root = document.documentElement;
-  if (t === "system") root.removeAttribute("data-theme");
-  else root.setAttribute("data-theme", t);
-  for (const el of document.querySelectorAll<HTMLElement>(".fw")) {
-    if (t === "system") delete el.dataset.theme;
-    else el.dataset.theme = t;
-  }
+  document.documentElement.setAttribute("data-theme", t);
 }
 
 const listeners = new Set<() => void>();
@@ -58,20 +63,10 @@ export function ThemeToggle() {
   // .fw wrapper gets the flag too.
   useEffect(() => { apply(read()); }, []);
 
-  const resolved = useSyncExternalStore<"light" | "dark">(
-    (fn) => {
-      const mq = window.matchMedia("(prefers-color-scheme: dark)");
-      mq.addEventListener("change", fn);
-      const un = subscribe(fn);
-      return () => { mq.removeEventListener("change", fn); un(); };
-    },
-    () => {
-      const t = read();
-      if (t !== "system") return t;
-      return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    },
-    () => "light",
-  );
+  // No matchMedia subscription any more. Nothing about the rendered theme
+  // depends on the system setting, so listening for it would re-render the
+  // switch in response to something that no longer changes anything.
+  const resolved = useSyncExternalStore<Theme>(subscribe, read, () => "light");
 
   const flip = useCallback(() => {
     const next: Theme = resolved === "dark" ? "light" : "dark";
@@ -105,12 +100,18 @@ export function ThemeToggle() {
 }
 
 /**
- * Runs before first paint, so the page never renders light and then flips.
+ * Runs before first paint, so someone who chose dark never sees a white flash
+ * on the way to it.
  *
  * Inline and synchronous on purpose: anything deferred happens after the
  * browser has already painted, which is the flash this exists to prevent.
+ *
+ * Only "dark" needs writing. Light is what the stylesheet does with no
+ * attribute at all, so a first-time visitor runs this, finds nothing stored,
+ * and the page is already correct.
  */
 export const THEME_SCRIPT =
-  `(function(){try{var t=localStorage.getItem('veyro-theme');`
-  + `if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}`
+  `(function(){try{`
+  + `if(localStorage.getItem('veyro-theme')==='dark'){`
+  + `document.documentElement.setAttribute('data-theme','dark');}`
   + `}catch(e){}})();`;

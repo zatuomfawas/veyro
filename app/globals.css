@@ -82,10 +82,7 @@ body {
  *
  * color-scheme on :root rather than on .fw: scrollbars, form controls and the
  * browser's own chrome are outside any wrapper we render. */
-@media (prefers-color-scheme: dark) {
-  html:not([data-theme="light"]) { color-scheme: dark; }
-  html:not([data-theme="light"]) body { background: #0f1113; }
-}
+/* Dark comes from the attribute only; see app/_ui/ThemeToggle.tsx. */
 html[data-theme="dark"] { color-scheme: dark; }
 html[data-theme="dark"] body { background: #0f1113; }
 html[data-theme="light"] { color-scheme: light; }
