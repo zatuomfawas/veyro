@@ -9,6 +9,7 @@ import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { StickyCta } from "@/app/_ui/StickyCta";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { FlowDiagram } from "@/app/_ui/FlowDiagram";
+import { GuardianPermissions } from "@/app/_ui/GuardianPermissions";
 
 export const metadata = buildMetadata("how");
 export const viewport = buildViewport();
@@ -80,7 +81,7 @@ export default function HowItWorks() {
       <div className="navbar">
         <div className="wrap-lp">
           <nav className="lp-nav" aria-label="Main">
-            <Link href="/" aria-label="Veyro, home"><Wordmark size={20} /></Link>
+            <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
             <div className="lp-links">
               <Link className="btn btn-q btn-sm hide-s" href="/for-guardians">For parents</Link>
               <Link className="btn btn-2 btn-sm" href="/check">Check what applies to you</Link>
@@ -356,6 +357,13 @@ export default function HowItWorks() {
           — and then they get told every time you request money, and keep a permanent record of
           it. <Link className="linkbtn" href="/for-guardians">What a guardian is agreeing to</Link>.
         </p>
+
+        {/* The same checklist the homepage shows, directly under the paragraph
+            it is summarising. Two statements of one sensitive claim beats one
+            statement someone can skim past. */}
+        <div style={{ marginTop: "var(--sp-6)" }}>
+          <GuardianPermissions />
+        </div>
 
         {/* ---------------------------------------------------------------- */}
         <hr className="rule" style={{ margin: "36px 0 28px" }} />
