@@ -68,6 +68,11 @@ export const CSS = `
      clearing WCAG AA's 4.5:1 with room; every other text pair is higher. Do
      not lighten these without re-running the measurement. See DESIGN.md. */
   --ink:#111315; --ink-2:#4a4f54; --ink-3:#61666b;
+  /* One step quieter than --ink-3, because a placeholder is a hint and
+     should not read as a filled value. It is a token rather than a literal
+     so it can invert with the theme: in dark, "quieter" means darker, and
+     there is no room below --ink-3 there, so dark simply uses --ink-3. */
+  --placeholder:#6b7075;
   --pine:#12513a; --pine-h:#0b3a29; --pine-bg:transparent; --pine-line:#acc2ba;
   --amber:#8a5a12; --amber-bg:transparent; --amber-line:#cdb899;
   --slate:#22456b; --slate-bg:transparent; --slate-line:#adbac8;
@@ -426,7 +431,7 @@ export const CSS = `
 }
 .fw .ta { height:auto; padding:9px 11px; resize:vertical; line-height:1.5; }
 .fw .input:focus, .fw .select:focus, .fw .ta:focus { outline:none; border-color:var(--brand); box-shadow:inset 0 0 0 1px var(--brand); }
-.fw .input::placeholder, .fw .ta::placeholder { color:#6b7075; }
+.fw .input::placeholder, .fw .ta::placeholder { color:var(--placeholder); }
 .fw .input:hover:not(:focus):not(:disabled), .fw .select:hover:not(:focus):not(:disabled) { border-color:var(--ink-3); }
 .fw .input:disabled, .fw .select:disabled, .fw .ta:disabled {
   background:var(--surface); color:var(--ink-3); cursor:not-allowed; border-color:var(--line-soft); }
