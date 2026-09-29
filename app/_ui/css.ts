@@ -62,7 +62,14 @@ export const CSS = `
   /* The highlight that sweeps a loading block. White works on a light
      skeleton and flashes on a dark one, so it is a token: the sweep is a
      suggestion of movement, not a light source. */
-  --skel-sheen:rgba(255,255,255,.55);
+  /* A skeleton block is the opposite of the surface it sits on, not a
+     slightly different shade of it. --surface-2 put it at 1.16:1 against
+     the page, which is a block you cannot see -- the shape of the page was
+     being drawn in a colour nobody could read. Dark on light here, light on
+     dark below, at the same strength both ways so the wait looks the same
+     whichever theme you are in. */
+  --skel-block:#7c8287;
+  --skel-sheen:rgba(255,255,255,.45);
   /* Interaction states. These were literals, and a literal cannot invert:
      pressed-black stays black when the button itself has gone white, and a
      pale selection stays pale when the text on it has gone light. Measured
@@ -1830,7 +1837,26 @@ export const CSS2 = `
    thing arrived.
 
    Reduced motion gets the blocks and none of the movement. */
-.fw .skel { background:var(--surface-2); border-radius:0; }
+.fw .skel { background:var(--skel-block); border-radius:0; }
+
+/* A skeleton is for waiting, so it does not appear until there is a wait.
+   loading.tsx is a Suspense fallback and was already only rendered while the
+   server work was pending, but "pending" includes the 40ms a warm page takes,
+   and a placeholder that paints for 40ms is a flicker, not information.
+
+   Every piece starts invisible and is revealed by an animation whose delay is
+   the gate. Nothing shows before it elapses, so a fast page goes straight to
+   content and a slow one gets the skeleton. It is a delay rather than a
+   timer in JavaScript because the fallback is a server component: there is no
+   effect to run, and the browser is already holding a clock. */
+.fw .skel, .fw .skel-hero, .fw .skel-rail, .fw .skel-card {
+  opacity:0; animation:veyro-skel-in .16s var(--ease) var(--skel-gate, 240ms) forwards; }
+@keyframes veyro-skel-in { to { opacity:1; } }
+/* The gate stays; only the fade goes. Someone who asked for less motion still
+   wants a fast page to go straight to its content. */
+@media (prefers-reduced-motion: reduce) {
+  .fw .skel, .fw .skel-hero, .fw .skel-rail, .fw .skel-card { animation-duration:0s; }
+}
 .fw .skel[data-shimmer="1"] { position:relative; overflow:hidden; }
 .fw .skel[data-shimmer="1"]::after { content:""; position:absolute; inset:0;
   transform:translateX(-100%);
@@ -1841,8 +1867,15 @@ export const CSS2 = `
   .fw .skel[data-shimmer="1"]::after { animation:none; }
 }
 .fw .skel-hero { background:var(--ink); padding:var(--sp-8) var(--sp-7); margin-bottom:var(--sp-7); }
-.fw .skel-hero { --skel-sheen:rgba(255,255,255,.12); }
-.fw .skel-hero .skel { background:rgba(255,255,255,.13); }
+/* This one panel is dark in both themes, so its blocks are light in both --
+   the rule is "opposite of the surface", not "opposite of the theme".
+   .46 is not a guess: it is the alpha at which white over this panel lands on
+   the same grey as --skel-block does over the page, so a block inside the
+   band and a block outside it are the same brightness. At .34 the band's
+   blocks read as dimmer than the rest of the page, which made one skeleton
+   look like two. */
+.fw .skel-hero { --skel-sheen:rgba(255,255,255,.30); }
+.fw .skel-hero .skel { background:rgba(255,255,255,.46); }
 .fw .skel-rail { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(0,1fr);
   border-top:1px solid var(--ink); margin-bottom:var(--sp-7); }
 .fw .skel-rail > div { padding:var(--sp-5) var(--sp-5) var(--sp-4) 0;
@@ -1895,7 +1928,8 @@ export const CSS2 = `
   --ink:#e8eaec; --ink-2:#aab1b7; --ink-3:#8c949b;
   --placeholder:#8c949b;
   --nav-veil:rgba(15,17,19,.88);
-  --skel-sheen:rgba(255,255,255,.10);
+  --skel-block:#79818a;
+  --skel-sheen:rgba(255,255,255,.45);
   /* Pressed is brighter here, not darker: --brand is already light. */
   --brand-a:#ffffff;
   --clay-a:#3a201d;
@@ -1930,7 +1964,8 @@ export const CSS2 = `
   --ink:#e8eaec; --ink-2:#aab1b7; --ink-3:#8c949b;
   --placeholder:#8c949b;
   --nav-veil:rgba(15,17,19,.88);
-  --skel-sheen:rgba(255,255,255,.10);
+  --skel-block:#79818a;
+  --skel-sheen:rgba(255,255,255,.45);
   /* Pressed is brighter here, not darker: --brand is already light. */
   --brand-a:#ffffff;
   --clay-a:#3a201d;

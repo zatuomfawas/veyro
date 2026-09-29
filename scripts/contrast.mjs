@@ -91,6 +91,14 @@ const suite = (name, t, panel, panelInk) => {
   check("button label while pressed", t("reverse"), t("brand-a"), 4.5);
   check("destructive label while pressed", t("clay"), t("clay-a"), 4.5);
   check("selected text", t("ink"), t("select-bg"), 4.5);
+
+  // A loading block carries no text, but it is the only thing on the screen
+  // while it is up: if it does not separate from the page there is nothing to
+  // look at. It sat at 1.16:1 before this was measured, which is why it read
+  // as "the skeleton is invisible". 3:1, as a non-text element that carries
+  // meaning -- and it is checked on --card too, since most blocks sit in one.
+  check("skeleton block on paper", t("skel-block"), t("paper"), 3);
+  check("skeleton block on card", t("skel-block"), t("card"), 3);
   // --line-hover is not checked at 3:1. It is a hover cue on a control the
   // reader has already found, not the boundary that identifies it -- .btn-2
   // carries a label and its own ground. It measures 1.39:1 in light, which is
