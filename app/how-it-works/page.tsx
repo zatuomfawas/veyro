@@ -8,6 +8,7 @@ import { ScrollProgress } from "@/app/_ui/ScrollProgress";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { StickyCta } from "@/app/_ui/StickyCta";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
+import { FlowDiagram } from "@/app/_ui/FlowDiagram";
 
 export const metadata = buildMetadata("how");
 export const viewport = buildViewport();
@@ -336,6 +337,74 @@ export default function HowItWorks() {
             permitting something is not the same as it being settled locally. That belongs here, in the
             middle of the article, rather than buried in a terms page.
           </p>
+        </div>
+
+        {/* ----------------------------------------------------------------
+            The three things the homepage used to explain in three chapters.
+            They moved here when the homepage stopped explaining and started
+            showing: this is the page for someone who wants the mechanics, and
+            keeping them on a page nobody had scrolled to was the reason the
+            homepage was so long. */}
+        <hr className="rule" style={{ margin: "36px 0 28px" }} />
+        <h2 className="h3">An adult on the account, not on your business</h2>
+        <p className="body" style={{ marginTop: 8 }}>
+          This is the part people get wrong, so it is worth being exact. Stripe needs a verified
+          adult behind every account. Your guardian is that adult. They are not a partner, not an
+          owner and not an approver: they do not own what you build, they cannot take your
+          products off you, and on the account type this runs on they cannot block a payout even
+          if they wanted to. What they do is one identity check, once, on Stripe&rsquo;s own form
+          — and then they get told every time you request money, and keep a permanent record of
+          it. <Link className="linkbtn" href="/for-guardians">What a guardian is agreeing to</Link>.
+        </p>
+
+        {/* ---------------------------------------------------------------- */}
+        <hr className="rule" style={{ margin: "36px 0 28px" }} />
+        <h2 className="h3">How the money moves</h2>
+        <p className="body" style={{ marginTop: 8, marginBottom: 24 }}>
+          Five stops, one direction. Veyro is the first stop and the last; the money itself only
+          ever touches Stripe.
+        </p>
+        <FlowDiagram
+          label="Where a payment goes, in order"
+          stops={[
+            { n: "Customer", t: "Pays", d: "On a page with your name and price on it." },
+            { n: "Checkout", t: "Veyro's page", d: "You send a link. Nothing to build.", you: true },
+            { n: "Stripe", t: "Takes the card", d: "Processes it. Veyro never sees the number." },
+            { n: "Your account", t: "Holds the money", d: "In your name, with your guardian verified on it." },
+            { n: "Veyro", t: "Records it", d: "Folds it into your ledger. Never in the path of the money.", you: true },
+          ]}
+        />
+        <p className="small" style={{ marginTop: 20 }}>
+          Your customer pays by card on Stripe&rsquo;s own hosted page, so the card number never
+          reaches your app or ours.{" "}
+          <Link className="linkbtn" href="/get-started">What your customer sees at the middle stop</Link>.
+        </p>
+
+        {/* ---------------------------------------------------------------- */}
+        <hr className="rule" style={{ margin: "36px 0 28px" }} />
+        <h2 className="h3">Two ways to take the payment</h2>
+        <p className="body" style={{ marginTop: 8 }}>
+          Both take the same money into the same account. Pick whichever matches what you have
+          built so far.
+        </p>
+        <div className="paths" style={{ marginTop: 20 }}>
+          <div className="path">
+            <span className="path-k">No code</span>
+            <h3 className="path-t">Send a link</h3>
+            <p className="path-d">
+              Make a product, copy its checkout link, and put it wherever your buyers already
+              are &mdash; a bio, a DM, a post. Nothing to build.
+            </p>
+          </div>
+          <div className="path" data-on="1">
+            <span className="path-k">In your app</span>
+            <h3 className="path-t">Paste code</h3>
+            <p className="path-d">
+              Two calls, no package to install, no rebuild. Your buy button opens a checkout and
+              you unlock what you sold when it comes back paid.{" "}
+              <Link className="linkbtn" href="/docs/sdk">The integration guide</Link>.
+            </p>
+          </div>
         </div>
 
         {/* ---------------------------------------------------------------- */}

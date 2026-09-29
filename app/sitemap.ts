@@ -11,6 +11,8 @@ const EXTRA: { path: string; priority: number }[] = [
   { path: "/wallet", priority: 0.8 },
   { path: "/for-founders", priority: 0.7 },
   { path: "/faq", priority: 0.7 },
+  // The page a parent is sent to when they want the unvarnished version.
+  { path: "/legal", priority: 0.6 },
   { path: "/about", priority: 0.6 },
   { path: "/contact", priority: 0.4 },
   { path: "/status", priority: 0.2 },
