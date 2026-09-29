@@ -24,7 +24,7 @@ export function AuthShell({
       <div className="navbar">
         <div className="wrap-lp">
           <nav className="lp-nav" aria-label="Main" style={{ borderBottom: 0 }}>
-          <Link href="/" aria-label="Veyro, home"><Wordmark size={20} /></Link>
+          <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
             <Link className="btn btn-q btn-sm" href="/check">Check eligibility</Link>
             <ThemeToggle />
           </nav>

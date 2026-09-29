@@ -51,7 +51,7 @@ function Shell({ children }: { children: React.ReactNode }) {
       <SkipLink />
       <div className="wrap-s">
         <div className="lp-nav" style={{ borderBottom: 0 }}>
-          <Link href="/" aria-label="Veyro, home"><Wordmark size={20} /></Link>
+          <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
           <Link className="btn btn-q btn-sm" href="/how-it-works">What this means</Link>
         </div>
       </div>

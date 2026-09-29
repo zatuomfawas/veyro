@@ -47,7 +47,7 @@ export function SiteFooter() {
       <div className="wrap-lp">
         <div className="footgrid">
           <div>
-            <Wordmark size={18} />
+            <Wordmark size={19} tile />
             <p className="tiny" style={{ marginTop: 12, maxWidth: "32ch" }}>
               Financial infrastructure for young founders. Software, not a bank.
             </p>

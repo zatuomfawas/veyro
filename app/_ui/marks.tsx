@@ -32,13 +32,36 @@ export function Icon({ name, size = 15 }: { name: string; size?: number }) {
 
 /* Archivo's cap height is ~0.72 of its em. The V is drawn to exactly that, so its
    flat apex sits on the baseline and its top aligns with the cap line of "eyro". */
-export function Wordmark({ size, hero, reversed }: { size?: number; hero?: boolean; reversed?: boolean }) {
+/**
+ * `tile` sets the V in a filled block instead of letting it stand as a letter.
+ *
+ * At nav size the V was a green letterform among five dark ones, which reads
+ * as a word with one coloured character rather than as a mark — the thing you
+ * would recognise on a tab, a favicon or a phone. In a block it is a mark, and
+ * it is the same shape at 20px as at 200px. The hero keeps the letterform,
+ * where the V is already 90px tall and does not need help being seen.
+ */
+export function Wordmark({
+  size, hero, reversed, tile,
+}: { size?: number; hero?: boolean; reversed?: boolean; tile?: boolean }) {
   return (
-    <span className={"wordmark" + (hero ? " wordmark-hero" : "")} style={size ? { fontSize: size } : undefined}>
+    <span
+      className={"wordmark" + (hero ? " wordmark-hero" : "") + (tile ? " wordmark-tile" : "")}
+      style={size ? { fontSize: size } : undefined}
+    >
       <svg className="wm-v" viewBox="10 18 80 66" aria-hidden="true" focusable="false">
-        <path d={V_PATH} fill={reversed ? "var(--reverse)" : "var(--pine)"} />
+        <path
+          d={V_PATH}
+          fill={tile ? "var(--reverse)" : reversed ? "var(--reverse)" : "var(--pine)"}
+        />
       </svg>
-      <span className="wm-rest" style={{ color: reversed ? "var(--reverse)" : "var(--ink)" }}>eyro</span>
+      {/* With the tile the V has become a mark rather than a letter, so the
+          word has to be spelled out beside it or the lockup reads "V eyro".
+          Mark plus full name; without the tile the V is still the letter and
+          only "eyro" follows it. */}
+      <span className="wm-rest" style={{ color: reversed ? "var(--reverse)" : "var(--ink)" }}>
+        {tile ? "Veyro" : "eyro"}
+      </span>
     </span>
   );
 }

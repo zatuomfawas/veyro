@@ -119,7 +119,7 @@ export function PreviewChrome() {
   return (
     <div className="wrap-s">
       <div className="lp-nav" style={{ borderBottom: 0 }}>
-        <Wordmark size={18} />
+        <Wordmark size={19} tile />
         <Link className="linkbtn" href="/dashboard/founder#products">Back to products</Link>
       </div>
     </div>

@@ -62,7 +62,7 @@ export default async function PayPage({ params, searchParams }: Params) {
 
       <div className="wrap-s">
         <div className="lp-nav" style={{ borderBottom: 0 }}>
-          <Wordmark size={18} />
+          <Wordmark size={19} tile />
           <span className="tiny">Payments secured by Stripe</span>
         </div>
       </div>

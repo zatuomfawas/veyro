@@ -62,7 +62,7 @@ export default function Status() {
       <div className="navbar">
         <div className="wrap-lp">
           <nav className="lp-nav" aria-label="Main">
-            <Link href="/" aria-label="Veyro, home"><Wordmark size={20} /></Link>
+            <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
             <div className="lp-links">
               <Link className="btn btn-q btn-sm" href="/contact">Contact</Link>
               <ThemeToggle />

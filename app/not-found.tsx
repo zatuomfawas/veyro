@@ -22,7 +22,7 @@ export default function NotFound() {
 
       <div className="wrap-n">
         <div className="lp-nav">
-          <Link href="/" aria-label="Veyro, home"><Wordmark size={20} /></Link>
+          <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
           <div className="lp-links">
             <Link className="btn btn-2 btn-sm" href="/check">Check eligibility</Link>
           </div>

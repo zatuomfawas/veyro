@@ -22,7 +22,7 @@ function Brand({ onClick, size = 20 }: { onClick?: () => void; size?: number }) 
   return (
     <button className="brand" onClick={onClick} aria-label="Veyro, home"
       style={{ background: "none", border: 0, cursor: onClick ? "pointer" : "default", padding: 0 }}>
-      <Wordmark size={size} />
+      <Wordmark size={size} tile />
     </button>
   );
 }

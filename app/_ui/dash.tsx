@@ -42,7 +42,7 @@ export function DashNav({
       <div className="navbar">
         <div className="wrap-w">
           <nav className="lp-nav" aria-label="Dashboard">
-          <Link href="/" aria-label="Veyro, home"><Wordmark size={20} /></Link>
+          <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
           <div className="lp-links">
             {home && (
               <Link

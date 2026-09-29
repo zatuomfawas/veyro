@@ -55,7 +55,7 @@ export default async function ReturnPage({
 
       <div className="wrap-s">
         <div className="lp-nav" style={{ borderBottom: 0 }}>
-          <Wordmark size={18} />
+          <Wordmark size={19} tile />
           <span className="tiny">Secure payment</span>
         </div>
       </div>
