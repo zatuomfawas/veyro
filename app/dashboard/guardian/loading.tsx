@@ -1,5 +1,5 @@
-import { Loading } from "@/app/_ui/Loading";
+import { PageSkeleton } from "@/app/_ui/Skeleton";
 
 export default function LoadingState() {
-  return <Loading what="your founders" />;
+  return <PageSkeleton what="your founders" left={2} right={2} />;
 }

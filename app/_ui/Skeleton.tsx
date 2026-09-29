@@ -88,3 +88,94 @@ export function DashboardSkeleton({ what = "your business" }: { what?: string })
     </div>
   );
 }
+
+/**
+ * The shape shared by Settings and the guardian dashboard: a page heading, a
+ * line of context under it, then two columns of cards. Both pages are built
+ * from DashHeader and Section, so the skeleton is built from the same
+ * measurements rather than from a guess at what they look like.
+ */
+export function PageSkeleton({
+  what, left = 3, right = 2,
+}: { what: string; left?: number; right?: number }) {
+  return (
+    <div className="fw">
+      <style>{CSS + CSS2}</style>
+      <main className="wrap-w" style={{ paddingTop: 24, paddingBottom: 56 }}>
+        <p className="sr-only" role="status" aria-live="polite">
+          Loading {what}…
+        </p>
+
+        <div aria-hidden="true">
+          <Bar w="220px" h={26} />
+          <Bar w="340px" h={12} mt={10} />
+
+          <div className="grid-2" style={{ gap: 32, alignItems: "start", marginTop: 24 }}>
+            <div>
+              {Array.from({ length: left }, (_, i) => (
+                <div className="skel-card" key={i}>
+                  <Bar w="130px" h={14} />
+                  <Bar w="100%" h={11} mt={14} />
+                  <Bar w="84%" h={11} mt={8} />
+                </div>
+              ))}
+            </div>
+            <div>
+              {Array.from({ length: right }, (_, i) => (
+                <div className="skel-card" key={i}>
+                  <Bar w="150px" h={14} />
+                  <Bar w="100%" h={11} mt={14} />
+                  <Bar w="90%" h={11} mt={8} />
+                  <Bar w="66%" h={11} mt={8} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+/**
+ * The checkout and the founder's preview of it are the same narrow shell: a
+ * wordmark line, then one column. This stands in for both, so the page does
+ * not reflow between the placeholder and the real thing.
+ *
+ * The customer-facing one matters more than the rest. Someone about to be
+ * asked for card details should never meet a blank screen, and should never
+ * see the price land in a different place than the placeholder implied.
+ */
+export function NarrowSkeleton({ what }: { what: string }) {
+  return (
+    <div className="fw">
+      <style>{CSS + CSS2}</style>
+      <div className="wrap-s">
+        <div className="lp-nav" style={{ borderBottom: 0 }}>
+          <Bar w="74px" h={18} />
+          <Bar w="150px" h={11} />
+        </div>
+      </div>
+      <main className="wrap-s" style={{ marginTop: 8, marginBottom: 90 }}>
+        <p className="sr-only" role="status" aria-live="polite">
+          Loading {what}…
+        </p>
+
+        <div aria-hidden="true">
+          <Bar w="70%" h={26} />
+          <Bar w="45%" h={12} mt={12} />
+
+          <div className="skel-card" style={{ marginTop: 24 }}>
+            <Bar w="55%" h={14} />
+            <Bar w="100%" h={11} mt={14} />
+            <Bar w="78%" h={11} mt={8} />
+            <Bar w="120px" h={30} mt={20} />
+          </div>
+
+          <Bar w="100%" h={44} mt={20} />
+          <Bar w="60%" h={11} mt={14} />
+        </div>
+      </main>
+    </div>
+  );
+}
