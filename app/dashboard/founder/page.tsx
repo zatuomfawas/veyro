@@ -38,6 +38,7 @@ import InviteGuardian, { ResendInvite } from "./InviteGuardian";
 import Notifications from "@/app/_ui/Notifications";
 import NewProduct, { NAME_FIELD_ID } from "./NewProduct";
 import ProductRows from "./ProductRows";
+import { AddToApp } from "./AddToApp";
 import RequestPayout from "./RequestPayout";
 import {
   BusinessHeader, GuardianStatus, PaymentStatus, PrimaryAction,
@@ -340,13 +341,16 @@ export default async function FounderDashboard() {
                   : "Nothing has cleared yet. Money lands here once a payment settles."}
               </span>
 
-              <dl className="wh-break">
+              <details className="wh-more">
+                <summary>Where that figure comes from</summary>
+                <dl className="wh-break">
                 <div><dt>Earned</dt><dd>{formatMinor(primaryFold.earned, primaryFold.currency)}</dd></div>
                 <div><dt>Stripe fees</dt><dd data-tone="out">&minus;{formatMinor(primaryFold.fees, primaryFold.currency)}</dd></div>
                 <div><dt>Refunded</dt><dd data-tone="out">&minus;{formatMinor(primaryFold.refunded, primaryFold.currency)}</dd></div>
                 <div><dt>Still settling</dt><dd>{formatMinor(primaryFold.pending, primaryFold.currency)}</dd></div>
-                <div><dt>Paid out</dt><dd data-tone="settled">{formatMinor(primaryFold.paidOut, primaryFold.currency)}</dd></div>
-              </dl>
+                  <div><dt>Paid out</dt><dd data-tone="settled">{formatMinor(primaryFold.paidOut, primaryFold.currency)}</dd></div>
+                </dl>
+              </details>
 
               {/* Never summed with the figure above: a minor-unit integer means
                   nothing without its currency, and adding JPY to USD would be a
@@ -366,12 +370,10 @@ export default async function FounderDashboard() {
 
               {primaryAvailable > 0 && (
                 <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
+                  {/* One action. Opening the checkout lives on every product
+                      row already, and a second button here competed with the
+                      only thing this panel is for. */}
                   <Link className="btn" href="#payouts">Request a payout</Link>
-                  {firstLive && (
-                    <Link className="btn btn-2" href={`/pay/${founderId}/${firstLive.id}`} target="_blank" rel="noreferrer">
-                      Open your checkout
-                    </Link>
-                  )}
                 </div>
               )}
             </div>
@@ -395,6 +397,12 @@ export default async function FounderDashboard() {
               </div>
             </div>
           )}
+
+          {/* Under the money, above everything else. A founder who has a live
+              product and wants more sales has exactly one next move, and it
+              was previously only findable by reading /docs/sdk and then
+              hunting for an id the dashboard never printed. */}
+          {firstLive && <AddToApp productId={firstLive.id} productName={firstLive.name} />}
 
           {/* Context, not content. Figures a founder glances at, so they sit on
               a rule rather than inside four more bordered cards on a page whose

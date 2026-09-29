@@ -1643,7 +1643,43 @@ export const CSS2 = `
    this ground the light tint carries it; --pine itself is 2.01:1 on ink. */
 .fw .wh-break dd[data-tone="settled"] { color:#a5bdb4; }
 .fw .wh-break dd[data-tone="out"] { color:#d9aeab; }
-.fw .wallethero .row { margin-top:var(--sp-7); }
+.fw .wallethero .row { margin-top:var(--sp-6); }
+/* The breakdown, folded away.
+   Five figures on a rule under the headline number meant the first thing a
+   founder saw was six numbers, not one. They are still here, still exact, one
+   click down: the question "how much do I have" gets answered before the
+   question "why is it that much" is even asked. */
+.fw .wh-more { margin-top:var(--sp-6); border-top:1px solid rgba(255,255,255,.17);
+  padding-top:var(--sp-4); }
+.fw .wh-more > summary { list-style:none; cursor:pointer; display:inline-flex;
+  align-items:center; gap:8px; font-size:var(--fs-2); color:#bcbdbd; }
+.fw .wh-more > summary::-webkit-details-marker { display:none; }
+.fw .wh-more > summary:hover { color:var(--reverse); }
+.fw .wh-more > summary::after { content:"+"; font-size:var(--fs-4); line-height:1; color:#9b9c9d; }
+.fw .wh-more[open] > summary::after { content:"−"; }
+.fw .wh-more[open] > summary { color:var(--reverse); margin-bottom:var(--sp-4); }
+
+/* Add it to your app.
+   The product id was in the page already, buried inside the href of a
+   Preview link, and nowhere as text a founder could select — while the SDK
+   docs tell them to paste "your-product-id" into a prompt. This is the one
+   place that hands it over. */
+.fw .addapp { border:1px solid var(--ink); background:var(--card);
+  padding:var(--sp-6); margin-bottom:var(--sp-7); }
+.fw .addapp-h { display:flex; flex-wrap:wrap; align-items:baseline; gap:8px var(--sp-4);
+  margin-bottom:var(--sp-2); }
+.fw .addapp-t { font-size:var(--fs-5); font-weight:var(--fw-bold); letter-spacing:-0.012em; }
+.fw .addapp-d { font-size:var(--fs-3); line-height:1.5; color:var(--ink-2); max-width:64ch;
+  margin:0 0 var(--sp-5); }
+.fw .addapp-id { display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+  background:var(--surface); border:1px solid var(--line); padding:10px 12px; }
+.fw .addapp-id code { font-family:var(--code); font-size:var(--fs-2); color:var(--ink);
+  word-break:break-all; }
+.fw .addapp-id .addapp-key { font-size:var(--fs-1); letter-spacing:0.06em;
+  text-transform:uppercase; color:var(--ink-3); flex:none; }
+.fw .addapp-foot { margin:var(--sp-5) 0 0; font-size:var(--fs-3); color:var(--ink-2); }
+@media (max-width:560px) { .fw .addapp { padding:var(--sp-5); } }
+
 @media (max-width:760px) {
   .fw .wallethero { padding:var(--sp-7) var(--sp-5); }
   .fw .wallethero .wh-big { font-size:var(--fs-9); }
