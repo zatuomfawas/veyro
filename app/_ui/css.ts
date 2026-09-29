@@ -1004,13 +1004,15 @@ export const CSS = `
 .fw .sidebyside { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,560px);
   gap:var(--sp-7); align-items:start; }
 /* The object beside the words is often much taller than them -- a checkout
-   mock is 796px against 304px of explanation -- and padding the text out to
-   match would be writing filler to fill a hole. The text travels instead, so
-   it is beside the part of the object you are actually looking at. A static
-   screenshot still shows the gap; scrolling is when it stops existing. */
-@media (min-width:901px) {
-  .fw .sidebyside > *:first-child { position:sticky; top:calc(var(--nav-h) + var(--sp-5)); }
-}
+   mock is 796px against 304px of explanation.
+
+   This column was briefly sticky, so the text would travel beside the part of
+   the object you were looking at. That was a mistake. A sticky block inside a
+   grid row sticks within its own row, so on a tall row the text detaches from
+   the heading above it and slides down the page on its own, which reads as
+   copy coming loose rather than as a considered sidebar. Whatever it bought
+   in filled space it lost twice over in the page behaving oddly while you
+   read it. The column stays where it was put. */
 @media (max-width:900px) {
   .fw .sidebyside { grid-template-columns:minmax(0,1fr); gap:var(--sp-6); }
 }
@@ -1193,11 +1195,11 @@ export const CSS = `
    uses it. */
 .fw .truthgrid { display:grid; grid-template-columns:minmax(0,4fr) minmax(0,9fr);
   gap:var(--sp-7); align-items:start; }
-/* The label is the one thing in its column, so it may as well stay with the
-   content it labels when that content is taller than the viewport. */
-@media (min-width:901px) {
-  .fw .truthgrid > *:first-child { position:sticky; top:calc(var(--nav-h) + var(--sp-5)); }
-}
+/* No sticky on the label column. It was tried and removed: a
+   first-child selector catches whatever leads each row, which on /wallet is a 224px block of real
+   content and not a heading at all, and a sticky grid item detaches from the
+   rest of its row and drifts down the page as you scroll. The column ratio
+   above is what fixes the empty space; movement was never the answer to it. */
 .fw .ownership { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:var(--sp-8);
   margin-top:var(--sp-8); padding-top:var(--sp-6); border-top:1px solid var(--line); align-items:start; }
 .fw .pricegrid { display:grid; grid-template-columns:minmax(0,6fr) minmax(0,5fr); gap:var(--sp-9); align-items:start; }
