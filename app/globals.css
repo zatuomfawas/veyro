@@ -50,6 +50,8 @@ body {
    * half. Now that --paper is #ffffff the seam is invisible, but the rule
    * stays: --paper is the one value allowed to change here. */
   background: #ffffff;
+  /* Which is to say: the light --paper. The dark one is below, and the two
+     literals here are the only colours in this file. */
 }
 
 /* Route transition. See app/template.tsx.
@@ -67,3 +69,24 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .route-in { animation: none; }
 }
+
+/* Dark mode reaches body the same way it reaches everything else — through the
+   data-theme flag the inline script writes on <html> before first paint, plus
+   the system preference when nobody has chosen.
+ *
+ * body needs its own rule for the reason stated above: the tokens are scoped
+ * to .fw, which is a div spanning only its own content, so on any page shorter
+ * than the viewport the ground would stop where the content stopped and the
+ * browser's default white would show underneath. Invisible while --paper was
+ * #ffffff; a bright band across the bottom of a dark page otherwise.
+ *
+ * color-scheme on :root rather than on .fw: scrollbars, form controls and the
+ * browser's own chrome are outside any wrapper we render. */
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) { color-scheme: dark; }
+  html:not([data-theme="light"]) body { background: #0f1113; }
+}
+html[data-theme="dark"] { color-scheme: dark; }
+html[data-theme="dark"] body { background: #0f1113; }
+html[data-theme="light"] { color-scheme: light; }
+html[data-theme="light"] body { background: #ffffff; }

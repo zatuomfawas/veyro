@@ -1830,6 +1830,124 @@ export const CSS2 = `
   .fw .skel-rail > div + div { padding-left:0; }
 }
 
+/* ==== dark mode =========================================================
+   Every colour in this stylesheet reads from the 26 tokens defined on .fw,
+   which is what makes a second theme a block of values rather than a rewrite.
+
+   Two rules, deliberately:
+
+     the media query, guarded by :not([data-theme="light"]), so the system
+     preference applies by default but an explicit choice of light still wins;
+
+     the attribute, so an explicit choice of dark wins on a system set to
+     light. Without both, the toggle only works in one direction.
+
+   No colour is defined ONLY in here. Every token has its light value on bare
+   .fw above, so a browser that supports neither still gets a complete theme.
+
+   What does not invert: .lp-dark and .wallethero were already dark, and their
+   internals are hard-coded for a dark ground — #bcbdbd captions, white rules
+   at 17% opacity. Flipping them would make a light band full of pale-grey
+   text. They stay dark and take a border instead, since they can no longer
+   rely on contrast with white to show their edges. */
+@media (prefers-color-scheme: dark) {
+  .fw:not([data-theme="light"]) {
+  /* Surfaces invert; the cool monochrome character does not. Paper is a
+     near-black with a trace of blue in it rather than #000, because pure
+     black against a bright phone at night is a glare edge, and because every
+     grey above it then has somewhere to sit. */
+  --paper:#0f1113; --surface:#16191c; --surface-2:#1e2226; --card:#14171a;
+  /* --reverse is "the colour text takes when it sits on --brand". Brand is
+     light here, so reverse is dark. Swapping these two is the whole trick. */
+  --reverse:#0f1113;
+  --line:#2a2f34; --line-soft:#22262a;
+  /* 1.4.11 wants 3:1 for a control's boundary. This measures 3.4:1 on --card. */
+  --control-line:#7b848b;
+  --brand:#e8eaec; --brand-h:#ffffff;
+  --ink:#e8eaec; --ink-2:#aab1b7; --ink-3:#8c949b;
+  --placeholder:#8c949b;
+  /* The accents lighten. #12513a is 2.0:1 on this ground and would fail every
+     rule it passes in the light theme; these are the same hues carried up
+     until they clear 4.5:1 on --card. */
+  --pine:#5fb48f; --pine-h:#7cc9a6;
+  --pine-bg:#12251e; --pine-line:#245040;
+  --amber:#d9a441; --amber-bg:#2a2112; --amber-line:#4f3f19;
+  --slate:#83aadb; --slate-bg:#15202e; --slate-line:#294660;
+  --clay:#e39089; --clay-bg:#2b1917; --clay-line:#5d322c;
+  /* Native controls, scrollbars and form widgets follow the page. */
+  color-scheme: dark;
+  }
+}
+.fw[data-theme="dark"] {
+  /* Surfaces invert; the cool monochrome character does not. Paper is a
+     near-black with a trace of blue in it rather than #000, because pure
+     black against a bright phone at night is a glare edge, and because every
+     grey above it then has somewhere to sit. */
+  --paper:#0f1113; --surface:#16191c; --surface-2:#1e2226; --card:#14171a;
+  /* --reverse is "the colour text takes when it sits on --brand". Brand is
+     light here, so reverse is dark. Swapping these two is the whole trick. */
+  --reverse:#0f1113;
+  --line:#2a2f34; --line-soft:#22262a;
+  /* 1.4.11 wants 3:1 for a control's boundary. This measures 3.4:1 on --card. */
+  --control-line:#7b848b;
+  --brand:#e8eaec; --brand-h:#ffffff;
+  --ink:#e8eaec; --ink-2:#aab1b7; --ink-3:#8c949b;
+  --placeholder:#8c949b;
+  /* The accents lighten. #12513a is 2.0:1 on this ground and would fail every
+     rule it passes in the light theme; these are the same hues carried up
+     until they clear 4.5:1 on --card. */
+  --pine:#5fb48f; --pine-h:#7cc9a6;
+  --pine-bg:#12251e; --pine-line:#245040;
+  --amber:#d9a441; --amber-bg:#2a2112; --amber-line:#4f3f19;
+  --slate:#83aadb; --slate-bg:#15202e; --slate-line:#294660;
+  --clay:#e39089; --clay-bg:#2b1917; --clay-line:#5d322c;
+  /* Native controls, scrollbars and form widgets follow the page. */
+  color-scheme: dark;
+}
+
+/* The two panels that were always dark. On a dark page they would otherwise
+   dissolve into it, so they earn an edge. */
+@media (prefers-color-scheme: dark) {
+  .fw:not([data-theme="light"]) .wallethero,
+  .fw:not([data-theme="light"]) section.lp.lp-dark { background:#080a0b;
+    border:1px solid var(--line); color:#e8eaec; }
+  .fw:not([data-theme="light"]) .skel-hero { background:#080a0b; border:1px solid var(--line); }
+}
+.fw[data-theme="dark"] .wallethero,
+.fw[data-theme="dark"] section.lp.lp-dark { background:#080a0b; border:1px solid var(--line);
+  color:#e8eaec; }
+.fw[data-theme="dark"] .skel-hero { background:#080a0b; border:1px solid var(--line); }
+
+/* The toggle itself. A button, not a checkbox: it performs an action rather
+   than recording a value, and it says which mode it will switch TO. */
+
+/* These panels were always dark, so their text takes --reverse — "the colour
+   that sits on --brand". In dark mode --reverse becomes dark, which is right
+   everywhere except here, where the ground did not invert with it. The
+   headline figure went near-black on near-black. The panels state their own
+   ink rather than inheriting a token whose meaning flipped underneath them. */
+.fw[data-theme="dark"] .wallethero .wh-big,
+.fw[data-theme="dark"] .lp-dark .lp-h2,
+.fw[data-theme="dark"] .lp-dark h2,
+.fw[data-theme="dark"] .lp-dark .d1,
+.fw[data-theme="dark"] .lp-dark .d2,
+.fw[data-theme="dark"] .lp-dark .statement { color:#e8eaec; }
+.fw[data-theme="dark"] .lp-dark .btn { background:#e8eaec; border-color:#e8eaec; color:#0f1113; }
+.fw[data-theme="dark"] .wallethero .btn { background:#e8eaec; border-color:#e8eaec; color:#0f1113; }
+@media (prefers-color-scheme: dark) {
+  .fw:not([data-theme="light"]) .wallethero .wh-big,
+  .fw:not([data-theme="light"]) .lp-dark .lp-h2,
+  .fw:not([data-theme="light"]) .lp-dark h2,
+  .fw:not([data-theme="light"]) .lp-dark .d1,
+  .fw:not([data-theme="light"]) .lp-dark .d2,
+  .fw:not([data-theme="light"]) .lp-dark .statement { color:#e8eaec; }
+  .fw:not([data-theme="light"]) .lp-dark .btn,
+  .fw:not([data-theme="light"]) .wallethero .btn {
+    background:#e8eaec; border-color:#e8eaec; color:#0f1113; }
+}
+.fw .themetoggle { display:inline-flex; align-items:center; gap:7px; }
+@media (pointer: coarse) { .fw .themetoggle { min-height:var(--tap); } }
+
 .fw .lp-tall { padding:var(--sp-10) 0; }
 .fw .lp-dark .statement-sub { color:#bcbdbd; }
 /* The mark's own stroke angle, reused as a section divider */

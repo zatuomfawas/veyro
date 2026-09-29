@@ -9,6 +9,7 @@
 import Link from "next/link";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import SignOut from "@/app/_ui/SignOut";
+import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 
 export const SUPPORT_EMAIL = "hello@withveyro.com";
 
@@ -59,6 +60,8 @@ export function DashNav({
             >
               Settings
             </Link>
+            {/* Before Sign out, so the destructive control stays last. */}
+            <ThemeToggle />
             <SignOut />
             </div>
           </nav>

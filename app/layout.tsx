@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Archivo, Onest } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SITE, SEO_ROUTES } from "@/lib/seo";
+import { THEME_SCRIPT } from "@/app/_ui/ThemeToggle";
 import "./globals.css";
 
 // Fonts are self-hosted, not fetched from Google at runtime.
@@ -66,7 +67,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   // The two variables land on <html>, where app/_ui/css.ts reads them for
   // --display and --ui.
   return (
-    <html lang="en" className={`${archivo.variable} ${onest.variable}`}>
+    <html lang="en" className={`${archivo.variable} ${onest.variable}`} suppressHydrationWarning>
+      <head>
+        {/* Before first paint, so a reader who chose dark never sees the page
+            render light and then flip. Inline and synchronous on purpose:
+            anything deferred runs after the browser has already painted,
+            which is the flash this exists to prevent. suppressHydrationWarning
+            on <html> because this script legitimately changes an attribute the
+            server did not write. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body>
         {children}
         {/* Vercel Analytics: aggregate page views, no cookie.
