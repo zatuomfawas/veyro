@@ -95,14 +95,20 @@ export default function HowItWorks() {
           It must stay at or above 86 or the sticky CTA will cover the last
           paragraph. The class is kept because it states the intent. */}
       <main id="main" className="wrap-lp has-sticky" style={{ paddingTop: 32 }}>
-        <span className="lp-eyebrow">Research</span>
-        <h1 className="d2" style={{ marginTop: 8, maxWidth: "20ch" }}>
-          We asked Stripe whether under-18s can take payments. Here&rsquo;s their answer.
+        <span className="lp-eyebrow">How we built it</span>
+        <h1 className="d2" style={{ marginTop: 8, maxWidth: "22ch" }}>
+          How we built real payments for under-18s.
         </h1>
         <p className="lead" style={{ marginTop: 12 }}>
-          The internet is confident and wrong about this. So instead of reading more forum posts, we
-          described what we wanted to build and asked Stripe directly. They replied on {REPLY_DATE}.
-          Their answer is quoted below, including the part that corrected us.
+          The internet is confident and wrong about this: search it and everyone tells you to wait
+          until you are 18. We did the work instead &mdash; established what the rules actually
+          permit, built the account flow that fits them, and shipped it. Your account, real Stripe
+          payments, no waiting.
+        </p>
+        <p className="body" style={{ marginTop: 12, maxWidth: "var(--m-body)" }}>
+          Below is the whole of it, including the primary source we hold ourselves to and the
+          four things that went wrong on the way. Written down because a claim about money and
+          minors is worth nothing if you cannot check it.
         </p>
         <p className="tiny" style={{ marginTop: 12 }}>
           Last checked {UPDATED}. Not legal or tax advice.
@@ -123,7 +129,7 @@ export default function HowItWorks() {
           <RoleStack />
         </div>
 
-        <h2 className="h3">What everyone else says</h2>
+        <h2 className="h3">What everyone else gets wrong</h2>
         <p className="body" style={{ marginTop: 8 }}>
           Search it and the answer comes back unanimous: you have to be 18 to accept online
           payments. Forums say it. Blog posts say it. Ask an AI assistant and it will tell you the
@@ -136,7 +142,7 @@ export default function HowItWorks() {
         </p>
 
         {/* ---------------------------------------------------------------- */}
-        <h2 className="h3" style={{ marginTop: 32 }}>What we asked</h2>
+        <h2 className="h3" style={{ marginTop: 32 }}>What we established</h2>
         <p className="body" style={{ marginTop: 8 }}>
           We wrote to Stripe support describing the model in plain terms. A platform onboarding
           founders aged 13 to 17, with a parent or legal guardian as the adult on the account, and
@@ -151,7 +157,7 @@ export default function HowItWorks() {
         </p>
 
         {/* ---------------------------------------------------------------- */}
-        <h2 className="h3" style={{ marginTop: 32 }}>Their answer</h2>
+        <h2 className="h3" style={{ marginTop: 32 }}>The rules, in writing</h2>
         <p className="body" style={{ marginTop: 8 }}>
           The reply came from Arthur at Stripe Support on {REPLY_DATE}. The core of it:
         </p>
@@ -222,7 +228,7 @@ export default function HowItWorks() {
         </div>
 
         {/* ---------------------------------------------------------------- */}
-        <h2 className="h3" style={{ marginTop: 32 }}>What we found building it</h2>
+        <h2 className="h3" style={{ marginTop: 32 }}>What we hit building it</h2>
         <p className="body" style={{ marginTop: 8 }}>
           Getting an answer is one thing. Building on it is another. Four things we hit, in the
           order we hit them.

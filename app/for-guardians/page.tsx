@@ -34,7 +34,7 @@ export default function ForGuardians() {
               <ThemeToggle />
               <MobileNav
                 items={[
-                  { href: "/how-it-works", label: "What Stripe told us" },
+                  { href: "/how-it-works", label: "How we built it" },
                   { href: "/check", label: "Check eligibility" },
                   { href: "/", label: "Home" },
                 ]}
@@ -183,7 +183,7 @@ export default function ForGuardians() {
         </div>
 
         <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap" }}>
-          <Link className="btn" href="/how-it-works">Read what Stripe told us</Link>
+          <Link className="btn" href="/how-it-works">How we built it</Link>
           <Link className="btn btn-2" href="/check">Check if this applies where you live</Link>
         </div>
       </main>

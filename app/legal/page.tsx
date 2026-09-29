@@ -176,7 +176,7 @@ export default function LegalPage() {
           so no stored balance can drift from the payments behind it.
         </p>
         <p className="small" style={{ marginTop: 20 }}>
-          <Link className="linkbtn" href="/how-it-works">What Stripe told us, in full</Link>
+          <Link className="linkbtn" href="/how-it-works">How we built it, in full</Link>
           {" · "}
           <Link className="linkbtn" href="/terms">Terms</Link>
           {" · "}

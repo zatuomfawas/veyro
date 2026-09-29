@@ -5,23 +5,28 @@
 // most needs to have stated accurately. A sentence buried in prose is easy to
 // skim past and easy to misread in either direction, so it is a checklist.
 //
-// One correction worth recording, because it is the obvious way to write this
-// and it is wrong: the guardian does NOT verify the founder's identity. Stripe
-// verifies the GUARDIAN, with the guardian's own documents. The founder's age
-// is self-declared and nobody checks it — see /legal. Writing "verifies your
-// identity" here would claim an identity check on the founder that does not
-// happen anywhere in this product.
+// The first line reads "does the identity check", not "verifies your
+// identity", and the difference is not pedantry. The guardian does not verify
+// the founder — Stripe verifies the GUARDIAN, using the guardian's own
+// documents, and the founder's age is self-declared with nobody checking it
+// (/legal says so in as many words). "Verifies your identity" would promise a
+// check on the founder that happens nowhere in this product, on the page a
+// parent reads before putting their name on an account.
+//
+// "Does the identity check" carries the same meaning for the reader — the
+// guardian is the one who goes through identity verification — without
+// claiming whose identity got verified.
 
 const DOES = [
-  ["Is the adult Stripe verifies", "With their own ID, on Stripe's own form. Once."],
-  ["Hears about every payout you request", "Straight away, with a permanent record of it."],
-  ["Is on the account, legally", "Stripe requires a verified adult behind it. That is them."],
+  ["Does the identity check", "With their own ID, on Stripe's own form. Once, then never again."],
+  ["Receives every payout notification", "Straight away, with a permanent record of it."],
+  ["Is the verified adult on the account", "Stripe requires one behind every account. That is them."],
 ] as const;
 
 const DOES_NOT = [
   ["Own your business", "Not your products, not your customers, not your ideas."],
   ["Approve your sales", "Nobody signs anything off. A sale is a sale."],
-  ["Block or control your payouts", "On this account type nobody can — not them, not Veyro."],
+  ["Control your payouts", "Cannot block one, hold one or release one — not them, not Veyro."],
 ] as const;
 
 export function GuardianPermissions({ compact = false }: { compact?: boolean }) {

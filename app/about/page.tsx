@@ -115,7 +115,7 @@ export default function About() {
               <ThemeToggle />
               <MobileNav
                 items={[
-                  { href: "/how-it-works", label: "What Stripe told us" },
+                  { href: "/how-it-works", label: "How we built it" },
                   { href: "/for-guardians", label: "For parents" },
                   { href: "/check", label: "Check eligibility" },
                   { href: "/", label: "Home" },
@@ -149,7 +149,7 @@ export default function About() {
             </p>
           </div>
 
-          <div style={{ maxWidth: "var(--m-wide)" }}>
+          <div>
             <p className="lead" style={{ marginTop: 0 }}>
               I built Veyro after seeing a problem firsthand with my brother. He had ideas for online
               businesses and was capable of actually building and launching them, but when it came
@@ -206,7 +206,7 @@ export default function About() {
           <div>
             <h2 className="h3" style={{ marginTop: 0 }}>What is not finished</h2>
           </div>
-          <div style={{ maxWidth: "var(--m-wide)" }}>
+          <div>
             <p className="body" style={{ marginTop: 0 }}>
               This is early software and some of it is visibly unfinished. Naming the gaps is more
               useful than waiting until someone trips over them.
@@ -243,7 +243,7 @@ export default function About() {
 
         <div className="row" style={{ marginTop: 40, gap: 10, flexWrap: "wrap" }}>
           <Link className="btn btn-lg" href="/check">Check what applies to you</Link>
-          <Link className="btn btn-2 btn-lg" href="/how-it-works">Read what Stripe told us</Link>
+          <Link className="btn btn-2 btn-lg" href="/how-it-works">How we built it</Link>
         </div>
 
         <p className="tiny" style={{ marginTop: 20 }}>
