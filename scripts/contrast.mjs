@@ -84,6 +84,19 @@ const suite = (name, t, panel, panelInk) => {
   check("button label on brand", t("reverse"), t("brand"), 4.5);
   check("button label on brand hover", t("reverse"), t("brand-h"), 4.5);
 
+  // Interaction states. A pressed button and a text selection are the two
+  // places a colour is applied on top of text that is already there, so they
+  // are the two places a literal that cannot invert makes the text vanish.
+  // Both did, in dark, at about 1.1:1 -- checked here so they cannot again.
+  check("button label while pressed", t("reverse"), t("brand-a"), 4.5);
+  check("destructive label while pressed", t("clay"), t("clay-a"), 4.5);
+  check("selected text", t("ink"), t("select-bg"), 4.5);
+  // --line-hover is not checked at 3:1. It is a hover cue on a control the
+  // reader has already found, not the boundary that identifies it -- .btn-2
+  // carries a label and its own ground. It measures 1.39:1 in light, which is
+  // the same quiet that --line is deliberately allowed, so holding the dark
+  // value to a stricter rule than the light one would invent a requirement.
+
   // Placeholders carry information, so they are text, not decoration.
   check("input placeholder", t("placeholder"), t("card"), 4.5);
   check("input placeholder on paper", t("placeholder"), t("paper"), 4.5);

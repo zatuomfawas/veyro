@@ -54,6 +54,28 @@ export const CSS = `
      instead. The alternating landing sections that used to rely on card being
      lighter than paper now use --surface. */
   --card:#ffffff; --reverse:#ffffff;
+  /* The colour the sticky nav takes once the page has scrolled under it.
+     Translucent, because the blur behind it is the point; a token, because
+     it was a literal white and the nav went on turning white in dark mode
+     the moment anyone scrolled. It is --paper with the alpha applied. */
+  --nav-veil:rgba(255,255,255,.88);
+  /* The highlight that sweeps a loading block. White works on a light
+     skeleton and flashes on a dark one, so it is a token: the sweep is a
+     suggestion of movement, not a light source. */
+  --skel-sheen:rgba(255,255,255,.55);
+  /* Interaction states. These were literals, and a literal cannot invert:
+     pressed-black stays black when the button itself has gone white, and a
+     pale selection stays pale when the text on it has gone light. Measured
+     in dark before this existed: 1.11:1 on a pressed button, 1.07:1 on
+     selected text. Both are "the label disappears while you touch it". */
+  --brand-a:#000000;
+  --clay-a:#f3e6e4;
+  --line-hover:#d4d4d1;
+  --select-bg:#e2e3e3;
+  /* The dimming behind a modal. On a white page a light scrim is enough to
+     push the page back; on a dark one the same scrim has almost nothing to
+     darken, so dark asks for more of it. */
+  --scrim:rgba(17,19,21,.32);
   --line:#e3e3e0; --line-soft:#eeeeec;
   /* Dividers are decorative, so --line may stay quiet. An input border is a UI
      component boundary and WCAG 1.4.11 wants 3:1 for it; --line measured
@@ -119,7 +141,7 @@ export const CSS = `
 /* Selected text was the browser's default blue, the one colour on the page
    from outside this palette — and it shows up constantly here, because people
    select amounts, account ids and invite links to copy them. */
-.fw ::selection { background:#e2e3e3; color:var(--ink); }
+.fw ::selection { background:var(--select-bg); color:var(--ink); }
 .fw button, .fw input, .fw select, .fw textarea { font: inherit; color: inherit; }
 .fw a { color: inherit; text-decoration: none; }
 /* Focus is pine. On the dark band .lp-dark overrides it back to white a few
@@ -369,12 +391,12 @@ export const CSS = `
 .fw .btn:active:not(:disabled) { transform:translateY(0); box-shadow:none; }
 .fw .btn { transition:background-color var(--t), border-color var(--t), color var(--t),
   box-shadow var(--t), transform var(--t); }
-.fw .btn:active { background:#000000; border-color:#000000; }
+.fw .btn:active { background:var(--brand-a); border-color:var(--brand-a); }
 .fw .btn[aria-busy="true"] { background:var(--brand-h); border-color:var(--brand-h); opacity:.85; cursor:progress; }
 .fw .btn[aria-busy="true"]::before { content:""; width:var(--marker); height:var(--marker); background:var(--reverse); flex:none; }
 .fw .btn-2:active { background:var(--surface-2); border-color:var(--ink-3); }
 .fw .btn-q:active { background:var(--surface-2); }
-.fw .btn-d:active { background:#f3e6e4; }
+.fw .btn-d:active { background:var(--clay-a); }
 /* Disabled is a state, not a faded version of the enabled one.
    This was opacity .38 over the brand, green at the time, which rendered
    white text on a washed-out green at roughly 2:1 — the label was the least readable thing on
@@ -388,7 +410,7 @@ export const CSS = `
 .fw .nav button:not(.btn)[data-on="1"] { font-weight:var(--fw-med); }
 /* (the disabled rule lives above; a second one here used to override it) */
 .fw .btn-2 { background:var(--paper); color:var(--ink); border-color:var(--line); }
-.fw .btn-2:hover { background:var(--surface); border-color:#d4d4d1; }
+.fw .btn-2:hover { background:var(--surface); border-color:var(--line-hover); }
 .fw .btn-q { background:transparent; border-color:transparent; color:var(--ink-2); }
 .fw .btn-q:hover { background:var(--surface-2); border-color:transparent; color:var(--ink); }
 .fw .btn-d { background:var(--paper); color:var(--clay); border-color:var(--clay-line); }
@@ -759,8 +781,8 @@ export const CSS = `
 .fw .tl .pt[data-on="bad"] { border-color:var(--clay); background:var(--clay); }
 
 /* modal / drawer */
-.fw .scrim { position:fixed; inset:0; background:rgba(17,19,21,.32); z-index:60; display:flex; align-items:center; justify-content:center; padding:20px; }
-.fw .modal { background:var(--card); border-radius:0; width:100%; max-width:460px;  max-height:90vh; overflow:auto; }
+.fw .scrim { position:fixed; inset:0; background:var(--scrim); z-index:60; display:flex; align-items:center; justify-content:center; padding:20px; }
+.fw .modal { background:var(--card); border:1px solid var(--line); border-radius:0; width:100%; max-width:460px;  max-height:90vh; overflow:auto; }
 .fw .drawer { position:fixed; top:0 ; right:0; bottom:0; width:352px; max-width:92vw; background:var(--card); border-left:1px solid var(--line); z-index:70; overflow:auto;  }
 .fw .pop { position:absolute; top:46px; right:0; width:360px; max-width:calc(100vw - 32px); background:var(--card); border:1px solid var(--line); border-radius:0;  z-index:50; overflow:hidden; }
 
@@ -1315,7 +1337,7 @@ export const CSS2 = `
    hidden or broken by its absence. */
 @supports (animation-timeline: scroll()) {
   @keyframes veyro-nav {
-    to { border-bottom-color:var(--line); background:rgba(255,255,255,.88);
+    to { border-bottom-color:var(--line); background:var(--nav-veil);
          backdrop-filter:saturate(1.4) blur(10px); }
   }
   .fw .navbar { animation:veyro-nav linear both; animation-timeline:scroll();
@@ -1812,13 +1834,14 @@ export const CSS2 = `
 .fw .skel[data-shimmer="1"] { position:relative; overflow:hidden; }
 .fw .skel[data-shimmer="1"]::after { content:""; position:absolute; inset:0;
   transform:translateX(-100%);
-  background:linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+  background:linear-gradient(90deg, transparent, var(--skel-sheen), transparent);
   animation:veyro-skel 1.25s var(--ease) 6; }
 @keyframes veyro-skel { to { transform:translateX(100%); } }
 @media (prefers-reduced-motion: reduce) {
   .fw .skel[data-shimmer="1"]::after { animation:none; }
 }
 .fw .skel-hero { background:var(--ink); padding:var(--sp-8) var(--sp-7); margin-bottom:var(--sp-7); }
+.fw .skel-hero { --skel-sheen:rgba(255,255,255,.12); }
 .fw .skel-hero .skel { background:rgba(255,255,255,.13); }
 .fw .skel-rail { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(0,1fr);
   border-top:1px solid var(--ink); margin-bottom:var(--sp-7); }
@@ -1871,6 +1894,14 @@ export const CSS2 = `
   --brand:#e8eaec; --brand-h:#ffffff;
   --ink:#e8eaec; --ink-2:#aab1b7; --ink-3:#8c949b;
   --placeholder:#8c949b;
+  --nav-veil:rgba(15,17,19,.88);
+  --skel-sheen:rgba(255,255,255,.10);
+  /* Pressed is brighter here, not darker: --brand is already light. */
+  --brand-a:#ffffff;
+  --clay-a:#3a201d;
+  --line-hover:#3a4046;
+  --select-bg:#2e3841;
+  --scrim:rgba(0,0,0,.62);
   /* The accents lighten. #12513a is 2.0:1 on this ground and would fail every
      rule it passes in the light theme; these are the same hues carried up
      until they clear 4.5:1 on --card. */
@@ -1898,6 +1929,14 @@ export const CSS2 = `
   --brand:#e8eaec; --brand-h:#ffffff;
   --ink:#e8eaec; --ink-2:#aab1b7; --ink-3:#8c949b;
   --placeholder:#8c949b;
+  --nav-veil:rgba(15,17,19,.88);
+  --skel-sheen:rgba(255,255,255,.10);
+  /* Pressed is brighter here, not darker: --brand is already light. */
+  --brand-a:#ffffff;
+  --clay-a:#3a201d;
+  --line-hover:#3a4046;
+  --select-bg:#2e3841;
+  --scrim:rgba(0,0,0,.62);
   /* The accents lighten. #12513a is 2.0:1 on this ground and would fail every
      rule it passes in the light theme; these are the same hues carried up
      until they clear 4.5:1 on --card. */
@@ -1950,8 +1989,32 @@ export const CSS2 = `
   .fw:not([data-theme="light"]) .wallethero .btn {
     background:#e8eaec; border-color:#e8eaec; color:#0f1113; }
 }
-.fw .themetoggle { display:inline-flex; align-items:center; gap:7px; }
-@media (pointer: coarse) { .fw .themetoggle { min-height:var(--tap); } }
+/* The theme switch. Square, because every other edge on this site is square
+   and a pill here would read as imported from somewhere else. The track is a
+   control boundary, so it takes --control-line and its 3:1, not --line.
+
+   The thumb carries the icon rather than the track carrying two of them: one
+   glyph in one place is less to read than two competing for the same meaning,
+   and the thumb's position already says which side is active. */
+.fw .themeswitch { display:inline-flex; align-items:center; justify-content:center;
+  background:none; border:0; padding:6px; cursor:pointer; color:inherit; }
+.fw .themeswitch-track { position:relative; display:block; width:46px; height:24px;
+  background:var(--surface); border:1px solid var(--control-line); }
+.fw .themeswitch-thumb { position:absolute; top:1px; left:1px; width:20px; height:20px;
+  display:flex; align-items:center; justify-content:center; font-size:11px; line-height:1;
+  background:var(--brand); color:var(--reverse);
+  transition:transform var(--dur, .18s) var(--ease); }
+.fw .themeswitch[aria-checked="true"] .themeswitch-thumb { transform:translateX(22px); }
+.fw .themeswitch:hover .themeswitch-track { border-color:var(--brand); }
+/* The focus ring goes on the track, because the button itself is only padding
+   and a ring around the padding sits too far from the thing it identifies. */
+.fw .themeswitch:focus-visible { outline:none; }
+.fw .themeswitch:focus-visible .themeswitch-track { outline:2px solid var(--pine); outline-offset:2px; }
+/* Someone who asked for less motion gets the state, not the slide. */
+@media (prefers-reduced-motion: reduce) {
+  .fw .themeswitch-thumb { transition:none; }
+}
+@media (pointer: coarse) { .fw .themeswitch { min-height:var(--tap); min-width:var(--tap); } }
 
 .fw .lp-tall { padding:var(--sp-10) 0; }
 .fw .lp-dark .statement-sub { color:#bcbdbd; }

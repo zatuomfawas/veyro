@@ -82,17 +82,24 @@ export function ThemeToggle() {
 
   const goingTo = resolved === "dark" ? "light" : "dark";
 
+  // role="switch" rather than a plain button: this records a state rather than
+  // performing an action, and a screen reader should say which state it is in.
+  // The name stays "Dark mode" in both positions, because a switch's name is
+  // the thing being switched, not the direction of travel -- aria-checked
+  // carries that. The title still says what a click will do, for a mouse.
   return (
     <button
       type="button"
-      className="btn btn-q btn-sm themetoggle"
-      onClick={flip}
-      // The label says what it will DO, which is what a button's name is for.
-      aria-label={`Switch to ${goingTo} mode`}
+      role="switch"
+      aria-checked={resolved === "dark"}
+      aria-label="Dark mode"
       title={`Switch to ${goingTo} mode`}
+      className="themeswitch"
+      onClick={flip}
     >
-      <span aria-hidden="true">{resolved === "dark" ? "☾" : "☀"}</span>
-      <span className="hide-s">{goingTo === "dark" ? "Dark" : "Light"}</span>
+      <span className="themeswitch-track" aria-hidden="true">
+        <span className="themeswitch-thumb">{resolved === "dark" ? "☾" : "☀"}</span>
+      </span>
     </button>
   );
 }
