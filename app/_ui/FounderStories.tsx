@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { FOUNDER_STORIES, type FounderStory } from "@/lib/stories";
 
 // Real founders, or nothing at all.
@@ -16,7 +17,7 @@ function Story({ s }: { s: FounderStory }) {
       <blockquote className="story-q">{s.quote}</blockquote>
       <figcaption className="story-by">
         {s.avatar
-          ? <img className="story-av" src={s.avatar} alt="" width={36} height={36} />
+          ? <Image className="story-av" src={s.avatar} alt="" width={36} height={36} />
           : <span className="story-av story-ini" aria-hidden="true">{initials(s.name)}</span>}
         <span>
           <b>{s.name}</b>
