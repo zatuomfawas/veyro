@@ -103,11 +103,12 @@ export default function SdkDocs() {
       </div>
 
       <main id="main" className="wrap-lp" style={{ paddingTop: 32, paddingBottom: 56 }}>
-        <span className="lp-eyebrow">For developers</span>
+        <span className="lp-eyebrow">Code first</span>
         <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>Add Veyro to your app.</h1>
         <p className="lead" style={{ marginTop: 16 }}>
-          You already built something. This is how it takes money: one product ID, one button, and
-          nothing about payment infrastructure that you have to learn first.
+          You already built the thing. This is how it starts taking money: one product ID, one
+          button, and nothing about payment infrastructure you have to learn first. Give it five
+          minutes.
         </p>
 
         {!PUBLISHED && (

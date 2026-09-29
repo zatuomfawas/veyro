@@ -101,8 +101,8 @@ export function sendVerificationEmail(email: string, token: string) {
   return send(
     email,
     "Verify your email to finish signing up",
-    "Welcome to Veyro.\n\n"
-      + "Click the link below to finish signing up:\n\n"
+    "Welcome to Veyro. You build it, we get it paid for.\n\n"
+      + "One click and you are in:\n\n"
       + `${link}\n\n`
       + "The link works for 24 hours. If it expires you can request a new one from the sign-in "
       + "page.\n\n"

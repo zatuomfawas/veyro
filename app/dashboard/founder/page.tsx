@@ -40,6 +40,7 @@ import NewProduct, { NAME_FIELD_ID } from "./NewProduct";
 import ProductRows from "./ProductRows";
 import { AddToApp } from "./AddToApp";
 import RequestPayout from "./RequestPayout";
+import { Milestone } from "./Milestone";
 import {
   BusinessHeader, GuardianStatus, PaymentStatus, PrimaryAction,
   overallStatus as computeOverall,
@@ -50,7 +51,7 @@ export const viewport = buildViewport();
 // Private by definition. No canonical, no Open Graph: there is nothing here to
 // share and nothing that should ever appear in a search result.
 export const metadata: Metadata = {
-  title: "Your business | Veyro",
+  title: "Your build | Veyro",
   robots: { index: false, follow: false },
 };
 
@@ -337,8 +338,8 @@ export default async function FounderDashboard() {
               <span className="wh-big">{formatMinor(primaryFold.available, primaryFold.currency)}</span>
               <span className="wh-sub">
                 {primaryFold.available > 0
-                  ? "Cleared, yours, and nothing is holding it. Requesting sends it to the bank account on your payment account."
-                  : "Nothing has cleared yet. Money lands here once a payment settles."}
+                  ? "Cleared, yours, nothing holding it. Request it and it moves to the bank account on your payment account."
+                  : "Nothing has cleared yet. The first one lands here the day somebody buys."}
               </span>
 
               <details className="wh-more">
@@ -410,21 +411,25 @@ export default async function FounderDashboard() {
           <div className="stattiles">
             <div>
               <span className="st-n">{analytics.views}</span>
-              <span className="st-l">Checkout views &middot; last {analytics.days} days</span>
+              <span className="st-l">People who looked &middot; last {analytics.days} days</span>
             </div>
             <div>
               <span className="st-n">{analytics.purchases}</span>
-              <span className="st-l">Purchases</span>
+              <span className="st-l">People who bought</span>
             </div>
             <div>
               <span className="st-n">{analytics.conversion === null ? "—" : Math.round(analytics.conversion * 100) + "%"}</span>
-              <span className="st-l">{analytics.conversion === null ? "Conversion, once anyone looks" : "Of views that bought"}</span>
+              <span className="st-l">{analytics.conversion === null ? "Your conversion, once people look" : "Of them bought"}</span>
             </div>
             <div>
               <span className="st-n">{formatMinor(monthMinor, primaryFold?.currency ?? "USD")}</span>
-              <span className="st-l">This month, cleared</span>
+              <span className="st-l">Cleared this month</span>
             </div>
           </div>
+
+          {/* Said once, under the numbers it is reading. Silent until there is
+              a live product, so a half-set-up account is not congratulated. */}
+          <Milestone purchases={analytics.purchases} hasLiveProduct={Boolean(firstLive)} />
 
           {/* What is left of the old top row: the half that answers "what
               happens next". A strip now, not a column, because the money it
@@ -503,8 +508,8 @@ export default async function FounderDashboard() {
                   label="Something to sell"
                   detail={
                     products.some((p) => p.status === "LIVE")
-                      ? "You have a live product with a checkout link."
-                      : "Add a product and make it live to get a checkout link."
+                      ? "Live, with a checkout link ready to share."
+                      : "Add a product and set it live to get your checkout link."
                   }
                 />
                 <SetupStep
@@ -512,8 +517,8 @@ export default async function FounderDashboard() {
                   label="First payment"
                   detail={
                     transactions.length > 0
-                      ? "Money has come in and is in your wallet."
-                      : "Share a checkout link. The first payment appears here."
+                      ? "Money came in. It is in your wallet."
+                      : "Share your checkout link. The first payment shows up here."
                   }
                 />
               </div>
