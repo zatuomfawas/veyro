@@ -1455,6 +1455,37 @@ export const CSS2 = `
 @media (prefers-reduced-motion: reduce) {
   .fw .disc-panel, .fw .disc-sign::after { transition:none; }
 }
+
+/* Opening a <details> smoothly.
+
+   The .disc-panel rule above animates 0fr to 1fr, which is the usual trick,
+   but it only works on markup where a wrapper is always rendered and a class
+   marks the state. A native <details> does not render its content at all
+   while it is closed, so there is nothing there to transition from -- which
+   is why the FAQ snapped open while its plus sign animated politely beside it.
+
+   ::details-content is the part the browser creates for that content, so it
+   can be given a height and transitioned like anything else. Two things are
+   needed with it: interpolate-size, because the open height is auto and auto
+   is not otherwise animatable; and allow-discrete on content-visibility, so
+   the content stays visible for the length of the close instead of vanishing
+   on the first frame.
+
+   Behind @supports, like the scroll-driven nav above. Firefox has neither
+   part yet, and there it keeps today's instant toggle -- the disclosure still
+   opens, closes and reads correctly, which is the behaviour the accessibility
+   page promises. Nothing here is required for the content to be reachable. */
+@supports selector(::details-content) and (interpolate-size: allow-keywords) {
+  .fw .disc, .fw .wh-more { interpolate-size:allow-keywords; }
+  .fw .disc::details-content, .fw .wh-more::details-content {
+    block-size:0; overflow:hidden;
+    transition:block-size var(--t-2) var(--ease),
+               content-visibility var(--t-2) var(--ease) allow-discrete; }
+  .fw .disc[open]::details-content, .fw .wh-more[open]::details-content { block-size:auto; }
+  @media (prefers-reduced-motion: reduce) {
+    .fw .disc::details-content, .fw .wh-more::details-content { transition:none; }
+  }
+}
 .fw .pwwrap { position:relative; }
 .fw .pwwrap .input { padding-right:66px; }
 .fw .pwtoggle { position:absolute; right:1px; top:0; bottom:0; min-height:var(--tap); padding:0 11px; background:transparent; border:0;
