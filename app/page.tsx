@@ -12,6 +12,9 @@ import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { StickyCta } from "@/app/_ui/StickyCta";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { FounderStories } from "@/app/_ui/FounderStories";
+import { Journey } from "@/app/_ui/Journey";
+import { GuardianPermissions } from "@/app/_ui/GuardianPermissions";
+import { AiIntegration } from "@/app/_ui/AiIntegration";
 
 export const metadata = buildMetadata("landing");
 export const viewport = buildViewport();
@@ -49,7 +52,7 @@ export default async function Home() {
       <div className="navbar">
         <div className="wrap-lp">
           <nav className="lp-nav" aria-label="Main">
-            <Link href="/" aria-label="Veyro, home"><Wordmark size={20} /></Link>
+            <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
             <div className="lp-links">
               <Link className="btn btn-q btn-sm hide-s" href="/how-it-works">How it works</Link>
               <Link className="btn btn-q btn-sm hide-s" href="/wallet">Founder Wallet</Link>
@@ -90,6 +93,7 @@ export default async function Home() {
                 <h1 className="hero-h">
                   <Wordmark hero />
                   <span className="tagline">Take payments before you&rsquo;re 18.</span>
+                  <span className="tagline-2">Your business. Your dashboard. Your money.</span>
                 </h1>
 
                 {/* "Block you at 18" is a compression rather than a claim we
@@ -147,7 +151,7 @@ window.location = checkoutUrl;
                     above, where it belongs to the sentence about eligibility
                     rather than competing with the thing the page is for. */}
                 <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap" }}>
-                  <Link className="btn btn-lg" href="/get-started">Get your dashboard</Link>
+                  <Link className="btn btn-lg" href="/get-started">Start now</Link>
                 </div>
 
               </div>
@@ -158,6 +162,34 @@ window.location = checkoutUrl;
             </div>
           </div>
         </div>
+
+        {/* ---- one journey, four steps ---- */}
+        <section className="lp ch ch-surface">
+          <div className="wrap-lp">
+            <div className="headc" style={{ marginBottom: 32 }}>
+              <span className="lp-eyebrow">Start to paid</span>
+              <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>Four steps. One of them is your parent.</h2>
+            </div>
+            <Journey />
+
+            {/* The guardian step is the one people get wrong in both
+                directions, so the correction sits directly under the row that
+                raises it rather than on another page. */}
+            <div style={{ marginTop: "var(--sp-7)" }}>
+              <GuardianPermissions />
+            </div>
+            <p className="small centred-note" style={{ marginTop: 16 }}>
+              <Link className="linkbtn" href="/how-it-works">How the money actually moves</Link>
+            </p>
+          </div>
+        </section>
+
+        {/* ---- the AI story ---- */}
+        <section className="lp ch">
+          <div className="wrap-lp">
+            <AiIntegration />
+          </div>
+        </section>
 
         {/* Real founders, when there are real founders to quote. Renders
             nothing until lib/stories.ts has some. */}
@@ -172,7 +204,7 @@ window.location = checkoutUrl;
               waiting is Stripe verifying an adult, not you filling anything in.
             </p>
             <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
-              <Link className="btn btn-lg" href="/get-started">Get your dashboard</Link>
+              <Link className="btn btn-lg" href="/get-started">Start now</Link>
             </div>
             <p className="tiny" style={{ marginTop: 16 }}>
               <Link className="linkbtn" href="/how-it-works">How it works</Link>
@@ -192,8 +224,8 @@ window.location = checkoutUrl;
           decided. */}
       <Reveal
         scope=".fw"
-        select="section.lp > .wrap-lp > *, section.lp .truthgrid > *, section.lp .band-side > *, section.lp .calls-grid > *"
-        stagger=".props, .commits, .calls, .tl"
+        select="section.lp > .wrap-lp > *, section.lp .ai > *, section.lp .gperm > *"
+        stagger=".jn, .ai-tools, .gperm-l"
       />
 
       <ScrollTop />

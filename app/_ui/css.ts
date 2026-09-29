@@ -920,6 +920,82 @@ export const CSS = `
   .fw .dp-row-m { display:none; }
 }
 
+/* ---- the four steps ----------------------------------------------------
+   A row of four on a desktop, a column on a phone, and a hairline running
+   between them either way so it reads as a sequence rather than as four
+   unrelated facts. The rule is drawn on the card, not under the row, so it
+   turns the corner when the row stacks. */
+.fw .jn { list-style:none; margin:0; padding:0; display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr)); gap:0; counter-reset:jn; }
+.fw .jn-s { position:relative; padding:var(--sp-6) var(--sp-5);
+  border-top:2px solid var(--line); }
+.fw .jn-s + .jn-s { border-left:1px solid var(--line); }
+/* The first step gets the accent, so the eye starts at step one. */
+.fw .jn-s:first-child { border-top-color:var(--pine); }
+.fw .jn-ic { display:block; width:26px; height:26px; color:var(--pine); }
+.fw .jn-ic svg { width:100%; height:100%; display:block; }
+.fw .jn-n { display:block; margin-top:var(--sp-5); font-size:var(--fs-1);
+  font-weight:var(--fw-bold); letter-spacing:0.14em; color:var(--ink-3); }
+.fw .jn-t { margin:6px 0 0; font-size:var(--fs-5); letter-spacing:-0.018em; }
+.fw .jn-d { margin:8px 0 0; font-size:var(--fs-2); line-height:1.6; color:var(--ink-2); }
+.fw .jn-who { display:inline-block; margin-top:var(--sp-4); font-size:var(--fs-1);
+  font-weight:var(--fw-bold); letter-spacing:0.04em; text-transform:uppercase;
+  color:var(--slate); border:1px solid var(--slate-line); background:var(--slate-bg);
+  padding:2px 7px; }
+@media (max-width:900px) {
+  .fw .jn { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .fw .jn-s:nth-child(3) { border-left:0; }
+}
+@media (max-width:560px) {
+  .fw .jn { grid-template-columns:minmax(0,1fr); }
+  .fw .jn-s + .jn-s { border-left:0; }
+}
+
+/* ---- guardian permissions ----------------------------------------------
+   Two columns, can and cannot. The marks carry colour because this is the one
+   place on the site where skimming the wrong way round matters: someone who
+   reads only the ticks should still come away with the right answer. */
+.fw .gperm { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--sp-6);
+  border:1px solid var(--line); background:var(--card); padding:var(--sp-6); }
+.fw .gperm-c { padding:var(--sp-5); gap:var(--sp-5); }
+.fw .gperm-h { margin:0 0 var(--sp-4); font-size:var(--fs-2); font-weight:var(--fw-bold);
+  letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-3); }
+.fw .gperm-l { list-style:none; margin:0; padding:0; display:flex; flex-direction:column;
+  gap:var(--sp-4); }
+.fw .gperm-l li { display:flex; gap:10px; align-items:flex-start; }
+.fw .gperm-l b { display:block; font-size:var(--fs-3); font-weight:var(--fw-bold); }
+.fw .gperm-d { display:block; margin-top:2px; font-size:var(--fs-2); color:var(--ink-2);
+  line-height:1.55; }
+.fw .gperm-m { width:20px; height:20px; flex:none; display:flex; align-items:center;
+  justify-content:center; margin-top:1px; }
+.fw .gperm-m svg { width:14px; height:14px; }
+.fw .gperm-yes { color:var(--pine); background:var(--pine-bg); border:1px solid var(--pine-line); }
+.fw .gperm-no { color:var(--clay); background:var(--clay-bg); border:1px solid var(--clay-line); }
+@media (max-width:760px) { .fw .gperm { grid-template-columns:minmax(0,1fr); } }
+
+/* ---- the AI prompt ------------------------------------------------------ */
+.fw .ai { display:grid; grid-template-columns:var(--split-a) var(--split-b);
+  gap:var(--sp-7); align-items:start; }
+.fw .ai-tools { list-style:none; margin:var(--sp-5) 0 0; padding:0; display:flex;
+  flex-wrap:wrap; gap:7px; }
+.fw .ai-tools li { font-size:var(--fs-2); font-weight:var(--fw-med); color:var(--ink-2);
+  border:1px solid var(--line); padding:3px 9px; background:var(--card); }
+.fw .ai-r { margin:0; border:1px solid var(--line); background:var(--card); overflow:hidden; }
+.fw .ai-cap { display:flex; align-items:center; gap:8px; padding:9px var(--sp-5);
+  border-bottom:1px solid var(--line); background:var(--surface);
+  font-size:var(--fs-1); font-weight:var(--fw-bold); letter-spacing:0.06em;
+  text-transform:uppercase; color:var(--ink-3); }
+/* A slow pulse, once every three seconds. It is the only thing on the page
+   that moves on its own, which is what makes it read as "live" rather than
+   as decoration. */
+.fw .ai-dot { width:7px; height:7px; border-radius:50%; background:var(--pine); flex:none;
+  animation:veyro-pulse 3s var(--ease) infinite; }
+@keyframes veyro-pulse { 0%,70%,100% { opacity:1; } 85% { opacity:.25; } }
+@media (prefers-reduced-motion: reduce) { .fw .ai-dot { animation:none; } }
+.fw .ai-pre { margin:0; padding:var(--sp-5); font-family:var(--code); font-size:var(--fs-2);
+  line-height:1.65; color:var(--ink-2); white-space:pre-wrap; overflow-x:auto; tab-size:2; }
+@media (max-width:900px) { .fw .ai { grid-template-columns:minmax(0,1fr); gap:var(--sp-6); } }
+
 /* modal / drawer */
 .fw .scrim { position:fixed; inset:0; background:var(--scrim); z-index:60; display:flex; align-items:center; justify-content:center; padding:20px; }
 .fw .modal { background:var(--card); border:1px solid var(--line); border-radius:0; width:100%; max-width:460px;  max-height:90vh; overflow:auto; }
@@ -1257,6 +1333,10 @@ export const CSS = `
   .fw .d2 { font-size:var(--fs-7); }
   .fw .wordmark-hero { font-size:var(--wm-sm); font-stretch:110%; }
   .fw .tagline { font-size:var(--fs-5); }
+.fw .tagline-2 { display:block; margin-top:var(--sp-3); font-size:var(--fs-4);
+  line-height:1.4; letter-spacing:-0.01em; font-weight:var(--fw-med); color:var(--ink-2);
+  font-family:var(--ui); }
+@media (max-width:760px) { .fw .tagline-2 { font-size:var(--fs-3); } }
   
   .fw .page { padding:16px 12px 56px; }
   .fw .tbl th, .fw .tbl td { padding:9px 10px; font-size:var(--fs-2); }
@@ -1277,6 +1357,16 @@ export const CSS2 = `
 .fw .wm-v { display:inline-block; vertical-align:baseline; height:0.72em; width:auto;
   margin-right:var(--wm-kern); letter-spacing:normal; }
 .fw .wm-rest { display:inline; }
+/* The tile. A pine block with the V reversed out of it, sized off the type so
+   it tracks the wordmark at any font-size. The V keeps its own optical inset
+   rather than filling the block edge to edge, which would read as a button. */
+.fw .wordmark-tile .wm-v { box-sizing:content-box; height:0.70em; width:0.70em;
+  padding:0.17em 0.15em; background:var(--pine); margin-right:0.34em;
+  vertical-align:-0.19em; }
+.fw .wordmark-tile .wm-v path { transform-origin:center; }
+/* The mark is a link target in every nav, so it gets the same lift the rest of
+   the nav's controls have rather than being the one dead thing in the row. */
+.fw a:hover .wordmark-tile .wm-v { background:var(--pine-h); }
 /* text-wrap:balance evens the two lines instead of letting the last word fall
    alone. The headline changed from four words to eight and a 26ch measure left
    "for." orphaned on its own line, which reads as a mistake at hero size.
