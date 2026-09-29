@@ -163,8 +163,18 @@ window.location = checkoutUrl;
           </div>
         </div>
 
+        {/* ---- the AI story, first, because it is the differentiator ----
+            Given the surface treatment rather than the plain one: this and the
+            dashboard are the two things someone should remember, and they now
+            sit one after the other at the top of the page. */}
+        <section className="lp ch ch-surface ch-accent">
+          <div className="wrap-lp">
+            <AiIntegration />
+          </div>
+        </section>
+
         {/* ---- one journey, four steps ---- */}
-        <section className="lp ch ch-surface">
+        <section className="lp ch">
           <div className="wrap-lp">
             <div className="headc" style={{ marginBottom: 32 }}>
               <span className="lp-eyebrow">Start to paid</span>
@@ -181,13 +191,6 @@ window.location = checkoutUrl;
             <p className="small centred-note" style={{ marginTop: 16 }}>
               <Link className="linkbtn" href="/how-it-works">How the money actually moves</Link>
             </p>
-          </div>
-        </section>
-
-        {/* ---- the AI story ---- */}
-        <section className="lp ch">
-          <div className="wrap-lp">
-            <AiIntegration />
           </div>
         </section>
 

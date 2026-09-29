@@ -996,6 +996,41 @@ export const CSS = `
   line-height:1.65; color:var(--ink-2); white-space:pre-wrap; overflow-x:auto; tab-size:2; }
 @media (max-width:900px) { .fw .ai { grid-template-columns:minmax(0,1fr); gap:var(--sp-6); } }
 
+/* A fixed-width object beside the words about it.
+
+   Used wherever a preview, card or diagram has a natural maximum width and
+   would otherwise sit in a wide column with the rest of the row empty. The
+   text column takes the slack, so the row fills rather than trailing off. */
+.fw .sidebyside { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,560px);
+  gap:var(--sp-7); align-items:start; }
+/* The object beside the words is often much taller than them -- a checkout
+   mock is 796px against 304px of explanation -- and padding the text out to
+   match would be writing filler to fill a hole. The text travels instead, so
+   it is beside the part of the object you are actually looking at. A static
+   screenshot still shows the gap; scrolling is when it stops existing. */
+@media (min-width:901px) {
+  .fw .sidebyside > *:first-child { position:sticky; top:calc(var(--nav-h) + var(--sp-5)); }
+}
+@media (max-width:900px) {
+  .fw .sidebyside { grid-template-columns:minmax(0,1fr); gap:var(--sp-6); }
+}
+
+/* A section that should read as the important one. A single accent rule along
+   the top edge, and nothing else -- enough to separate it from the section
+   above without turning it into a coloured box. */
+.fw .ch-accent { border-top:2px solid transparent;
+  border-image:linear-gradient(90deg, var(--pine), var(--slate)) 1; }
+
+/* A short list with a tick per line. Used beside a tall object, where a
+   paragraph leaves the column short and the row opens a gap under it. */
+.fw .ticks { list-style:none; margin:0; padding:0; display:flex; flex-direction:column;
+  gap:10px; }
+.fw .ticks li { position:relative; padding-left:26px; font-size:var(--fs-3);
+  line-height:1.5; color:var(--ink-2); }
+.fw .ticks li::before { content:""; position:absolute; left:0; top:0.42em; width:12px; height:7px;
+  border-left:2px solid var(--pine); border-bottom:2px solid var(--pine);
+  transform:rotate(-45deg); }
+
 /* modal / drawer */
 .fw .scrim { position:fixed; inset:0; background:var(--scrim); z-index:60; display:flex; align-items:center; justify-content:center; padding:20px; }
 .fw .modal { background:var(--card); border:1px solid var(--line); border-radius:0; width:100%; max-width:460px;  max-height:90vh; overflow:auto; }
@@ -1149,7 +1184,20 @@ export const CSS = `
 .fw .cardgrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
   gap:var(--sp-6); align-items:stretch; }
 .fw .cardgrid > * { min-width:0; }
-.fw .truthgrid { display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:var(--sp-8); align-items:start; }
+/* 5fr/7fr gave the label column 543px at 1440 to hold a single 26px heading,
+   so every row opened an L-shaped void under the label beside a block three to
+   eighteen times its height. The editorial split is right; the ratio was not.
+   4fr/9fr puts the column at roughly the width of the words in it, and hands
+   the two hundred pixels it was wasting to the content. Measured on
+   /for-guardians, /for-founders, /about and /wallet, which is every page that
+   uses it. */
+.fw .truthgrid { display:grid; grid-template-columns:minmax(0,4fr) minmax(0,9fr);
+  gap:var(--sp-7); align-items:start; }
+/* The label is the one thing in its column, so it may as well stay with the
+   content it labels when that content is taller than the viewport. */
+@media (min-width:901px) {
+  .fw .truthgrid > *:first-child { position:sticky; top:calc(var(--nav-h) + var(--sp-5)); }
+}
 .fw .ownership { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:var(--sp-8);
   margin-top:var(--sp-8); padding-top:var(--sp-6); border-top:1px solid var(--line); align-items:start; }
 .fw .pricegrid { display:grid; grid-template-columns:minmax(0,6fr) minmax(0,5fr); gap:var(--sp-9); align-items:start; }
@@ -1360,9 +1408,17 @@ export const CSS2 = `
 /* The tile. A pine block with the V reversed out of it, sized off the type so
    it tracks the wordmark at any font-size. The V keeps its own optical inset
    rather than filling the block edge to edge, which would read as a button. */
-.fw .wordmark-tile .wm-v { box-sizing:content-box; height:0.70em; width:0.70em;
-  padding:0.17em 0.15em; background:var(--pine); margin-right:0.34em;
-  vertical-align:-0.19em; }
+/* Bigger than the type it sits beside, not the same size as it. At parity the
+   block read as a highlighted letter; a mark has to look like an object the
+   word is standing next to. 0.88em of glyph in a block with generous padding
+   comes out noticeably taller than the cap height of "eyro", which is what
+   makes it register before the word does. */
+.fw .wordmark-tile .wm-v { box-sizing:content-box; height:0.88em; width:0.80em;
+  padding:0.20em 0.18em; background:var(--pine); margin-right:0.36em;
+  vertical-align:-0.26em; }
+/* The name beside the mark is the brand, so it is set tighter and heavier than
+   the nav links around it rather than inheriting their weight. */
+.fw .wordmark-tile .wm-rest { letter-spacing:-0.045em; }
 .fw .wordmark-tile .wm-v path { transform-origin:center; }
 /* The mark is a link target in every nav, so it gets the same lift the rest of
    the nav's controls have rather than being the one dead thing in the row. */

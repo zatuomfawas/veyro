@@ -14,6 +14,8 @@
 // and the fourteen customers across those prices average $18.86, which is a
 // sticker pack and a commission, not a fantasy.
 
+import { CountUp } from "@/app/_ui/CountUp";
+
 const DAYS = [
   { d: "M", v: 18 }, { d: "T", v: 34 }, { d: "W", v: 12 }, { d: "T", v: 45 },
   { d: "F", v: 62 }, { d: "S", v: 41 }, { d: "S", v: 52 },
@@ -43,7 +45,12 @@ export function DashboardPreview() {
         <div className="dp-head">
           <div>
             <span className="dp-k">Available to request</span>
-            <span className="dp-big">$195.00</span>
+            <span className="dp-big">
+              {/* The one number on the site that moves. It renders as the
+                  final value on the server, so with no JavaScript or with
+                  reduced motion the correct figure is already there. */}
+              <CountUp amountMinor={19500} currency="USD" />
+            </span>
           </div>
           <span className="dp-cta">Request a payout</span>
         </div>
