@@ -15,6 +15,7 @@ import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { StickyCta } from "@/app/_ui/StickyCta";
 import { FAQ } from "@/app/_ui/faq";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
+import { FounderStories } from "@/app/_ui/FounderStories";
 
 export const metadata = buildMetadata("landing");
 export const viewport = buildViewport();
@@ -105,7 +106,7 @@ export default async function Home() {
               <div>
                 <h1 className="hero-h">
                   <Wordmark hero />
-                  <span className="tagline">Your idea. Your app. Your money.</span>
+                  <span className="tagline">Your app deserves to make money.</span>
                 </h1>
 
                 {/* "Block you at 18" is a compression rather than a claim we
@@ -122,9 +123,9 @@ export default async function Home() {
                     apply where I live" and which returns no for Brazil. */}
                 <div className="hero-accent" style={{ marginTop: "var(--sp-5)" }}>
                   <p className="lead" style={{ margin: 0 }}>
-                    You built something people want. Payment processors block you at 18. Veyro
-                    removes that blocker &mdash; add payments to your app, keep your products and
-                    business decisions fully yours, and get paid to an account in your name.
+                    You shipped something people want. Most processors make you wait until you
+                    are 18. You do not have to. Add payments to what you already built, keep
+                    every product decision, and get paid into an account in your name.
                   </p>
                 </div>
 
@@ -132,9 +133,19 @@ export default async function Home() {
                     exists, but they are not what someone arrives wanting to
                     read; the checker two clicks away answers them properly. */}
                 <p className="foldwho">
-                  Built for young founders. Guardian involvement may be required depending on your
-                  setup.
+                  Built for founders who are not 18 yet. A parent or guardian does the identity
+                  step once; the account, the products and the money stay yours.
                 </p>
+
+                {/* The three numbers that answer "is this worth my afternoon".
+                    "Live the same day" is deliberately about shipping, which is
+                    the part Veyro controls -- not about a first sale, which
+                    depends on whoever you built it for. */}
+                <ul className="wins" aria-label="What setup costs you">
+                  <li><b>5 min</b><span>to set up</span></li>
+                  <li><b>2 calls</b><span>to integrate</span></li>
+                  <li><b>0%</b><span>taken by Veyro</span></li>
+                </ul>
 
                 <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap" }}>
                   <Link className="btn btn-lg" href="/get-started">Get started</Link>
@@ -144,6 +155,18 @@ export default async function Home() {
                 <p className="tiny" style={{ marginTop: 12 }}>
                   The checker takes two questions. No account, no email address.
                 </p>
+
+                {/* The code is the product for most of the people arriving
+                    here, so it is on the first screen rather than five
+                    chapters down. Three lines, and they are the real ones. */}
+                <figure className="herocode">
+                  <pre>{`const { checkoutUrl } = await veyro.checkout(productId);
+window.location = checkoutUrl;
+// ...they pay, you get the money.`}</pre>
+                  <figcaption>
+                    That is the integration. <Link className="linkbtn" href="/docs/sdk">See the guide</Link>
+                  </figcaption>
+                </figure>
 
               </div>
 
@@ -182,21 +205,21 @@ export default async function Home() {
             <div className="headc">
               <span className="lp-eyebrow">What you get</span>
               <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)", marginBottom: 20 }}>
-                Three things that are yours.
+                Three things nobody takes off you.
               </h2>
             </div>
             <div className="props">
               <div>
                 <span className="pr-t">See every payment</span>
-                <span className="pr-d">Each sale, each fee, what is settling, what you can draw today.</span>
+                <span className="pr-d">Every sale, every fee, what is still settling, what you can draw today.</span>
               </div>
               <div>
-                <span className="pr-t">Your account, your login</span>
+                <span className="pr-t">Your account, your call</span>
                 <span className="pr-d">Opened in your name. Separate logins, and no guardian can block a payout.</span>
               </div>
               <div>
                 <span className="pr-t">No cut</span>
-                <span className="pr-d">Veyro takes no percentage. Stripe charges its own processing fees.</span>
+                <span className="pr-d">Veyro takes 0%. Stripe charges its own processing fees, and that is it.</span>
               </div>
             </div>
           </div>
@@ -318,12 +341,38 @@ export default async function Home() {
                 chapter still leans without wasting the canvas. */}
             <div className="calls-grid">
               <div className="calls-head">
-                <span className="lp-eyebrow">Already built it?</span>
-                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>Two calls.</h2>
+                <span className="lp-eyebrow">Two ways to get paid</span>
+                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                  Send a link, or paste the code.
+                </h2>
                 <p className="body" style={{ marginTop: 12 }}>
-                  Your app does not need rebuilding and there is no package to install. You add a
-                  buy button; these two calls do the rest.
+                  Both take the same payments into the same account. Pick whichever one matches
+                  what you have built so far.
                 </p>
+
+                {/* The fork, stated once and early. Until this was here the
+                    page only ever showed the code path, so anyone without an
+                    app to paste it into read the whole chapter as "not for
+                    me" -- when the link path needs nothing built at all. */}
+                <div className="paths">
+                  <div className="path">
+                    <span className="path-k">No code</span>
+                    <h3 className="path-t">Send a link</h3>
+                    <p className="path-d">
+                      Make a product, copy its checkout link, and put it wherever your buyers
+                      already are &mdash; a bio, a DM, a post. Nothing to build.
+                    </p>
+                  </div>
+                  <div className="path" data-on="1">
+                    <span className="path-k">In your app</span>
+                    <h3 className="path-t">Paste code</h3>
+                    <p className="path-d">
+                      Two calls, no package to install, no rebuild. Your buy button opens a
+                      checkout and you unlock what you sold when it comes back paid.
+                    </p>
+                  </div>
+                </div>
+
                 <p className="small" style={{ marginTop: 20 }}>
                   <Link className="linkbtn" href="/docs/sdk">The full integration guide</Link>
                   {" \u00b7 "}
@@ -528,13 +577,17 @@ export default async function Home() {
           </div>
         </section>
 
+        {/* Real founders, when there are real founders to quote. Renders
+            nothing until lib/stories.ts has some. */}
+        <FounderStories />
+
         {/* ================= 9. the end ================= */}
         <section className="lp ch ch-9 lp-dark">
           <div className="wrap-lp lp-center">
-            <h2 className="lp-h2">You built it. Now make it sellable.</h2>
+            <h2 className="lp-h2">You built it. Now make it pay.</h2>
             <p className="body" style={{ marginTop: 14, marginLeft: "auto", marginRight: "auto" }}>
-              Connect what you made, complete the setup with your guardian, and start taking
-              payments.
+              Connect what you made, do the guardian step once, and start taking money. Most of
+              it is waiting on Stripe, not on you.
             </p>
             <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
               <Link className="btn btn-lg" href="/get-started">Get started</Link>

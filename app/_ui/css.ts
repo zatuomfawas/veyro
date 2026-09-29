@@ -787,6 +787,68 @@ export const CSS = `
 .fw .tl .pt[data-on="1"] { border-color:var(--ink); background:var(--ink); }
 .fw .tl .pt[data-on="bad"] { border-color:var(--clay); background:var(--clay); }
 
+/* The hero's three numbers, and the hero's code block.
+
+   Both exist because the first screen has to answer two questions a builder
+   actually asks -- what does this cost me, and what does the code look like --
+   before the page starts explaining itself. */
+.fw .wins { list-style:none; margin:var(--sp-5) 0 0; padding:0; display:flex; flex-wrap:wrap;
+  gap:var(--sp-6); }
+.fw .wins li { display:flex; flex-direction:column; gap:2px; }
+.fw .wins b { font-size:var(--fs-6); font-weight:var(--fw-bold); letter-spacing:-0.02em;
+  line-height:1; }
+.fw .wins span { font-size:var(--fs-2); color:var(--ink-2); }
+.fw .herocode { margin:var(--sp-5) 0 0; }
+.fw .herocode pre { margin:0; padding:var(--sp-4) var(--sp-5); background:var(--surface);
+  border:1px solid var(--line); overflow-x:auto; font-size:var(--fs-2); line-height:1.6;
+  font-family:var(--code); tab-size:2; }
+.fw .herocode figcaption { margin-top:8px; font-size:var(--fs-2); color:var(--ink-2); }
+@media (max-width:760px) {
+  .fw .wins { gap:var(--sp-5); }
+  .fw .herocode pre { font-size:11px; padding:var(--sp-3) var(--sp-4); }
+}
+
+/* The two ways to take a payment, side by side. Equal weight on purpose:
+   the link path is not a lesser version of the code path, it is the whole
+   product for anyone who has an audience but not an app yet. */
+.fw .paths { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--sp-4);
+  margin-top:var(--sp-6); }
+.fw .path { border:1px solid var(--line); background:var(--card); padding:var(--sp-5); }
+.fw .path[data-on="1"] { border-color:var(--control-line); }
+.fw .path-k { display:block; font-size:var(--fs-1); font-weight:var(--fw-bold);
+  letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-3); }
+.fw .path-t { margin-top:6px; font-size:var(--fs-4); }
+.fw .path-d { margin:8px 0 0; font-size:var(--fs-2); line-height:1.6; color:var(--ink-2); }
+@media (max-width:620px) { .fw .paths { grid-template-columns:minmax(0,1fr); } }
+
+/* Founder stories. Styled now so that dropping real ones into lib/stories.ts
+   is the only step left; the section renders nothing while that file is empty. */
+.fw .stories { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:var(--sp-5); margin-top:var(--sp-7); }
+.fw .story { margin:0; border:1px solid var(--line); background:var(--card); padding:var(--sp-5); }
+.fw .story-q { margin:0; font-size:var(--fs-4); line-height:1.5; text-wrap:pretty; }
+/* Literal curly quotes rather than CSS unicode escapes: a backslash followed
+   by digits is an octal escape to TypeScript, which rejects it before CSS
+   ever sees the string, and the whole stylesheet stops compiling. */
+.fw .story-q::before { content:"“"; }
+.fw .story-q::after { content:"”"; }
+.fw .story-by { display:flex; align-items:center; gap:10px; margin-top:var(--sp-5); }
+.fw .story-by b { display:block; font-size:var(--fs-2); font-weight:var(--fw-bold); }
+.fw .story-av { width:36px; height:36px; flex:none; object-fit:cover; background:var(--surface-2); }
+.fw .story-ini { display:flex; align-items:center; justify-content:center; font-size:var(--fs-2);
+  font-weight:var(--fw-bold); color:var(--ink-2); }
+.fw .story-m { display:block; font-size:var(--fs-2); color:var(--ink-3); }
+.fw .story-amt { margin-left:auto; font-size:var(--fs-2); font-weight:var(--fw-bold);
+  color:var(--pine); white-space:nowrap; }
+
+/* The milestone line. A rule above it and nothing else: it is a remark on the
+   numbers directly above, not another card competing with them. */
+.fw .milestone { border-top:1px solid var(--line); padding:var(--sp-5) 0 var(--sp-6);
+  margin-bottom:var(--sp-6); }
+.fw .ms-h { margin:0; font-size:var(--fs-5); font-weight:var(--fw-bold); letter-spacing:-0.016em; }
+.fw .ms-s { margin:4px 0 0; font-size:var(--fs-3); color:var(--ink-2); max-width:var(--m-body); }
+.fw .ms-c { margin:var(--sp-4) 0 0; font-size:var(--fs-2); color:var(--ink-3); }
+
 /* modal / drawer */
 .fw .scrim { position:fixed; inset:0; background:var(--scrim); z-index:60; display:flex; align-items:center; justify-content:center; padding:20px; }
 .fw .modal { background:var(--card); border:1px solid var(--line); border-radius:0; width:100%; max-width:460px;  max-height:90vh; overflow:auto; }
