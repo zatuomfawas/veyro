@@ -1792,6 +1792,44 @@ export const CSS2 = `
 .fw .payoutline .po-amt { font-size:var(--fs-4); font-weight:var(--fw-bold);
   font-variant-numeric:tabular-nums; letter-spacing:-0.01em; }
 
+/* Skeletons.
+   The old loading state was a line of text, and its comment argued a shimmer
+   is dishonest because it draws fake content in the shape of real content and
+   keeps claiming the page is nearly ready even when it is stuck. Half of that
+   holds: so the shimmer runs for a bounded time and then rests, rather than
+   pulsing forever at someone whose connection has died, and the live region
+   below still says in words what is loading. What the text alone could not do
+   is hold the shape of the page, so the header stopped jumping when the real
+   thing arrived.
+
+   Reduced motion gets the blocks and none of the movement. */
+.fw .skel { background:var(--surface-2); border-radius:0; }
+.fw .skel[data-shimmer="1"] { position:relative; overflow:hidden; }
+.fw .skel[data-shimmer="1"]::after { content:""; position:absolute; inset:0;
+  transform:translateX(-100%);
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+  animation:veyro-skel 1.25s var(--ease) 6; }
+@keyframes veyro-skel { to { transform:translateX(100%); } }
+@media (prefers-reduced-motion: reduce) {
+  .fw .skel[data-shimmer="1"]::after { animation:none; }
+}
+.fw .skel-hero { background:var(--ink); padding:var(--sp-8) var(--sp-7); margin-bottom:var(--sp-7); }
+.fw .skel-hero .skel { background:rgba(255,255,255,.13); }
+.fw .skel-rail { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(0,1fr);
+  border-top:1px solid var(--ink); margin-bottom:var(--sp-7); }
+.fw .skel-rail > div { padding:var(--sp-5) var(--sp-5) var(--sp-4) 0;
+  border-right:1px solid var(--line); }
+.fw .skel-rail > div:last-child { border-right:0; }
+.fw .skel-rail > div + div { padding-left:var(--sp-5); }
+.fw .skel-card { border:1px solid var(--line); background:var(--card);
+  padding:var(--sp-5); margin-bottom:var(--sp-5); }
+@media (max-width:760px) {
+  .fw .skel-hero { padding:var(--sp-7) var(--sp-5); }
+  .fw .skel-rail { grid-auto-flow:row; grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .fw .skel-rail > div { border-right:0; border-bottom:1px solid var(--line); padding:var(--sp-4) 0; }
+  .fw .skel-rail > div + div { padding-left:0; }
+}
+
 .fw .lp-tall { padding:var(--sp-10) 0; }
 .fw .lp-dark .statement-sub { color:#bcbdbd; }
 /* The mark's own stroke angle, reused as a section divider */

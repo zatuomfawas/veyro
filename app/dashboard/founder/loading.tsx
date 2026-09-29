@@ -1,5 +1,5 @@
-import { Loading } from "@/app/_ui/Loading";
+import { DashboardSkeleton } from "@/app/_ui/Skeleton";
 
 export default function LoadingState() {
-  return <Loading what="your business" />;
+  return <DashboardSkeleton what="your business" />;
 }
