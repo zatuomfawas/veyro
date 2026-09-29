@@ -68,8 +68,8 @@ export const CSS = `
      being drawn in a colour nobody could read. Dark on light here, light on
      dark below, at the same strength both ways so the wait looks the same
      whichever theme you are in. */
-  --skel-block:#7c8287;
-  --skel-sheen:rgba(255,255,255,.45);
+  --skel-block:#b6babe;
+  --skel-sheen:rgba(255,255,255,.22);
   /* Interaction states. These were literals, and a literal cannot invert:
      pressed-black stays black when the button itself has gone white, and a
      pale selection stays pale when the text on it has gone light. Measured
@@ -2186,8 +2186,8 @@ export const CSS2 = `
    band and a block outside it are the same brightness. At .34 the band's
    blocks read as dimmer than the rest of the page, which made one skeleton
    look like two. */
-.fw .skel-hero { --skel-sheen:rgba(255,255,255,.30); }
-.fw .skel-hero .skel { background:rgba(255,255,255,.46); }
+.fw .skel-hero { --skel-sheen:rgba(255,255,255,.14); }
+.fw .skel-hero .skel { background:rgba(255,255,255,.22); }
 .fw .skel-rail { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(0,1fr);
   border-top:1px solid var(--ink); margin-bottom:var(--sp-7); }
 .fw .skel-rail > div { padding:var(--sp-5) var(--sp-5) var(--sp-4) 0;
@@ -2240,8 +2240,8 @@ export const CSS2 = `
   --ink:#e8eaec; --ink-2:#aab1b7; --ink-3:#8c949b;
   --placeholder:#8c949b;
   --nav-veil:rgba(15,17,19,.88);
-  --skel-block:#79818a;
-  --skel-sheen:rgba(255,255,255,.45);
+  --skel-block:#454b50;
+  --skel-sheen:rgba(255,255,255,.22);
   /* Pressed is brighter here, not darker: --brand is already light. */
   --brand-a:#ffffff;
   --clay-a:#3a201d;
@@ -2276,8 +2276,8 @@ export const CSS2 = `
   --ink:#e8eaec; --ink-2:#aab1b7; --ink-3:#8c949b;
   --placeholder:#8c949b;
   --nav-veil:rgba(15,17,19,.88);
-  --skel-block:#79818a;
-  --skel-sheen:rgba(255,255,255,.45);
+  --skel-block:#454b50;
+  --skel-sheen:rgba(255,255,255,.22);
   /* Pressed is brighter here, not darker: --brand is already light. */
   --brand-a:#ffffff;
   --clay-a:#3a201d;

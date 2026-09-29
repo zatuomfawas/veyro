@@ -92,13 +92,18 @@ const suite = (name, t, panel, panelInk) => {
   check("destructive label while pressed", t("clay"), t("clay-a"), 4.5);
   check("selected text", t("ink"), t("select-bg"), 4.5);
 
-  // A loading block carries no text, but it is the only thing on the screen
-  // while it is up: if it does not separate from the page there is nothing to
-  // look at. It sat at 1.16:1 before this was measured, which is why it read
-  // as "the skeleton is invisible". 3:1, as a non-text element that carries
-  // meaning -- and it is checked on --card too, since most blocks sit in one.
-  check("skeleton block on paper", t("skel-block"), t("paper"), 3);
-  check("skeleton block on card", t("skel-block"), t("card"), 3);
+  // A loading block carries no text, so no WCAG rule reaches it. This is a
+  // tripwire, not a requirement: it existed at 1.16:1 against the page, which
+  // is a skeleton nobody can see, and the point is that it cannot go back
+  // there unnoticed.
+  //
+  // The floor is 1.6 rather than 3. It was 3 while the brief was "make the
+  // block unmissable"; the brief is now "dimmer and less forced", and a
+  // placeholder is meant to be quiet -- it is the shape of content, not
+  // content. 1.6 leaves the current ~2:1 room to be tuned by eye without
+  // letting anyone tune it into invisibility.
+  check("skeleton block on paper", t("skel-block"), t("paper"), 1.6);
+  check("skeleton block on card", t("skel-block"), t("card"), 1.6);
   // --line-hover is not checked at 3:1. It is a hover cue on a control the
   // reader has already found, not the boundary that identifies it -- .btn-2
   // carries a label and its own ground. It measures 1.39:1 in light, which is
