@@ -74,7 +74,10 @@ function Step({
         <h3 className="h3" style={{ margin: 0 }}>{title}</h3>
         <span className="badge b-slate">{who}</span>
       </div>
-      <div style={{ marginTop: "var(--sp-3)" }}>{children}</div>
+      {/* longform: the prose inside a step takes a reading measure and is
+          centred in it, while the wide things a step can hold -- a checkout
+          preview, the payment flow, a code block -- keep the full width. */}
+      <div className="longform" style={{ marginTop: "var(--sp-3)" }}>{children}</div>
     </section>
   );
 }
@@ -166,7 +169,7 @@ export default function GetStarted() {
         </div>
       </div>
 
-      <main id="main" className="wrap-lp has-sticky" style={{ paddingTop: 32 }}>
+      <main id="main" className="wrap-lp longform has-sticky" style={{ paddingTop: 32 }}>
         <span className="lp-eyebrow">Get started</span>
         <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
           From your app to your first payment.
@@ -203,7 +206,7 @@ export default function GetStarted() {
             nothing, which reads as a page that ran out of things to say. The
             words beside it were already on the page, further down, saying the
             same thing about the same picture. */}
-        <div className="sidebyside" style={{ marginTop: 26 }}>
+        <div className="preview-stack" style={{ marginTop: 26 }}>
           <div>
             <h3 className="h4" style={{ margin: 0 }}>What your customer sees</h3>
             <p className="body" style={{ marginTop: 10 }}>
@@ -431,7 +434,7 @@ export function BuyButton() {
 
         {/* ---------------- FAQ ---------------- */}
         <h2 className="h3">Questions people ask at this point</h2>
-        <div className="ruled" style={{ marginTop: 16 }}>
+        <div className="ruled" style={{ marginTop: 16, maxWidth: "var(--m-body)", marginInline: "auto" }}>
           {FAQ.map(([q, a]) => (
             <div key={q}>
               <h3 className="h4" style={{ margin: 0 }}>{q}</h3>

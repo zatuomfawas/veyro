@@ -94,7 +94,7 @@ export default function HowItWorks() {
       {/* paddingBottom is inline, so it overrides .has-sticky's 86px on mobile.
           It must stay at or above 86 or the sticky CTA will cover the last
           paragraph. The class is kept because it states the intent. */}
-      <main id="main" className="wrap-lp has-sticky" style={{ paddingTop: 32 }}>
+      <main id="main" className="wrap-lp longform has-sticky" style={{ paddingTop: 32 }}>
         <span className="lp-eyebrow">How we built it</span>
         <h1 className="d2" style={{ marginTop: 8, maxWidth: "22ch" }}>
           How we built real payments for under-18s.

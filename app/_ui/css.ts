@@ -1011,47 +1011,57 @@ export const CSS = `
    between the two reads as something failing to load. This bounds the frame to
    roughly what it contains. Cards holding tables or grids do not take it --
    there the width is the content. */
+/* Long-form pages: one article column, with full-bleed exceptions.
+
+   /how-it-works is mostly prose in a 1344px container, each paragraph wrapping
+   at a reading measure and sitting hard against the left, which leaves six
+   hundred pixels of nothing down the right of the whole page. It is not a
+   framed box, which is why the box-based check never saw it.
+
+   The first attempt gave every child its own max-width and auto margins. That
+   measures correctly and looks wrong: a heading, a paragraph and a blockquote
+   have different intrinsic widths, so centring each one independently lines up
+   their boxes and not their text, and the column grows three left edges.
+
+   A grid with a named content column instead. Every child lands in the same
+   column, so they share one left edge; the few things that are genuinely wide
+   -- the roles grid, the payment flow, the integration paths, a preview beside
+   its words -- opt into the full width by name. */
+.fw .longform { display:grid; grid-template-columns:
+  [full-start] minmax(0, 1fr)
+  [content-start] minmax(0, var(--m-body)) [content-end]
+  minmax(0, 1fr) [full-end]; }
+.fw .longform > * { grid-column: content; min-width:0; }
+.fw .longform > .truthgrid,
+.fw .longform > .flow,
+.fw .longform > .paths,
+.fw .longform > .stage,
+.fw .longform > .code,
+.fw .longform > .codecap { grid-column: full; }
+/* Below the point where the middle column would be the whole width anyway,
+   the grid is just one column and costs nothing. */
+@media (max-width:900px) {
+  .fw .longform { display:block; }
+}
+
 .fw .card-prose { max-width:78ch; }
 /* The eligibility card is the tight case: its fields already cap at --m-tight,
    so 78ch would still leave half the frame empty. It caps just past them. */
 .fw .card-prose:has(> .checkform) { max-width:46ch; }
 
-/* A fixed-width object beside the words about it.
+/* A fixed-width object under the words about it, centred.
 
-   Used wherever a preview, card or diagram has a natural maximum width and
-   would otherwise sit in a wide column with the rest of the row empty. The
-   text column takes the slack, so the row fills rather than trailing off. */
-.fw .sidebyside { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,560px);
-  gap:var(--sp-7); align-items:start; }
-/* The object beside the words is often much taller than them -- a checkout
-   mock is 796px against 304px of explanation.
+   This was side by side. A checkout mock is 560 wide and 796 tall, and the
+   three paragraphs explaining it are 304 tall, so the row left a five-hundred
+   pixel hole beneath the text -- the exact shape this pass is removing. Making
+   the text travel with a sticky column hid it while scrolling and left it in
+   every screenshot; padding the text out to match would be writing filler.
 
-   This column was briefly sticky, so the text would travel beside the part of
-   the object you were looking at. That was a mistake. A sticky block inside a
-   grid row sticks within its own row, so on a tall row the text detaches from
-   the heading above it and slides down the page on its own, which reads as
-   copy coming loose rather than as a considered sidebar. Whatever it bought
-   in filled space it lost twice over in the page behaving oddly while you
-   read it. The column stays where it was put. */
-@media (max-width:900px) {
-  .fw .sidebyside { grid-template-columns:minmax(0,1fr); gap:var(--sp-6); }
-}
-
-/* A section that should read as the important one. A single accent rule along
-   the top edge, and nothing else -- enough to separate it from the section
-   above without turning it into a coloured box. */
-.fw .ch-accent { border-top:2px solid transparent;
-  border-image:linear-gradient(90deg, var(--pine), var(--slate)) 1; }
-
-/* A short list with a tick per line. Used beside a tall object, where a
-   paragraph leaves the column short and the row opens a gap under it. */
-.fw .ticks { list-style:none; margin:0; padding:0; display:flex; flex-direction:column;
-  gap:10px; }
-.fw .ticks li { position:relative; padding-left:26px; font-size:var(--fs-3);
-  line-height:1.5; color:var(--ink-2); }
-.fw .ticks li::before { content:""; position:absolute; left:0; top:0.42em; width:12px; height:7px;
-  border-left:2px solid var(--pine); border-bottom:2px solid var(--pine);
-  transform:rotate(-45deg); }
+   Stacked, the words sit in the article column and the object centres below
+   them. What is left either side of it is margin on both sides, which reads as
+   a measure rather than as something that failed to load. */
+.fw .preview-stack { display:flex; flex-direction:column; gap:var(--sp-6); }
+.fw .preview-stack > :last-child { align-self:center; width:100%; max-width:560px; }
 
 /* modal / drawer */
 .fw .scrim { position:fixed; inset:0; background:var(--scrim); z-index:60; display:flex; align-items:center; justify-content:center; padding:20px; }
