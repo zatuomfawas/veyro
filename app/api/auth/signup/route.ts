@@ -6,6 +6,7 @@ import { hashPassword, audit } from "@/lib/auth";
 import { evaluateDateOfBirth, MIN_SIGNUP_AGE } from "@/lib/age";
 import { newVerificationToken } from "@/lib/verification";
 import { sendVerificationEmail } from "@/lib/email";
+import { ensureDefaultProduct } from "@/lib/default-product";
 
 /** Founders may be 13+. A guardian must be a legal adult. */
 const GUARDIAN_MIN_AGE = 18;
@@ -107,6 +108,21 @@ export async function POST(req: Request) {
   });
 
   await audit(user.id, "account.created", email, undefined, { country, region, ageAtSignup });
+
+  // A founder gets a starter product so the dashboard can show them a real
+  // integration snippet on their first visit rather than a placeholder and an
+  // errand. A guardian gets nothing: they do not sell anything.
+  //
+  // Non-fatal, like the email below it. The account exists either way, and
+  // failing a signup because a convenience row did not write would be a much
+  // worse outcome than a founder making their own product the old way.
+  if (role === "FOUNDER") {
+    try {
+      await ensureDefaultProduct(user.id, user.name);
+    } catch {
+      // Swallowed on purpose: see above. The dashboard handles having none.
+    }
+  }
 
   // No session. Signing them in here would defeat the gate entirely.
   //

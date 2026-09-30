@@ -38,6 +38,7 @@ import { AddToApp } from "./AddToApp";
 import RequestPayout from "./RequestPayout";
 import { EarningsHero } from "./EarningsHero";
 import { weekStart, foldWeek } from "@/lib/week";
+import { canTakePayment } from "@/lib/sale-rules";
 import {
   BusinessHeader, GuardianStatus, PaymentStatus, PrimaryAction,
   overallStatus as computeOverall,
@@ -233,6 +234,19 @@ export default async function FounderDashboard() {
 
   const firstLive = products.find((p) => p.status === "LIVE");
 
+  // The product the integration panel talks about: the live one if there is
+  // one, otherwise whatever they have. A founder who signed up a minute ago
+  // has a starter draft, and the snippet is worth handing over before the
+  // guardian has finished Stripe -- they can be pasting it meanwhile.
+  const snippetProduct = firstLive ?? products[0] ?? null;
+  const canCharge = canTakePayment(account);
+  const snippetLive = Boolean(firstLive) && canCharge;
+  const snippetBlocked = snippetLive
+    ? null
+    : !canCharge
+      ? "It cannot take money until your guardian finishes payment setup below."
+      : "Set it live on your products page when you are ready to be paid.";
+
   // What "copy your payment link" should copy, and whether it can copy at all.
   //
   // A founder can have several products, so "your link" has to resolve to one:
@@ -329,12 +343,19 @@ export default async function FounderDashboard() {
                       Open your checkout
                     </Link>
                   )
-                  : <Link className="btn" href="/dashboard/founder/products">Set up something to sell</Link>}
+                  : null}
               </div>
             </div>
           )}
 
-          {firstLive && <AddToApp productId={firstLive.id} productName={firstLive.name} />}
+          {snippetProduct && (
+            <AddToApp
+              productId={snippetProduct.id}
+              productName={snippetProduct.name}
+              live={snippetLive}
+              blockedReason={snippetBlocked}
+            />
+          )}
 
           {/* Context, not content. Figures a founder glances at, so they sit on
               a rule rather than inside four more bordered cards on a page whose

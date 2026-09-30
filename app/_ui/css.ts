@@ -537,9 +537,16 @@ export const CSS = `
    inside a sentence and wrong for a block of markup: it has no real monospace
    metrics, so indentation does not line up. This is the one place a second
    family is justified, and it is a stack of faces already on the machine. */
+/* A code block is a framed box with a visible right edge, and its lines have
+   a natural length -- about seventy characters here. Left unbounded in a wide
+   column it draws that edge six hundred pixels past where the code stops, and
+   the empty band reads as a rendering fault rather than as breathing room.
+   Bounded to its own measure, the frame lands where the content does. Lines
+   longer than the cap still scroll; nothing is hidden. */
 .fw .code { font-family:var(--code); font-size:var(--fs-2); line-height:1.7;
   background:var(--surface); border:1px solid var(--line); padding:14px 16px;
-  overflow-x:auto; white-space:pre; tab-size:2; color:var(--ink); margin:0; }
+  overflow-x:auto; white-space:pre; tab-size:2; color:var(--ink); margin:0;
+  max-width:78ch; }
 .fw .code .c { color:var(--ink-3); }
 .fw .code b { font-weight:var(--fw-bold); color:var(--brand); }
 .fw .codecap { display:flex; align-items:center; justify-content:space-between; gap:12px;
@@ -995,6 +1002,19 @@ export const CSS = `
 .fw .ai-pre { margin:0; padding:var(--sp-5); font-family:var(--code); font-size:var(--fs-2);
   line-height:1.65; color:var(--ink-2); white-space:pre-wrap; overflow-x:auto; tab-size:2; }
 @media (max-width:900px) { .fw .ai { grid-template-columns:minmax(0,1fr); gap:var(--sp-6); } }
+
+/* A card that holds one column of prose or one narrow form.
+
+   A .card draws a visible border, so its width is a line someone sees. Left to
+   fill a wide page while its text wraps at a reading measure, it draws that
+   line several hundred pixels past where the content stops, and the band
+   between the two reads as something failing to load. This bounds the frame to
+   roughly what it contains. Cards holding tables or grids do not take it --
+   there the width is the content. */
+.fw .card-prose { max-width:78ch; }
+/* The eligibility card is the tight case: its fields already cap at --m-tight,
+   so 78ch would still leave half the frame empty. It caps just past them. */
+.fw .card-prose:has(> .checkform) { max-width:46ch; }
 
 /* A fixed-width object beside the words about it.
 
@@ -2069,6 +2089,23 @@ export const CSS2 = `
   word-break:break-all; }
 .fw .addapp-id .addapp-key { font-size:var(--fs-1); letter-spacing:0.06em;
   text-transform:uppercase; color:var(--ink-3); flex:none; }
+/* The code beside what you do with it, rather than above it. A snippet whose
+   longest line is ~70 characters in a 1300px panel leaves a third of the row
+   empty; the actions take that space. */
+.fw .addapp-grid { display:grid; grid-template-columns:minmax(0,1fr); gap:var(--sp-6);
+  align-items:start; margin-top:var(--sp-5); }
+@media (min-width:900px) {
+  .fw .addapp-grid { grid-template-columns:minmax(0,7fr) minmax(0,5fr); gap:var(--sp-7); }
+}
+.fw .addapp-side > :first-child { margin-top:0; }
+
+/* The snippet itself, with the founder's own product id in it. Scrolls rather
+   than wraps: this is code someone is about to paste, and a soft-wrapped line
+   reads as a line break that is not there. */
+.fw .addapp-code { margin:0; padding:var(--sp-5); background:var(--surface);
+  border:1px solid var(--line); overflow-x:auto; }
+.fw .addapp-code code { font-family:var(--code); font-size:var(--fs-2); line-height:1.65;
+  color:var(--ink-2); white-space:pre; tab-size:2; }
 .fw .addapp-foot { margin:var(--sp-5) 0 0; font-size:var(--fs-3); color:var(--ink-2); }
 @media (max-width:560px) { .fw .addapp { padding:var(--sp-5); } }
 

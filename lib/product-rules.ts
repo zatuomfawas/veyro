@@ -58,3 +58,17 @@ export function validateProductFields(f: {
 
   return errors;
 }
+
+/**
+ * The name a founder's starter product gets: "Zat's first product".
+ *
+ * Here rather than beside the database call that uses it so it can be tested
+ * without a database — the create itself needs Prisma, this does not.
+ */
+export function defaultProductName(founderName?: string | null): string {
+  const first = (founderName ?? "").trim().split(/\s+/)[0] ?? "";
+  if (!first) return "Your first product";
+  // "Chris" takes a bare apostrophe, not "Chris's".
+  const suffix = /s$/i.test(first) ? "'" : "'s";
+  return `${first}${suffix} first product`;
+}

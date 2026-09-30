@@ -208,7 +208,7 @@ function EligibilityCheck({
           </>
         )}
 
-        <div className="card" style={{ marginTop: 20 }}><div className="card-b checkform">
+        <div className="card card-prose" style={{ marginTop: 20 }}><div className="card-b checkform">
           <Field label="Where do you live?">
             <select className="select" value={code} onChange={(e) => { setCode(e.target.value); setRegion(""); reset(); }}>
               <option value="">Choose a country</option>

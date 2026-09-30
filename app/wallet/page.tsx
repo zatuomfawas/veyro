@@ -163,7 +163,7 @@ export default function WalletPage() {
           </div>
         </div>
 
-        <div className="card" style={{ marginTop: 32 }}>
+        <div className="card card-prose" style={{ marginTop: 32 }}>
           <div className="card-b">
             <h2 className="h4" style={{ marginTop: 0 }}>Where the money actually sits</h2>
             <p className="body">
