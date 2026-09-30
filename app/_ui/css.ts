@@ -2011,6 +2011,46 @@ export const CSS2 = `
    hairlines and forty pixels of nothing between the question and the answer. */
 .fw .wh-more .wh-break { margin-top:0; padding-top:0; border-top:0; }
 
+/* Account & setup, folded away. Everything here is real and occasionally
+   necessary -- the guardian's state, what Stripe is still waiting for -- and
+   none of it is why anyone opened the page. It gets a disclosure rather than a
+   column of its own, so the page can be about money. */
+.fw .acct { border-top:1px solid var(--line); margin-top:var(--sp-7); }
+.fw .acct > summary { list-style:none; cursor:pointer; display:inline-flex;
+  align-items:center; gap:8px; padding:var(--sp-5) 0; font-size:var(--fs-4);
+  font-weight:var(--fw-bold); letter-spacing:-0.012em; color:var(--ink); }
+.fw .acct > summary::-webkit-details-marker { display:none; }
+.fw .acct > summary::after { content:"+"; font-size:var(--fs-5); line-height:1;
+  color:var(--ink-3); }
+.fw .acct[open] > summary::after { content:"−"; }
+.fw .acct-b { padding-bottom:var(--sp-5); }
+
+/* The earnings hero's figures and its week of bars. The panel itself is
+   .wallethero above; these are the parts that only exist on the dashboard. */
+.fw .eh-top { display:flex; align-items:flex-end; justify-content:space-between;
+  gap:var(--sp-6); flex-wrap:wrap; }
+.fw .eh-figs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--sp-5);
+  margin-top:var(--sp-7); padding-top:var(--sp-5); border-top:1px solid var(--line); }
+.fw .eh-n { display:block; font-size:var(--fs-6); font-weight:var(--fw-bold);
+  letter-spacing:-0.02em; line-height:1.1; font-variant-numeric:tabular-nums; }
+.fw .eh-l { display:block; margin-top:3px; font-size:var(--fs-2); color:var(--ink-3); }
+.fw .eh-chart { display:flex; align-items:stretch; gap:6px; height:88px;
+  margin-top:var(--sp-6); }
+.fw .eh-col { flex:1 1 0; display:flex; flex-direction:column; gap:6px; min-width:0; }
+/* The track is what a bar's percentage is measured against, so the tallest day
+   fills it exactly and the rest stay in proportion to it. */
+.fw .eh-track { flex:1 1 auto; display:flex; align-items:flex-end; }
+.fw .eh-bar { display:block; width:100%; background:var(--pine); min-height:2px; }
+/* A day with nothing in it gets a hairline, not a bar: an empty day is a fact
+   worth seeing, and a zero-height bar reads as a rendering fault. */
+.fw .eh-bar[data-zero="1"] { background:var(--line); height:2px !important; }
+.fw .eh-d { text-align:center; font-size:var(--fs-1); color:var(--ink-3); }
+@media (max-width:560px) {
+  .fw .eh-figs { grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--sp-3); }
+  .fw .eh-n { font-size:var(--fs-5); }
+  .fw .eh-chart { height:52px; }
+}
+
 /* Add it to your app.
    The product id was in the page already, buried inside the href of a
    Preview link, and nowhere as text a founder could select — while the SDK
