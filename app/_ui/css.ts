@@ -1967,43 +1967,49 @@ export const CSS2 = `
    nothing else here is: on a page of white cards a dark band is the only
    hierarchy signal that cannot be missed, and it is the same reversal the
    marketing page ends on, so the product looks like what was promised. */
-.fw .wallethero { background:var(--ink); color:var(--reverse); padding:var(--sp-8) var(--sp-7);
+.fw .wallethero { background:var(--surface); color:var(--ink);
+  border:1px solid var(--line); padding:var(--sp-8) var(--sp-7);
   margin-bottom:var(--sp-7); }
 .fw .wallethero .wh-label { display:block; font-size:var(--fs-2); letter-spacing:0.02em;
-  color:#9b9c9d; }
+  color:var(--ink-3); }
 .fw .wallethero .wh-big { display:block; font-size:var(--fs-10); line-height:1.02;
   letter-spacing:-0.03em; font-weight:var(--fw-bold); font-variant-numeric:tabular-nums;
   margin-top:var(--sp-2); }
-.fw .wallethero .wh-sub { display:block; font-size:var(--fs-3); color:#bcbdbd; margin-top:var(--sp-3);
-  max-width:46ch; }
+.fw .wallethero .wh-sub { display:block; font-size:var(--fs-3); color:var(--ink-2);
+  margin-top:var(--sp-3); max-width:46ch; }
 /* The breakdown, on one rule. Every figure a founder might question about the
    big number above, in the order the money actually moves through them. */
 .fw .wh-break { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(0,1fr);
   gap:var(--sp-5); margin-top:var(--sp-7); padding-top:var(--sp-5);
-  border-top:1px solid rgba(255,255,255,.17); }
+  border-top:1px solid var(--line); }
 .fw .wh-break > div { min-width:0; }
-.fw .wh-break dt { display:block; font-size:var(--fs-2); color:#9b9c9d; }
+.fw .wh-break dt { display:block; font-size:var(--fs-2); color:var(--ink-3); }
 .fw .wh-break dd { display:block; margin:3px 0 0; font-size:var(--fs-5); font-weight:var(--fw-med);
   font-variant-numeric:tabular-nums; }
-/* Settled money is pine everywhere else on the site, so it is pine here. On
-   this ground the light tint carries it; --pine itself is 2.01:1 on ink. */
-.fw .wh-break dd[data-tone="settled"] { color:#a5bdb4; }
-.fw .wh-break dd[data-tone="out"] { color:#d9aeab; }
+/* Settled money is pine everywhere else on the site, so it is pine here --
+   the token now, not a tint of it, because the ground is an ordinary surface
+   and --pine is measured against exactly that in both themes. */
+.fw .wh-break dd[data-tone="settled"] { color:var(--pine); }
+.fw .wh-break dd[data-tone="out"] { color:var(--clay); }
 .fw .wallethero .row { margin-top:var(--sp-6); }
 /* The breakdown, folded away.
    Five figures on a rule under the headline number meant the first thing a
    founder saw was six numbers, not one. They are still here, still exact, one
    click down: the question "how much do I have" gets answered before the
    question "why is it that much" is even asked. */
-.fw .wh-more { margin-top:var(--sp-6); border-top:1px solid rgba(255,255,255,.17);
+.fw .wh-more { margin-top:var(--sp-6); border-top:1px solid var(--line);
   padding-top:var(--sp-4); }
 .fw .wh-more > summary { list-style:none; cursor:pointer; display:inline-flex;
-  align-items:center; gap:8px; font-size:var(--fs-2); color:#bcbdbd; }
+  align-items:center; gap:8px; font-size:var(--fs-2); color:var(--ink-2); }
 .fw .wh-more > summary::-webkit-details-marker { display:none; }
-.fw .wh-more > summary:hover { color:var(--reverse); }
-.fw .wh-more > summary::after { content:"+"; font-size:var(--fs-4); line-height:1; color:#9b9c9d; }
+.fw .wh-more > summary:hover { color:var(--ink); }
+.fw .wh-more > summary::after { content:"+"; font-size:var(--fs-4); line-height:1; color:var(--ink-3); }
 .fw .wh-more[open] > summary::after { content:"−"; }
-.fw .wh-more[open] > summary { color:var(--reverse); margin-bottom:var(--sp-4); }
+.fw .wh-more[open] > summary { color:var(--ink); margin-bottom:var(--sp-4); }
+/* Inside the disclosure the breakdown does not need its own rule and gap: the
+   disclosure already draws one above its summary, and stacking both put two
+   hairlines and forty pixels of nothing between the question and the answer. */
+.fw .wh-more .wh-break { margin-top:0; padding-top:0; border-top:0; }
 
 /* Add it to your app.
    The product id was in the page already, buried inside the href of a
@@ -2219,7 +2225,7 @@ export const CSS2 = `
    No colour is defined ONLY in here. Every token has its light value on bare
    .fw above, so a browser that supports neither still gets a complete theme.
 
-   What does not invert: .lp-dark and .wallethero were already dark, and their
+   What does not invert: .lp-dark was already dark, and its
    internals are hard-coded for a dark ground — #bcbdbd captions, white rules
    at 17% opacity. Flipping them would make a light band full of pale-grey
    text. They stay dark and take a border instead, since they can no longer
@@ -2271,9 +2277,14 @@ export const CSS2 = `
   color-scheme: dark;
 }
 
-/* The two panels that were always dark. On a dark page they would otherwise
-   dissolve into it, so they earn an edge. */
-[data-theme="dark"] .fw .wallethero,
+/* The landing page's dark band is still dark on a dark page, so it earns an
+   edge to stop it dissolving into the page around it.
+
+   The wallet hero used to be in this rule and is not any more. It was dark in
+   both themes -- var(--ink) in light, this in dark -- which made "Available to
+   request" a black panel on a white dashboard, and the one thing on the page
+   that ignored the theme switch. It is an ordinary surface now and inverts
+   with everything else. */
 [data-theme="dark"] .fw section.lp.lp-dark { background:#080a0b; border:1px solid var(--line);
   color:#e8eaec; }
 
@@ -2285,14 +2296,12 @@ export const CSS2 = `
    everywhere except here, where the ground did not invert with it. The
    headline figure went near-black on near-black. The panels state their own
    ink rather than inheriting a token whose meaning flipped underneath them. */
-[data-theme="dark"] .fw .wallethero .wh-big,
 [data-theme="dark"] .fw .lp-dark .lp-h2,
 [data-theme="dark"] .fw .lp-dark h2,
 [data-theme="dark"] .fw .lp-dark .d1,
 [data-theme="dark"] .fw .lp-dark .d2,
 [data-theme="dark"] .fw .lp-dark .statement { color:#e8eaec; }
 [data-theme="dark"] .fw .lp-dark .btn { background:#e8eaec; border-color:#e8eaec; color:#0f1113; }
-[data-theme="dark"] .fw .wallethero .btn { background:#e8eaec; border-color:#e8eaec; color:#0f1113; }
 /* The theme switch. Square, because every other edge on this site is square
    and a pill here would read as imported from somewhere else. The track is a
    control boundary, so it takes --control-line and its 3:1, not --line.
