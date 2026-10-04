@@ -87,7 +87,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             meaningful share of them cannot lawfully consent to behavioural
             tracking. Session recording on minors also sits badly beside a
             product whose pitch to their parents is that it never receives their
-            documents and takes no percentage.
+            identity documents.
 
             It sets no cookie and uses no browser storage: verified against the
             package source, not its marketing. The script and its beacon are both

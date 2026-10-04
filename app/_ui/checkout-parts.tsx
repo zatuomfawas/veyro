@@ -84,7 +84,7 @@ export function CheckoutAssurance({ underAgeNote = true }: { underAgeNote?: bool
             <p className="sb-body">
               Your card details are entered on Stripe&rsquo;s own form and are never seen by
               Veyro or by the seller. The payment goes directly to the seller&rsquo;s Stripe
-              account. Veyro never holds it and takes no percentage of it.
+              account. Veyro never holds it.
             </p>
           </div>
         </div>

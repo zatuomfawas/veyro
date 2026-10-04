@@ -227,7 +227,7 @@ export default function GetStarted() {
               <li>Your product name and price, not ours</li>
               <li>Stripe&rsquo;s card form, so the number never reaches you or us</li>
               <li>Works from a link in a bio, a DM, or a button in your app</li>
-              <li>No percentage taken by Veyro</li>
+              <li>Your name on it, so a buyer knows who they are paying</li>
             </ul>
             <p className="small" style={{ marginTop: 16 }}>
               The page is hosted for you. There is nothing here to build, style or keep running.
@@ -471,8 +471,10 @@ export function BuyButton() {
           <Link className="btn btn-2 btn-lg" href="/check">Check my eligibility first</Link>
         </div>
         <p className="tiny" style={{ marginTop: 12 }}>
-          Veyro takes no percentage of what you earn. Stripe&rsquo;s own processing fees still
-          apply. <Link className="linkbtn" href="/how-it-works">How the setup works</Link>
+          Free under $100 a month. Stripe&rsquo;s own processing fees still apply.{" "}
+          <Link className="linkbtn" href="/pricing">Pricing</Link>
+          {" \u00b7 "}
+          <Link className="linkbtn" href="/how-it-works">How the setup works</Link>
         </p>
       </main>
 
