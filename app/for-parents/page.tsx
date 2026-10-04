@@ -8,6 +8,8 @@ import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { GuardianPermissions } from "@/app/_ui/GuardianPermissions";
+import { ParentPanel } from "@/app/_ui/ParentPanel";
+import { MoneyRail } from "@/app/_ui/MoneyRail";
 
 export const viewport = buildViewport();
 
@@ -171,8 +173,25 @@ export default function ForParents() {
           parts no lawyer has confirmed. It is not a sales page and there is nothing to buy.
         </p>
 
-        <hr className="rule" style={{ margin: "30px 0" }} />
+        {/* Layer 2. A parent arrives having been asked to agree to something
+            and not knowing what it looks like, and four well-written answers
+            below cannot fix that as quickly as showing them. The controls are
+            the part that matters: the fear is being locked in, and a visible
+            Close the account answers it before the prose gets there. */}
+        <ParentPanel />
 
+        <p className="body" style={{ marginTop: "var(--sp-6)" }}>
+          Your name is on the account, so the money that reaches it is traceable to a real,
+          verified adult &mdash; which is the entire reason this is allowed. It does not pass
+          through Veyro on the way.
+        </p>
+
+        <MoneyRail />
+
+        <hr className="rule" style={{ margin: "var(--sp-9) 0 var(--sp-7)" }} />
+
+        {/* Layer 3: the four questions, at length, for the reader who wants
+            them. */}
         {QUESTIONS.map((x, i) => (
           <section key={x.q}>
             <h2 className="h3" style={{ marginTop: i === 0 ? 0 : 36 }}>{x.q}</h2>

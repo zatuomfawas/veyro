@@ -105,6 +105,10 @@ export const CSS = `
   --pine:#12513a; --pine-h:#0b3a29; --pine-bg:transparent; --pine-line:#acc2ba;
   --amber:#8a5a12; --amber-bg:transparent; --amber-line:#cdb899;
   --slate:#22456b; --slate-bg:transparent; --slate-line:#adbac8;
+  /* The pricing slider's track. Decorative -- no text sits on either --
+     but the free band has to be visible, and --pine-bg is transparent in
+     this theme by design, so these are their own pair. */
+  --track-free:#e4efe9; --track-rest:#ececeb;
   --clay:#9c2b22; --clay-bg:transparent; --clay-line:#d5a6a2;
   /* Display face, wordmark only. Never for interface text. */
   --display: var(--font-archivo), "Archivo", "Helvetica Neue", "Arial Black", Helvetica, Arial, sans-serif;
@@ -1087,7 +1091,22 @@ export const CSS = `
 .fw .longform > .objection,
 .fw .longform > .stage,
 .fw .longform > .code,
+.fw .longform > .mrail,
+.fw .longform > .dp,
+.fw .longform > .calc,
+.fw .longform > .aud,
 .fw .longform > .codecap { grid-column: full; }
+/* ...but the ones that are objects rather than bands cap and centre. 860px is
+   a shade wider than the 66ch text column, which is the point: they are
+   allowed to break the measure without becoming the page. */
+.fw .longform > .dp,
+.fw .longform > .calc { max-width:860px; margin-inline:auto; }
+/* A diagram that arrives directly after a paragraph needs the room a heading
+   would otherwise have given it. */
+.fw .longform > .dp,
+.fw .longform > .calc,
+.fw .longform > .aud,
+.fw .longform > .mrail { margin-block:var(--sp-8); }
 /* Below the point where the middle column would be the whole width anyway,
    the grid is just one column and costs nothing. */
 @media (max-width:900px) {
@@ -2532,6 +2551,93 @@ export const CSS2 = `
 .fw .chip-sep { color:var(--ink-3); font-size:var(--fs-1); flex:none; }
 @media (prefers-reduced-motion: reduce) { .fw .chip { transition:none; } }
 
+/* ==== the parent's panel ==================================================
+   Reuses the .dp window chrome, because the point is that this is the same
+   application the founder is looking at rather than a marketing drawing of
+   one. What is added is the setup sequence and the controls. */
+/* Two columns above the fold-down point: the sequence on the left, what the
+   parent keeps on the right. One column left every row two-thirds empty, and
+   side by side is also the truer picture -- the controls are not something
+   that happens after the setup, they are there the whole time. */
+.fw .pp .dp-body { padding-top:var(--sp-5); display:grid; gap:var(--sp-6) var(--sp-7);
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:start; }
+@media (max-width:720px) {
+  .fw .pp .dp-body { grid-template-columns:1fr; gap:var(--sp-5); }
+}
+.fw .pp-steps { list-style:none; margin:0; padding:0; }
+.fw .pp-step { display:flex; gap:var(--sp-3); padding:10px 0;
+  border-bottom:1px solid var(--line-soft); align-items:flex-start; }
+.fw .pp-step:last-child { border-bottom:0; }
+.fw .pp-tick { flex:none; width:19px; height:19px; margin-top:1px;
+  display:inline-flex; align-items:center; justify-content:center;
+  border:1px solid var(--control-line); color:transparent;
+  background:var(--surface);
+  transition:color var(--t-2) var(--ease), background-color var(--t-2) var(--ease),
+             border-color var(--t-2) var(--ease); }
+.fw .pp-step[data-done="1"] .pp-tick { color:var(--reverse); background:var(--pine);
+  border-color:var(--pine); }
+.fw .pp-step-b { min-width:0; }
+.fw .pp-step-t { display:flex; align-items:center; gap:7px; flex-wrap:wrap;
+  font-size:var(--fs-3); font-weight:var(--fw-med); color:var(--ink); }
+.fw .pp-step-d { display:block; margin-top:2px; font-size:var(--fs-2); color:var(--ink-3); }
+/* The two steps that are the parent's. Naming them inside the sequence is the
+   clearest way to say that the other two are not. */
+.fw .pp-you { font-size:var(--fs-1); font-weight:var(--fw-bold); letter-spacing:0.05em;
+  text-transform:uppercase; color:var(--slate); border:1px solid var(--slate-line);
+  background:var(--slate-bg); padding:1px 6px; }
+.fw .pp-ctl { padding-left:var(--sp-7); border-left:1px solid var(--line); }
+@media (max-width:720px) {
+  .fw .pp-ctl { padding-left:0; border-left:0; padding-top:var(--sp-5);
+    border-top:1px solid var(--line); }
+}
+.fw .pp-btns { display:grid; gap:var(--sp-2); margin-top:var(--sp-4); }
+/* Drawn as controls, not as a list, because the reassurance is that these are
+   buttons. Inert on purpose: a real one here would be a lie about what a
+   button does. */
+.fw .pp-btn { border:1px solid var(--control-line); background:var(--surface);
+  padding:10px var(--sp-4); }
+.fw .pp-btn-t { display:block; font-size:var(--fs-3); font-weight:var(--fw-med); }
+.fw .pp-btn-d { display:block; margin-top:2px; font-size:var(--fs-2); color:var(--ink-3); }
+@media (prefers-reduced-motion: reduce) { .fw .pp-tick { transition:none; } }
+
+/* ==== the pricing calculator ==============================================
+   A range input styled to carry an argument. The track is tinted across the
+   free band so the reader can see, before touching it, that a quarter of the
+   scale costs nothing -- and the thumb is a square because nothing else on
+   this site has a radius.
+
+   The vendor pseudo-elements cannot be combined into one selector list: a
+   browser that does not recognise one of them drops the whole rule, so the
+   WebKit and Firefox halves are written out separately on purpose. */
+.fw .calc { border:1px solid var(--line); background:var(--card); padding:var(--sp-6); }
+.fw .calc-top { display:flex; flex-direction:column; gap:5px; margin-bottom:var(--sp-5); }
+.fw .calc-range { -webkit-appearance:none; appearance:none; width:100%; height:26px;
+  background:transparent; display:block; cursor:pointer; }
+.fw .calc-range:focus-visible { outline:var(--focus-w) solid var(--brand);
+  outline-offset:var(--focus-offset); }
+.fw .calc-range::-webkit-slider-runnable-track { height:6px; border:1px solid var(--control-line);
+  background:linear-gradient(90deg, var(--track-free) 0, var(--track-free) var(--calc-free,10%),
+    var(--track-rest) var(--calc-free,10%), var(--track-rest) 100%); }
+.fw .calc-range::-moz-range-track { height:6px; border:1px solid var(--control-line);
+  background:linear-gradient(90deg, var(--track-free) 0, var(--track-free) var(--calc-free,10%),
+    var(--track-rest) var(--calc-free,10%), var(--track-rest) 100%); }
+.fw .calc-range::-webkit-slider-thumb { -webkit-appearance:none; appearance:none;
+  width:18px; height:18px; margin-top:-7px; background:var(--brand);
+  border:1px solid var(--brand); }
+.fw .calc-range::-moz-range-thumb { width:18px; height:18px; border-radius:0;
+  background:var(--brand); border:1px solid var(--brand); }
+.fw .calc-scale { display:flex; justify-content:space-between; gap:var(--sp-3);
+  margin-top:7px; font-size:var(--fs-1); color:var(--ink-3); }
+.fw .calc-mark { color:var(--pine); font-weight:var(--fw-med); }
+.fw .calc-out { margin-top:var(--sp-6); padding-top:var(--sp-5);
+  border-top:1px solid var(--line); }
+/* Zero is the argument, so it is drawn as a result rather than as an absence. */
+.fw .calc-out .fig[data-free="1"] { color:var(--pine); }
+@media (max-width:560px) {
+  .fw .calc { padding:var(--sp-5); }
+  .fw .calc-scale .calc-mark { display:none; }
+}
+
 /* ==== audience split ======================================================
    Two people read this site and they are not reading for the same thing. A
    founder is asking whether they can start; a parent is asking whether this
@@ -2636,6 +2742,7 @@ export const CSS2 = `
   --pine-bg:#12251e; --pine-line:#245040;
   --amber:#d9a441; --amber-bg:#2a2112; --amber-line:#4f3f19;
   --slate:#83aadb; --slate-bg:#15202e; --slate-line:#294660;
+  --track-free:#163027; --track-rest:#24282c;
   --clay:#e39089; --clay-bg:#2b1917; --clay-line:#5d322c;
   /* Native controls, scrollbars and form widgets follow the page. */
   color-scheme: dark;

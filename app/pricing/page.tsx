@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { buildViewport, SITE } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
+import { PriceCalculator } from "@/app/_ui/PriceCalculator";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { MobileNav } from "@/app/_ui/MobileNav";
@@ -92,7 +93,15 @@ export default function Pricing() {
           numbers actually look like.
         </p>
 
-        <hr className="rule" style={{ margin: "30px 0" }} />
+        {/* Layer 2: the model, as the instrument rather than as a sentence.
+            It sits above the tiers because "what would this cost me" is the
+            question the page is actually asked, and a reader who answers it
+            here has a reason to read the two panels below. */}
+        <div className="layer-tight">
+          <PriceCalculator />
+        </div>
+
+        <hr className="rule" style={{ margin: "var(--sp-9) 0 var(--sp-7)" }} />
 
         <div className="tiers">
           <section className="tier">
