@@ -14,6 +14,7 @@ import { StickyCta } from "@/app/_ui/StickyCta";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { Journey } from "@/app/_ui/Journey";
 import { ParentAccount } from "@/app/_ui/ParentAccount";
+import { AudienceSplit } from "@/app/_ui/AudienceSplit";
 
 export const metadata = buildMetadata("landing");
 export const viewport = buildViewport();
@@ -167,8 +168,21 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ---- 3. the objection that decides it ---- */}
+        {/* ---- Layer 3: whichever of the two readers you are ---- */}
         <section className="lp ch">
+          <div className="wrap-lp">
+            <div className="headc">
+              <span className="lp-eyebrow">Two people have to say yes</span>
+              <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                One of them is reading over your shoulder.
+              </h2>
+            </div>
+            <AudienceSplit />
+          </div>
+        </section>
+
+        {/* ---- the objection that decides it ---- */}
+        <section className="lp ch ch-surface">
           <div className="wrap-lp">
             <ParentAccount />
           </div>

@@ -10,6 +10,8 @@ import { StickyCta } from "@/app/_ui/StickyCta";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { FlowDiagram } from "@/app/_ui/FlowDiagram";
 import { GuardianPermissions } from "@/app/_ui/GuardianPermissions";
+import { MoneyRail } from "@/app/_ui/MoneyRail";
+import { AudienceSplit } from "@/app/_ui/AudienceSplit";
 
 export const metadata = buildMetadata("how");
 export const viewport = buildViewport();
@@ -114,7 +116,15 @@ export default function HowItWorks() {
           Last checked {UPDATED}. Not legal or tax advice.
         </p>
 
-        <hr className="rule" style={{ margin: "24px 0" }} />
+        {/* Layer 2. This page is long on purpose and most of it is Layer 3 --
+            the primary source, the country grading, the four things that went
+            wrong. A reader who gets the shape of it in one picture first reads
+            the rest as detail rather than as argument. The detailed version of
+            the same path, with what happens at each stop, is further down
+            under "How the money moves"; this is deliberately the short one. */}
+        <MoneyRail />
+
+        <hr className="rule" style={{ margin: "var(--sp-7) 0" }} />
 
         <h2 className="h3">In order</h2>
         <ol className="numbered" style={{ marginTop: 16 }}>
@@ -493,6 +503,15 @@ export default function HowItWorks() {
 
         {/* ---------------------------------------------------------------- */}
         <hr className="rule" style={{ margin: "36px 0 28px" }} />
+        <h2 className="h3">Whichever of the two you are</h2>
+        <p className="body" style={{ marginTop: 8 }}>
+          This page is written for both of you, which means half of it is addressed to someone
+          else whichever one you are. The short version, split:
+        </p>
+        <AudienceSplit />
+
+        <hr className="rule" style={{ margin: "var(--sp-9) 0 var(--sp-7)" }} />
+
         <h2 className="h3">Find out what applies to you</h2>
         <p className="body" style={{ marginTop: 8 }}>
           Two questions: where you live and what year you were born. It runs in your browser, takes

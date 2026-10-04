@@ -416,13 +416,10 @@ export function BuyButton() {
             ever sees them. The money goes straight to the account in your name.
           </p>
           <Preview title="Your wallet" badge={<span className="badge b-pine">Live</span>}>
-            <span
-              className="num"
-              style={{ fontSize: "clamp(30px, 9vw, var(--fs-9))", fontWeight: "var(--fw-bold)", letterSpacing: "-0.022em" }}
-            >
+            <span className="fig" style={{ fontSize: "clamp(30px, 9vw, var(--fs-9))" }}>
               $12.00
             </span>
-            <span className="tiny" style={{ display: "block", marginTop: 4 }}>earned, example figures</span>
+            <span className="fig-sub">earned, example figures</span>
             <div className="reqlist" style={{ marginTop: "var(--sp-4)" }}>
               <div className="reqrow">
                 <div>

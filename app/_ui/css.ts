@@ -883,52 +883,22 @@ export const CSS = `
 .fw .dp-head { display:flex; align-items:flex-end; justify-content:space-between; gap:var(--sp-5);
   flex-wrap:wrap; padding-top:var(--sp-4); border-top:2px solid transparent;
   border-image:linear-gradient(90deg, var(--pine), var(--slate)) 1; }
-.fw .dp-k { display:block; font-size:var(--fs-1); letter-spacing:0.06em; text-transform:uppercase;
-  color:var(--ink-3); font-weight:var(--fw-bold); }
-.fw .dp-big { display:block; margin-top:4px; font-size:var(--fs-9); line-height:1;
-  font-weight:var(--fw-bold); letter-spacing:-0.03em; }
 .fw .dp-cta { display:inline-flex; align-items:center; height:var(--h-md); padding:0 var(--sp-4);
   background:var(--brand); color:var(--reverse); font-size:var(--fs-2);
   font-weight:var(--fw-med); white-space:nowrap; }
-.fw .dp-stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--sp-4);
-  margin-top:var(--sp-6); padding:var(--sp-5) 0; border-top:1px solid var(--line);
-  border-bottom:1px solid var(--line); }
-.fw .dp-n { display:block; font-size:var(--fs-6); font-weight:var(--fw-bold); letter-spacing:-0.02em;
-  line-height:1.1; }
-.fw .dp-up { color:var(--pine); }
-.fw .dp-l { display:block; margin-top:3px; font-size:var(--fs-2); color:var(--ink-3); }
-.fw .dp-chart { margin-top:var(--sp-5); }
-.fw .dp-chart-h { display:flex; justify-content:space-between; }
-.fw .dp-bars { display:flex; align-items:flex-end; gap:6px; height:86px; margin-top:var(--sp-4); }
-.fw .dp-bar-col { flex:1 1 0; display:flex; flex-direction:column; justify-content:flex-end;
-  align-items:stretch; height:100%; gap:6px; }
-.fw .dp-bar-v { display:block; background:var(--pine); min-height:3px; }
-.fw .dp-bar-col:last-child .dp-bar-v { background:var(--brand); }
-.fw .dp-bar-d { text-align:center; font-size:var(--fs-1); color:var(--ink-3); }
-.fw .dp-tx { margin-top:var(--sp-6); border-top:1px solid var(--line); }
-.fw .dp-row { display:grid; grid-template-columns:1fr auto auto auto; align-items:center;
-  gap:var(--sp-4); padding:11px 0; border-bottom:1px solid var(--line-soft); }
-.fw .dp-row-n { font-size:var(--fs-2); font-weight:var(--fw-med); min-width:0;
-  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.fw .dp-row-m { font-size:var(--fs-1); color:var(--ink-3); white-space:nowrap; }
-.fw .dp-row-f { color:var(--ink-3); }
-.fw .dp-row-net { font-size:var(--fs-3); font-weight:var(--fw-bold); color:var(--pine);
-  white-space:nowrap; }
-.fw .dp-pill { font-size:var(--fs-1); font-weight:var(--fw-bold); padding:2px 7px;
-  border:1px solid var(--line); white-space:nowrap; }
-.fw .dp-paid { color:var(--pine); border-color:var(--pine-line); background:var(--pine-bg); }
-.fw .dp-settling { color:var(--amber); border-color:var(--amber-line); background:var(--amber-bg); }
 .fw .dp-foot { display:flex; align-items:center; gap:8px; margin-top:var(--sp-5);
   font-size:var(--fs-2); color:var(--ink-2); }
 .fw .dp-dot { width:7px; height:7px; border-radius:50%; background:var(--pine); flex:none; }
 @media (max-width:560px) {
   .fw .dp-body { padding:var(--sp-5); }
-  .fw .dp-big { font-size:var(--fs-8); }
-  .fw .dp-stats { grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--sp-3); }
-  .fw .dp-n { font-size:var(--fs-5); }
-  /* The fee breakdown is the first thing to go when there is no room. */
-  .fw .dp-row { grid-template-columns:1fr auto auto; }
-  .fw .dp-row-m { display:none; }
+  /* The balance comes down a step so the card is not mostly one number, and
+     the chips scroll rather than wrapping into four stacked rows -- the
+     sequence reads as a sequence or it is not worth drawing. */
+  .fw .dp-head .fig-xl { font-size:var(--fs-8); }
+  .fw .lw-chips { overflow-x:auto; flex-wrap:nowrap; padding-bottom:4px;
+    scrollbar-width:none; }
+  .fw .lw-chips::-webkit-scrollbar { display:none; }
+  .fw .dp-cta { height:var(--h-sm); }
 }
 
 /* ---- the four steps ----------------------------------------------------
@@ -973,10 +943,11 @@ export const CSS = `
 .fw .tier { border:1px solid var(--line); background:var(--card); padding:var(--sp-6);
   border-top:2px solid var(--line); }
 .fw .tier[data-paid="1"] { border-top-color:var(--pine); }
-.fw .tier-h { margin:0; font-size:var(--fs-2); font-weight:var(--fw-bold);
-  letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-3); }
+.fw .tier-h { margin:0; font-size:var(--fs-1); font-weight:var(--fw-med);
+  letter-spacing:0.07em; text-transform:uppercase; color:var(--ink-3); }
 .fw .tier-p { margin:var(--sp-3) 0 0; font-size:var(--fs-9); line-height:1;
-  font-weight:var(--fw-bold); letter-spacing:-0.03em; }
+  font-weight:var(--fw-bold); letter-spacing:-0.03em;
+  font-variant-numeric:tabular-nums lining-nums; font-feature-settings:"tnum" 1; }
 .fw .tier-d { margin:var(--sp-4) 0 0; font-size:var(--fs-3); line-height:1.6;
   color:var(--ink-2); }
 .fw .tierlist { margin:var(--sp-5) 0 0; display:flex; flex-direction:column; gap:var(--sp-4); }
