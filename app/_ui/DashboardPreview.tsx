@@ -6,7 +6,7 @@
 // sceptical parent notices:
 //
 //   gross            264.00
-//   Stripe fees      -19.50
+//   processing fees  -19.50
 //   net              244.50   <- shown
 //   already paid out -49.50
 //   available        195.00   <- shown

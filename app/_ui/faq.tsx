@@ -53,8 +53,8 @@ export const FAQ: FaqEntry[] = [
     a: (
       <>
       Nothing under $100 a month in earnings, which is most people. Above that, 3% on the
-      amount over $100 &mdash; earn $400 in a month and you pay $9. Stripe charges its own
-      processing fees on top, which Stripe sets and deducts, on the free tier too.
+      amount over $100 &mdash; earn $400 in a month and you pay $9. Card processing fees are
+      charged on top by the payment processor, which sets and deducts them, on the free tier too.
       </>
     ),
   },
@@ -65,7 +65,7 @@ export const FAQ: FaqEntry[] = [
       <>
       More weakly than the phrase suggests. The founder&rsquo;s birthdate is
       self-declared and is never verified independently: Veyro checks the full date
-      against the 13 floor, but nobody confirms it is real. Stripe verifies the
+      against the 13 floor, but nobody confirms it is real. What gets checked is the
       <em> guardian&rsquo;s</em> identity, not the founder&rsquo;s age. This is weaker
       than it should be and will be tightened before launch.
       </>
@@ -76,7 +76,7 @@ export const FAQ: FaqEntry[] = [
     homepage: true,
     a: (
       <>
-      Nothing automatic. The guardian&rsquo;s name stays on the Stripe
+      Nothing automatic. The guardian&rsquo;s name stays on the payment
       account and the account itself does not change. It is something we will address
       before launch. Until then there is no handover, and it would be wrong to imply one.
       </>
@@ -89,18 +89,18 @@ export const FAQ: FaqEntry[] = [
       <>
       Use the <Link className="linkbtn" href="/check">eligibility checker</Link>. Two
       questions and you will know immediately whether this works where you live,
-      including when the answer is no. Brazil is excluded outright: Stripe requires
-      account holders there to be 18 or over, guardian or no guardian.
+      including when the answer is no. Brazil is excluded outright: account holders there
+      must be 18 or over, guardian or no guardian.
       </>
     ),
   },
   {
-    q: "Why does Stripe ask all these business-sounding questions?",
+    q: "Why does setup ask all these business-sounding questions?",
     
     a: (
       <>
-      Because Stripe verifies the adult on the account and has to understand what the
-      business actually does. They are required to ask by law, and their form does not
+      Because the adult on the account has to be verified, and the check has to understand
+      what the business actually does. Those questions are required by law, and the form does not
       know it is looking at someone selling stickers. Your guardian fills them in, not
       you, and Veyro adds a line of plain guidance under each one.
       </>

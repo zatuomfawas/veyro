@@ -57,7 +57,12 @@ export const SEO_ROUTES: Record<SeoRouteKey, SeoRoute> = {
   landing: {
     path: "/",
     title: "Can you take payments under 18? Yes, from 13, with a guardian | Veyro",
-    desc: "Most answers online say you must be 18. You can create a Stripe Standard account from 13 with a legal guardian as account owner. Veyro helps you get a parent to yes, then checks your checkout actually delivers.",
+    // The search snippet is the first sentence anyone reads about Veyro, and
+    // it used to lead on what the payment processor permits. That answers the
+    // eligibility question and loses the sale in the same breath: a searcher
+    // told the permission belongs to somebody else goes and asks them for it.
+    // It leads on the problem we solve instead.
+    desc: "Most answers online say you must be 18. You can take payments from 13 with a parent or guardian on the account. Veyro gets you from \u201Ccan I?\u201D to a working checkout: the parent approval, the paperwork, and the account kept straight while you earn.",
   },
   how: {
     path: "/how-it-works",

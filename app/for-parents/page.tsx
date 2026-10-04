@@ -44,9 +44,10 @@ const QUESTIONS: QA[] = [
     a: (
       <>
         <p className="body" style={{ marginTop: 0 }}>
-          Stripe&rsquo;s own policy permits someone aged 13 to 17 to hold a connected account when
-          a parent or legal guardian is the verified adult on it. That is written guidance from
-          the payment processor, quoted in full on{" "}
+          The payment processor&rsquo;s own written policy permits someone aged 13 to 17 to hold a
+          connected account when a parent or legal guardian is the verified adult on it. That is
+          their guidance, not our reading of it, and it is quoted in full &mdash; named, dated and
+          unedited &mdash; on{" "}
           <Link className="linkbtn" href="/how-it-works">how it works</Link>, and it is what this
           product is built on.
         </p>
@@ -68,19 +69,19 @@ const QUESTIONS: QA[] = [
         <p className="body" style={{ marginTop: 0 }}>
           You are the account owner. That is the honest answer and it is the point: an adult has
           to be the enforceable party, because a contract with a minor is voidable at the
-          minor&rsquo;s election. Stripe verifies you, not your child, and the account exists in
-          your name.
+          minor&rsquo;s election. It is you who gets identity-checked, not your child, and the
+          account exists in your name.
         </p>
         <p className="body" style={{ marginTop: 12 }}>
           In practice that means refunds, chargebacks and disputes on this account are ultimately
-          yours, the same as they would be if your child simply used your own Stripe account.
+          yours, the same as they would be if your child simply used your own account.
           What changes is that it is a separate account for a separate activity, rather than
           mixed into your personal payments, and that your child handles the day-to-day instead
           of you.
         </p>
         <p className="body" style={{ marginTop: 12 }}>
           Veyro never holds the money and is never in the path of it. Payments go from the
-          customer to the Stripe account; Veyro keeps the record.
+          customer to the payment account in your name; Veyro keeps the record.
         </p>
       </>
     ),
@@ -91,8 +92,8 @@ const QUESTIONS: QA[] = [
       <>
         <p className="body" style={{ marginTop: 0 }}>
           Possibly, and this is the question to take to an accountant rather than to a website.
-          Because you are the account owner, tax documentation that Stripe issues for the account
-          is issued against you. That is a real consequence of the arrangement and not something
+          Because you are the account owner, tax documentation the processor issues for the
+          account is issued against you. That is a real consequence of the arrangement and not something
           to wave away.
         </p>
         <p className="body" style={{ marginTop: 12 }}>
@@ -113,8 +114,9 @@ const QUESTIONS: QA[] = [
     a: (
       <>
         <p className="body" style={{ marginTop: 0 }}>
-          Yes. You own the account and you can close or freeze it at any time, directly with
-          Stripe. Nothing in Veyro can prevent that, and nothing in Veyro is designed to.
+          Yes. You own the account and you can close or freeze it at any time, with the processor
+          directly and not through us. Nothing in Veyro can prevent that, and nothing in Veyro is
+          designed to.
         </p>
         <p className="body" style={{ marginTop: 12 }}>
           What you do not do is approve each payout. You verify yourself once at setup, and after
@@ -190,6 +192,12 @@ export default function ForParents() {
 
         <hr className="rule" style={{ margin: "36px 0 28px" }} />
 
+        {/* The processor is named here and nowhere else on this page. Every
+            other mention has been reframed, because naming the rails inside an
+            argument hands the reader a free workaround. This block is not an
+            argument -- it is the disclosure of who the parent is about to
+            contract with, and a link to the agreement they will sign. A
+            counterparty you are asked to sign with has to be named. */}
         <h2 className="h3">Before you decide</h2>
         <p className="body" style={{ marginTop: 8 }}>
           The identity check happens on Stripe&rsquo;s own hosted form. Veyro never receives your

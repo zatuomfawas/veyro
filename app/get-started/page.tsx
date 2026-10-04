@@ -85,7 +85,7 @@ function Step({
 const FLOW = [
   { n: "Your app", t: "The link", d: "A normal link or button in whatever you built.", you: true },
   { n: "Veyro", t: "Checkout", d: "A hosted page with the product, price and card form." },
-  { n: "Stripe", t: "The payment", d: "Takes the card, charges it, holds the money." },
+  { n: "The processor", t: "The payment", d: "Takes the card, charges it, holds the money." },
   { n: "Your wallet", t: "The record", d: "Veyro folds the payment into your ledger.", you: true },
 ];
 
@@ -105,9 +105,9 @@ const FAQ: [string, React.ReactNode][] = [
     "How long until the money reaches a bank account?",
     <>
       Two separate waits, and it is worth knowing which is which. First the payment has to clear
-      at Stripe, which is usually a couple of days. Then Stripe pays out to the bank account on
-      the connected account, on <strong>Stripe&rsquo;s own schedule</strong> — typically longer for
-      the first payout on a new account, and shorter after that, varying by country.{" "}
+      with the processor, which is usually a couple of days. Then it pays out to the bank account
+      attached to your payment account, on <strong>its own schedule</strong> — typically longer
+      for the first payout on a new account, and shorter after that, varying by country.{" "}
       <Link className="linkbtn" href="/how-it-works">The wallet</Link> shows which of your money is still
       settling and which is available, so you are never guessing. Veyro never holds the money and
       cannot speed a payout up, slow one down, or stop one.
@@ -126,14 +126,14 @@ const FAQ: [string, React.ReactNode][] = [
     "What happens if a customer wants a refund?",
     <>
       Your guardian issues it from the Stripe dashboard, because that is where the money actually
-      sits. The customer gets their money back and Stripe keeps its original processing fee, so a
+      sits. The customer gets their money back and the processor keeps its original fee, so a
       refunded sale costs you that fee.
       {" "}
       <strong>
         Veyro does not record refunds yet, so your wallet will still count a refunded payment as
         earned.
       </strong>{" "}
-      Until that ships, Stripe&rsquo;s own dashboard is the accurate figure after any refund. We
+      Until that ships, that dashboard is the accurate figure after any refund. We
       would rather say that plainly than let the number quietly drift.
     </>,
   ],
@@ -179,7 +179,7 @@ export default function GetStarted() {
         <div className="hero-accent" style={{ marginTop: "var(--sp-5)" }}>
           <p className="body" style={{ margin: 0 }}>
             <b>One thing to know before you start.</b> A parent or guardian has to verify
-            themselves with Stripe before the account can take a payment. It happens once, it
+            themselves before the account can take a payment. It happens once, it
             takes them about ten minutes, and nothing you do here works until they have done it.
             Worth asking them before you begin rather than after.{" "}
             <Link className="linkbtn" href="/for-parents">The page to send them</Link>.
@@ -189,7 +189,8 @@ export default function GetStarted() {
         {/* ---------------- the diagram ---------------- */}
         <h2 className="h3" style={{ marginTop: 40 }}>Where a payment goes</h2>
         <p className="body" style={{ marginTop: 8 }}>
-          Four stops. Veyro is the first and the last; the money itself only ever touches Stripe.
+          Four stops. Veyro is the first and the last, and the money itself only ever sits at
+          the third.
         </p>
 
         {/* Each li carries the list semantics and nothing else: display:contents
@@ -216,8 +217,9 @@ export default function GetStarted() {
           <div>
             <h3 className="h4" style={{ margin: 0 }}>What your customer sees</h3>
             <p className="body" style={{ marginTop: 10 }}>
-              One page, your product name, your price, and a card field. It is hosted by Veyro and
-              the card form itself is Stripe&rsquo;s, so the number goes straight to them.
+              One page, your product name, your price, and a card field. It is hosted by Veyro
+              and the card field belongs to the payment processor, so the number goes straight to
+              them.
             </p>
             <p className="body" style={{ marginTop: 12 }}>
               You do not build this, style it, or host it. You send someone to it &mdash; from a
@@ -225,7 +227,7 @@ export default function GetStarted() {
             </p>
             <ul className="ticks" style={{ marginTop: 16 }}>
               <li>Your product name and price, not ours</li>
-              <li>Stripe&rsquo;s card form, so the number never reaches you or us</li>
+              <li>A processor-hosted card field, so the number never reaches you or us</li>
               <li>Works from a link in a bio, a DM, or a button in your app</li>
               <li>Your name on it, so a buyer knows who they are paying</li>
             </ul>
@@ -297,7 +299,7 @@ export default function GetStarted() {
 
         <Step n={3} title="Your guardian opens the payment account" who="Your guardian">
           <p className="body" style={{ marginTop: 0 }}>
-            They do this on Stripe&rsquo;s own form, as themselves: their name, their identity
+            They do this on the processor&rsquo;s own form, as themselves: their name, their identity
             document, their bank details. You cannot do this part and Veyro will not let you try —
             the whole arrangement depends on the verified adult being the actual adult.
           </p>
@@ -305,7 +307,7 @@ export default function GetStarted() {
             <div className="reqlist">
               {[
                 ["Guardian consented", "Sam Taylor agreed and is the adult on the account."],
-                ["Identity verified", "Stripe checked Sam's details and accepted them."],
+                ["Identity verified", "Sam's details were checked and accepted."],
                 ["Payouts enabled", "A bank account is attached and payouts are on."],
               ].map(([k, v]) => (
                 <div className="reqrow" key={k}>
@@ -410,7 +412,7 @@ export function BuyButton() {
         <Step n={6} title="Someone buys it" who="Your customer">
           <p className="body" style={{ marginTop: 0 }}>
             They click, land on a page that shows what they are buying and what it costs, and pay
-            with a card. The card details go to Stripe&rsquo;s own form — neither you nor Veyro
+            with a card. The card details go to the processor&rsquo;s own form — neither you nor Veyro
             ever sees them. The money goes straight to the account in your name.
           </p>
           <Preview title="Your wallet" badge={<span className="badge b-pine">Live</span>}>
@@ -425,12 +427,12 @@ export function BuyButton() {
               <div className="reqrow">
                 <div>
                   <span className="req-t">Notion Second Brain template</span>
-                  <span className="req-d">Paid &middot; $12.00 &middot; Stripe fee $0.65</span>
+                  <span className="req-d">Paid &middot; $12.00 &middot; fee $0.65</span>
                 </div>
               </div>
             </div>
             <p className="tiny" style={{ marginTop: 12, marginBottom: 0 }}>
-              Stripe takes its fee before the money reaches your balance, so what you keep is a
+              The processor takes its fee before the money reaches your balance, so what you keep is a
               little less than the price. The wallet shows both figures rather than one.
             </p>
           </Preview>
@@ -471,7 +473,7 @@ export function BuyButton() {
           <Link className="btn btn-2 btn-lg" href="/check">Check my eligibility first</Link>
         </div>
         <p className="tiny" style={{ marginTop: 12 }}>
-          Free under $100 a month. Stripe&rsquo;s own processing fees still apply.{" "}
+          Free under $100 a month. Card processing fees still apply.{" "}
           <Link className="linkbtn" href="/pricing">Pricing</Link>
           {" \u00b7 "}
           <Link className="linkbtn" href="/how-it-works">How the setup works</Link>

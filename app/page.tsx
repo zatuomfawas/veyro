@@ -23,19 +23,21 @@ export const viewport = buildViewport();
 // JavaScript switched off — only the tabs and the prompt generator need it.
 //
 // The order is the product's order rather than the argument's. It used to open
-// by explaining Stripe's age policy, which answers a question nobody has asked
-// yet. What a visitor actually arrives with is "I built something — can I sell
-// it?", so the page now answers that first and reaches the eligibility rules
-// once they matter.
+// by explaining the processor's age policy, which answers a question nobody has
+// asked yet -- and worse, answers it in a way that points the reader at a free
+// workaround. What a visitor arrives with is "I built something — can I sell
+// it?", so the page answers that first and reaches eligibility once it matters.
 //
 // currentUser() reads the session cookie, which opts this route out of static
 // rendering. For anonymous traffic, which is nearly all of it, that costs a
 // cookie read and no database query: currentUser() returns null before it
 // touches the db.
 //
-// The Stripe evidence still matters and still exists in full on /how-it-works:
-// the verbatim reply, the country grading, and what they would not confirm. It
-// is linked from here rather than argued here.
+// The processor evidence still matters and still exists in full on
+// /how-it-works: the verbatim reply, the country grading, and what they would
+// not confirm. It is linked from here rather than argued here, which is also
+// where naming the rails belongs -- on the page a reader reaches after they
+// already want this, not in the first paragraph they read.
 
 export default async function Home() {
   // A revoked or expired session must still show "Sign in". Hiding it because
@@ -105,17 +107,18 @@ export default async function Home() {
                     line: the disclaimer directly below, and the checker as the
                     secondary CTA, which exists precisely to answer "does this
                     apply where I live" and which returns no for Brazil. */}
-                {/* The second clause concedes the rails on purpose. Stripe has
-                    allowed this since 13; the reason nobody does it is
-                    everything around the payment, and that is what is being
-                    sold here. A sentence that would be equally true of Stripe
-                    does not belong on this page. */}
+                {/* The lead no longer opens on what the processor permits.
+                    Naming the rails here answered "is this allowed?" at the
+                    cost of planting the workaround -- a reader who learns the
+                    permission is somebody else's concludes they can go and get
+                    it themselves, for free. The hard part is the sentence
+                    that follows, and it is ours. */}
                 <div className="hero-accent" style={{ marginTop: "var(--sp-5)" }}>
                   <p className="lead" style={{ margin: 0 }}>
-                    Stripe has allowed this since you were 13. Almost nobody does it, because the
-                    hard part was never the payment &mdash; it is proving it is legal, getting a
-                    parent to actually agree, and keeping the account straight while you earn.
-                    Veyro is that part.
+                    Veyro makes it work. Almost nobody gets paid before 18, because the hard part
+                    was never the payment &mdash; it is proving it is legal, getting a parent to
+                    actually agree, and keeping the account straight while you earn. That is the
+                    part we built.
                   </p>
                 </div>
 
@@ -152,7 +155,7 @@ export default async function Home() {
             </div>
             <Journey />
             <p className="small centred-note" style={{ marginTop: 24 }}>
-              <Link className="linkbtn" href="/how-it-works">What Veyro does and what Stripe does</Link>
+              <Link className="linkbtn" href="/how-it-works">What Veyro does, and what it sits on</Link>
             </p>
           </div>
         </section>

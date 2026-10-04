@@ -2092,7 +2092,7 @@ export const CSS2 = `
 .fw .wh-more .wh-break { margin-top:0; padding-top:0; border-top:0; }
 
 /* Account & setup, folded away. Everything here is real and occasionally
-   necessary -- the guardian's state, what Stripe is still waiting for -- and
+   necessary -- the guardian's state, what verification is waiting on -- and
    none of it is why anyone opened the page. It gets a disclosure rather than a
    column of its own, so the page can be about money. */
 .fw .acct { border-top:1px solid var(--line); margin-top:var(--sp-7); }
@@ -2239,8 +2239,8 @@ export const CSS2 = `
 
 /* Payments as money moving, grouped by the day it moved.
    Six numeric columns in a half-width card meant every figure was small,
-   right-aligned and identical in weight, so "what was I paid", "what did
-   Stripe take" and "what did I keep" all looked the same. Each payment is
+   right-aligned and identical in weight, so "what was I paid", "what did the
+   fee take" and "what did I keep" all looked the same. Each payment is
    now one line that reads left to right: what came in, what came off, what
    is left — and the day above it carries that day's total, which the table
    never showed at all. */

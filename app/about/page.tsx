@@ -35,13 +35,13 @@ const SUPPORT_EMAIL = "hello@withveyro.com";
 // changing first.
 const COMMITMENTS: { head: string; body: React.ReactNode }[] = [
   {
-    head: "Your guardian consents, and Stripe verifies them. They cannot block a payout.",
+    head: "Your guardian consents and is verified. They cannot block a payout.",
     body: (
       <>
-        A guardian accepts in their own account, and Stripe checks their identity, not the
-        founder&rsquo;s. They are told about every payout request and keep a permanent record of it.
-        They get no veto, because on the Stripe account type this is built on nobody can be given
-        one. A guardian should know that before agreeing, not after.
+        A guardian accepts in their own account, and it is their identity that gets checked, not
+        the founder&rsquo;s. They are told about every payout request and keep a permanent record
+        of it. They get no veto, because the account type this is built on cannot grant one to
+        anybody. A guardian should know that before agreeing, not after.
       </>
     ),
   },
@@ -49,7 +49,7 @@ const COMMITMENTS: { head: string; body: React.ReactNode }[] = [
     head: "Money settles to the founder's own account, never through Veyro.",
     body: (
       <>
-        A customer pays the founder&rsquo;s Stripe connected account directly. Veyro is never in the
+        A customer pays the connected account directly. Veyro is never in the
         path of the money and never holds a balance. The wallet you see is folded from your own
         records each time it is shown, so it cannot drift from them.
       </>
@@ -59,8 +59,9 @@ const COMMITMENTS: { head: string; body: React.ReactNode }[] = [
     head: "Veyro never receives identity documents or bank details.",
     body: (
       <>
-        Passports, ID numbers, and the bank account payouts go to are entered on Stripe&rsquo;s own
-        hosted form. Veyro stores a reference to the account and nothing that could be used to
+        Passports, ID numbers, and the bank account payouts go to are entered on the
+        processor&rsquo;s own hosted form. Veyro stores a reference to the account and nothing
+        that could be used to
         impersonate anyone. That is an architectural choice, not a promise about our intentions.
       </>
     ),
@@ -71,8 +72,8 @@ const COMMITMENTS: { head: string; body: React.ReactNode }[] = [
       <>
         Free under $100 a month in earnings, and 3% on whatever is above that. A dormant account
         costs us nothing, which is why the free tier is genuinely free rather than something paid
-        users subsidise. Stripe charges its own processing fees on top, which Stripe sets and
-        deducts.
+        users subsidise. Card processing fees are charged on top by the payment processor, which
+        sets and deducts them.
       </>
     ),
   },
@@ -89,8 +90,8 @@ const COMMITMENTS: { head: string; body: React.ReactNode }[] = [
     head: "This is software, not a bank, and none of it is settled law.",
     body: (
       <>
-        Stripe&rsquo;s written policy permits a 13-year-old to hold an account where a guardian
-        completes their onboarding, and{" "}
+        The payment processor&rsquo;s written policy permits a 13-year-old to hold an account
+        where a guardian completes their onboarding, and{" "}
         <Link className="linkbtn" href="/how-it-works">we publish their exact words</Link>. Whether
         that is settled where you live has not been confirmed by a lawyer in any country. Provider
         policy allowing something is not the same as it being tested.
@@ -215,13 +216,13 @@ export default function About() {
             <ul className="arrowlist" style={{ marginTop: 16 }}>
               <li>
                 <strong>A founder&rsquo;s date of birth is self-declared.</strong> Nobody verifies
-                it. Stripe verifies the guardian&rsquo;s identity, not the founder&rsquo;s age. This
-                is a current limitation, and tightening it is scheduled before launch.
+                it. What gets verified is the guardian&rsquo;s identity, not the founder&rsquo;s
+                age. This is a current limitation, and tightening it is scheduled before launch.
               </li>
               <li>
                 <strong>Nothing happens when a founder turns 18.</strong> It has not been built. The
-                guardian&rsquo;s name stays on the Stripe account and the account itself does not
-                change. This will be addressed before launch.
+                guardian&rsquo;s name stays on the payment account and the account itself does
+                not change. This will be addressed before launch.
               </li>
               <li>
                 <strong>Veyro cannot send email yet.</strong> That is why a guardian invitation is a

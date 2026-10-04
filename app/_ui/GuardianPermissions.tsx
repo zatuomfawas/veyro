@@ -15,15 +15,22 @@
 // thing a teenager actually wants.
 //
 // And it does not say "verifies your identity". The guardian does not verify
-// the founder; Stripe verifies the GUARDIAN, with the guardian's own documents,
-// and the founder's age is self-declared with nobody checking it (/legal says
-// so in as many words). "Does the identity check" carries the same meaning for
-// a reader without claiming whose identity got checked.
+// the founder; it is the GUARDIAN who gets verified, with the guardian's own
+// documents, and the founder's age is self-declared with nobody checking it
+// (/legal says so in as many words). "Does the identity check" carries the
+// same meaning for a reader without claiming whose identity got checked.
+//
+// The processor is not named in these six lines. This block renders on
+// /for-parents and on /how-it-works, and on both of them the question is what
+// the adult is signing up for, not whose rails it runs on. Naming them here
+// invites "then I will just open one myself", which is the objection the
+// whole site is built to answer. /how-it-works names them in its own
+// architecture section, which is where that belongs.
 
 const DOES = [
-  ["Does the identity check", "With their own ID, on Stripe's own form. Once, then never again."],
-  ["Owns the account", "It is in their name with Stripe. That is the part that makes this lawful."],
-  ["Can close or freeze it", "At any time, directly with Stripe. Nothing here prevents that."],
+  ["Does the identity check", "With their own ID, on a secure form Veyro never sees. Once, then never again."],
+  ["Owns the account", "The payment account is in their name. That is the part that makes this lawful."],
+  ["Can close or freeze it", "At any time, and not through us. Nothing in Veyro prevents it."],
 ] as const;
 
 const DOES_NOT = [

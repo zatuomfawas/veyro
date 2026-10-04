@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 // column look like the deprived one, which is the opposite of true here.
 
 const FREE = [
-  "Guardian verification and the Stripe connection",
+  "Guardian verification and the payment connection",
   "The integration snippet, and the dashboard",
   "Monthly payouts",
   "Tax forms",
@@ -46,7 +46,7 @@ const FREE = [
 const PAID = [
   ["Weekly payouts", "Instead of monthly."],
   ["Quarterly tax estimates", "So the bill in April is not a surprise."],
-  ["Compliance monitoring", "We watch the account's standing and tell you before Stripe does."],
+  ["Compliance monitoring", "We watch the account's standing and tell you before the processor does."],
   ["Disputes and chargebacks handled", "We deal with them rather than forwarding you the email."],
   ["Priority support", "For you."],
   ["Guardian support", "And for your parent, from a person, which is usually what they want."],
@@ -130,7 +130,7 @@ export default function Pricing() {
         <h2 className="h3">Why these numbers</h2>
         <p className="body" style={{ marginTop: 8 }}>
           Running an active seller costs about $3.25 a month before anyone earns a penny &mdash;
-          Stripe Connect charges $2.00 for the account, $0.25 a payout, and a quarter of a percent
+          the processor charges $2.00 for the account, $0.25 a payout, and a quarter of a percent
           each on the payout and on routing the funds. An account that sits dormant costs nothing,
           which is why the free tier is genuinely free rather than something paid users subsidise.
         </p>
@@ -146,12 +146,12 @@ export default function Pricing() {
 
         <hr className="rule" style={{ margin: "36px 0 28px" }} />
 
-        <h2 className="h3">What Stripe charges, separately</h2>
+        <h2 className="h3">The other fee, which is not ours</h2>
         <p className="body" style={{ marginTop: 8 }}>
-          Stripe takes its own processing fee on every payment, it sets that fee, and it deducts
-          it before the money reaches your balance. It is not passed through Veyro and it applies
-          on the free tier too. Your dashboard shows it on every transaction rather than netting
-          it away.
+          Card processing costs money, and the payment processor takes its own fee on every
+          payment. It sets that fee and deducts it before the money reaches your balance. It is
+          not passed through Veyro, we do not mark it up, and it applies on the free tier too.
+          Your dashboard shows it on every transaction rather than netting it away.
         </p>
 
         <div className="row" style={{ marginTop: "var(--sp-7)", gap: 8, flexWrap: "wrap" }}>

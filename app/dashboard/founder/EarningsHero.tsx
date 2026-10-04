@@ -6,7 +6,7 @@ import { formatMinor } from "@/lib/money";
 //
 // Three figures and one action. Available is the one that answers "how much
 // can I take out", so it is the big one; net is what they actually kept after
-// Stripe; the count is how many payments made it up.
+// the processor; the count is how many payments made it up.
 //
 // It says "payments", not "customers". Nothing in this schema identifies a
 // buyer -- a FounderTransaction has a product and an amount, not a person --
@@ -41,7 +41,7 @@ export function EarningsHero({
       <div className="eh-figs">
         <div>
           <span className="eh-n">{formatMinor(fold.net, fold.currency)}</span>
-          <span className="eh-l">Net revenue, after Stripe</span>
+          <span className="eh-l">Net revenue, after fees</span>
         </div>
         <div>
           <span className="eh-n">{payments}</span>
@@ -82,7 +82,7 @@ export function EarningsHero({
         <summary>Where that figure comes from</summary>
         <dl className="wh-break">
           <div><dt>Earned</dt><dd>{formatMinor(fold.earned, fold.currency)}</dd></div>
-          <div><dt>Stripe fees</dt><dd data-tone="out">&minus;{formatMinor(fold.fees, fold.currency)}</dd></div>
+          <div><dt>Processing fees</dt><dd data-tone="out">&minus;{formatMinor(fold.fees, fold.currency)}</dd></div>
           <div><dt>Refunded</dt><dd data-tone="out">&minus;{formatMinor(fold.refunded, fold.currency)}</dd></div>
           <div><dt>Still settling</dt><dd>{formatMinor(fold.pending, fold.currency)}</dd></div>
           <div><dt>Paid out</dt><dd data-tone="settled">{formatMinor(fold.paidOut, fold.currency)}</dd></div>

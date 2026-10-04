@@ -9,7 +9,7 @@
 // There is deliberately no "Set up payments" button here, and no "reconnect"
 // link. POST /api/founder/payment-setup refuses a founder acting on their own
 // behalf — "Payment setup is completed by your guardian, not by you." — because
-// the guardian is the adult Stripe verifies. A control that 403s every time is
+// the guardian is the adult who gets verified. A control that 403s every time is
 // worse than none, so this page reports the state and names whose move it is.
 
 import type { Metadata } from "next";
@@ -236,7 +236,7 @@ export default async function FounderDashboard() {
   // The product the integration panel talks about: the live one if there is
   // one, otherwise whatever they have. A founder who signed up a minute ago
   // has a starter draft, and the snippet is worth handing over before the
-  // guardian has finished Stripe -- they can be pasting it meanwhile.
+  // guardian has finished verifying -- they can be pasting it meanwhile.
   const snippetProduct = firstLive ?? products[0] ?? null;
   const canCharge = canTakePayment(account);
   const snippetLive = Boolean(firstLive) && canCharge;
@@ -331,8 +331,8 @@ export default async function FounderDashboard() {
               <span className="wh-label">Available to request</span>
               <span className="wh-big">{formatMinor(0, "USD")}</span>
               <span className="wh-sub">
-                Nothing has sold yet. The first time someone pays, what they paid, what Stripe
-                took and what you keep all appear here &mdash; and this figure is what you can
+                Nothing has sold yet. The first time someone pays, what they paid, what the
+                processing fee took and what you keep all appear here &mdash; and this figure is what you can
                 request.
               </span>
               <div className="row" style={{ marginTop: "var(--sp-7)", gap: 8, flexWrap: "wrap" }}>
@@ -443,7 +443,7 @@ export default async function FounderDashboard() {
                 >
                   Payments will show up here once you&rsquo;ve integrated Veyro&rsquo;s code into
                   your app and customers start paying you. Every one lands here within seconds
-                  &mdash; amount, product, and Stripe&rsquo;s fee.
+                  &mdash; amount, product, and the processing fee.
                 </EmptyState>
               )
             ) : (
@@ -483,9 +483,10 @@ export default async function FounderDashboard() {
                             <li className="txrow" key={t.id}>
                               <div>
                                 <span className="tx-name">{t.product?.name ?? "None"}</span>
-                                {/* Stripe's own reference, so a founder asking
-                                    about a payment can quote something Stripe
-                                    recognises rather than describing it. */}
+                                {/* The processor's own reference, so a founder
+                                    asking about a payment can quote something
+                                    support recognises rather than describing
+                                    it. */}
                                 <span className="tx-ref">{t.stripePaymentIntentId}</span>
                               </div>
                               <div className="tx-flow">
@@ -497,8 +498,8 @@ export default async function FounderDashboard() {
                                     : formatMinor(t.feeMinor, t.currency) + " fee"}
                                 </span>
                                 <span className="tx-arrow">&rarr;</span>
-                                {/* Blank rather than a guess while Stripe has
-                                    not reported the fee: net is not knowable
+                                {/* Blank rather than a guess while the fee has
+                                    not been reported: net is not knowable
                                     yet and a placeholder number would be a
                                     claim about the founder's money. */}
                                 <span
@@ -575,11 +576,11 @@ export default async function FounderDashboard() {
                               {/* What each state actually means for the money,
                                   rather than restating the badge. */}
                               {done
-                                ? `Sent on ${fmtDate(p.createdAt)}. Stripe pays it into the bank account on your payment account.`
+                                ? `Sent on ${fmtDate(p.createdAt)}. It is paid into the bank account on your payment account.`
                                 : failed
                                   ? `Requested ${fmtDate(p.createdAt)} and did not go through. The money is still in your wallet.`
                                   : p.status === "APPROVED"
-                                    ? `Approved, waiting on Stripe. Requested ${fmtDate(p.createdAt)}.`
+                                    ? `Approved, waiting on the processor. Requested ${fmtDate(p.createdAt)}.`
                                     : `Requested ${fmtDate(p.createdAt)}. Held out of your available balance so it cannot be spent twice.`}
                             </span>
                           </span>
@@ -626,9 +627,9 @@ export default async function FounderDashboard() {
                     label="Payment account live"
                     detail={
                       account?.status === "ACTIVE"
-                        ? "Stripe has enabled charges and payouts."
+                        ? "Charges and payouts are enabled."
                         : account
-                          ? "Your guardian finishes this on Stripe's own form."
+                          ? "Your guardian finishes this on the processor's own form."
                           : "Opens once your guardian has consented."
                     }
                   />
@@ -668,7 +669,7 @@ export default async function FounderDashboard() {
                 {state === "consented" && consent ? (
                   <p className="body" style={{ margin: 0 }}>
                     <strong>{guardianName}</strong> agreed on {fmtDate(consent.consentedAt!)}. They are
-                    the adult Stripe verifies, and they open the payment account for you.
+                    the verified adult on it, and they open the payment account for you.
                   </p>
                 ) : state === "none" ? (
                   /* The invite form is the action, handed to EmptyState rather
@@ -679,8 +680,8 @@ export default async function FounderDashboard() {
                     heading="You need a parent or guardian"
                     action={<InviteGuardian founderId={founderId} />}
                   >
-                    Stripe requires a verified adult because you&rsquo;re under 18. Your guardian
-                    makes their own login and completes Stripe&rsquo;s checks. You keep control of
+                    A verified adult is required because you&rsquo;re under 18. Your guardian
+                    makes their own login and completes the identity checks. You keep control of
                     products and links.
                   </EmptyState>
                 ) : (
@@ -742,27 +743,27 @@ export default async function FounderDashboard() {
                   </Notice>
                 ) : !account || account.status === "NOT_STARTED" || account.status === "AWAITING_GUARDIAN" ? (
                   <Notice tone="amber" head={`${guardianName} will set up payments`}>
-                    This one is not yours to do. Stripe verifies the adult on the account, so your
-                    guardian signs in and completes Stripe&rsquo;s own form as themselves.
+                    This one is not yours to do. It is the adult on the account who gets
+                    verified, so your guardian signs in and completes the form as themselves.
                   </Notice>
                 ) : account.status === "PENDING" ? (
                   <Notice tone="slate" head="Setting up…">
-                    Everything asked for has been sent. This is waiting on Stripe, not on you or your
-                    guardian. It usually clears on its own.
+                    Everything asked for has been sent. This is waiting on the processor, not on
+                    you or your guardian. It usually clears on its own.
                   </Notice>
                 ) : account.status === "REQUIREMENTS_DUE" ? (
                   <div>
                     <p className="body" style={{ marginTop: 0 }}>
-                      Stripe still needs {due.length === 1 ? "one thing" : `${due.length} things`} before
+                      The processor still needs {due.length === 1 ? "one thing" : `${due.length} things`} before
                       this account can take payments. {guardianName} supplies{" "}
-                      {due.length === 1 ? "it" : "them"} in Stripe&rsquo;s own form. Veyro never sees
+                      {due.length === 1 ? "it" : "them"} in its own form. Veyro never sees
                       identity documents.
                     </p>
                     {due.length > 0 ? (
                       <Requirements items={due} />
                     ) : (
                       <Notice tone="grey" head="Nothing itemised yet">
-                        Stripe has flagged this account but has not said which field is outstanding.
+                        The account has been flagged but no outstanding field has been named.
                         It often resolves without anyone doing anything.
                       </Notice>
                     )}
@@ -785,12 +786,19 @@ export default async function FounderDashboard() {
                   </div>
                 ) : account.status === "DISCONNECTED" ? (
                   <Notice tone="clay" head="Account disconnected">
-                    The Stripe connection was removed, so nothing can be sold right now.{" "}
+                    The payment connection was removed, so nothing can be sold right now.{" "}
                     <strong>{guardianName}</strong> needs to reconnect it from their own account.
-                    reconnecting is theirs to do, not yours, because Stripe verifies them.
+                    Reconnecting is theirs to do, not yours, because they are the verified adult.
                   </Notice>
                 ) : (
-                  <Notice tone="clay" head="Stripe has restricted this account">
+                  /* The only place the processor is named in this file.
+                     Everywhere else it has been reframed, because the brand in
+                     a status line is noise at best and, on the marketing side,
+                     an invitation to go and arrange this for free. Here the
+                     reader has to send someone to a specific dashboard, and an
+                     instruction that will not name its destination is not an
+                     instruction. */
+                  <Notice tone="clay" head="This account has been restricted">
                     {account.connectedAt
                       ? `Connected on ${fmtDate(account.connectedAt)}, and since restricted. `
                       : ""}
@@ -814,7 +822,7 @@ export default async function FounderDashboard() {
                   Best seller: <strong>{analytics.topProduct.name}</strong>, {analytics.topProduct.purchases}
                   {analytics.topProduct.purchases === 1 ? " sale" : " sales"} totalling{" "}
                   {formatMinor(analytics.topProduct.grossMinor, analytics.topProduct.currency)}. Views are
-                  counted once per browser session, and amounts are gross, before Stripe&rsquo;s fee.
+                  counted once per browser session, and amounts are gross, before the processing fee.
                 </p>
               )}
   

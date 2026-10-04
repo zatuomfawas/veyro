@@ -6,6 +6,13 @@ import Link from "next/link";
 // and it is what the visitor is already doing. It is answered in those words,
 // on the page, rather than implied by a feature list.
 //
+// The processor is not named anywhere in these five. This section exists to
+// close the free-workaround objection, and naming the rails inside the answer
+// re-opens it: a reader told which company permits this can go and arrange it
+// themselves. What is being compared is two accounts, and that comparison is
+// true whoever is underneath. The rails are named on /how-it-works and on
+// /legal, where a reader has already decided they want this.
+//
 // Four of these are wins. The fifth is not, and it says so: there is no
 // handover at 18 yet, so on that point a Veyro account and a parent's account
 // are currently the same. Writing it as a win would be the one claim on this
@@ -28,10 +35,10 @@ const ANSWERS: Answer[] = [
     q: "They approve once here, not every time",
     a: (
       <>
-        Your parent verifies themselves with Stripe at setup. That is the approval. They are not
-        asked again each time you get paid, and they are not a bottleneck between you and your
-        money. They can still close or freeze the account &mdash; they own it &mdash; but they
-        are not in the middle of it.
+        Your parent verifies themselves once, when the account is opened. That is the approval.
+        They are not asked again each time you get paid, and they are not a bottleneck between
+        you and your money. They can still close or freeze the account &mdash; they own it
+        &mdash; but they are not in the middle of it.
       </>
     ),
   },
@@ -50,9 +57,8 @@ const ANSWERS: Answer[] = [
     q: "You get tools built for you",
     a: (
       <>
-        Your own dashboard, your own products, your own payout history &mdash; instead of being a
-        guest in an adult&rsquo;s Stripe account, reading someone else&rsquo;s numbers to find
-        yours.
+        Your own dashboard, your own products, your own payout history &mdash; instead of being
+        a guest in an adult&rsquo;s account, reading someone else&rsquo;s numbers to find yours.
       </>
     ),
   },
@@ -61,7 +67,7 @@ const ANSWERS: Answer[] = [
     tie: true,
     a: (
       <>
-        A parent&rsquo;s Stripe account never becomes yours: you start over and lose your payment
+        A parent&rsquo;s account never becomes yours: you start over and lose your payment
         history. Right now Veyro is the same &mdash; there is no handover yet. We are building
         the transfer so you keep your history, and until it exists we are not going to pretend it
         does.{" "}

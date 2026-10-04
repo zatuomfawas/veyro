@@ -18,7 +18,7 @@ const STEPS: Step[] = [
   },
   {
     n: "02", t: "Your parent approves, once",
-    d: "They verify themselves with Stripe on Stripe's own form. That is their whole job. After it, they are not in the loop on your payouts.",
+    d: "They verify themselves once, on a secure form Veyro never sees. That is their whole job. After it, they are not in the loop on your payouts.",
     who: "Them, not you",
     icon: (<svg viewBox="0 0 24 24" aria-hidden="true"><path {...S} d="M12 3 4 6v6c0 4.4 3.4 8.2 8 9 4.6-.8 8-4.6 8-9V6l-8-3Z" /><path {...S} d="m9 12 2 2 4-4" /></svg>),
   },
