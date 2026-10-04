@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { buildViewport, SITE } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { PriceCalculator } from "@/app/_ui/PriceCalculator";
+import { feeMinor, EXAMPLE_EARNINGS_MINOR } from "@/lib/pricing";
+import { formatMinor } from "@/lib/money";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { MobileNav } from "@/app/_ui/MobileNav";
@@ -12,17 +14,17 @@ import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 export const viewport = buildViewport();
 
 export const metadata: Metadata = {
-  title: "Pricing: free under $100 a month",
+  title: "Pricing: one product, free under $100 a month",
   description:
-    "Free under $100 a month in earnings, with everything needed to get paid. 3% on what you "
-    + "earn above that. Most people never pay anything.",
+    "One product and one set of features for everyone. Free under $100 a month in earnings, "
+    + "3% on what you earn above that. Most people never pay anything.",
   alternates: { canonical: SITE + "/pricing" },
   robots: { index: true, follow: true },
   openGraph: {
     type: "website",
     siteName: "Veyro",
-    title: "Pricing: free under $100 a month",
-    description: "3% above $100 a month. Most people never pay anything.",
+    title: "Pricing: one product, free under $100 a month",
+    description: "Same product and same cover at every size. 3% above $100 a month.",
     url: SITE + "/pricing",
   },
 };
@@ -31,26 +33,32 @@ export const metadata: Metadata = {
 //
 // The paid tier should be found by someone who has started earning, not pushed
 // at someone deciding whether to try. A teenager who feels upsold leaves, and
-// the free tier is the product for most of them permanently rather than a
+// the free limit covers most of them permanently rather than being a
 // trial that runs out.
 //
 // No feature table with ticks and crosses: a comparison grid makes the free
 // column look like the deprived one, which is the opposite of true here.
 
-const FREE = [
-  "Guardian verification and the payment connection",
-  "The integration snippet, and the dashboard",
-  "Monthly payouts",
-  "Tax forms",
-];
-
-const PAID = [
-  ["Weekly payouts", "Instead of monthly."],
-  ["Quarterly tax estimates", "So the bill in April is not a surprise."],
+// One list. Everybody gets all of it.
+//
+// This page used to be two columns with different contents, and the free one
+// was missing compliance monitoring and dispute handling. That is not how the
+// product works -- an account under $100 a month is monitored and its
+// chargebacks are dealt with exactly like any other -- so the page was
+// describing a product we do not sell, in the direction that would matter
+// most to somebody who got a chargeback and had been told it was not covered.
+//
+// Two items carry a threshold. They say so inline rather than being hoisted
+// into a second column, because the thing that changes is the cadence, not
+// whether you are covered.
+const INCLUDED: readonly (readonly [string, string])[] = [
+  ["Guardian verification and account setup", "The whole of getting your parent verified and the payment account open."],
+  ["Integration snippet and dashboard", "One snippet, your products, your ledger, your payout history."],
+  ["Payouts", "Monthly, and weekly once you are earning over $100 a month."],
   ["Compliance monitoring", "We watch the account's standing and tell you before the processor does."],
-  ["Disputes and chargebacks handled", "We deal with them rather than forwarding you the email."],
-  ["Priority support", "For you."],
-  ["Guardian support", "And for your parent, from a person, which is usually what they want."],
+  ["Dispute and chargeback handling", "We deal with them rather than forwarding you the email."],
+  ["Tax forms and quarterly estimates", "So the bill in April is not a surprise."],
+  ["Support", "For you, and for your parent from a person. Prioritised once you are earning."],
 ] as const;
 
 export default function Pricing() {
@@ -84,83 +92,112 @@ export default function Pricing() {
 
       <main id="main" className="wrap-lp longform" style={{ paddingTop: 32, paddingBottom: 56 }}>
         <span className="lp-eyebrow">Pricing</span>
-        <h1 className="d2" style={{ marginTop: 8, maxWidth: "20ch" }}>
-          Free under $100 a month.
+        <h1 className="d2" style={{ marginTop: 8, maxWidth: "22ch" }}>
+          One product. Different costs depending on what you earn.
         </h1>
         <p className="lead" style={{ marginTop: 12 }}>
-          Then 3% on whatever you earn above that. That is the whole price list. Most people who
-          use Veyro will never pay anything, and that is not a funnel &mdash; it is what the
-          numbers actually look like.
+          There is no plan to choose and nothing to upgrade to. Everyone gets the same product,
+          the same monitoring and the same help with disputes. What changes with what you earn
+          is the price, and for two things the cadence.
         </p>
 
-        {/* Layer 2: the model, as the instrument rather than as a sentence.
-            It sits above the tiers because "what would this cost me" is the
-            question the page is actually asked, and a reader who answers it
-            here has a reason to read the two panels below. */}
+        {/* Section 1: the deal, stated as three lines rather than a table. */}
+        <div className="deal">
+          <p className="deal-l">Free under <strong>$100</strong> a month.</p>
+          <p className="deal-l"><strong>3%</strong> on everything you earn above $100.</p>
+          <p className="deal-n">
+            Same product, same compliance, same dispute cover &mdash; at every size.
+          </p>
+        </div>
+
+        {/* Section 2: the instrument, so the reader can put their own number
+            in rather than find themselves in someone else's example. */}
         <div className="layer-tight">
           <PriceCalculator />
         </div>
 
         <hr className="rule" style={{ margin: "var(--sp-9) 0 var(--sp-7)" }} />
 
-        <div className="tiers">
-          <section className="tier">
-            <h2 className="tier-h">Free</h2>
-            <p className="tier-p">$0</p>
-            <p className="tier-d">
-              Under $100 a month in earnings. No card, no trial, no expiry. Everything you need to
-              actually get paid:
-            </p>
-            <ul className="ticks" style={{ marginTop: "var(--sp-5)" }}>
-              {FREE.map((f) => <li key={f}>{f}</li>)}
-            </ul>
-          </section>
+        {/* Section 3: one list. No ticks and crosses: a comparison grid makes
+            one column look like the deprived one, and here there isn't one. */}
+        <h2 className="h3">What you get</h2>
+        <p className="body" style={{ marginTop: 8 }}>
+          All of it, whatever you earn. Two lines mention a threshold, and both are about how
+          often something happens rather than whether you are covered.
+        </p>
+        <dl className="tierlist" style={{ marginTop: "var(--sp-5)" }}>
+          {INCLUDED.map(([t, d]) => (
+            <div key={t}>
+              <dt>{t}</dt>
+              <dd>{d}</dd>
+            </div>
+          ))}
+        </dl>
 
-          <section className="tier" data-paid="1">
-            <h2 className="tier-h">Above $100 a month</h2>
-            <p className="tier-p">3%</p>
-            <p className="tier-d">
-              Charged only on the amount over $100, so the first $100 stays free whatever you earn.
-              Earn $400 in a month and you pay $9. Adds:
-            </p>
-            <dl className="tierlist">
-              {PAID.map(([t, d]) => (
-                <div key={t}>
-                  <dt>{t}</dt>
-                  <dd>{d}</dd>
-                </div>
-              ))}
-            </dl>
-          </section>
-        </div>
+        <hr className="rule" style={{ margin: "var(--sp-9) 0 var(--sp-7)" }} />
 
-        <hr className="rule" style={{ margin: "36px 0 28px" }} />
+        {/* Section 4: the examples, computed rather than typed. Every figure
+            in this table comes from the same function the calculator above
+            uses, so the table cannot quietly stop agreeing with the rule. */}
+        <h2 className="h3">What people actually pay</h2>
+        <p className="body" style={{ marginTop: 8 }}>
+          The sum is: take what you earned, subtract the first $100, and take 3% of the rest.
+          Here it is run for five months of different sizes.
+        </p>
+        <table className="tbl ptable" style={{ marginTop: "var(--sp-5)" }}>
+          <thead>
+            <tr>
+              <th scope="col">You earn in a month</th>
+              <th scope="col">Charged on</th>
+              <th scope="col">You pay</th>
+            </tr>
+          </thead>
+          <tbody>
+            {EXAMPLE_EARNINGS_MINOR.map((earned) => {
+              const over = Math.max(0, earned - 10000);
+              const fee = feeMinor(earned);
+              return (
+                <tr key={earned}>
+                  <td className="num">{formatMinor(earned, "USD")}</td>
+                  <td className="num ptable-mid">
+                    {over === 0 ? "nothing" : formatMinor(over, "USD")}
+                  </td>
+                  <td className="num ptable-fee" data-free={fee === 0 ? "1" : undefined}>
+                    {formatMinor(fee, "USD")}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        <p className="tiny" style={{ marginTop: "var(--sp-4)" }}>
+          Card processing fees are charged separately by the payment processor, at every size
+          including the free one. They are not ours and we do not mark them up.
+        </p>
+
+        <hr className="rule" style={{ margin: "var(--sp-9) 0 var(--sp-7)" }} />
 
         <h2 className="h3">Why these numbers</h2>
         <p className="body" style={{ marginTop: 8 }}>
           Running an active seller costs about $3.25 a month before anyone earns a penny &mdash;
           the processor charges $2.00 for the account, $0.25 a payout, and a quarter of a percent
-          each on the payout and on routing the funds. An account that sits dormant costs nothing,
-          which is why the free tier is genuinely free rather than something paid users subsidise.
+          each on the payout and on routing the funds. A dormant account costs nothing, which is
+          why being under the limit is genuinely free rather than something paid users subsidise.
+        </p>
+        <p className="body" style={{ marginTop: 12 }}>
+          Once you are earning $100 or more a month, the 3% pays for the part that only matters
+          when real money is moving: watching the account&rsquo;s standing, handling the disputes,
+          and answering your parent when they ring. Those things are there from the first sale
+          either way &mdash; the fee is what makes them sustainable, not what unlocks them.
         </p>
         <p className="body" style={{ marginTop: 12 }}>
           In comparable marketplaces, 44% of sellers never earn anything at all and the median
-          earner makes around $120 a month. A free tier at $100 therefore covers roughly half of
+          earner makes around $120 a month. A free limit at $100 therefore covers roughly half of
           everyone who ever earns a cent, which is the point of putting it there.
         </p>
         <p className="body" style={{ marginTop: 12 }}>
           3% is a number we can say out loud. Someone earning $400 a month pays $9. A higher rate
           would not survive that sentence.
-        </p>
-
-        <hr className="rule" style={{ margin: "36px 0 28px" }} />
-
-        <h2 className="h3">The other fee, which is not ours</h2>
-        <p className="body" style={{ marginTop: 8 }}>
-          Card processing costs money, and the payment processor takes its own fee on every
-          payment. It sets that fee and deducts it before the money reaches your balance. It is
-          not passed through Veyro, we do not mark it up, and it applies on the free tier too.
-          Your dashboard shows it on every transaction rather than netting it away.
         </p>
 
         <div className="row" style={{ marginTop: "var(--sp-7)", gap: 8, flexWrap: "wrap" }}>

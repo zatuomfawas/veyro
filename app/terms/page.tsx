@@ -109,7 +109,9 @@ export default function Terms() {
           Veyro charges <strong>nothing</strong> while your earnings are under $100 in a calendar
           month. Above that, Veyro charges <strong>3% of the amount over $100</strong> in that
           month. The first $100 of a month&rsquo;s earnings is never charged for, whatever you
-          earn in total. The features listed as free on the pricing page are free at both tiers.
+          earn in total. There is one product and one set of features: everything listed on the
+          pricing page is included at every level of earnings, including when you are paying
+          nothing. What earnings change is the price, and how often payouts run.
         </p>
         <p className="body" style={{ marginTop: 12 }}>
           Stripe charges its own processing fees, which are set by Stripe, deducted by Stripe, and

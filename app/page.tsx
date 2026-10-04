@@ -193,8 +193,9 @@ export default async function Home() {
           <div className="wrap-lp lp-center">
             <h2 className="lp-h2">Your parent approves once. Then it&rsquo;s yours to run.</h2>
             <p className="body" style={{ marginTop: 14, marginLeft: "auto", marginRight: "auto" }}>
-              Free under $100 a month. 3% on whatever you earn above that. Most people never pay
-              anything, and the free tier is the whole product &mdash; not a trial.
+              Free under $100 a month. 3% on whatever you earn above that. There is one product
+              and nothing to upgrade to &mdash; the monitoring, the dispute handling and the
+              support are the same whether you are paying us or not.
             </p>
             <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
               <Link className="btn btn-lg" href="/get-started">Start &mdash; it&rsquo;s free</Link>

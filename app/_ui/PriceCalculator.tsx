@@ -33,7 +33,7 @@ export function PriceCalculator() {
   const keep = earned - fee;
   // The rate against the whole amount, which is the number a reader is
   // actually comparing with other platforms. It is always below 3%, and on
-  // the free tier it is zero -- stating it is the strongest thing this
+  // under the free limit it is zero -- stating it is the strongest thing this
   // component does.
   const effective = earned > 0 ? (fee / earned) * 100 : 0;
   const free = fee === 0;

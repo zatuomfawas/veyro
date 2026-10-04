@@ -53,8 +53,9 @@ export const FAQ: FaqEntry[] = [
     a: (
       <>
       Nothing under $100 a month in earnings, which is most people. Above that, 3% on the
-      amount over $100. Card processing fees are charged on top by the payment processor,
-      which sets and deducts them, on the free tier too.
+      amount over $100. It is one product either way: compliance monitoring, dispute handling,
+      tax forms and support are included whether you are paying or not. Card processing fees
+      are charged on top by the payment processor, which sets and deducts them, at every size.
       {/* The worked example reads as a figure rather than as a clause,
           because it is the part of this answer anyone actually checks. */}
       <span className="figrow" style={{ marginTop: "var(--sp-4)", display: "grid" }}>

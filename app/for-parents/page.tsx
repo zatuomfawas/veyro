@@ -124,7 +124,7 @@ const QUESTIONS: QA[] = [
           What you do not do is approve each payout. You verify yourself once at setup, and after
           that your child moves their own money without asking. That is deliberate &mdash; a
           parent who has to approve every payment is a parent who becomes a bottleneck, and a
-          teenager who needs permission for every pound is not running anything. You keep the
+          teenager who needs permission for every sale is not running anything. You keep the
           control that matters: the account itself.
         </p>
       </>

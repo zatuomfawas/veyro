@@ -182,7 +182,7 @@ export default function LegalPage() {
           For balance, and because the list above is not the whole picture. The guardian is the
           account owner, which is the part that makes the arrangement lawful, and the founder
           controls the payouts and owns the earnings. Veyro charges nothing under $100 a month
-          and 3% on the amount above it. Veyro never sees identity documents or bank details
+          and 3% on the amount above it, with the same product either way. Veyro never sees identity documents or bank details
           — those go to Stripe&rsquo;s own hosted form. Every figure in the wallet is folded
           from the founder&rsquo;s own payment records each time it is read, so no stored balance
           can drift from the payments behind it.

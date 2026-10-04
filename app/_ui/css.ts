@@ -939,30 +939,15 @@ export const CSS = `
   .fw .jn-s + .jn-s { border-left:0; }
 }
 
-/* ---- pricing tiers -------------------------------------------------------
-   Two panels, not a comparison table. A feature grid with ticks and crosses
-   makes the free column read as the deprived one, and here the free tier is
-   the whole product for most people. Both panels get the same frame and the
-   same weight; only the accent edge differs. */
-.fw .tiers { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--sp-6);
-  margin-top:var(--sp-6); align-items:start; }
-.fw .tier { border:1px solid var(--line); background:var(--card); padding:var(--sp-6);
-  border-top:2px solid var(--line); }
-.fw .tier[data-paid="1"] { border-top-color:var(--pine); }
-.fw .tier-h { margin:0; font-size:var(--fs-1); font-weight:var(--fw-med);
-  letter-spacing:0.07em; text-transform:uppercase; color:var(--ink-3); }
-.fw .tier-p { margin:var(--sp-3) 0 0; font-size:var(--fs-9); line-height:1;
-  font-weight:var(--fw-bold); letter-spacing:-0.03em;
-  font-variant-numeric:tabular-nums lining-nums; font-feature-settings:"tnum" 1; }
-.fw .tier-d { margin:var(--sp-4) 0 0; font-size:var(--fs-3); line-height:1.6;
-  color:var(--ink-2); }
+/* ---- what is included ----------------------------------------------------
+   One list, one column, no ticks and crosses. The two panels this replaced
+   put some of the product in a right-hand column, which read as a feature
+   gate and was not one: an account under the free limit is monitored and its
+   chargebacks are handled exactly like any other. A list with nothing to
+   compare against cannot imply otherwise. */
 .fw .tierlist { margin:var(--sp-5) 0 0; display:flex; flex-direction:column; gap:var(--sp-4); }
 .fw .tierlist dt { font-size:var(--fs-3); font-weight:var(--fw-bold); }
 .fw .tierlist dd { margin:2px 0 0; font-size:var(--fs-2); color:var(--ink-2); line-height:1.55; }
-@media (max-width:760px) {
-  .fw .tiers { grid-template-columns:minmax(0,1fr); }
-  .fw .tier-p { font-size:var(--fs-8); }
-}
 
 /* ---- the parent's-account objection ------------------------------------
    A two-column row per answer: the claim on the left where it can be skimmed,
@@ -1064,7 +1049,6 @@ export const CSS = `
 .fw .longform > .truthgrid,
 .fw .longform > .flow,
 .fw .longform > .paths,
-.fw .longform > .tiers,
 .fw .longform > .objection,
 .fw .longform > .stage,
 .fw .longform > .code,
@@ -2596,6 +2580,42 @@ export const CSS2 = `
 .fw .pp-btn-t { display:block; font-size:var(--fs-3); font-weight:var(--fw-med); }
 .fw .pp-btn-d { display:block; margin-top:2px; font-size:var(--fs-2); color:var(--ink-3); }
 @media (prefers-reduced-motion: reduce) { .fw .pp-tick { transition:none; } }
+
+/* ==== the deal, and the sum ==============================================
+   Pricing used to be two bordered panels side by side, which is a comparison
+   whether or not you mean it as one: the eye reads two boxes as two things to
+   choose between, and the left one as the lesser. There is one product, so
+   there is one column now and the panels are gone along with their CSS.
+
+   The deal is three lines, not a table. Two figures and a sentence saying the
+   figures are the only thing that changes. */
+.fw .deal { margin-top:var(--sp-7); padding:var(--sp-6) 0;
+  border-top:2px solid var(--brand); border-bottom:1px solid var(--line); }
+.fw .deal-l { margin:0 0 6px; font-size:var(--fs-6); line-height:1.34;
+  letter-spacing:-0.012em; color:var(--ink);
+  font-variant-numeric:tabular-nums lining-nums; }
+.fw .deal-l strong { font-weight:var(--fw-bold); }
+.fw .deal-n { margin:var(--sp-4) 0 0; font-size:var(--fs-3); color:var(--ink-2); }
+
+/* The worked examples. A reader is being invited to check the arithmetic, so
+   the figures are columns that line up rather than numbers in sentences:
+   tabular digits, right-aligned, and the middle column quieter because it is
+   the working rather than the answer. */
+.fw .ptable { margin-top:var(--sp-5); }
+.fw .ptable th:not(:first-child),
+.fw .ptable td:not(:first-child) { text-align:right; }
+.fw .ptable td { font-variant-numeric:tabular-nums lining-nums;
+  font-feature-settings:"tnum" 1; }
+.fw .ptable-mid { color:var(--ink-3); }
+.fw .ptable-fee { font-weight:var(--fw-bold); }
+/* Zero is the argument this table is making, so it is drawn as a result
+   rather than as an absence. */
+.fw .ptable-fee[data-free="1"] { color:var(--pine); }
+@media (max-width:560px) {
+  .fw .ptable th, .fw .ptable td { padding-left:var(--sp-3); padding-right:var(--sp-3); }
+  .fw .ptable th:first-child, .fw .ptable td:first-child { padding-left:0; }
+  .fw .ptable th:last-child, .fw .ptable td:last-child { padding-right:0; }
+}
 
 /* ==== the pricing calculator ==============================================
    A range input styled to carry an argument. The track is tinted across the
