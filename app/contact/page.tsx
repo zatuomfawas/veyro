@@ -71,7 +71,7 @@ export default function Contact() {
           </li>
           <li>
             <strong>You are a parent deciding whether to agree.</strong> Say so. That question gets
-            a proper answer, not a sales reply. <Link className="linkbtn" href="/for-guardians">
+            a proper answer, not a sales reply. <Link className="linkbtn" href="/for-parents">
             What a guardian takes on</Link> covers most of it.
           </li>
           <li>

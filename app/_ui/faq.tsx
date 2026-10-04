@@ -52,9 +52,9 @@ export const FAQ: FaqEntry[] = [
     
     a: (
       <>
-      Veyro takes no percentage of what you earn today. Stripe charges its own fees on
-      each transaction, which Stripe sets and deducts. Future pricing is undecided; if it
-      ever changes you will be told before it applies to you.
+      Nothing under $100 a month in earnings, which is most people. Above that, 3% on the
+      amount over $100 &mdash; earn $400 in a month and you pay $9. Stripe charges its own
+      processing fees on top, which Stripe sets and deducts, on the free tier too.
       </>
     ),
   },

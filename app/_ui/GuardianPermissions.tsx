@@ -1,32 +1,35 @@
 // What a guardian is and is not, as a list rather than a paragraph.
 //
-// This is the most sensitive claim on the site: "your parent cannot block a
-// payout" is the thing a founder most wants to hear and the thing a parent
-// most needs to have stated accurately. A sentence buried in prose is easy to
-// skim past and easy to misread in either direction, so it is a checklist.
+// This is the most sensitive claim on the site: it is the thing a founder most
+// wants to hear and the thing a parent most needs stated accurately. As prose
+// it was one clause in a paragraph, easy to skim past and easy to misread in
+// either direction, so it is two columns with coloured marks.
 //
-// The first line reads "does the identity check", not "verifies your
-// identity", and the difference is not pedantry. The guardian does not verify
-// the founder — Stripe verifies the GUARDIAN, using the guardian's own
-// documents, and the founder's age is self-declared with nobody checking it
-// (/legal says so in as many words). "Verifies your identity" would promise a
-// check on the founder that happens nowhere in this product, on the page a
-// parent reads before putting their name on an account.
+// Two things it deliberately does not say.
 //
-// "Does the identity check" carries the same meaning for the reader — the
-// guardian is the one who goes through identity verification — without
-// claiming whose identity got verified.
+// It does not say the guardian cannot veto a payout. That was the old wording
+// and it is the wrong frame twice over: it alarms the parent reading it, and it
+// overstates the position. The guardian owns the account and can close or
+// freeze it whenever they like. What they do not do is approve each payout.
+// Approve once, then stay out of the way -- which is accurate, and is also the
+// thing a teenager actually wants.
+//
+// And it does not say "verifies your identity". The guardian does not verify
+// the founder; Stripe verifies the GUARDIAN, with the guardian's own documents,
+// and the founder's age is self-declared with nobody checking it (/legal says
+// so in as many words). "Does the identity check" carries the same meaning for
+// a reader without claiming whose identity got checked.
 
 const DOES = [
   ["Does the identity check", "With their own ID, on Stripe's own form. Once, then never again."],
-  ["Receives every payout notification", "Straight away, with a permanent record of it."],
-  ["Is the verified adult on the account", "Stripe requires one behind every account. That is them."],
+  ["Owns the account", "It is in their name with Stripe. That is the part that makes this lawful."],
+  ["Can close or freeze it", "At any time, directly with Stripe. Nothing here prevents that."],
 ] as const;
 
 const DOES_NOT = [
   ["Own your business", "Not your products, not your customers, not your ideas."],
-  ["Approve your sales", "Nobody signs anything off. A sale is a sale."],
-  ["Control your payouts", "Cannot block one, hold one or release one — not them, not Veyro."],
+  ["Approve each sale", "Nobody signs anything off. A sale is a sale."],
+  ["Approve each payout", "They verify once at setup. After that you move your own money without asking."],
 ] as const;
 
 export function GuardianPermissions({ compact = false }: { compact?: boolean }) {

@@ -14,12 +14,11 @@ const COLUMNS: { head: string; links: { href: string; label: string; external?: 
     head: "Product",
     links: [
       { href: "/get-started", label: "Get started" },
-      { href: "/docs/sdk", label: "Add Veyro to your app" },
       { href: "/how-it-works", label: "How it works" },
-      { href: "/wallet", label: "The Founder Wallet" },
+      { href: "/for-parents", label: "For parents" },
+      { href: "/docs/sdk", label: "Add Veyro to your app" },
       { href: "/check", label: "Check eligibility" },
-      { href: "/for-founders", label: "For founders" },
-      { href: "/for-guardians", label: "For parents" },
+      { href: "/pricing", label: "Pricing" },
     ],
   },
   {
@@ -27,6 +26,7 @@ const COLUMNS: { head: string; links: { href: string; label: string; external?: 
     links: [
       { href: "/about", label: "About" },
       { href: "/faq", label: "Questions" },
+      { href: "/legal", label: "What is not settled" },
       { href: "/contact", label: "Contact" },
       { href: "/status", label: "Status" },
     ],

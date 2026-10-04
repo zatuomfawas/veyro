@@ -934,6 +934,7 @@ export const CSS = `
    turns the corner when the row stacks. */
 .fw .jn { list-style:none; margin:0; padding:0; display:grid;
   grid-template-columns:repeat(4,minmax(0,1fr)); gap:0; counter-reset:jn; }
+.fw .jn[data-steps="3"] { grid-template-columns:repeat(3,minmax(0,1fr)); }
 .fw .jn-s { position:relative; padding:var(--sp-6) var(--sp-5);
   border-top:2px solid var(--line); }
 .fw .jn-s + .jn-s { border-left:1px solid var(--line); }
@@ -956,6 +957,53 @@ export const CSS = `
 @media (max-width:560px) {
   .fw .jn { grid-template-columns:minmax(0,1fr); }
   .fw .jn-s + .jn-s { border-left:0; }
+}
+
+/* ---- pricing tiers -------------------------------------------------------
+   Two panels, not a comparison table. A feature grid with ticks and crosses
+   makes the free column read as the deprived one, and here the free tier is
+   the whole product for most people. Both panels get the same frame and the
+   same weight; only the accent edge differs. */
+.fw .tiers { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--sp-6);
+  margin-top:var(--sp-6); align-items:start; }
+.fw .tier { border:1px solid var(--line); background:var(--card); padding:var(--sp-6);
+  border-top:2px solid var(--line); }
+.fw .tier[data-paid="1"] { border-top-color:var(--pine); }
+.fw .tier-h { margin:0; font-size:var(--fs-2); font-weight:var(--fw-bold);
+  letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-3); }
+.fw .tier-p { margin:var(--sp-3) 0 0; font-size:var(--fs-9); line-height:1;
+  font-weight:var(--fw-bold); letter-spacing:-0.03em; }
+.fw .tier-d { margin:var(--sp-4) 0 0; font-size:var(--fs-3); line-height:1.6;
+  color:var(--ink-2); }
+.fw .tierlist { margin:var(--sp-5) 0 0; display:flex; flex-direction:column; gap:var(--sp-4); }
+.fw .tierlist dt { font-size:var(--fs-3); font-weight:var(--fw-bold); }
+.fw .tierlist dd { margin:2px 0 0; font-size:var(--fs-2); color:var(--ink-2); line-height:1.55; }
+@media (max-width:760px) {
+  .fw .tiers { grid-template-columns:minmax(0,1fr); }
+  .fw .tier-p { font-size:var(--fs-8); }
+}
+
+/* ---- the parent's-account objection ------------------------------------
+   A two-column row per answer: the claim on the left where it can be skimmed,
+   the detail on the right for anyone who stops. The tie row is marked with a
+   dash rather than a tick and takes the muted ink, so scanning only the marks
+   still gives the honest answer. */
+.fw .objlist { margin:var(--sp-7) 0 0; display:grid; gap:0; }
+.fw .objrow { display:grid; grid-template-columns:minmax(0,4fr) minmax(0,7fr);
+  gap:var(--sp-6); padding:var(--sp-5) 0; border-top:1px solid var(--line); }
+.fw .objrow:last-child { border-bottom:1px solid var(--line); }
+.fw .obj-q { display:flex; gap:10px; align-items:flex-start; margin:0;
+  font-size:var(--fs-4); font-weight:var(--fw-bold); letter-spacing:-0.012em; }
+.fw .obj-a { margin:0; font-size:var(--fs-3); line-height:1.6; color:var(--ink-2); }
+.fw .obj-mark { width:20px; height:20px; flex:none; display:flex; align-items:center;
+  justify-content:center; margin-top:2px; color:var(--pine);
+  background:var(--pine-bg); border:1px solid var(--pine-line); }
+.fw .obj-mark svg { width:14px; height:14px; }
+.fw .objrow[data-tie="1"] .obj-mark { color:var(--ink-3); background:var(--surface-2);
+  border-color:var(--line); }
+.fw .objrow[data-tie="1"] .obj-q { color:var(--ink-2); }
+@media (max-width:760px) {
+  .fw .objrow { grid-template-columns:minmax(0,1fr); gap:var(--sp-3); }
 }
 
 /* ---- guardian permissions ----------------------------------------------
@@ -1035,6 +1083,8 @@ export const CSS = `
 .fw .longform > .truthgrid,
 .fw .longform > .flow,
 .fw .longform > .paths,
+.fw .longform > .tiers,
+.fw .longform > .objection,
 .fw .longform > .stage,
 .fw .longform > .code,
 .fw .longform > .codecap { grid-column: full; }

@@ -131,7 +131,7 @@ export default function LegalPage() {
                 items={[
                   { href: "/how-it-works", label: "How it works" },
                   { href: "/faq", label: "Questions" },
-                  { href: "/for-guardians", label: "For parents" },
+                  { href: "/for-parents", label: "For parents" },
                   { href: "/check", label: "Check eligibility" },
                 ]}
               />
@@ -151,7 +151,7 @@ export default function LegalPage() {
         </p>
         <p className="small" style={{ marginTop: 16 }}>
           If you are a parent deciding whether to put your name on an account, this is the page to
-          read. <Link className="linkbtn" href="/for-guardians">What you are agreeing to</Link>.
+          read. <Link className="linkbtn" href="/for-parents">What you are agreeing to</Link>.
         </p>
 
         <hr className="rule" style={{ margin: "30px 0" }} />

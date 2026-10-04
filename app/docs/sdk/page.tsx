@@ -92,8 +92,7 @@ export default function SdkDocs() {
                 items={[
                   { href: "/get-started", label: "Get started" },
                   { href: "/how-it-works", label: "How it works" },
-                  { href: "/wallet", label: "The Founder Wallet" },
-                  { href: "/faq", label: "Questions" },
+                                    { href: "/faq", label: "Questions" },
                   { href: "/check", label: "Check eligibility" },
                 ]}
               />
@@ -270,7 +269,7 @@ document.querySelector("#buy").addEventListener("click", () => {
         <p className="body" style={{ marginTop: 8, maxWidth: "var(--m-body)" }}>
           There is no switch. Once that check comes back ready, the button takes real money. Your
           first payment appears in your wallet, and{" "}
-          <Link className="linkbtn" href="/wallet">the wallet</Link> shows what has settled and
+          <Link className="linkbtn" href="/how-it-works">the wallet</Link> shows what has settled and
           what is still on its way.
         </p>
 

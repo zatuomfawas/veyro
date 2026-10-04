@@ -106,8 +106,10 @@ export default function Terms() {
 
       <Clause n={5} title="What Veyro costs">
         <p className="body" style={{ marginTop: 0 }}>
-          Veyro takes <strong>no percentage of your transactions</strong> and charges no fee for
-          the features described on this site as of the date above.
+          Veyro charges <strong>nothing</strong> while your earnings are under $100 in a calendar
+          month. Above that, Veyro charges <strong>3% of the amount over $100</strong> in that
+          month. The first $100 of a month&rsquo;s earnings is never charged for, whatever you
+          earn in total. The features listed as free on the pricing page are free at both tiers.
         </p>
         <p className="body" style={{ marginTop: 12 }}>
           Stripe charges its own processing fees, which are set by Stripe, deducted by Stripe, and

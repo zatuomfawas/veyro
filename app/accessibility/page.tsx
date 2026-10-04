@@ -134,7 +134,7 @@ export default function Accessibility() {
         <p className="body" style={{ marginTop: 12 }}>
           If you cannot complete something because of an accessibility barrier, we will do it with
           you directly rather than leave you stuck. See also{" "}
-          <Link className="linkbtn" href="/for-guardians">what a guardian takes on</Link>, which
+          <Link className="linkbtn" href="/for-parents">what a guardian takes on</Link>, which
           matters if you are helping someone use this.
         </p>
       </Clause>

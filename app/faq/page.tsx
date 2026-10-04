@@ -49,9 +49,7 @@ export default function FaqPage() {
               <MobileNav
                 items={[
                   { href: "/how-it-works", label: "How it works" },
-                  { href: "/wallet", label: "The Founder Wallet" },
-                  { href: "/for-founders", label: "For founders" },
-                  { href: "/for-guardians", label: "For parents" },
+                                                      { href: "/for-parents", label: "For parents" },
                   { href: "/check", label: "Check eligibility" },
                 ]}
               />
@@ -88,7 +86,7 @@ export default function FaqPage() {
             <p className="body" style={{ marginBottom: 0 }}>
               <Link className="linkbtn" href="/contact">Email us</Link> and a person will reply. If
               you are a parent deciding whether to agree to this,{" "}
-              <Link className="linkbtn" href="/for-guardians">what a guardian takes on</Link> is the
+              <Link className="linkbtn" href="/for-parents">what a guardian takes on</Link> is the
               page written for you.
             </p>
           </div>

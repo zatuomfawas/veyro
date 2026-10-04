@@ -11,10 +11,8 @@ import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { StickyCta } from "@/app/_ui/StickyCta";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
-import { FounderStories } from "@/app/_ui/FounderStories";
 import { Journey } from "@/app/_ui/Journey";
-import { GuardianPermissions } from "@/app/_ui/GuardianPermissions";
-import { AiIntegration } from "@/app/_ui/AiIntegration";
+import { ParentAccount } from "@/app/_ui/ParentAccount";
 
 export const metadata = buildMetadata("landing");
 export const viewport = buildViewport();
@@ -55,8 +53,8 @@ export default async function Home() {
             <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
             <div className="lp-links">
               <Link className="btn btn-q btn-sm hide-s" href="/how-it-works">How it works</Link>
-              <Link className="btn btn-q btn-sm hide-s" href="/wallet">Founder Wallet</Link>
-              <Link className="btn btn-q btn-sm hide-s" href="/for-guardians">For parents</Link>
+              <Link className="btn btn-q btn-sm hide-s" href="/for-parents">For parents</Link>
+              <Link className="btn btn-q btn-sm hide-s" href="/docs/sdk">Docs</Link>
               {user ? (
                 <Link className="btn btn-sm" href={defaultLandingFor(user.role)}>
                   Back to your dashboard
@@ -71,10 +69,10 @@ export default async function Home() {
               <MobileNav
                 items={[
                   { href: "/how-it-works", label: "How it works" },
-                  { href: "/wallet", label: "The Founder Wallet" },
-                  { href: "/docs/sdk", label: "Add it to your app" },
-                  { href: "/for-guardians", label: "For parents" },
+                  { href: "/for-parents", label: "For parents" },
+                  { href: "/docs/sdk", label: "Docs" },
                   { href: "/check", label: "Check eligibility" },
+                  { href: "/pricing", label: "Pricing" },
                   { href: "/faq", label: "Questions" },
                   { href: "/legal", label: "What is not settled" },
                   { href: "/auth/signin", label: "Sign in" },
@@ -92,8 +90,7 @@ export default async function Home() {
               <div>
                 <h1 className="hero-h">
                   <Wordmark hero />
-                  <span className="tagline">Take payments before you&rsquo;re 18.</span>
-                  <span className="tagline-2">Your business. Your dashboard. Your money.</span>
+                  <span className="tagline">You can take payments before you&rsquo;re 18.</span>
                 </h1>
 
                 {/* "Block you at 18" is a compression rather than a claim we
@@ -108,51 +105,32 @@ export default async function Home() {
                     line: the disclaimer directly below, and the checker as the
                     secondary CTA, which exists precisely to answer "does this
                     apply where I live" and which returns no for Brazil. */}
+                {/* The second clause concedes the rails on purpose. Stripe has
+                    allowed this since 13; the reason nobody does it is
+                    everything around the payment, and that is what is being
+                    sold here. A sentence that would be equally true of Stripe
+                    does not belong on this page. */}
                 <div className="hero-accent" style={{ marginTop: "var(--sp-5)" }}>
                   <p className="lead" style={{ margin: 0 }}>
-                    Not a workaround, and not a wallet that holds your money for you. A real
-                    Stripe account in your name, opened with a parent as the verified adult.
-                    You run the business. You keep the money. You do not wait three years.
+                    Stripe has allowed this since you were 13. Almost nobody does it, because the
+                    hard part was never the payment &mdash; it is proving it is legal, getting a
+                    parent to actually agree, and keeping the account straight while you earn.
+                    Veyro is that part.
                   </p>
                 </div>
 
-                {/* Supporting, not the headline. The age rules are why Veyro
-                    exists, but they are not what someone arrives wanting to
-                    read; the checker two clicks away answers them properly. */}
                 <p className="foldwho">
                   From 13, in 43 countries, with a parent or guardian on the account.{" "}
                   <Link className="linkbtn" href="/check">Check yours</Link> &mdash; two questions,
                   no account needed.
                 </p>
 
-                {/* The three numbers that answer "is this worth my afternoon".
-                    "Live the same day" is deliberately about shipping, which is
-                    the part Veyro controls -- not about a first sale, which
-                    depends on whoever you built it for. */}
-                <ul className="wins" aria-label="What setup costs you">
-                  <li><b>5 min</b><span>to set up</span></li>
-                  <li><b>2 calls</b><span>to integrate</span></li>
-                  <li><b>0%</b><span>taken by Veyro</span></li>
-                </ul>
-
-                {/* The code is the product for most of the people arriving
-                    here, so it is on the first screen rather than five
-                    chapters down. Three lines, and they are the real ones. */}
-                <figure className="herocode">
-                  <pre>{`const { checkoutUrl } = await veyro.checkout(productId);
-window.location = checkoutUrl;
-// ...they pay, you get the money.`}</pre>
-                  <figcaption>
-                    That is the integration. <Link className="linkbtn" href="/docs/sdk">See the guide</Link>
-                  </figcaption>
-                </figure>
-
-                {/* One ask. The checker is still reachable, from the line
-                    above, where it belongs to the sentence about eligibility
-                    rather than competing with the thing the page is for. */}
                 <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap" }}>
-                  <Link className="btn btn-lg" href="/get-started">Start now</Link>
+                  <Link className="btn btn-lg" href="/get-started">Start &mdash; it&rsquo;s free</Link>
                 </div>
+                <p className="tiny" style={{ marginTop: 12 }}>
+                  No card. Free under $100 a month, which is most people.
+                </p>
 
               </div>
 
@@ -163,56 +141,44 @@ window.location = checkoutUrl;
           </div>
         </div>
 
-        {/* ---- the AI story, first, because it is the differentiator ----
-            Given the surface treatment rather than the plain one: this and the
-            dashboard are the two things someone should remember, and they now
-            sit one after the other at the top of the page. */}
-        <section className="lp ch ch-surface ch-accent">
-          <div className="wrap-lp">
-            <AiIntegration />
-          </div>
-        </section>
-
-        {/* ---- one journey, four steps ---- */}
-        <section className="lp ch">
+        {/* ---- 2. how it works, in three ---- */}
+        <section className="lp ch ch-surface">
           <div className="wrap-lp">
             <div className="headc" style={{ marginBottom: 32 }}>
               <span className="lp-eyebrow">Start to paid</span>
-              <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>Four steps. One of them is your parent.</h2>
+              <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                Three steps. One of them is your parent.
+              </h2>
             </div>
             <Journey />
-
-            {/* The guardian step is the one people get wrong in both
-                directions, so the correction sits directly under the row that
-                raises it rather than on another page. */}
-            <div style={{ marginTop: "var(--sp-7)" }}>
-              <GuardianPermissions />
-            </div>
-            <p className="small centred-note" style={{ marginTop: 16 }}>
-              <Link className="linkbtn" href="/how-it-works">How the money actually moves</Link>
+            <p className="small centred-note" style={{ marginTop: 24 }}>
+              <Link className="linkbtn" href="/how-it-works">What Veyro does and what Stripe does</Link>
             </p>
           </div>
         </section>
 
-        {/* Real founders, when there are real founders to quote. Renders
-            nothing until lib/stories.ts has some. */}
-        <FounderStories />
+        {/* ---- 3. the objection that decides it ---- */}
+        <section className="lp ch">
+          <div className="wrap-lp">
+            <ParentAccount />
+          </div>
+        </section>
 
-        {/* ================= 9. the end ================= */}
+        {/* ---- 4. what it costs, then the ask ---- */}
         <section className="lp ch ch-9 lp-dark">
           <div className="wrap-lp lp-center">
-            <h2 className="lp-h2">You built it. Now make it pay.</h2>
+            <h2 className="lp-h2">Your parent approves once. Then it&rsquo;s yours to run.</h2>
             <p className="body" style={{ marginTop: 14, marginLeft: "auto", marginRight: "auto" }}>
-              Sign up, do the guardian step once, and the dashboard above is yours. Most of the
-              waiting is Stripe verifying an adult, not you filling anything in.
+              Free under $100 a month. 3% on whatever you earn above that. Most people never pay
+              anything, and the free tier is the whole product &mdash; not a trial.
             </p>
             <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
-              <Link className="btn btn-lg" href="/get-started">Start now</Link>
+              <Link className="btn btn-lg" href="/get-started">Start &mdash; it&rsquo;s free</Link>
             </div>
             <p className="tiny" style={{ marginTop: 16 }}>
-              <Link className="linkbtn" href="/how-it-works">How it works</Link>
+              <Link className="linkbtn" href="/pricing">What the 3% buys</Link>
               {" \u00b7 "}
-              <Link className="linkbtn" href="/faq">Questions</Link>
+              <Link className="linkbtn" href="/for-parents">For parents</Link>
               {" \u00b7 "}
               <Link className="linkbtn" href="/legal">What is not settled yet</Link>
             </p>
@@ -227,8 +193,8 @@ window.location = checkoutUrl;
           decided. */}
       <Reveal
         scope=".fw"
-        select="section.lp > .wrap-lp > *, section.lp .ai > *, section.lp .gperm > *"
-        stagger=".jn, .ai-tools, .gperm-l"
+        select="section.lp > .wrap-lp > *, section.lp .objection > *"
+        stagger=".jn, .objlist"
       />
 
       <ScrollTop />
@@ -239,7 +205,7 @@ window.location = checkoutUrl;
           screen: navbar, the closing CTA, the footer link and this. The bar
           is worth keeping for the action the page keeps offering as the
           lower-commitment one. */}
-      <StickyCta note="Free to start. Veyro takes 0%." />
+      <StickyCta note="Free under $100 a month. No card." />
       <SiteFooter />
     </div>
   );

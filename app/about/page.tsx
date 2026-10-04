@@ -66,12 +66,13 @@ const COMMITMENTS: { head: string; body: React.ReactNode }[] = [
     ),
   },
   {
-    head: "Veyro takes no percentage of what you earn.",
+    head: "Most people will never pay Veyro anything.",
     body: (
       <>
-        No cut, no platform fee. Stripe charges its own processing fees, which Stripe sets and
-        deducts. Future pricing is undecided, and if that ever changes you will be told before it
-        applies to you.
+        Free under $100 a month in earnings, and 3% on whatever is above that. A dormant account
+        costs us nothing, which is why the free tier is genuinely free rather than something paid
+        users subsidise. Stripe charges its own processing fees on top, which Stripe sets and
+        deducts.
       </>
     ),
   },
@@ -110,13 +111,13 @@ export default function About() {
             <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
             <div className="lp-links">
               <Link className="btn btn-q btn-sm hide-s" href="/how-it-works">How it works</Link>
-              <Link className="btn btn-q btn-sm hide-s" href="/for-guardians">For parents</Link>
+              <Link className="btn btn-q btn-sm hide-s" href="/for-parents">For parents</Link>
               <Link className="btn btn-sm" href="/check">Check eligibility</Link>
               <ThemeToggle />
               <MobileNav
                 items={[
                   { href: "/how-it-works", label: "How we built it" },
-                  { href: "/for-guardians", label: "For parents" },
+                  { href: "/for-parents", label: "For parents" },
                   { href: "/check", label: "Check eligibility" },
                   { href: "/", label: "Home" },
                 ]}

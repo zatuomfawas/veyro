@@ -8,11 +8,11 @@ const EXTRA: { path: string; priority: number }[] = [
   // the question most people arrive with.
   { path: "/get-started", priority: 0.9 },
   { path: "/docs/sdk", priority: 0.8 },
-  { path: "/wallet", priority: 0.8 },
-  { path: "/for-founders", priority: 0.7 },
   { path: "/faq", priority: 0.7 },
   // The page a parent is sent to when they want the unvarnished version.
   { path: "/legal", priority: 0.6 },
+  { path: "/for-parents", priority: 0.9 },
+  { path: "/pricing", priority: 0.6 },
   { path: "/about", priority: 0.6 },
   { path: "/contact", priority: 0.4 },
   { path: "/status", priority: 0.2 },

@@ -108,7 +108,7 @@ const FAQ: [string, React.ReactNode][] = [
       at Stripe, which is usually a couple of days. Then Stripe pays out to the bank account on
       the connected account, on <strong>Stripe&rsquo;s own schedule</strong> — typically longer for
       the first payout on a new account, and shorter after that, varying by country.{" "}
-      <Link className="linkbtn" href="/wallet">The wallet</Link> shows which of your money is still
+      <Link className="linkbtn" href="/how-it-works">The wallet</Link> shows which of your money is still
       settling and which is available, so you are never guessing. Veyro never holds the money and
       cannot speed a payout up, slow one down, or stop one.
     </>,
@@ -151,15 +151,12 @@ export default function GetStarted() {
             <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
             <div className="lp-links">
               <Link className="btn btn-q btn-sm hide-s" href="/how-it-works">How it works</Link>
-              <Link className="btn btn-q btn-sm hide-s" href="/wallet">The Wallet</Link>
-              <Link className="btn btn-sm" href="/check">Check eligibility</Link>
+                            <Link className="btn btn-sm" href="/check">Check eligibility</Link>
               <ThemeToggle />
               <MobileNav
                 items={[
                   { href: "/how-it-works", label: "How it works" },
-                  { href: "/wallet", label: "The Founder Wallet" },
-                  { href: "/for-founders", label: "For founders" },
-                  { href: "/for-guardians", label: "For parents" },
+                                                      { href: "/for-parents", label: "For parents" },
                   { href: "/faq", label: "Questions" },
                   { href: "/check", label: "Check eligibility" },
                 ]}
@@ -176,9 +173,18 @@ export default function GetStarted() {
         </h1>
         <p className="lead" style={{ marginTop: 16 }}>
           Say you built a site that sells Notion templates. It works, people want them, and there
-          is no way to charge. Here is the whole path from that to money in an account with your
-          name on it, in the order you will actually do it.
+          is no way to charge. Here is the whole path from that to money, in the order you will
+          actually do it.
         </p>
+        <div className="hero-accent" style={{ marginTop: "var(--sp-5)" }}>
+          <p className="body" style={{ margin: 0 }}>
+            <b>One thing to know before you start.</b> A parent or guardian has to verify
+            themselves with Stripe before the account can take a payment. It happens once, it
+            takes them about ten minutes, and nothing you do here works until they have done it.
+            Worth asking them before you begin rather than after.{" "}
+            <Link className="linkbtn" href="/for-parents">The page to send them</Link>.
+          </p>
+        </div>
 
         {/* ---------------- the diagram ---------------- */}
         <h2 className="h3" style={{ marginTop: 40 }}>Where a payment goes</h2>

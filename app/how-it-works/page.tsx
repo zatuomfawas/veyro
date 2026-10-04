@@ -83,7 +83,7 @@ export default function HowItWorks() {
           <nav className="lp-nav" aria-label="Main">
             <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
             <div className="lp-links">
-              <Link className="btn btn-q btn-sm hide-s" href="/for-guardians">For parents</Link>
+              <Link className="btn btn-q btn-sm hide-s" href="/for-parents">For parents</Link>
               <Link className="btn btn-2 btn-sm" href="/check">Check what applies to you</Link>
               <ThemeToggle />
             </div>
@@ -95,15 +95,15 @@ export default function HowItWorks() {
           It must stay at or above 86 or the sticky CTA will cover the last
           paragraph. The class is kept because it states the intent. */}
       <main id="main" className="wrap-lp longform has-sticky" style={{ paddingTop: 32 }}>
-        <span className="lp-eyebrow">How we built it</span>
-        <h1 className="d2" style={{ marginTop: 8, maxWidth: "22ch" }}>
-          How we built real payments for under-18s.
+        <span className="lp-eyebrow">How it works</span>
+        <h1 className="d2" style={{ marginTop: 8, maxWidth: "24ch" }}>
+          What Veyro does, and what Stripe does.
         </h1>
         <p className="lead" style={{ marginTop: 12 }}>
-          The internet is confident and wrong about this: search it and everyone tells you to wait
-          until you are 18. We did the work instead &mdash; established what the rules actually
-          permit, built the account flow that fits them, and shipped it. Your account, real Stripe
-          payments, no waiting.
+          Stripe moves the money. It has allowed a 13-year-old to hold an account with an adult
+          behind it for years. Veyro is everything around that: proving the arrangement is lawful,
+          getting your parent through it in one sitting, and keeping the account straight after.
+          Here is the whole of it, in order, with nothing left mysterious.
         </p>
         <p className="body" style={{ marginTop: 12, maxWidth: "var(--m-body)" }}>
           Below is the whole of it, including the primary source we hold ourselves to and the
@@ -115,6 +115,76 @@ export default function HowItWorks() {
         </p>
 
         <hr className="rule" style={{ margin: "24px 0" }} />
+
+        <h2 className="h3">In order</h2>
+        <ol className="numbered" style={{ marginTop: 16 }}>
+          <li>
+            <span>You sign up</span>
+            <span>
+              Two questions that matter: where you live and when you were born. Those decide
+              whether this is open to you at all, and the checker answers it before you make an
+              account.
+            </span>
+          </li>
+          <li>
+            <span>Your parent verifies and approves, once</span>
+            <span>
+              They go through Stripe&rsquo;s own hosted form with their own ID. Veyro never sees
+              the documents. This is the only thing they have to do, and they do not do it again.
+            </span>
+          </li>
+          <li>
+            <span>The Stripe account is created, and you control the payouts</span>
+            <span>
+              Your parent is the account owner on paper &mdash; an adult has to be the enforceable
+              party, which is what makes the whole thing lawful. You decide where the money goes
+              and when you take it out, without asking them each time.
+            </span>
+          </li>
+          <li>
+            <span>You paste a snippet, or send a link</span>
+            <span>
+              Two calls and no package to install, or skip the code entirely and send the checkout
+              link to whoever is buying.{" "}
+              <Link className="linkbtn" href="/docs/sdk">The integration guide</Link>.
+            </span>
+          </li>
+          <li>
+            <span>You get paid</span>
+            <span>
+              Money lands in the Stripe account. The dashboard folds every payment, fee and refund
+              into one position so the number you see is the number you can take.
+            </span>
+          </li>
+          <li>
+            <span>Veyro keeps it compliant</span>
+            <span>
+              Watching what Stripe still needs from the account, surfacing it before it becomes a
+              problem, and handling the tax paperwork. This is the part that does not exist
+              anywhere else, and it is the part you are actually paying for if you ever pay.
+            </span>
+          </li>
+        </ol>
+
+        <h2 className="h3" style={{ marginTop: 36 }}>Who does what</h2>
+        <div className="paths" style={{ marginTop: 20 }}>
+          <div className="path">
+            <span className="path-k">Stripe</span>
+            <h3 className="path-t">The money</h3>
+            <p className="path-d">
+              Takes the card, holds the balance, pays it out, verifies your parent, sets and
+              deducts its own fees. Veyro is never in the path of the money and never holds it.
+            </p>
+          </div>
+          <div className="path" data-on="1">
+            <span className="path-k">Veyro</span>
+            <h3 className="path-t">Everything around it</h3>
+            <p className="path-d">
+              Proving the route is lawful, getting your parent through setup once, the dashboard,
+              the integration, keeping the account compliant as you earn, and the tax forms.
+            </p>
+          </div>
+        </div>
 
         {/* ---------------------------------------------------------------- */}
         <div className="truthgrid" style={{ marginBottom: 40, alignItems: "start" }}>
@@ -361,7 +431,7 @@ export default function HowItWorks() {
           products off you, and on the account type this runs on they cannot block a payout even
           if they wanted to. What they do is one identity check, once, on Stripe&rsquo;s own form
           — and then they get told every time you request money, and keep a permanent record of
-          it. <Link className="linkbtn" href="/for-guardians">What a guardian is agreeing to</Link>.
+          it. <Link className="linkbtn" href="/for-parents">What a guardian is agreeing to</Link>.
         </p>
 
         {/* The same checklist the homepage shows, directly under the paragraph

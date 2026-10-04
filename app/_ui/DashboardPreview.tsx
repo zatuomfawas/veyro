@@ -31,7 +31,7 @@ const ROWS: { name: string; gross: string; fee: string; net: string; state: "pai
 export function DashboardPreview() {
   return (
     <div className="dp" role="img"
-      aria-label="Example founder dashboard showing $244.50 net revenue, $195.00 available to request, and 14 customers">
+      aria-label="Example founder dashboard showing $244.50 net revenue, $195.00 available to request, and 14 payments">
       {/* Window chrome. It reads as an application rather than as a diagram
           of one, which is the whole difference between "here is how it works"
           and "this is yours". */}
@@ -62,7 +62,7 @@ export function DashboardPreview() {
           </div>
           <div>
             <span className="dp-n">14</span>
-            <span className="dp-l">Customers</span>
+            <span className="dp-l">Payments</span>
           </div>
           <div>
             <span className="dp-n dp-up">+38%</span>
