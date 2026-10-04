@@ -29,7 +29,6 @@ import { CSS, CSS2 } from "@/app/_ui/css";
 import { Notice } from "@/app/_ui/form";
 import { Requirements } from "@/app/_ui/Requirements";
 import { SIGNUP_COUNTRIES } from "@/app/_ui/countries";
-import { CopyLink } from "@/app/_ui/CopyLink";
 import { DashNav, Section, EmptyState, SUPPORT_EMAIL, fmtDate } from "@/app/_ui/dash";
 
 import InviteGuardian, { ResendInvite } from "./InviteGuardian";
@@ -405,37 +404,46 @@ export default async function FounderDashboard() {
           {/* ---------------- 6. transactions ---------------- */}
           <Section title="Transactions">
             {transactions.length === 0 ? (
-              /* Three different situations, not one. With no products at all
-                 this would be the second dead end in a column that already
-                 says "no products yet", so it points at that one instead of
-                 repeating it. With only drafts there is nothing to copy. */
+              /* Three situations, and the common one first. Veyro is the layer
+                 that gets payments working, not a shop someone stocks, so the
+                 empty state points at the integration panel above rather than
+                 telling them to go and make something to sell.
+
+                 The draft branch used to link to #products, an anchor on this
+                 page. Products moved to their own page and the anchor went
+                 with them, so that button had been scrolling nowhere. */
               products.length === 0 ? (
                 <EmptyState
                   heading="No payments yet"
                   action={
                     <Link className="btn" href="/dashboard/founder/products">
-                      Create your first product
+                      Add payments to your app
                     </Link>
                   }
                 >
-                  Payments show up here once you have something to sell. Start with a product,
-                  and the link it gives you is what customers pay through.
+                  Payments will show up here once you&rsquo;ve integrated Veyro&rsquo;s code into
+                  your app and customers start paying you. You need one product first &mdash; it
+                  is what the code points at.
                 </EmptyState>
               ) : draftsOnly ? (
                 <EmptyState
                   heading="No payments yet"
-                  secondary={{ label: "Go to your products", href: "#products" }}
+                  action={<Link className="btn" href="#integrate">Get integration code</Link>}
+                  secondary={{ label: "Set it live", href: "/dashboard/founder/products" }}
                 >
-                  Your product is still a draft. Make it live and you&rsquo;ll get a link you
-                  can send.
+                  Payments will show up here once you&rsquo;ve integrated Veyro&rsquo;s code into
+                  your app and customers start paying you. Your product is still a draft, so set
+                  it live before you send anyone to it.
                 </EmptyState>
               ) : (
                 <EmptyState
                   heading="No payments yet"
-                  action={<CopyLink path={payPath!} />}
+                  action={<Link className="btn" href="#integrate">Get integration code</Link>}
+                  secondary={{ label: "Or copy the link", href: payPath! }}
                 >
-                  When someone pays, it appears here within seconds &mdash; amount, product,
-                  and Stripe&rsquo;s fee.
+                  Payments will show up here once you&rsquo;ve integrated Veyro&rsquo;s code into
+                  your app and customers start paying you. Every one lands here within seconds
+                  &mdash; amount, product, and Stripe&rsquo;s fee.
                 </EmptyState>
               )
             ) : (

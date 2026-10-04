@@ -74,7 +74,7 @@ export function BuyButton() {
 }`;
 
   return (
-    <section className="addapp" aria-labelledby="addapp-h">
+    <section className="addapp" id="integrate" aria-labelledby="addapp-h">
       <div className="addapp-h">
         <h2 className="addapp-t" id="addapp-h">Add payments to your app in 2 minutes</h2>
         {/* The status is the product's real one, not a decoration. A founder

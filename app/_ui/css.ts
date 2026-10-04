@@ -2304,13 +2304,11 @@ export const CSS2 = `
    content and a slow one gets the skeleton. It is a delay rather than a
    timer in JavaScript because the fallback is a server component: there is no
    effect to run, and the browser is already holding a clock. */
-.fw .skel, .fw .skel-hero, .fw .skel-rail, .fw .skel-card {
   opacity:0; animation:veyro-skel-in .16s var(--ease) var(--skel-gate, 240ms) forwards; }
 @keyframes veyro-skel-in { to { opacity:1; } }
 /* The gate stays; only the fade goes. Someone who asked for less motion still
    wants a fast page to go straight to its content. */
 @media (prefers-reduced-motion: reduce) {
-  .fw .skel, .fw .skel-hero, .fw .skel-rail, .fw .skel-card { animation-duration:0s; }
 }
 .fw .skel[data-shimmer="1"] { position:relative; overflow:hidden; }
 .fw .skel[data-shimmer="1"]::after { content:""; position:absolute; inset:0;
@@ -2332,19 +2330,33 @@ export const CSS2 = `
 /* Balance on the left, action on the right, like the band it stands for. */
 .fw .skel-herorow { display:flex; align-items:flex-start; justify-content:space-between;
   gap:var(--sp-6); flex-wrap:wrap; }
-.fw .skel-rail { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(0,1fr);
-  border-top:1px solid var(--line); margin-bottom:var(--sp-7); }
-.fw .skel-rail > div { padding:var(--sp-5) var(--sp-5) var(--sp-4) 0;
-  border-right:1px solid var(--line); }
-.fw .skel-rail > div:last-child { border-right:0; }
-.fw .skel-rail > div + div { padding-left:var(--sp-5); }
+/* The dashboard skeleton's own pieces, each mirroring a real one: the three
+   figures under the balance, the week as a strip, the snippet beside its
+   actions, and a transaction row. Same dim blocks as everything else -- a
+   placeholder that matches the layout does not also need to be loud. */
+.fw .skel-figs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:var(--sp-5); margin-top:var(--sp-7); padding-top:var(--sp-5);
+  border-top:1px solid var(--line); }
+.fw .skel-week { display:flex; align-items:flex-end; gap:6px; height:64px;
+  margin-top:var(--sp-6); }
+.fw .skel-weekcol { flex:1 1 0; display:flex; align-items:flex-end; height:100%; }
+.fw .skel-weekbar { width:100%; }
+.fw .skel-int { display:grid; grid-template-columns:minmax(0,1fr); gap:var(--sp-5);
+  margin-top:var(--sp-5); align-items:start; }
+@media (min-width:900px) {
+  .fw .skel-int { grid-template-columns:minmax(0,7fr) minmax(0,5fr); gap:var(--sp-6); }
+}
+.fw .skel-row { display:flex; align-items:center; justify-content:space-between;
+  gap:var(--sp-5); padding:12px 0; border-bottom:1px solid var(--line-soft); }
+.fw .skel-row:first-of-type { margin-top:var(--sp-4); border-top:1px solid var(--line-soft); }
+@media (max-width:560px) {
+  .fw .skel-figs { gap:var(--sp-3); }
+  .fw .skel-week { height:48px; }
+}
 .fw .skel-card { border:1px solid var(--line); background:var(--card);
   padding:var(--sp-5); margin-bottom:var(--sp-5); }
 @media (max-width:760px) {
   .fw .skel-hero { padding:var(--sp-7) var(--sp-5); }
-  .fw .skel-rail { grid-auto-flow:row; grid-template-columns:repeat(2,minmax(0,1fr)); }
-  .fw .skel-rail > div { border-right:0; border-bottom:1px solid var(--line); padding:var(--sp-4) 0; }
-  .fw .skel-rail > div + div { padding-left:0; }
 }
 
 /* ==== dark mode =========================================================
