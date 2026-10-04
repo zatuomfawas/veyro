@@ -11,6 +11,7 @@ import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { FlowDiagram } from "@/app/_ui/FlowDiagram";
 import { GuardianPermissions } from "@/app/_ui/GuardianPermissions";
 import { MoneyRail } from "@/app/_ui/MoneyRail";
+import { LiveWallet } from "@/app/_ui/LiveWallet";
 import { AudienceSplit } from "@/app/_ui/AudienceSplit";
 
 export const metadata = buildMetadata("how");
@@ -473,6 +474,16 @@ export default function HowItWorks() {
           reaches your app or ours.{" "}
           <Link className="linkbtn" href="/get-started">What your customer sees at the middle stop</Link>.
         </p>
+
+        {/* The diagram above says where the money goes; this is what the last
+            stop actually looks like once it gets there. A page that explains
+            a path for four hundred words and never shows the destination is
+            asking the reader to take the destination on trust. */}
+        <p className="body" style={{ marginTop: "var(--sp-7)" }}>
+          And this is the last stop, as you would see it: a sale arriving, settling, and becoming
+          money you can ask for.
+        </p>
+        <LiveWallet />
 
         {/* ---------------------------------------------------------------- */}
         <hr className="rule" style={{ margin: "36px 0 28px" }} />

@@ -2541,6 +2541,19 @@ export const CSS2 = `
 .fw .chip-sep { color:var(--ink-3); font-size:var(--fs-1); flex:none; }
 @media (prefers-reduced-motion: reduce) { .fw .chip { transition:none; } }
 
+/* ==== the eligibility answer ==============================================
+   The one place on the site where motion is a response rather than an
+   entrance: the reader pressed a button and this is the reply. It is short
+   and it rises rather than fading alone, because a block that merely appears
+   at full opacity is easy to miss directly under the control you just used. */
+.fw .check-res { margin-top:var(--sp-4);
+  animation:veyro-check var(--t-3) var(--ease-out) both; }
+@keyframes veyro-check {
+  from { opacity:0; transform:translateY(8px); }
+  to { opacity:1; transform:none; }
+}
+@media (prefers-reduced-motion: reduce) { .fw .check-res { animation:none; } }
+
 /* ==== the parent's panel ==================================================
    Reuses the .dp window chrome, because the point is that this is the same
    application the founder is looking at rather than a marketing drawing of

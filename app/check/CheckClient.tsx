@@ -232,7 +232,10 @@ function EligibilityCheck({
         </div></div>
 
         {R && (
-          <div style={{ marginTop: 16 }}>
+          /* Keyed on the answer, so asking a second question replays the
+             entrance instead of swapping the text underneath the reader --
+             a result that changes silently is one they can miss entirely. */
+          <div className="check-res" key={`${R.route}-${R.country?.[0]}-${R.region}`}>
             {R.route === "guardian" && (
               <Notice tone="pine" head={"Verified in " + (R.region || R.country?.[1])}
                 action={<Btn size="sm" onClick={() => go("signup")}>Create your account</Btn>}>
@@ -360,19 +363,52 @@ function EligibilityCheck({
 
         {/* The workings belong on the page devoted to this question. On the
             landing page the section around this already links to them. */}
-        {!embedded && <div style={{ marginTop: 24 }}>
-          <div className="lbl" style={{ marginBottom: 8 }}>How we work this out</div>
-          <p className="tiny" style={{ maxWidth: "var(--m-body)" }}>
-            Two filters, and a default. First, how the payment provider reaches your country: 43 countries can sign
-            up directly, 2 are sales-contact only, 5 run on a different company&rsquo;s platform whose rules we have
-            not read, and Brazil is supported but only for account holders of 18 or over. Second, the age at which you
-            can enter a binding contract where you live, because the provider&rsquo;s terms defer to local law rather
-            than assuming 18. Scotland is 16, seven Canadian provinces and territories are 19, Mississippi is 21, and
-            Singapore separates contracting age from adulthood entirely. Beyond those two, the route is treated as
-            open: Stripe confirmed the mechanism to us directly on 8 September 2026, so we do not mark a country
-            closed unless its own law sets a higher age or the provider carves it out. What Stripe would not confirm
-            is availability country by country, and the result above says so where it applies. Terms change, and none
-            of this is legal or tax advice.
+        {/* This used to be one ten-line paragraph carrying the whole of the
+            page's credibility, which is a lot to ask of a block nobody can
+            scan. Same facts, same numbers, given the room to be read: the
+            coverage as figures, the two filters as two things, and the
+            sourcing on its own where it can be checked. */}
+        {!embedded && <div className="layer-tight">
+          <div className="lbl" style={{ marginBottom: "var(--sp-4)" }}>How we work this out</div>
+
+          <div className="figrow">
+            <div>
+              <span className="fig-k">Sign up directly</span>
+              <span className="fig fig-md">43</span>
+              <span className="fig-sub">countries</span>
+            </div>
+            <div>
+              <span className="fig-k">Sales contact only</span>
+              <span className="fig fig-md">2</span>
+              <span className="fig-sub">no self-serve signup</span>
+            </div>
+            <div>
+              <span className="fig-k">Extended network</span>
+              <span className="fig fig-md">5</span>
+              <span className="fig-sub">rules we have not read</span>
+            </div>
+            <div>
+              <span className="fig-k">Carved out</span>
+              <span className="fig fig-md">1</span>
+              <span className="fig-sub">Brazil, 18 and over only</span>
+            </div>
+          </div>
+
+          <p className="tiny" style={{ marginTop: "var(--sp-6)", maxWidth: "var(--m-body)" }}>
+            <strong>Filter one is reach:</strong> how the payment provider gets to your country at all, which is
+            what the four figures above divide up.
+          </p>
+          <p className="tiny" style={{ marginTop: "var(--sp-3)", maxWidth: "var(--m-body)" }}>
+            <strong>Filter two is age:</strong> the age at which you can enter a binding contract where you live,
+            because the provider&rsquo;s terms defer to local law rather than assuming 18. Scotland is 16, seven
+            Canadian provinces and territories are 19, Mississippi is 21, and Singapore separates contracting age
+            from adulthood entirely.
+          </p>
+          <p className="tiny" style={{ marginTop: "var(--sp-3)", maxWidth: "var(--m-body)" }}>
+            <strong>Beyond those two, the route is treated as open.</strong> Stripe confirmed the mechanism to us
+            directly on 8 September 2026, so we do not mark a country closed unless its own law sets a higher age
+            or the provider carves it out. What Stripe would not confirm is availability country by country, and
+            the result above says so where it applies. Terms change, and none of this is legal or tax advice.
           </p>
         </div>}
       </div>

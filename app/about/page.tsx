@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
+import { MoneyRail } from "@/app/_ui/MoneyRail";
 import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
@@ -191,6 +192,13 @@ export default function About() {
           Every one of these is true of the code as it stands, not an intention. They are written
           down so that changing any of them has to be a decision somebody makes on purpose.
         </p>
+
+        {/* The second commitment below says the money never passes through
+            Veyro. This is that sentence drawn: two stops are ours and the
+            one in the middle, where the money actually sits, is not. */}
+        <div style={{ margin: "var(--sp-8) 0" }}>
+          <MoneyRail />
+        </div>
 
         <ol className="numbered">
           {COMMITMENTS.map((c) => (

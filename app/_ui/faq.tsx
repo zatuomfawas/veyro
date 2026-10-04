@@ -53,8 +53,24 @@ export const FAQ: FaqEntry[] = [
     a: (
       <>
       Nothing under $100 a month in earnings, which is most people. Above that, 3% on the
-      amount over $100 &mdash; earn $400 in a month and you pay $9. Card processing fees are
-      charged on top by the payment processor, which sets and deducts them, on the free tier too.
+      amount over $100. Card processing fees are charged on top by the payment processor,
+      which sets and deducts them, on the free tier too.
+      {/* The worked example reads as a figure rather than as a clause,
+          because it is the part of this answer anyone actually checks. */}
+      <span className="figrow" style={{ marginTop: "var(--sp-4)", display: "grid" }}>
+        <span>
+          <span className="fig-k">You earn</span>
+          <span className="fig fig-sm">$400.00</span>
+        </span>
+        <span>
+          <span className="fig-k">Veyro&rsquo;s fee</span>
+          <span className="fig fig-sm">$9.00</span>
+        </span>
+        <span>
+          <span className="fig-k">You keep</span>
+          <span className="fig fig-sm fig-pos">$391.00</span>
+        </span>
+      </span>
       </>
     ),
   },

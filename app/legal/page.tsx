@@ -4,6 +4,7 @@ import { buildViewport, SITE } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
+import { MoneyRail } from "@/app/_ui/MoneyRail";
 import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
@@ -154,7 +155,16 @@ export default function LegalPage() {
           read. <Link className="linkbtn" href="/for-parents">What you are agreeing to</Link>.
         </p>
 
-        <hr className="rule" style={{ margin: "30px 0" }} />
+        {/* The six doubts below are all about one arrangement, and a reader
+            who has not seen it drawn is being asked to hold it in their head
+            while being told what is wrong with it. No product UI on this
+            page: it exists to be sober, and a dashboard here would be the
+            page selling while it apologises. */}
+        <div style={{ marginTop: "var(--sp-8)" }}>
+          <MoneyRail />
+        </div>
+
+        <hr className="rule" style={{ margin: "var(--sp-8) 0 30px" }} />
 
         <ol className="numbered">
           {GAPS.map((g) => (

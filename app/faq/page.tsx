@@ -8,6 +8,7 @@ import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { ScrollProgress } from "@/app/_ui/ScrollProgress";
 import { FAQ } from "@/app/_ui/faq";
+import { MoneyRail } from "@/app/_ui/MoneyRail";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 
 export const viewport = buildViewport();
@@ -68,7 +69,15 @@ export default function FaqPage() {
           says so.
         </p>
 
-        <div style={{ marginTop: 40, maxWidth: "var(--m-wide)" }}>
+        {/* Half of these answers are about where money goes and who holds it,
+            and each one re-describes the same path in its own words. The path
+            drawn once, before any of them, means the answers can refer to a
+            picture the reader already has. */}
+        <div style={{ marginTop: "var(--sp-8)", maxWidth: "var(--m-wide)" }}>
+          <MoneyRail />
+        </div>
+
+        <div style={{ marginTop: "var(--sp-8)", maxWidth: "var(--m-wide)" }}>
           {FAQ.map((f) => (
             <details className="disc" key={f.q}>
               <summary className="disc-q">
