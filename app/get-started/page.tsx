@@ -142,7 +142,7 @@ const FAQ: [string, React.ReactNode][] = [
 export default function GetStarted() {
   return (
     <div className="fw">
-      <style>{CSS + CSS2}</style>
+      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
 
       <div className="navbar">

@@ -76,7 +76,7 @@ Read ${SITE}/docs/sdk and fix only what that error points at.`,
 export default function SdkDocs() {
   return (
     <div className="fw">
-      <style>{CSS + CSS2}</style>
+      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
 
       <div className="navbar">

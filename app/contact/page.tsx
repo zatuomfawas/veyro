@@ -24,7 +24,7 @@ const EMAIL = "hello@withveyro.com";
 export default function Contact() {
   return (
     <div className="fw">
-      <style>{CSS + CSS2}</style>
+      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
       <div className="navbar">
         <div className="wrap-lp">

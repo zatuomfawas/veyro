@@ -4,7 +4,8 @@ import { currentUser } from "@/lib/auth";
 import { defaultLandingFor } from "@/lib/next-path";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
-import { DashboardPreview } from "@/app/_ui/DashboardPreview";
+import { LiveWallet } from "@/app/_ui/LiveWallet";
+import { MoneyRail } from "@/app/_ui/MoneyRail";
 import { Reveal } from "@/app/_ui/Reveal";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { MobileNav } from "@/app/_ui/MobileNav";
@@ -46,7 +47,7 @@ export default async function Home() {
 
   return (
     <div className="fw">
-      <style>{CSS + CSS2}</style>
+      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
 
       <div className="navbar">
@@ -107,54 +108,60 @@ export default async function Home() {
                     line: the disclaimer directly below, and the checker as the
                     secondary CTA, which exists precisely to answer "does this
                     apply where I live" and which returns no for Brazil. */}
-                {/* The lead no longer opens on what the processor permits.
-                    Naming the rails here answered "is this allowed?" at the
-                    cost of planting the workaround -- a reader who learns the
-                    permission is somebody else's concludes they can go and get
-                    it themselves, for free. The hard part is the sentence
-                    that follows, and it is ours. */}
-                <div className="hero-accent" style={{ marginTop: "var(--sp-5)" }}>
-                  <p className="lead" style={{ margin: 0 }}>
-                    Veyro makes it work. Almost nobody gets paid before 18, because the hard part
-                    was never the payment &mdash; it is proving it is legal, getting a parent to
-                    actually agree, and keeping the account straight while you earn. That is the
-                    part we built.
-                  </p>
-                </div>
+                {/* Layer 1 is one sentence and one visual, and the sentence
+                    is the subhead rather than this paragraph. What used to sit
+                    here was the argument -- why this is hard, what we do about
+                    it -- which is Layer 2 work being done above the fold in
+                    prose. The wallet on the right now carries it: a reader who
+                    watches a sale land and a payout get requested has been
+                    told what this is without reading a word of it. */}
+                <p className="hero-sub">From 13, with a parent or guardian on the account.</p>
 
-                <p className="foldwho">
-                  From 13, in 43 countries, with a parent or guardian on the account.{" "}
-                  <Link className="linkbtn" href="/check">Check yours</Link> &mdash; two questions,
-                  no account needed.
-                </p>
-
-                <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap" }}>
-                  <Link className="btn btn-lg" href="/get-started">Start &mdash; it&rsquo;s free</Link>
+                <div className="row" style={{ marginTop: "var(--sp-6)", gap: 8, flexWrap: "wrap" }}>
+                  <Link className="btn btn-lg" href="/check">Check eligibility</Link>
+                  <Link className="btn btn-2 btn-lg" href="/get-started">Start free</Link>
                 </div>
                 <p className="tiny" style={{ marginTop: 12 }}>
-                  No card. Free under $100 a month, which is most people.
+                  Two questions, no account needed. Free under $100 a month, which is most people.
                 </p>
 
               </div>
 
               <div>
-                <DashboardPreview />
+                <LiveWallet />
               </div>
             </div>
           </div>
         </div>
 
-        {/* ---- 2. how it works, in three ---- */}
+        {/* ---- Layer 2: where the money goes, as one picture ---- */}
         <section className="lp ch ch-surface">
           <div className="wrap-lp">
-            <div className="headc" style={{ marginBottom: 32 }}>
-              <span className="lp-eyebrow">Start to paid</span>
+            <div className="headc" style={{ marginBottom: "var(--sp-8)" }}>
+              <span className="lp-eyebrow">Where the money goes</span>
               <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
-                Three steps. One of them is your parent.
+                It never stops here.
               </h2>
+              <p className="lp-lead" style={{ marginTop: "var(--sp-4)" }}>
+                A customer pays, and the money lands in an account with your name on the
+                products and your guardian&rsquo;s name on the paperwork. Veyro is the checkout
+                at one end and the record at the other. It is never the thing holding your money.
+              </p>
             </div>
-            <Journey />
-            <p className="small centred-note" style={{ marginTop: 24 }}>
+
+            <MoneyRail />
+
+            <div className="layer">
+              <div className="headc" style={{ marginBottom: "var(--sp-7)" }}>
+                <span className="lp-eyebrow">Start to paid</span>
+                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                  Three steps. One of them is your parent.
+                </h2>
+              </div>
+              <Journey />
+            </div>
+
+            <p className="small centred-note" style={{ marginTop: "var(--sp-7)" }}>
               <Link className="linkbtn" href="/how-it-works">What Veyro does, and what it sits on</Link>
             </p>
           </div>

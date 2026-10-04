@@ -1238,8 +1238,6 @@ export const CSS = `
 .fw .req-d { display:block; font-size:var(--fs-2); color:var(--ink-2); margin-top:2px; max-width:var(--m-lead); }
 .fw .captbl th:first-child { width:32%; }
 .fw .provtbl th:first-child { width:44%; }
-.fw .foldwho { font-size:var(--fs-2); letter-spacing:0.02em; color:var(--brand); font-weight:var(--fw-med);
-  margin-top:var(--sp-5); padding-top:var(--sp-4); border-top:1px solid var(--line); }
 .fw .foldwhy { list-style:none; margin:var(--sp-5) 0 0; padding:0; }
 .fw .foldwhy li { position:relative; padding:7px 0 7px 20px; font-size:var(--fs-3); color:var(--ink-2);
   line-height:1.5; max-width:52ch; }
@@ -1513,6 +1511,13 @@ export const CSS2 = `
   font-weight:var(--fw-reg); color:var(--ink-2); margin-top:var(--sp-5); max-width:30ch;
   text-wrap:balance; }
 .fw h1.hero-h { margin:0; }
+/* The hero's second line. It is the qualifier on the headline above it, not a
+   paragraph, so it stays one line of plain type: the argument that used to
+   live here moved into the wallet on the right, which makes it better than
+   prose could. */
+.fw .hero-sub { margin:var(--sp-4) 0 0; font-size:var(--fs-5); line-height:1.5;
+  color:var(--ink-2); max-width:34ch; }
+@media (max-width:760px) { .fw .hero-sub { font-size:var(--fs-4); } }
 .fw .mark { display:block; flex:none; }
 .fw .brand { display:inline-block; line-height:1; }
 .fw .lp-links { display:flex; align-items:center; gap:4px; flex-wrap:wrap; justify-content:flex-end; }
@@ -2357,6 +2362,216 @@ export const CSS2 = `
   padding:var(--sp-5); margin-bottom:var(--sp-5); }
 @media (max-width:760px) {
   .fw .skel-hero { padding:var(--sp-7) var(--sp-5); }
+}
+
+/* ==== instrument type ====================================================
+   Marketing type and financial type are two different jobs and should not
+   look like one. Prose wants a comfortable measure and proportional figures;
+   a balance wants to read like a panel -- fixed-width digits that do not
+   shuffle as they change, a label that is clearly a label, and enough
+   letterspacing on the label to stop it competing with the number.
+
+   .num already existed and did the tabular part. These build the rest of the
+   treatment on top of it so a figure can be dropped anywhere on the site and
+   arrive looking like the product rather than like a headline. */
+.fw .fig { font-variant-numeric:tabular-nums lining-nums; font-feature-settings:"tnum" 1;
+  font-weight:var(--fw-bold); letter-spacing:-0.022em; color:var(--ink); line-height:1.04;
+  display:block; }
+.fw .fig-xl { font-size:var(--fs-9); }
+.fw .fig-lg { font-size:var(--fs-8); }
+.fw .fig-md { font-size:var(--fs-7); }
+.fw .fig-sm { font-size:var(--fs-5); }
+/* The label above or below a figure. Uppercase at this size needs the extra
+   tracking to stay legible, and the weight stays at 500 so it never reads as
+   a heading. */
+.fw .fig-k { display:block; font-size:var(--fs-1); letter-spacing:0.07em;
+  text-transform:uppercase; color:var(--ink-3); font-weight:var(--fw-med); }
+/* An identifier rather than a quantity: a payout number, a reference. Monospaced
+   because it is read character by character, not at a glance. */
+.fw .fig-ref { font-family:var(--code); font-size:var(--fs-1); letter-spacing:0.04em;
+  color:var(--ink-3); font-variant-numeric:tabular-nums; text-transform:uppercase; }
+.fw .fig-pos { color:var(--pine); }
+.fw .fig-sub { display:block; margin-top:6px; font-size:var(--fs-2); color:var(--ink-3); }
+/* A figure group: label, number, optional sub. Used wherever a page states a
+   quantity it wants read as money rather than as copy. */
+.fw .figrow { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:var(--sp-5) var(--sp-6); }
+.fw .figrow > div { min-width:0; }
+
+/* ==== money rail =========================================================
+   The one picture the whole product is: money entering at one end, arriving
+   at the other, and Veyro being the thing it passes through. It appears on
+   every page where the architecture matters, drawn identically each time,
+   because five drawings of one idea is five chances to contradict yourself.
+
+   The travelling spark is the only moving part. It is one element on a track,
+   not an animation per segment, so the timing cannot drift out of step with
+   the line it is running along. */
+.fw .mrail { position:relative; }
+.fw .mrail-track { margin:0; padding:0; list-style:none; display:grid; gap:var(--sp-2);
+  grid-template-columns:repeat(var(--mrail-n,5),minmax(0,1fr)); }
+/* The line the spark runs on, behind the nodes. Insets by half a cell so it
+   starts and ends at the centre of the first and last node rather than at the
+   edge of the row. */
+.fw .mrail-line { display:block; position:absolute; top:13px;
+  left:calc(50% / var(--mrail-n,5)); right:calc(50% / var(--mrail-n,5));
+  height:1px; background:var(--line); overflow:hidden; }
+.fw .mrail-spark { position:absolute; top:0; left:0; width:34%; height:100%;
+  background:linear-gradient(90deg,transparent,var(--brand),transparent);
+  animation:veyro-mrail 3.4s var(--ease) infinite; }
+@keyframes veyro-mrail {
+  0% { transform:translateX(-100%); }
+  100% { transform:translateX(calc(100% / 0.34)); }
+}
+.fw .mrail-node { position:relative; display:flex; flex-direction:column;
+  align-items:center; text-align:center; gap:6px; min-width:0; }
+.fw .mrail-dot { width:9px; height:9px; border-radius:50%; background:var(--paper);
+  border:1px solid var(--control-line); margin-top:9px; flex:none; position:relative; }
+/* The stops Veyro owns. Filled rather than outlined, which is the whole
+   claim the picture is making. */
+.fw .mrail-node[data-ours="1"] .mrail-dot { background:var(--brand); border-color:var(--brand); }
+.fw .mrail-k { font-size:var(--fs-1); letter-spacing:0.05em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:var(--fw-med); }
+.fw .mrail-t { font-size:var(--fs-2); font-weight:var(--fw-med); color:var(--ink);
+  line-height:1.3; }
+.fw .mrail-node[data-ours="1"] .mrail-t { color:var(--brand); }
+/* Below 620px the rail turns and runs down the page. The line moves to the
+   left gutter and the labels sit beside it, which is the only arrangement
+   that survives five stops at 375px. */
+@media (max-width:620px) {
+  .fw .mrail-track { grid-template-columns:1fr; gap:var(--sp-4); }
+  .fw .mrail-line { top:14px; bottom:14px; left:4px; right:auto; width:1px; height:auto; }
+  .fw .mrail-spark { width:100%; height:28%;
+    background:linear-gradient(180deg,transparent,var(--brand),transparent);
+    animation-name:veyro-mrail-v; }
+  @keyframes veyro-mrail-v {
+    0% { transform:translateY(-100%); }
+    100% { transform:translateY(calc(100% / 0.28)); }
+  }
+  .fw .mrail-node { flex-direction:row; align-items:baseline; text-align:left;
+    gap:var(--sp-3); }
+  .fw .mrail-dot { margin-top:0; align-self:center; }
+  .fw .mrail-k { flex:none; width:7ch; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fw .mrail-spark { animation:none; opacity:.5; width:100%;
+    background:linear-gradient(90deg,transparent,var(--brand),transparent); }
+}
+
+/* ==== the hero wallet's moving parts ======================================
+   Everything here is a change of state in a card that must not change size.
+   The hero is the first thing painted and the last thing that should reflow,
+   so the arriving row holds its height from the first frame and only its
+   contents fade in. */
+.fw .lw-chips { margin-top:var(--sp-5); padding-top:var(--sp-4);
+  border-top:1px solid var(--line); }
+.fw .lw-led { margin-top:var(--sp-4); }
+/* One lift as the balance lands. Short, and on the whole figure rather than
+   per digit -- money that flickers is money you distrust. */
+.fw .lw-bal { margin-top:5px; transition:transform var(--t-3) var(--ease-out); }
+.fw .lw-bal[data-bump="1"] { animation:veyro-lw-bump 460ms var(--ease-out) 1; }
+@keyframes veyro-lw-bump {
+  0% { transform:translateY(5px); opacity:.55; }
+  100% { transform:none; opacity:1; }
+}
+/* The row reserves its box immediately and reveals its contents. Collapsing
+   the height instead would make the card grow under the reader's eye. */
+.fw .lw-new { opacity:0; transition:opacity var(--t-3) var(--ease-out); }
+.fw .lw-new[data-in="1"] { opacity:1; animation:veyro-lw-row 420ms var(--ease-out) 1; }
+@keyframes veyro-lw-row {
+  from { opacity:0; transform:translateY(-8px); }
+  to { opacity:1; transform:none; }
+}
+.fw .dp-cta[data-state="done"] { background:var(--pine-bg); color:var(--pine);
+  border-color:var(--pine-line); }
+@media (prefers-reduced-motion: reduce) {
+  .fw .lw-bal, .fw .lw-bal[data-bump="1"],
+  .fw .lw-new, .fw .lw-new[data-in="1"] { animation:none; transition:none; }
+  /* Reduced motion never runs the sequence, so the row is simply there. */
+  .fw .lw-new { opacity:1; }
+}
+
+/* ==== ledger ==============================================================
+   A transaction list that is a transaction list, not a table of text. Rows
+   arrive one after another the first time the block is seen, which is the
+   only honest animation for a ledger: that is what a ledger does. */
+.fw .led { border-top:1px solid var(--line); }
+.fw .led-row { display:grid; grid-template-columns:1fr auto auto;
+  align-items:center; gap:var(--sp-3); padding:11px 0;
+  border-bottom:1px solid var(--line-soft); }
+.fw .led-n { font-size:var(--fs-3); font-weight:var(--fw-med); min-width:0;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.fw .led-sub { display:block; font-size:var(--fs-1); color:var(--ink-3);
+  font-weight:var(--fw-reg); }
+.fw .led-amt { font-variant-numeric:tabular-nums lining-nums; font-size:var(--fs-3);
+  font-weight:var(--fw-bold); white-space:nowrap; }
+.fw .led[data-animate="1"] .led-row { animation:veyro-led var(--t-3) var(--ease-out) both;
+  animation-delay:calc(var(--i,0) * 90ms + 120ms); }
+@keyframes veyro-led {
+  from { opacity:0; transform:translateY(7px); }
+  to { opacity:1; transform:none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fw .led[data-animate="1"] .led-row { animation:none; }
+}
+
+/* ==== state chips =========================================================
+   One spelling of a payment's life, used everywhere it is drawn: received,
+   settling, available, requested, paid. The sequence is the product, so the
+   chips that name it have to look the same on every page that shows it. */
+.fw .chips { display:flex; flex-wrap:wrap; align-items:center; gap:6px; }
+.fw .chip { display:inline-flex; align-items:center; gap:5px; height:22px;
+  padding:0 8px; font-size:var(--fs-1); font-weight:var(--fw-bold);
+  letter-spacing:0.03em; text-transform:uppercase; border:1px solid var(--line);
+  color:var(--ink-3); background:var(--surface); white-space:nowrap;
+  transition:color var(--t-2) var(--ease), border-color var(--t-2) var(--ease),
+             background-color var(--t-2) var(--ease); }
+.fw .chip[data-on="1"][data-tone="pine"]  { color:var(--pine);  border-color:var(--pine-line);  background:var(--pine-bg); }
+.fw .chip[data-on="1"][data-tone="amber"] { color:var(--amber); border-color:var(--amber-line); background:var(--amber-bg); }
+.fw .chip[data-on="1"][data-tone="slate"] { color:var(--slate); border-color:var(--slate-line); background:var(--slate-bg); }
+.fw .chip-sep { color:var(--ink-3); font-size:var(--fs-1); flex:none; }
+@media (prefers-reduced-motion: reduce) { .fw .chip { transition:none; } }
+
+/* ==== audience split ======================================================
+   Two people read this site and they are not reading for the same thing. A
+   founder is asking whether they can start; a parent is asking whether this
+   is legitimate. Where a page speaks to both, it says which half is which
+   rather than hoping the reader sorts it out.
+
+   The two panels differ in ground as well as in heading, because a reader
+   skimming for "the bit that is for me" is looking at shape before words. */
+.fw .aud { display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:var(--sp-5); margin-top:var(--sp-6); }
+.fw .aud-p { border:1px solid var(--line); padding:var(--sp-6); min-width:0;
+  display:flex; flex-direction:column; }
+.fw .aud-p[data-who="founder"] { background:var(--card); }
+.fw .aud-p[data-who="parent"]  { background:var(--surface); }
+.fw .aud-k { display:flex; align-items:center; gap:7px; font-size:var(--fs-1);
+  letter-spacing:0.07em; text-transform:uppercase; font-weight:var(--fw-med);
+  color:var(--ink-3); }
+.fw .aud-k::before { content:""; width:7px; height:7px; flex:none; }
+.fw .aud-p[data-who="founder"] .aud-k::before { background:var(--brand); }
+.fw .aud-p[data-who="parent"]  .aud-k::before { background:var(--slate); }
+.fw .aud-h { margin-top:var(--sp-3); font-size:var(--fs-6); line-height:1.3;
+  letter-spacing:-0.016em; font-weight:var(--fw-bold); }
+.fw .aud-b { margin-top:var(--sp-3); font-size:var(--fs-3); line-height:1.55;
+  color:var(--ink-2); }
+.fw .aud-foot { margin-top:auto; padding-top:var(--sp-5); }
+@media (max-width:760px) {
+  .fw .aud { grid-template-columns:1fr; gap:var(--sp-4); }
+  .fw .aud-p { padding:var(--sp-5); }
+}
+
+/* ==== layer spacing =======================================================
+   Three layers to every page: the one-sentence answer, the one diagram, and
+   then everything else. The layers are told apart by the room around them
+   more than by anything else, so the gap is a token rather than a number
+   somebody picks again on each page. */
+.fw .layer { margin-top:var(--sp-10); }
+.fw .layer-tight { margin-top:var(--sp-8); }
+@media (max-width:760px) {
+  .fw .layer { margin-top:var(--sp-8); }
+  .fw .layer-tight { margin-top:var(--sp-7); }
 }
 
 /* ==== dark mode =========================================================

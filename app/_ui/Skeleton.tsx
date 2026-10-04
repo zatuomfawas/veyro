@@ -32,7 +32,7 @@ function Bar({ w, h = 14, mt = 0 }: { w: string; h?: number; mt?: number }) {
 export function DashboardSkeleton({ what = "your money" }: { what?: string }) {
   return (
     <div className="fw">
-      <style>{CSS + CSS2}</style>
+      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <main className="wrap-w" style={{ paddingTop: 24, paddingBottom: 56 }}>
         {/* The words, for anyone who cannot see the shape. */}
         <p className="sr-only" role="status" aria-live="polite">
@@ -129,7 +129,7 @@ export function PageSkeleton({
 }: { what: string; left?: number; right?: number }) {
   return (
     <div className="fw">
-      <style>{CSS + CSS2}</style>
+      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <main className="wrap-w" style={{ paddingTop: 24, paddingBottom: 56 }}>
         <p className="sr-only" role="status" aria-live="polite">
           Loading {what}…
@@ -178,7 +178,7 @@ export function PageSkeleton({
 export function NarrowSkeleton({ what }: { what: string }) {
   return (
     <div className="fw">
-      <style>{CSS + CSS2}</style>
+      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <div className="wrap-s">
         <div className="lp-nav" style={{ borderBottom: 0 }}>
           <Bar w="74px" h={18} />

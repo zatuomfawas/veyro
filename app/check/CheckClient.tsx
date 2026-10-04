@@ -419,7 +419,7 @@ export default function CheckClient() {
 
   return (
     <div className="fw">
-      <style>{CSS + CSS2}</style>
+      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
       <EligibilityCheck go={go} />
     </div>

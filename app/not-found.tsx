@@ -17,7 +17,7 @@ export const viewport = buildViewport();
 export default function NotFound() {
   return (
     <div className="fw">
-      <style>{CSS + CSS2}</style>
+      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
 
       <div className="wrap-n">
