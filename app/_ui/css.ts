@@ -892,20 +892,18 @@ export const CSS = `
 @media (max-width:560px) {
   .fw .dp-body { padding:var(--sp-5); }
   /* The balance comes down a step so the card is not mostly one number.
-     The sequence needs 335px and has 301, so at phone width it stops being a
-     line and becomes a deliberate two-by-two: all four states visible, none
-     clipped, none stranded on a second row behind a dangling arrow. The
-     arrows go, because reading order carries the sequence once the shape is
-     obviously a grid.
+     The sequence is three chips now, not four, and three fit on one line at
+     375px with the padding tightened. It stays a line: a two-by-two grid of
+     three leaves one stranded on its own row, and the whole value of drawing
+     this is that it reads left to right.
 
      Doubling the class is deliberate. .chips sets flex-wrap:wrap and is
      declared later in this file, so an equal-specificity override here loses
      on source order no matter what it says. */
   .fw .dp-head .fig-xl { font-size:var(--fs-8); }
-  .fw .chips.lw-chips { display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:5px; }
-  .fw .chips.lw-chips .chip { justify-content:center; padding:0 6px; }
-  .fw .chips.lw-chips .chip-sep { display:none; }
+  .fw .chips.lw-chips { flex-wrap:nowrap; gap:4px; }
+  .fw .chips.lw-chips .chip { padding:0 6px; letter-spacing:0.02em; }
+  .fw .chips.lw-chips .chip-sep { font-size:10px; }
   .fw .dp-cta { height:var(--h-sm); }
 }
 

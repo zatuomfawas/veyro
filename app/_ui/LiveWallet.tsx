@@ -9,59 +9,56 @@
 //
 // What it does, once, when scrolled into view:
 //
-//   a sale arrives        a row slides into the ledger and the figures move
-//   it settles            the row's chip walks received -> settling -> available
-//   the money is taken    the balance steps up and a payout is requested
+//   the balance counts     from nothing up to $195.00, the real figure
+//   a sale arrives         a row slides into the ledger
+//   it settles             the row walks received -> settling -> available
 //
-// Then it stops. A loop would turn the hero into a screensaver and the figures
-// into decoration; this runs the product's actual sequence one time and leaves
-// the result on screen, which is also the frame someone screenshotting it gets.
+// Then it stops. A loop would turn the hero into a screensaver and the
+// figures into decoration; this runs the product's actual sequence one time
+// and leaves the result on screen, which is also the frame someone
+// screenshotting it gets.
 //
-// THE RULE THIS FILE IS BUILT AROUND: the figures only ever move forwards.
+// TWO THINGS THIS DELIBERATELY DOES NOT DO, both of which it used to:
 //
-// This used to render the FINISHED state on the server and wind back to the
-// beginning to play. In the hero that rewind happens on screen at load, so
-// the balance went 195 -> 171 -> 195 and read as a glitch, which is exactly
-// what it was. Money going backwards in a wallet is the single worst thing
-// this component could do, and it was doing it on the home page.
+// It does not move the balance between two real figures. It showed $171.86
+// stepping up to $195.00 as the sale settled, which is arithmetically right
+// and reads as a glitch -- two numbers in the one place the page wants you
+// to look, smaller one first. There is one balance here and it is $195.00.
 //
-// So the server renders the OPENING state instead: $171.86 available, the
-// sale not yet in the ledger, nothing requested. That is a complete and
-// truthful wallet, just an earlier moment of one -- not a zero waiting to be
-// filled in. The client starts exactly there and only advances.
+// It does not change the button. "Request a payout" is a call to action, and
+// flipping it to "Payout requested" on a timer is the interface claiming
+// something happened that nobody did. The payment lifecycle is the chips'
+// job; the button stays an invitation. For the same reason the sequence ends
+// at Available rather than Requested: available is a state money is in, and
+// requested is something a person chooses to do.
 //
-// Reduced motion, and anything without an IntersectionObserver, is moved
-// straight to the finished state: the whole story, none of the movement.
+// THE RULE THIS FILE IS BUILT AROUND: nothing changes without a cause the
+// viewer can see. The sale row sliding in is the cause of the chips moving.
+// The count is a first-sight flourish on a figure that never changes again.
 
 import { Fragment, useEffect, useReducer, useRef } from "react";
 import { formatMinor } from "@/lib/money";
 import { CountUp } from "@/app/_ui/CountUp";
 
-// The arithmetic has to survive a sceptical parent adding it up, so it is
-// stated once here and everything else is derived.
-//
-//   opening available   171.86
-//   the sale            + 23.14  gross 24.00, less the 0.86 processing fee
-//   closing available   195.00   <- the figure in the aria label
-//
-// Those three lines add up, and the opening figure is the one that was chosen
-// to make them: a round 171.00 would have closed at 194.14 and the card would
-// have been quietly wrong in front of exactly the reader who checks.
-const OPENING_MINOR = 17186;
+// The arithmetic has to survive a sceptical parent adding it up. The sale is
+// the one the ledger shows arriving; $195.00 is the balance it is part of,
+// across the fourteen payments the card does not have room to list.
 const SALE_GROSS_MINOR = 2400;
 const SALE_FEE_MINOR = 86;
-const END_MINOR = 19500;
+const BALANCE_MINOR = 19500;
 
-type Phase = 0 | 1 | 2 | 3 | 4;
-// 0 idle (opening balance)      3 available, balance steps up
-// 1 sale lands, row appears     4 payout requested  <- the server-rendered end
+type Phase = 0 | 1 | 2 | 3;
+// 0 before the sale arrives (what the server renders)
+// 1 the row slides in, received
 // 2 settling
+// 3 available  <- where it stops
 
+// The balance count runs first and finishes before the sale starts arriving,
+// so the two are read as two things rather than as one confusing one.
 const SEQUENCE: { at: number; to: Phase }[] = [
-  { at: 600, to: 1 },
-  { at: 1500, to: 2 },
-  { at: 2600, to: 3 },
-  { at: 3900, to: 4 },
+  { at: 1500, to: 1 },
+  { at: 2400, to: 2 },
+  { at: 3300, to: 3 },
 ];
 
 const PRIOR = [
@@ -83,10 +80,10 @@ export function LiveWallet() {
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced || typeof IntersectionObserver === "undefined") {
-      // Straight to the end. One state change, no animation -- the balance
-      // still never goes backwards, it simply arrives.
+      // Straight to the end. One state change, no animation: the same final
+      // frame everyone else arrives at, reached without the journey.
       ran.current = true;
-      setPhase(4);
+      setPhase(3);
       return;
     }
 
@@ -107,9 +104,6 @@ export function LiveWallet() {
   }, []);
 
   const saleVisible = phase >= 1;
-  const balance = phase >= 3 ? END_MINOR : OPENING_MINOR;
-  const requested = phase >= 4;
-
   const saleState = phase >= 3 ? "available" : phase === 2 ? "settling" : "received";
   const saleTone = phase >= 3 ? "pine" : phase === 2 ? "amber" : "slate";
 
@@ -118,8 +112,8 @@ export function LiveWallet() {
       className="dp" ref={node}
       role="img"
       aria-label={
-        "Example founder wallet. A $24.00 sale arrives and settles, taking the balance "
-        + "available to request from $171.86 to $195.00, which is then requested as a payout."
+        "Example founder wallet showing $195.00 available to request. A $24.00 sale arrives "
+        + "and settles into it, leaving $23.14 after the processing fee."
       }
     >
       <div className="dp-bar" aria-hidden="true">
@@ -137,12 +131,10 @@ export function LiveWallet() {
                 is the only number on the site that moves, and it only moves
                 up. */}
             <span className="fig fig-xl lw-bal">
-              <CountUp to={balance} currency="USD" />
+              <CountUp amountMinor={BALANCE_MINOR} currency="USD" />
             </span>
           </div>
-          <span className="dp-cta" data-state={requested ? "done" : undefined}>
-            {requested ? "Payout requested" : "Request a payout"}
-          </span>
+          <span className="dp-cta">Request a payout</span>
         </div>
 
         {/* The sequence, named. This is the one place on the marketing site
@@ -153,7 +145,6 @@ export function LiveWallet() {
             ["Received", "slate", phase >= 1],
             ["Settling", "amber", phase >= 2],
             ["Available", "pine", phase >= 3],
-            ["Requested", "pine", phase >= 4],
           ] as const).map(([label, tone, on], i) => (
             <Fragment key={label}>
               {i > 0 && <span className="chip-sep">&rarr;</span>}
@@ -193,9 +184,7 @@ export function LiveWallet() {
         </div>
 
         <div className="dp-foot">
-          <span className="dp-dot" /> {requested
-            ? "Payout #00421 on its way to your bank"
-            : "Last payout $49.50, 20 Sept"}
+          <span className="dp-dot" /> Last payout $49.50, sent to your bank on 20 Sept
         </div>
       </div>
     </div>
