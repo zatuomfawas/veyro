@@ -891,13 +891,21 @@ export const CSS = `
 .fw .dp-dot { width:7px; height:7px; border-radius:50%; background:var(--pine); flex:none; }
 @media (max-width:560px) {
   .fw .dp-body { padding:var(--sp-5); }
-  /* The balance comes down a step so the card is not mostly one number, and
-     the chips scroll rather than wrapping into four stacked rows -- the
-     sequence reads as a sequence or it is not worth drawing. */
+  /* The balance comes down a step so the card is not mostly one number.
+     The sequence needs 335px and has 301, so at phone width it stops being a
+     line and becomes a deliberate two-by-two: all four states visible, none
+     clipped, none stranded on a second row behind a dangling arrow. The
+     arrows go, because reading order carries the sequence once the shape is
+     obviously a grid.
+
+     Doubling the class is deliberate. .chips sets flex-wrap:wrap and is
+     declared later in this file, so an equal-specificity override here loses
+     on source order no matter what it says. */
   .fw .dp-head .fig-xl { font-size:var(--fs-8); }
-  .fw .lw-chips { overflow-x:auto; flex-wrap:nowrap; padding-bottom:4px;
-    scrollbar-width:none; }
-  .fw .lw-chips::-webkit-scrollbar { display:none; }
+  .fw .chips.lw-chips { display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:5px; }
+  .fw .chips.lw-chips .chip { justify-content:center; padding:0 6px; }
+  .fw .chips.lw-chips .chip-sep { display:none; }
   .fw .dp-cta { height:var(--h-sm); }
 }
 
@@ -2503,6 +2511,17 @@ export const CSS2 = `
 }
 @media (prefers-reduced-motion: reduce) {
   .fw .led[data-animate="1"] .led-row { animation:none; }
+}
+/* At phone width three columns leave the product name about 140px, which
+   truncates almost every real one. The amount is what the eye goes to, so it
+   keeps the top line beside the name; the state chip drops underneath, where
+   there is room for it to stay a chip rather than become an abbreviation. */
+@media (max-width:480px) {
+  .fw .led-row { grid-template-columns:minmax(0,1fr) auto; row-gap:7px; }
+  .fw .led-n { grid-column:1; grid-row:1; white-space:normal; overflow:visible;
+    text-overflow:clip; }
+  .fw .led-amt { grid-column:2; grid-row:1; align-self:start; }
+  .fw .led-row > .chip { grid-column:1; grid-row:2; justify-self:start; }
 }
 
 /* ==== state chips =========================================================
