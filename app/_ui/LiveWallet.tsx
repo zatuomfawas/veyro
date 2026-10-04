@@ -17,16 +17,25 @@
 // into decoration; this runs the product's actual sequence one time and leaves
 // the result on screen, which is also the frame someone screenshotting it gets.
 //
-// THE RULE THIS FILE IS BUILT AROUND: the final state is what renders on the
-// server. Not the first state, not a zero. With no JavaScript, with reduced
-// motion, or if this never hydrates, the wallet shows the finished, internally
-// consistent figures. On a page about money an empty number waiting to be
-// filled in would be the worst thing that could happen, so it cannot: every
-// value below is derived from END, and the animation walks backwards from it
-// before walking forwards again.
+// THE RULE THIS FILE IS BUILT AROUND: the figures only ever move forwards.
+//
+// This used to render the FINISHED state on the server and wind back to the
+// beginning to play. In the hero that rewind happens on screen at load, so
+// the balance went 195 -> 171 -> 195 and read as a glitch, which is exactly
+// what it was. Money going backwards in a wallet is the single worst thing
+// this component could do, and it was doing it on the home page.
+//
+// So the server renders the OPENING state instead: $171.86 available, the
+// sale not yet in the ledger, nothing requested. That is a complete and
+// truthful wallet, just an earlier moment of one -- not a zero waiting to be
+// filled in. The client starts exactly there and only advances.
+//
+// Reduced motion, and anything without an IntersectionObserver, is moved
+// straight to the finished state: the whole story, none of the movement.
 
 import { Fragment, useEffect, useReducer, useRef } from "react";
 import { formatMinor } from "@/lib/money";
+import { CountUp } from "@/app/_ui/CountUp";
 
 // The arithmetic has to survive a sceptical parent adding it up, so it is
 // stated once here and everything else is derived.
@@ -61,9 +70,9 @@ const PRIOR = [
 ];
 
 export function LiveWallet() {
-  // Starts at the end. Only JS, having checked the motion setting, ever winds
-  // it back to the beginning to play forwards.
-  const [phase, setPhase] = useReducer((_: Phase, n: Phase) => n, 4 as Phase);
+  // Starts at the opening state, which is what the server rendered. Nothing
+  // below ever sets a phase lower than the one before it.
+  const [phase, setPhase] = useReducer((_: Phase, n: Phase) => n, 0 as Phase);
   const node = useRef<HTMLDivElement>(null);
   const ran = useRef(false);
 
@@ -71,19 +80,27 @@ export function LiveWallet() {
     if (ran.current) return;
     const el = node.current;
     if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (typeof IntersectionObserver === "undefined") return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced || typeof IntersectionObserver === "undefined") {
+      // Straight to the end. One state change, no animation -- the balance
+      // still never goes backwards, it simply arrives.
+      ran.current = true;
+      setPhase(4);
+      return;
+    }
 
     const timers: ReturnType<typeof setTimeout>[] = [];
     const io = new IntersectionObserver((entries) => {
       if (!entries.some((e) => e.isIntersecting) || ran.current) return;
       ran.current = true;
       io.disconnect();
-      // Wind back, then play. The rewind is applied in the same tick as the
-      // first timer is scheduled so the end state is never painted twice.
-      setPhase(0);
       for (const s of SEQUENCE) timers.push(setTimeout(() => setPhase(s.to), s.at));
-    }, { threshold: 0.35 });
+      // 0.15, not a third. The card is tall -- 479px -- and on a short window
+      // a third of it may never be on screen at once while the reader is
+      // looking straight at the hero, which would mean the sequence silently
+      // never plays. A sixth is enough to know it has been seen.
+    }, { threshold: 0.15 });
 
     io.observe(el);
     return () => { io.disconnect(); for (const t of timers) clearTimeout(t); };
@@ -101,8 +118,8 @@ export function LiveWallet() {
       className="dp" ref={node}
       role="img"
       aria-label={
-        "Example founder wallet. A $24.00 sale arrives, settles, and brings the balance "
-        + "available to request to $195.00, which is then requested as a payout."
+        "Example founder wallet. A $24.00 sale arrives and settles, taking the balance "
+        + "available to request from $171.86 to $195.00, which is then requested as a payout."
       }
     >
       <div className="dp-bar" aria-hidden="true">
@@ -115,10 +132,12 @@ export function LiveWallet() {
         <div className="dp-head">
           <div>
             <span className="fig-k">Available to request</span>
-            {/* data-bump drives one short lift when the figure changes, so the
-                eye is told where to look without the number itself moving. */}
-            <span className="fig fig-xl lw-bal" data-bump={phase >= 3 ? "1" : undefined}>
-              {formatMinor(balance, "USD")}
+            {/* The money animation: the figure counts from the opening
+                balance to the closing one as the sale becomes available. It
+                is the only number on the site that moves, and it only moves
+                up. */}
+            <span className="fig fig-xl lw-bal">
+              <CountUp to={balance} currency="USD" />
             </span>
           </div>
           <span className="dp-cta" data-state={requested ? "done" : undefined}>

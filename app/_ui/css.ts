@@ -2464,14 +2464,10 @@ export const CSS2 = `
 .fw .lw-chips { margin-top:var(--sp-5); padding-top:var(--sp-4);
   border-top:1px solid var(--line); }
 .fw .lw-led { margin-top:var(--sp-4); }
-/* One lift as the balance lands. Short, and on the whole figure rather than
-   per digit -- money that flickers is money you distrust. */
-.fw .lw-bal { margin-top:5px; transition:transform var(--t-3) var(--ease-out); }
-.fw .lw-bal[data-bump="1"] { animation:veyro-lw-bump 460ms var(--ease-out) 1; }
-@keyframes veyro-lw-bump {
-  0% { transform:translateY(5px); opacity:.55; }
-  100% { transform:none; opacity:1; }
-}
+/* No animation on the figure itself. The digits now count to the new balance,
+   and a lift underneath a count is two effects competing for the same glance.
+   The counting is the signal. */
+.fw .lw-bal { margin-top:5px; }
 /* The row reserves its box immediately and reveals its contents. Collapsing
    the height instead would make the card grow under the reader's eye. */
 .fw .lw-new { opacity:0; transition:opacity var(--t-3) var(--ease-out); }
@@ -2483,9 +2479,9 @@ export const CSS2 = `
 .fw .dp-cta[data-state="done"] { background:var(--pine-bg); color:var(--pine);
   border-color:var(--pine-line); }
 @media (prefers-reduced-motion: reduce) {
-  .fw .lw-bal, .fw .lw-bal[data-bump="1"],
   .fw .lw-new, .fw .lw-new[data-in="1"] { animation:none; transition:none; }
-  /* Reduced motion never runs the sequence, so the row is simply there. */
+  /* Reduced motion is moved straight to the finished state, so the row is
+     simply there. */
   .fw .lw-new { opacity:1; }
 }
 
