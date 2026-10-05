@@ -79,18 +79,37 @@ test("dispute tools are listed but labelled, because they are not built", () => 
   }
 });
 
-test("every enhanced service is labelled until it is built", () => {
+test("every enhanced service is labelled if, and only if, it is not built", () => {
+  // A blanket "all of these are labelled" assertion was right when none of
+  // them existed and became wrong the moment three shipped. Each line is now
+  // pinned to the thing that implements it, so a label cannot linger on a
+  // feature that works or come off one that does not.
   const pricing = claims("app/pricing/page.tsx");
   const above = pricing.slice(pricing.indexOf("const ABOVE"), pricing.indexOf("export default"));
   const lines = above.split("\n").filter((l) => /^\s*\["/.test(l));
-  assert.equal(lines.length, 6, "expected the six enhanced services from the Terms");
-  // None of the six exists yet: no payout scheduling, no review pipeline, no
-  // support tiering, no annual summary anywhere in the repo.
-  for (const l of lines) {
-    assert.ok(/,\s*true\]/.test(l), `unlabelled enhanced service: ${l.trim().slice(0, 60)}`);
+  assert.equal(lines.length, 5, "expected the five paid services from the Terms");
+
+  const BUILT: [RegExp, boolean][] = [
+    [/weekly payout/i, existsSync("app/dashboard/founder/PayoutSupport.tsx")],
+    [/dispute and chargeback assistance/i, existsSync("app/dashboard/founder/Disputes.tsx")],
+    [/priority support/i, existsSync("app/dashboard/founder/SupportCard.tsx")],
+    [/direct guardian support/i, existsSync("app/dashboard/founder/SupportCard.tsx")],
+    [/annual earnings/i, existsSync("lib/annual-summary.ts")],
+  ];
+
+  for (const [pattern, built] of BUILT) {
+    const line = lines.find((l) => pattern.test(l));
+    assert.ok(line, `no paid line matches ${pattern}`);
+    const labelled = /,\s*true\]/.test(line);
+    assert.equal(labelled, !built,
+      built
+        ? `${pattern} is built, so the From 5 November label should be off`
+        : `${pattern} is not built, so it must carry the From 5 November label`);
   }
+
   assert.ok(/assistance/i.test(above), "the dispute line must be worded as assistance");
   assert.ok(!/we deal with them|we handle/i.test(above), "the paid line promises an outcome");
+  assert.ok(!/Health Review/i.test(above), "the deferred health review is back on the page");
 });
 
 test("no tax claims anywhere on the pricing page", () => {

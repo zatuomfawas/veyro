@@ -86,12 +86,11 @@ const INCLUDED: readonly Item[] = [
 // visibility rather than control we do not have, a record rather than tax
 // advice.
 const ABOVE: readonly Item[] = [
-  ["Weekly payout support", "Help getting Stripe's weekly schedule set up on the account, and visibility of what is coming.", true],
-  ["Enhanced dispute and chargeback assistance", "Guidance and templates. We cannot decide how a dispute ends, and we will not pretend to.", true],
-  ["Enhanced Monthly Account Health Review", "A person reads the account and writes up anything material they find.", true],
-  ["Priority support", "Target response within 24 hours.", true],
-  ["Direct Guardian Support", "Your parent can talk to someone directly.", true],
-  ["Annual Earnings & Payout Summary", "A record of what you earned and paid out. It is not tax advice.", true],
+  ["Weekly payout scheduling and visibility", "Set up Stripe's weekly schedule, and see the next scheduled payout date. We cannot guarantee the timing of any payout."],
+  ["Enhanced dispute and chargeback assistance", "Guidance, templates and administrative help. The final response stays with the account holder where Stripe requires it."],
+  ["Priority support", "Target response time of 24 hours."],
+  ["Direct Guardian Support", "Human support for your parent or legal guardian."],
+  ["Annual Earnings & Payout Summary", "A record of a year's earnings and payouts. It is not tax advice."],
 ] as const;
 
 export default function Pricing() {

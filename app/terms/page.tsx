@@ -199,23 +199,27 @@ export default function Terms() {
           </p>
           <ul className="arrowlist" style={{ marginTop: 12 }}>
             <li>
-              Weekly payout support and visibility, including assistance accessing and configuring
-              Stripe&rsquo;s available payout scheduling options
+              <strong>Weekly Payout Scheduling &amp; Visibility.</strong> Eligible paid-tier users
+              may configure or use Stripe&rsquo;s available weekly payout schedule, subject to
+              Stripe&rsquo;s requirements and availability. Veyro provides visibility into payout
+              information, including the next scheduled payout date, but does not guarantee the
+              timing or availability of any payout.
             </li>
             <li>
-              Dispute and chargeback assistance (Veyro provides templates, guidance and
-              administrative support but does not determine dispute outcomes or guarantee
-              reversal)
+              <strong>Enhanced Dispute &amp; Chargeback Assistance.</strong> Veyro guidance,
+              templates and administrative assistance; final response/action remains with the
+              Stripe account holder where required.
             </li>
             <li>
-              Enhanced Monthly Account Health Review (a human review of account information
-              available to Veyro, together with a summary of material issues identified)
+              <strong>Priority Support.</strong> Target response time of 24 hours.
             </li>
-            <li>Priority support with a target response time of 24 hours</li>
-            <li>Direct Guardian Support</li>
             <li>
-              Annual Earnings &amp; Payout Summary (provided for informational and recordkeeping
-              purposes only and does not constitute tax, accounting or legal advice)
+              <strong>Direct Guardian Support.</strong> Human support for the parent/legal
+              guardian.
+            </li>
+            <li>
+              <strong>Annual Earnings &amp; Payout Summary.</strong> Informational annual
+              transaction/payout record, not tax advice.
             </li>
           </ul>
         </Sub>

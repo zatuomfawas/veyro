@@ -159,7 +159,7 @@ export default async function FounderDashboard() {
 
   const founderId = user.id;
 
-  const [consent, account, products, transactions, wallet, activity, payouts, notifications, analytics, weekRows, paymentCount, monthLedger, disputes, eligibility] =
+  const [consent, account, products, transactions, wallet, activity, payouts, notifications, analytics, weekRows, paymentCount, monthLedger, disputes, eligibility, allMonths] =
     await Promise.all([
     db.guardianConsent.findUnique({
       where: { founderId },
@@ -219,6 +219,10 @@ export default async function FounderDashboard() {
       take: 10,
     }),
     isEligible(founderId),
+    db.monthlyLedger.findMany({
+      where: { founderId },
+      select: { month: true, qmeMinor: true },
+    }),
   ]);
 
   const state = consentState(consent);
@@ -264,6 +268,12 @@ export default async function FounderDashboard() {
   const payoutSchedule = account?.providerAccountId
     ? await readPayoutSchedule(account.providerAccountId)
     : null;
+
+  // Years with at least one month over the limit. The route decides
+  // eligibility again on request; this only decides what to offer.
+  const summaryYears = [...new Set(
+    allMonths.filter((m) => m.qmeMinor > 10000).map((m) => Number(m.month.slice(0, 4))),
+  )].sort((a, b) => b - a);
 
   const firstLive = products.find((p) => p.status === "LIVE");
 
@@ -445,6 +455,24 @@ export default async function FounderDashboard() {
             product id to be worth pasting -- deleting it would remove the
             ability to sell anything, not just the clutter. */}
           {/* ---------------- 6. transactions ---------------- */}
+          {summaryYears.length > 0 && (
+            <Section title="Annual Earnings &amp; Payout Summary">
+              <p className="body" style={{ marginTop: 0 }}>
+                A record of what you earned and what was paid out, for any year you were over
+                $100 in at least one month. It is not tax advice &mdash; it is a document to give
+                an accountant, not one to file.
+              </p>
+              <div className="row" style={{ gap: 8, flexWrap: "wrap", marginTop: "var(--sp-4)" }}>
+                {summaryYears.map((y) => (
+                  <a key={y} className="btn btn-2 btn-sm"
+                     href={`/api/founder/annual-summary?year=${y}`}>
+                    Download {y}
+                  </a>
+                ))}
+              </div>
+            </Section>
+          )}
+
           <Section title="Support">
             <SupportCard
               founderId={founderId}

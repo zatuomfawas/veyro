@@ -50,6 +50,8 @@ async function send(
   subject: string,
   text: string,
   context: { action: string; founderId?: string; meta?: Record<string, unknown> },
+  /** Optional files. Only the annual summary uses this. */
+  attachments?: { filename: string; content: Buffer }[],
 ): Promise<SendResult> {
   if (!resend) {
     console.info(`Email send skipped (no API key): "${subject}" to ${to}`);
@@ -63,6 +65,7 @@ async function send(
       subject,
       replyTo: REPLY_TO,
       text,
+      ...(attachments?.length ? { attachments } : {}),
     });
 
     if (error) {
@@ -244,6 +247,30 @@ export function sendPaymentNotification(
       + `Your wallet: ${SITE}/dashboard/founder`
       + SIGNOFF,
     { action: "email.payment_sent", founderId, meta: { amountMinor, currency } },
+  );
+}
+
+/* ---------------- the annual summary ---------------- */
+
+/**
+ * Last year's record, attached.
+ *
+ * The body says what the document is and, as plainly, what it is not. A
+ * teenager receiving a PDF headed "Annual Earnings" in January will reasonably
+ * wonder whether it is a tax form, and the answer has to be in the email as
+ * well as in the footer of the file.
+ */
+export function sendAnnualSummary(to: string, year: number, pdf: Buffer) {
+  return send(
+    to,
+    `Your ${year} earnings and payout summary`,
+    `Attached is a record of what you earned and what was paid out in ${year}.\n\n`
+      + "It is for your records. It is not a tax form and it is not tax advice \u2014 if you need "
+      + "to file something, this is a document to give an accountant, not one to file.\n\n"
+      + `Your dashboard: ${SITE}/dashboard/founder`
+      + SIGNOFF,
+    { action: "email.annual_summary", meta: { year } },
+    [{ filename: `veyro-annual-summary-${year}.pdf`, content: pdf }],
   );
 }
 
