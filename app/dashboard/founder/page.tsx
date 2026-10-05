@@ -23,6 +23,9 @@ import { currentMonthKey, hasCrossedLimit, isEligible, mayCollectFee } from "@/l
 import { feeMinor as dueForQme } from "@/lib/pricing";
 import { ThisMonth } from "./ThisMonth";
 import { Disputes } from "./Disputes";
+import { PayoutSupport } from "./PayoutSupport";
+import { SupportCard } from "./SupportCard";
+import { readPayoutSchedule } from "@/lib/payout-schedule";
 import { foldWallet } from "@/lib/ledger";
 import { foldAnalytics } from "@/lib/analytics";
 import { consentState } from "@/lib/consent";
@@ -255,6 +258,13 @@ export default async function FounderDashboard() {
   // line -- not a banner to dismiss, because there is nothing to accept.
   const crossedThreshold = hasCrossedLimit(qmeMinor);
 
+  // Read from Stripe rather than stored: a schedule the account holder
+  // changed in their own dashboard five minutes ago must not be reported here
+  // as whatever we cached last week.
+  const payoutSchedule = account?.providerAccountId
+    ? await readPayoutSchedule(account.providerAccountId)
+    : null;
+
   const firstLive = products.find((p) => p.status === "LIVE");
 
   // The product the integration panel talks about: the live one if there is
@@ -435,6 +445,22 @@ export default async function FounderDashboard() {
             product id to be worth pasting -- deleting it would remove the
             ability to sell anything, not just the clutter. */}
           {/* ---------------- 6. transactions ---------------- */}
+          <Section title="Support">
+            <SupportCard
+              founderId={founderId}
+              eligible={eligibility.eligible}
+              guardianName={guardianName}
+            />
+          </Section>
+
+          <Section title="Payout frequency">
+            <PayoutSupport
+              schedule={payoutSchedule}
+              eligible={eligibility.eligible}
+              guardianName={guardianName}
+            />
+          </Section>
+
           <Section title="Disputes">
             <Disputes
               rows={disputes.map((d) => ({

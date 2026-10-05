@@ -2814,7 +2814,7 @@ export const CSS2 = `
 .fw .dispute-due { margin:var(--sp-3) 0 0; padding-left:var(--sp-4);
   border-left:3px solid var(--amber); font-size:var(--fs-3); line-height:1.55;
   color:var(--ink); }
-.fw .dispute-help { margin-top:var(--sp-4); padding-top:var(--sp-4);
+.fw .dispute-help, .fw .payout-help { margin-top:var(--sp-4); padding-top:var(--sp-4);
   border-top:1px solid var(--line-soft); }
 @media (max-width:560px) {
   .fw .dispute { padding:var(--sp-4); }
