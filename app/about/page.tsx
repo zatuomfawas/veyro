@@ -36,13 +36,14 @@ const SUPPORT_EMAIL = "hello@withveyro.com";
 // changing first.
 const COMMITMENTS: { head: string; body: React.ReactNode }[] = [
   {
-    head: "Your guardian consents and is verified. They cannot block a payout.",
+    head: "Your parent approves the account once. They don’t approve each payout.",
     body: (
       <>
         A guardian accepts in their own account, and it is their identity that gets checked, not
-        the founder&rsquo;s. They are told about every payout request and keep a permanent record
-        of it. They get no veto, because the account type this is built on cannot grant one to
-        anybody. A guardian should know that before agreeing, not after.
+        the founder&rsquo;s. After that, their control is over the account itself: they can close
+        or freeze it at any time. They are told about every payout request and keep a permanent
+        record of it, but they do not approve them one by one &mdash; you control that. A guardian
+        should know both halves of that before agreeing, not after.
       </>
     ),
   },
