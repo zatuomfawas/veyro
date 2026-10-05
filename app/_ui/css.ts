@@ -1197,6 +1197,30 @@ export const CSS = `
   .fw .lfrail { display:none; }
 }
 
+/* "From 5 November" on a feature that is not built yet. Quiet enough not to
+   read as a badge of honour, loud enough that nobody misses it: this is the
+   difference between a promise and a plan. */
+.fw .soon { display:inline-block; margin-left:8px; padding:1px 7px;
+  font-size:var(--fs-1); font-weight:var(--fw-med); letter-spacing:0.03em;
+  color:var(--amber); border:1px solid var(--amber-line);
+  background:var(--amber-bg); white-space:nowrap; vertical-align:middle; }
+.fw .soon-inline { margin:0 2px; }
+@media (max-width:480px) {
+  .fw .soon { margin-left:0; margin-top:4px; }
+  .fw .tierlist dt { display:flex; flex-wrap:wrap; align-items:center; gap:0 6px; }
+}
+
+/* A notice about which version of a document is in force. Two tones: amber
+   for terms not yet effective, slate for a superseded copy. A left rule
+   rather than a tinted panel, because the tinted grounds are transparent in
+   the light theme and a panel would vanish in the theme most people see. */
+.fw .archive-note { margin-top:var(--sp-6); padding:var(--sp-4) var(--sp-5);
+  border-left:3px solid var(--slate); background:var(--surface);
+  font-size:var(--fs-3); line-height:1.55; color:var(--ink);
+  max-width:var(--m-body); }
+.fw .archive-note[data-tone="pending"] { border-left-color:var(--amber); }
+.fw .archive-note strong { font-weight:var(--fw-bold); }
+
 /* A titled sub-part of a legal clause. Enough space above it to read as a
    division rather than as an emphasised line in the preceding paragraph. */
 .fw .subclause { margin-top:var(--sp-6); }

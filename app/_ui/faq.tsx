@@ -53,9 +53,10 @@ export const FAQ: FaqEntry[] = [
     a: (
       <>
       Nothing under $100 a month in earnings, which is most people. Above that, 3% on the
-      amount over $100. The core product is the same either way &mdash; the account setup, the
-      dashboard, payouts, account status monitoring and support. Some extra services switch on in
-      the months you earn above $100.{" "}
+      amount over $100, and <strong>fees start on 5 November 2026</strong> &mdash; nothing is
+      charged before then. The core product is the same either way: account setup, the dashboard,
+      payouts, account status monitoring and support. Some extra services switch on in the months
+      you earn above $100.{" "}
       <Link className="linkbtn" href="/pricing">What those are</Link>. The fee is taken when a
       payment succeeds, and a later refund does not return it. Card processing fees are charged
       on top by the payment processor, which sets and deducts them, at every size.

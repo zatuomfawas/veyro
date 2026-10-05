@@ -41,48 +41,55 @@ export const metadata: Metadata = {
 // No feature table with ticks and crosses: a comparison grid makes the free
 // column look like the deprived one, which is the opposite of true here.
 
-// Two lists, and every line in the first one is something that exists today.
+// Two lists, and every line says whether it exists yet.
 //
-// This page has now been wrong in both directions. It began as two columns
-// that put compliance monitoring and dispute handling behind the paid one,
-// which was not the product. It was then rewritten as one product with
-// everything for everyone -- which overshot: the Terms counsel settled put
-// six enhanced services in months above $100, and marketing must not promise
-// more than the binding document does.
+// This page has now been wrong in both directions: first as two columns that
+// gated real features behind the paid one, then as one product promising
+// everything to everyone. Counsel's Terms settle it -- a core product for
+// everybody, enhanced services in months above $100 -- and marketing must not
+// promise more than the binding document does, or sooner.
 //
-// So the first list was built by reading the code, not the old copy:
+// `soon` is not a marketing flourish. It marks an item that is NOT in the
+// codebase today, and it is set by reading the code:
 //
-//   guardian verification      lib/stripe-account.ts, the consent flow
-//   dashboard and ledger       lib/ledger.ts
-//   integration snippet        AddToApp
-//   payouts                    RequestPayout
-//   account status monitoring  the account.updated webhook syncs status and
-//                              outstanding requirements; the dashboard shows
-//                              both, which is what the Terms describe
-//   support                    a person on the other end of the contact page
+//   built     guardian verification   lib/stripe-account.ts, the consent flow
+//   built     dashboard and ledger    lib/ledger.ts
+//   built     integration snippet     AddToApp
+//   built     payouts                 RequestPayout
+//   built     account status          the account.updated webhook syncs status
+//                                     and outstanding requirements; the
+//                                     dashboard shows both
+//   built     support                 a person on the contact page
+//   NOT built dispute tools           no dispute webhook, no evidence
+//                                     submission, no dispute UI anywhere
+//   NOT built everything above $100   no payout scheduling, no review
+//                                     pipeline, no support tiering, no summary
 //
-// Dispute features are NOT in that list. There is no dispute webhook, no
-// evidence submission and no dispute UI anywhere in the codebase, so there is
-// nothing truthful to say about disputes to someone earning under $100.
-// Tax forms are not in it either, for the same reason.
-const INCLUDED: readonly (readonly [string, string])[] = [
-  ["Guardian verification and account setup", "Getting your parent verified and the payment account open."],
-  ["Integration snippet and dashboard", "One snippet, your products, your ledger, your payout history."],
+// scripts/claims.test.ts holds these flags to the code. If a dispute webhook
+// lands and the label stays on, the test fails; if a label comes off
+// something still missing, it fails too.
+type Item = readonly [name: string, detail: string, soon?: true];
+
+const INCLUDED: readonly Item[] = [
+  ["Payment setup", "Getting your parent verified and the payment account open."],
+  ["Dashboard", "Your products, your ledger, your payout history."],
+  ["Integration", "One snippet, and you can take a payment."],
   ["Payouts", "Request your money whenever it is available."],
   ["Account status monitoring", "We watch the account's standing and what the processor still wants, and show you both."],
-  ["Support", "A person on the other end, for you and for your parent."],
+  ["Dispute notifications and evidence submission", "We tell you when a payment is disputed, and you can send supporting information from the dashboard.", true],
+  ["Standard support", "A person on the other end, for you and for your parent."],
 ] as const;
 
-// The enhanced services, worded to match the Terms rather than to sell past
-// them: "subject to eligibility and availability", assistance rather than
-// outcomes, a record rather than tax advice.
-const ABOVE: readonly (readonly [string, string])[] = [
-  ["Weekly payouts", "Instead of monthly, subject to processing and account status."],
-  ["Dispute and chargeback assistance", "Guidance and templates. We cannot decide how a dispute ends, and we will not pretend to."],
-  ["Enhanced Monthly Account Health Review", "A person reads the account and writes up anything material they find."],
-  ["Priority support", "Target response within 24 hours."],
-  ["Direct Guardian Support", "Your parent can talk to someone directly."],
-  ["Annual Earnings & Payout Summary", "A record of what you earned and paid out. It is not tax advice."],
+// Worded to match the Terms rather than to sell past them: subject to
+// eligibility and availability, assistance rather than outcomes, a record
+// rather than tax advice.
+const ABOVE: readonly Item[] = [
+  ["Weekly payouts", "Instead of monthly, subject to processing and account status.", true],
+  ["Dispute and chargeback assistance", "Guidance and templates. We cannot decide how a dispute ends, and we will not pretend to.", true],
+  ["Enhanced Monthly Account Health Review", "A person reads the account and writes up anything material they find.", true],
+  ["Priority support", "Target response within 24 hours.", true],
+  ["Direct Guardian Support", "Your parent can talk to someone directly.", true],
+  ["Annual Earnings & Payout Summary", "A record of what you earned and paid out. It is not tax advice.", true],
 ] as const;
 
 export default function Pricing() {
@@ -135,7 +142,7 @@ export default function Pricing() {
           </p>
           <p className="deal-warn">
             The fee is taken when a payment succeeds. If you later refund that customer, the fee
-            isn&rsquo;t returned.
+            isn&rsquo;t returned. <strong>Fees start on 5 November 2026.</strong>
           </p>
         </div>
 
@@ -151,12 +158,17 @@ export default function Pricing() {
             one column look like the deprived one, and here there isn't one. */}
         <h2 className="h3">What everyone gets</h2>
         <p className="body" style={{ marginTop: 8 }}>
-          Whatever you earn, including nothing. Every line here is something that works today.
+          Whatever you earn, including nothing. Anything marked
+          <span className="soon soon-inline">From 5 November</span> is not built yet, and says so
+          rather than letting you find out.
         </p>
         <dl className="tierlist" style={{ marginTop: "var(--sp-5)" }}>
-          {INCLUDED.map(([t, d]) => (
+          {INCLUDED.map(([t, d, soon]) => (
             <div key={t}>
-              <dt>{t}</dt>
+              <dt>
+                {t}
+                {soon ? <span className="soon">From 5 November</span> : null}
+              </dt>
               <dd>{d}</dd>
             </div>
           ))}
@@ -170,9 +182,12 @@ export default function Pricing() {
           apply in the months you are over the line, not to your account forever.
         </p>
         <dl className="tierlist" style={{ marginTop: "var(--sp-5)" }}>
-          {ABOVE.map(([t, d]) => (
+          {ABOVE.map(([t, d, soon]) => (
             <div key={t}>
-              <dt>{t}</dt>
+              <dt>
+                {t}
+                {soon ? <span className="soon">From 5 November</span> : null}
+              </dt>
               <dd>{d}</dd>
             </div>
           ))}
@@ -254,7 +269,8 @@ export default function Pricing() {
           One thing to know before you take a payment: the fee is worked out and taken at the
           moment a payment succeeds. If you refund that customer afterwards, the fee is not
           returned to you. A refund does lower the running total used to decide whether later
-          payments that month are charged at all.
+          payments that month are charged at all. Fees start on 5 November 2026; nothing is
+          charged before then.
         </p>
 
         <div className="row" style={{ marginTop: "var(--sp-7)", gap: 8, flexWrap: "wrap" }}>

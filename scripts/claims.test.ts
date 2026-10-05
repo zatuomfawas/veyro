@@ -50,19 +50,51 @@ test("account status monitoring is implemented", () => {
   assert.match(read("app/dashboard/founder/page.tsx"), /requirements|due/i);
 });
 
-test("nothing about disputes is promised to everyone", () => {
-  // There is no dispute webhook, no evidence submission and no dispute UI.
-  // Until there is, the free list must stay silent about disputes -- and the
-  // paid line must say assistance, never an outcome.
+test("dispute tools are listed but labelled, because they are not built", () => {
+  // The Terms promise baseline dispute notifications and evidence submission
+  // from 5 November. Until the code exists, the page must say so on the line
+  // itself -- a promise dated in the future is honest; an undated one is not.
   const hook = read("app/api/webhooks/stripe/route.ts");
-  assert.ok(!/charge\.dispute/.test(hook), "a dispute webhook exists: revisit the pricing copy");
+  const built = /charge\.dispute/.test(hook);
 
   const pricing = claims("app/pricing/page.tsx");
   const free = pricing.slice(pricing.indexOf("const INCLUDED"), pricing.indexOf("const ABOVE"));
-  assert.ok(!/dispute/i.test(free), "the everyone-list mentions disputes, which are not built");
-  assert.ok(!/tax form|quarterly estimate/i.test(pricing), "tax claims are back");
+  const disputeLine = free.split("\n").find((l) => /dispute/i.test(l)) ?? "";
+  assert.ok(disputeLine, "the everyone-list no longer mentions disputes at all");
 
-  const above = pricing.slice(pricing.indexOf("const ABOVE"));
-  assert.ok(/assistance/i.test(above), "the paid dispute line must be worded as assistance");
+  if (built) {
+    assert.ok(!/,\s*true\]/.test(disputeLine),
+      "a dispute webhook exists, so the From 5 November label should come off");
+  } else {
+    assert.ok(/,\s*true\]/.test(disputeLine),
+      "disputes are not built, so the line must carry the From 5 November label");
+  }
+});
+
+test("every enhanced service is labelled until it is built", () => {
+  const pricing = claims("app/pricing/page.tsx");
+  const above = pricing.slice(pricing.indexOf("const ABOVE"), pricing.indexOf("export default"));
+  const lines = above.split("\n").filter((l) => /^\s*\["/.test(l));
+  assert.equal(lines.length, 6, "expected the six enhanced services from the Terms");
+  // None of the six exists yet: no payout scheduling, no review pipeline, no
+  // support tiering, no annual summary anywhere in the repo.
+  for (const l of lines) {
+    assert.ok(/,\s*true\]/.test(l), `unlabelled enhanced service: ${l.trim().slice(0, 60)}`);
+  }
+  assert.ok(/assistance/i.test(above), "the dispute line must be worded as assistance");
   assert.ok(!/we deal with them|we handle/i.test(above), "the paid line promises an outcome");
+});
+
+test("no tax claims anywhere on the pricing page", () => {
+  assert.ok(!/tax form|quarterly estimate/i.test(claims("app/pricing/page.tsx")));
+});
+
+test("fees cannot be collected before the Terms take effect", () => {
+  // The page says fees start on 5 November. The code must agree, or the page
+  // is making a commitment the system can break.
+  const pricing = claims("app/pricing/page.tsx");
+  assert.match(pricing, /Fees start on 5 November 2026/);
+  const lib = read("lib/pricing.ts");
+  assert.match(lib, /FEE_COLLECTION_ENABLED = false/);
+  assert.match(lib, /FEES_EFFECTIVE_AT/);
 });

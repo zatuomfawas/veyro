@@ -27,3 +27,57 @@ export function feeMinor(earnedMinor: number): number {
  * rule, and the test asserts the figures are the ones we say they are.
  */
 export const EXAMPLE_EARNINGS_MINOR = [5000, 10000, 20000, 50000, 100000] as const;
+
+/**
+ * The fee a single successful payment carries, under the "Fee timing and
+ * refunds" subsection of the Terms.
+ *
+ * The rule is incremental and ratcheted. A fee is incurred when a payment
+ * succeeds, calculated on Qualifying Monthly Earnings accumulated through and
+ * including that payment. Refunds reduce QME for deciding what later payments
+ * owe, but never claw back a fee already taken -- so when a refund has pushed
+ * QME back down, the next payment carries nothing until the total due climbs
+ * past what has already been collected.
+ *
+ * @param qmeAfterMinor   QME for the calendar month, including this payment.
+ * @param alreadyCollectedMinor  Fees already incurred this month.
+ * @returns the fee this payment carries. Never negative: the Terms say no
+ *          credit is issued when refunds drop QME below the figure a previous
+ *          fee was calculated on.
+ */
+export function feeOnPaymentMinor(
+  qmeAfterMinor: number,
+  alreadyCollectedMinor: number,
+): number {
+  const due = feeMinor(qmeAfterMinor);
+  return Math.max(0, due - alreadyCollectedMinor);
+}
+
+/**
+ * The calendar month a payment falls in, per the "Calendar month" subsection:
+ * UTC, keyed on the timestamp Stripe recorded for the successful payment.
+ *
+ * Returns "YYYY-MM". Local time is never consulted -- a payment at 23:30 in
+ * Dubai on the 31st is the following month there and this month in UTC, and
+ * the Terms say UTC decides.
+ */
+export function qmeMonthKey(stripeCreatedUnixSeconds: number): string {
+  const d = new Date(stripeCreatedUnixSeconds * 1000);
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}`;
+}
+
+/**
+ * No Veyro fee may be taken before the Terms that introduce it are in force.
+ *
+ * Two independent locks, as counsel asked. FEE_COLLECTION_ENABLED is the
+ * operational switch; this date is the legal floor and does not care what the
+ * switch says. Flipping the flag early cannot take a fee, because the guard
+ * below is the thing the collection path has to get past.
+ */
+export const FEES_EFFECTIVE_AT = Date.UTC(2026, 10, 5, 0, 0, 0); // 5 Nov 2026, 00:00 UTC
+export const FEE_COLLECTION_ENABLED = false;
+
+/** Whether a fee may lawfully be taken at `nowMs`. Both locks must agree. */
+export function mayCollectFee(nowMs: number = Date.now()): boolean {
+  return FEE_COLLECTION_ENABLED && nowMs >= FEES_EFFECTIVE_AT;
+}

@@ -5,7 +5,16 @@ import { LegalShell, Clause, Sub, SUPPORT_EMAIL } from "@/app/_ui/LegalShell";
 export const metadata = buildMetadata("terms");
 export const viewport = buildViewport();
 
-const UPDATED = "16 September 2026";
+const UPDATED = "5 October 2026";
+/**
+ * When these Terms begin to govern. Until then the version dated
+ * 16 September 2026 applies, and is served at /terms/2026-09-16.
+ *
+ * AFTER 5 NOVEMBER 2026: delete EFFECTIVE and the <notice> below. The archive
+ * route stays live permanently -- it is what somebody checks when they want
+ * to know what they actually agreed to.
+ */
+const EFFECTIVE = "5 November 2026";
 
 const SECTIONS = [
   { n: 1, title: "What Veyro is" },
@@ -26,7 +35,20 @@ export default function Terms() {
       title="Terms of Service"
       lead="What Veyro is, what it is not, and what you and your guardian are agreeing to."
       updated={UPDATED}
+      effective={EFFECTIVE}
       sections={SECTIONS}
+      notice={
+        <div className="archive-note" data-tone="pending">
+          <strong>These Terms take effect on {EFFECTIVE}.</strong>
+          <p style={{ margin: "6px 0 0" }}>
+            Until then, the{" "}
+            <Link className="linkbtn" href="/terms/2026-09-16">
+              Terms dated 16 September 2026
+            </Link>{" "}
+            apply.
+          </p>
+        </div>
+      }
     >
       <Clause n={1} title="What Veyro is">
         <p className="body" style={{ marginTop: 0 }}>
@@ -48,11 +70,32 @@ export default function Terms() {
           anything to do with the payment account, Stripe&rsquo;s terms govern.
         </p>
 
-        <Sub title="Account Status Monitoring">
+        <Sub title="Account status monitoring">
           <p className="body">
             Veyro may monitor information made available through its payment-provider integrations
             for account-status, verification or operational issues and may notify you where we
             identify an issue requiring your attention.
+          </p>
+        </Sub>
+
+        <Sub title="Dispute notifications and response tools">
+          <p className="body">
+            Veyro provides users with notifications regarding eligible payment disputes and
+            chargebacks and functionality through which users may submit supporting information or
+            evidence. Paid-tier users may additionally receive enhanced dispute and chargeback
+            assistance from Veyro.
+          </p>
+          <p className="body" style={{ marginTop: 12 }}>
+            Veyro does not determine the outcome of any dispute or chargeback and does not
+            guarantee that a dispute will be resolved or a payment recovered.
+          </p>
+        </Sub>
+
+        <Sub title="Payment funds">
+          <p className="body">
+            Veyro does not hold, custody or take possession of payment funds. Payment processing,
+            settlement and payouts are provided through Stripe and remain subject to
+            Stripe&rsquo;s applicable terms and requirements.
           </p>
         </Sub>
       </Clause>
@@ -80,55 +123,30 @@ export default function Terms() {
         </p>
       </Clause>
 
+      {/* One guardian section. The six-subsection version deployed on
+          4 October is superseded by counsel's consolidated wording; nothing
+          else in the Terms governs guardians. */}
       <Clause n={3} title="Guardian, account ownership and founder access">
-        <Sub title="Guardian Onboarding">
-          <p className="body">
-            Where a Founder is under 18 years old, a parent or legal guardian must complete any
-            onboarding, consent and verification requirements applicable to the Founder or the
-            applicable Stripe account.
-          </p>
-        </Sub>
-
-        <Sub title="Legal Ownership">
-          <p className="body">
-            Where the connected business is owned by the parent or legal guardian, the connected
-            business, its Stripe account and the relevant payout account must accurately reflect
-            that legal ownership.
-          </p>
-        </Sub>
-
-        <Sub title="Founder Operational Access">
-          <p className="body">
-            Once the required onboarding and verification have been completed, Veyro may permit
-            the Founder to use Veyro&rsquo;s platform to perform ordinary day-to-day business and
-            account-management activities, subject to the permissions configured by the account
-            holder, applicable Stripe requirements, and any actions for which guardian approval
-            is required.
-          </p>
-        </Sub>
-
-        <Sub title="Continuing Guardian Responsibility">
-          <p className="body">
-            The guardian remains the legal owner and/or authorized Representative of the
-            applicable business and retains the responsibilities applicable to that role under
-            Stripe&rsquo;s terms and applicable law.
-          </p>
-        </Sub>
-
-        <Sub title="No Transfer of Ownership">
-          <p className="body">
-            Nothing in Veyro&rsquo;s platform access provisions transfers ownership of the
-            connected business, Stripe account or funds from the legal account holder to the
-            Founder.
-          </p>
-        </Sub>
-
-        <Sub title="Stripe Terms Apply">
-          <p className="body">
-            Stripe&rsquo;s terms govern the Stripe account and payment services. Veyro does not
-            override or replace Stripe&rsquo;s requirements.
-          </p>
-        </Sub>
+        <p className="body" style={{ marginTop: 0 }}>
+          Where a Founder is under 18, a parent or legal guardian must complete any onboarding,
+          consent and verification requirements required by Veyro or Stripe.
+        </p>
+        <p className="body" style={{ marginTop: 12 }}>
+          Where the connected business is owned by the parent or legal guardian, that person
+          remains the legal owner and applicable Stripe account representative. Following
+          completion of the required onboarding and verification, Veyro may permit the Founder to
+          use Veyro&rsquo;s platform for ordinary day-to-day business activities, subject to
+          applicable permissions, Stripe requirements and any actions for which guardian approval
+          is required.
+        </p>
+        <p className="body" style={{ marginTop: 12 }}>
+          Access granted to the Founder through Veyro does not transfer ownership of the connected
+          business, Stripe account or payment funds to the Founder.
+        </p>
+        <p className="body" style={{ marginTop: 12 }}>
+          The parent or legal guardian remains responsible for the obligations applicable to their
+          role under Stripe&rsquo;s terms and applicable law.
+        </p>
       </Clause>
 
       <Clause n={4} title="Your responsibilities">
@@ -145,14 +163,14 @@ export default function Terms() {
       </Clause>
 
       <Clause n={5} title="Pricing and fees">
-        <Sub title="Free Tier">
+        <Sub title="Free tier">
           <p className="body">
             Veyro does not charge a platform fee on the first US$100 of Qualifying Monthly
             Earnings during a calendar month.
           </p>
         </Sub>
 
-        <Sub title="Paid Tier">
+        <Sub title="Paid tier">
           <p className="body">
             Where Qualifying Monthly Earnings exceed US$100 during a calendar month, Veyro will
             charge a platform fee equal to 3% of the amount exceeding US$100.
@@ -175,7 +193,7 @@ export default function Terms() {
           </p>
         </Sub>
 
-        <Sub title="Paid-Tier Services">
+        <Sub title="Paid-tier services">
           <p className="body">
             Subject to eligibility and availability, paid-tier users may receive:
           </p>
@@ -202,32 +220,48 @@ export default function Terms() {
           </ul>
         </Sub>
 
-        <Sub title="Refunds and Reversals">
+        <Sub title="Fee timing and refunds">
           <p className="body">
             Veyro platform fees are separate from Stripe processing fees.
           </p>
           <p className="body" style={{ marginTop: 12 }}>
-            A Veyro fee is incurred when a payment on which a Veyro fee is applicable succeeds,
-            based on Qualifying Monthly Earnings for that calendar month accumulated through and
-            including that payment. Refunds, reversals and chargebacks do not reduce or refund a
-            Veyro fee already incurred. However, they reduce Qualifying Monthly Earnings used to
-            determine whether any additional Veyro fee becomes payable on subsequent payments
-            during the same calendar month. No refund or credit will be issued solely because
-            subsequent refunds, reversals or chargebacks reduce Qualifying Monthly Earnings below
-            the amount previously used to calculate a Veyro fee. Veyro does not automatically
-            refund a Veyro platform fee already incurred, except where required by these Terms or
-            applicable law.
+            A Veyro fee is incurred when a payment on which a Veyro fee is applicable succeeds.
+            The fee is calculated using Qualifying Monthly Earnings for that calendar month
+            accumulated through and including that payment. Refunds, reversals and chargebacks do
+            not reduce or refund a Veyro fee already incurred. However, they reduce Qualifying
+            Monthly Earnings used to determine whether any additional Veyro fee becomes payable on
+            subsequent payments during the same calendar month. No refund or credit will be issued
+            solely because subsequent refunds, reversals or chargebacks reduce Qualifying Monthly
+            Earnings below the amount previously used to calculate a Veyro fee.
           </p>
         </Sub>
 
-        <Sub title="Inactive Accounts">
+        <Sub title="Calendar month">
+          <p className="body">
+            For purposes of calculating Qualifying Monthly Earnings, a calendar month is
+            determined according to Coordinated Universal Time (UTC), beginning at 00:00 UTC on
+            the first day of the month and ending at 23:59:59 UTC on the last day of the month.
+            The timestamp recorded by Stripe for the applicable successful payment will determine
+            the calendar month in which the payment falls.
+          </p>
+        </Sub>
+
+        <Sub title="Currency">
+          <p className="body">
+            Payments processed in currencies other than US dollars will be converted to US dollars
+            using the objective exchange-rate methodology specified by Veyro and consistently
+            applied by the Veyro fee-calculation system.
+          </p>
+        </Sub>
+
+        <Sub title="Inactive accounts">
           <p className="body">
             Veyro does not charge a platform fee solely because an account exists where no
             Qualifying Monthly Earnings have been generated.
           </p>
         </Sub>
 
-        <Sub title="Changes to Fees">
+        <Sub title="Changes to fees">
           <p className="body">
             Veyro may amend its fees by providing at least 30 days&rsquo; prior notice. Amendments
             apply prospectively and will not retroactively change fees validly incurred before the
@@ -246,7 +280,7 @@ export default function Terms() {
       </Clause>
 
       <Clause n={7} title="Limitation of liability">
-        <Sub title="Payment Processing">
+        <Sub title="Payment processing">
           <p className="body">
             Payment processing services, including payment authorization, settlement, disputes,
             chargebacks, reserves, holds and payout decisions, are provided or controlled by
@@ -258,28 +292,36 @@ export default function Terms() {
           </p>
         </Sub>
 
-        <Sub title="Account Monitoring and Reviews">
+        <Sub title="Account monitoring and reviews">
           <p className="body">
-            Account-status monitoring and account-health reviews are provided as a support and
-            informational service only. They are based on information available to Veyro at the
-            time of review and do not constitute legal, tax, accounting or regulatory advice, and
-            do not constitute a certification or guarantee that an account, business or activity
-            complies with applicable law, Stripe requirements or any third-party terms. Veyro does
-            not guarantee that every issue will be identified or identified before it affects an
-            account.
+            Account Status Monitoring and Account Health Reviews are provided as informational and
+            support services based on information available to Veyro. They do not constitute
+            legal, tax, accounting or regulatory advice, and do not constitute a certification or
+            guarantee that an account, business or activity complies with applicable law, Stripe
+            requirements or other third-party obligations. Veyro does not guarantee that every
+            issue will be identified or identified before it affects an account.
           </p>
         </Sub>
+
+        {/* A5: the universal saving provision, as the final paragraph of the
+            section rather than inside a subsection -- it qualifies the whole
+            of clause 7, not one part of it. */}
+        <p className="body" style={{ marginTop: "var(--sp-6)" }}>
+          Nothing in these Terms excludes, limits, or waives any right or protection that cannot
+          lawfully be excluded, limited, or waived under applicable law, including any mandatory
+          protections applicable to minors.
+        </p>
       </Clause>
 
       <Clause n={8} title="Ending your use of Veyro">
-        <Sub title="Guardian-Initiated Closure">
+        <Sub title="Guardian-initiated closure">
           <p className="body">
             A guardian/account holder may request closure at any time, subject to outstanding
             transactions and obligations.
           </p>
         </Sub>
 
-        <Sub title="Veyro-Initiated Suspension">
+        <Sub title="Veyro-initiated suspension">
           <p className="body">
             Veyro may suspend or terminate access where reasonably necessary to address fraud,
             misuse, legal or regulatory requirements, Stripe requirements, security issues, or
@@ -287,11 +329,11 @@ export default function Terms() {
           </p>
         </Sub>
 
-        <Sub title="Settlement of Obligations">
+        <Sub title="Settlement of obligations">
           <p className="body">
             Termination does not extinguish fees, refunds, disputes, chargebacks, reserves,
             payment obligations or other amounts that arose before termination. Any remaining
-            funds or payouts remain subject to Stripe&rsquo;s applicable terms, including any
+            funds or payouts remain subject to Stripe&rsquo;s applicable terms, including
             applicable holds, reserves, disputes, refunds or reversals.
           </p>
         </Sub>

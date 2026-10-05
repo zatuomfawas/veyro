@@ -34,13 +34,16 @@ export type Section = { n: number; title: string };
  * people rely on into noise.
  */
 export function LegalShell({
-  title, lead, updated, sections, children,
-}: {
+  title, lead, updated, sections, children, effective, notice }: {
   title: string;
   lead: string;
   updated: string;
   sections: Section[];
   children: React.ReactNode;
+  /** When these Terms begin to govern, if that is not today. */
+  effective?: string;
+  /** Shown above the document. For a version that is not yet in force. */
+  notice?: React.ReactNode;
 }) {
   return (
     <div className="fw">
@@ -64,7 +67,10 @@ export function LegalShell({
       <main id="main" className="wrap-lp longform" style={{ paddingTop: 40, paddingBottom: 56 }}>
         <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>{title}</h1>
         <p className="lead" style={{ marginTop: 12 }}>{lead}</p>
-        <MarginNote head="Last updated">{updated}.</MarginNote>
+        <MarginNote head="Last updated">
+          {updated}.
+          {effective ? <> Takes effect {effective}.</> : null}
+        </MarginNote>
 
         <div style={{ marginTop: 24, maxWidth: "var(--m-wide)" }}>
           <Notice tone="amber" head="Read this first: these are not lawyer-reviewed">
@@ -81,6 +87,8 @@ export function LegalShell({
             </p>
           </Notice>
         </div>
+
+        {notice}
 
         <div className="truthgrid" style={{ marginTop: 40, alignItems: "start" }}>
           {/* Contents. Sticky below the header on desktop; at ≤900px truthgrid
