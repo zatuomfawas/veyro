@@ -181,6 +181,12 @@ export default function Pricing() {
 
         <hr className="rule" style={{ margin: "var(--sp-9) 0 var(--sp-7)" }} />
 
+        <MarginNote head="What a seller costs us">
+          <span className="fig fig-md">$3.25</span>
+          a month, once they are active: the account, the payouts, and the routing. A dormant
+          account costs nothing, which is the whole reason the free limit can be real.
+        </MarginNote>
+
         <h2 className="h3">Why these numbers</h2>
         <p className="body" style={{ marginTop: 8 }}>
           Running an active seller costs about $3.25 a month before anyone earns a penny &mdash;

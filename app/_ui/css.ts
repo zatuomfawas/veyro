@@ -1210,8 +1210,17 @@ export const CSS = `
   margin-bottom:2px; }
 .fw .lfnote .fig { margin:2px 0 4px; }
 /* A note the reader may want at any point, not at the point it happens to be
-   written. Sticky inside its track; back in the flow once the track is gone. */
-.fw .lfnote[data-sticky="1"] { position:sticky; top:calc(var(--nav-h) + 28px); }
+   written. Sticky inside its track; back in the flow once the track is gone.
+
+   grid-row:1/-1 is what makes the sticky actually travel. Auto-placed, the
+   note gets one row, its grid area is that row's height, and there is nowhere
+   for it to stick to -- it scrolls away like any other block while claiming
+   to be pinned. Spanning every row gives it the page to move down. */
+.fw .lfnote[data-sticky="1"] { grid-row:1 / -1; align-self:start;
+  position:sticky; top:calc(var(--nav-h) + 28px); }
+@media (max-width:1040px) {
+  .fw .lfnote[data-sticky="1"] { grid-row:auto; }
+}
 @media (max-width:1040px) {
   .fw .lfnote { grid-column:content; border-top:0; border-left:2px solid var(--line);
     padding:2px 0 2px var(--sp-4); margin:var(--sp-5) 0; }

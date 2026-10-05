@@ -368,6 +368,13 @@ export default function HowItWorks() {
         </ol>
 
         {/* ---------------------------------------------------------------- */}
+        <MarginNote head="Where it reaches">
+          <span className="fig fig-md">43</span>
+          countries can sign up directly. Two are sales-contact only, five run on an extended
+          network whose rules we have not read, and Brazil is 18 and over.{" "}
+          <Link className="linkbtn" href="/check">Check yours</Link>.
+        </MarginNote>
+
         <h2 className="h3" style={{ marginTop: 32 }}>What this means where you live</h2>
         <p className="body" style={{ marginTop: 8 }}>
           Two questions decide it, and most people only ask the first.
@@ -458,6 +465,11 @@ export default function HowItWorks() {
 
         {/* ---------------------------------------------------------------- */}
         <hr className="rule" style={{ margin: "36px 0 28px" }} />
+        <MarginNote head="Veyro never holds it">
+          The money goes from the customer to an account in your guardian&rsquo;s name. We are the
+          checkout at one end and the record at the other, and never in the path between.
+        </MarginNote>
+
         <h2 className="h3">How the money moves</h2>
         <p className="body" style={{ marginTop: 8, marginBottom: 24 }}>
           Five stops, one direction. Veyro is the first stop and the last; the money itself only
