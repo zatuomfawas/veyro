@@ -54,8 +54,16 @@ test("dispute tools are listed but labelled, because they are not built", () => 
   // The Terms promise baseline dispute notifications and evidence submission
   // from 5 November. Until the code exists, the page must say so on the line
   // itself -- a promise dated in the future is honest; an undated one is not.
+  // "Built" means a founder is actually served, not that a webhook exists.
+  // The first version of this test checked only the handler, and went green
+  // the moment the webhook landed -- while the dashboard still showed a
+  // founder nothing about the dispute they were losing.
   const hook = read("app/api/webhooks/stripe/route.ts");
-  const built = /charge\.dispute/.test(hook);
+  const built =
+    /charge\.dispute/.test(hook)                                   // we hear about it
+    && existsSync("lib/dispute-notify.ts")                         // we tell them
+    && existsSync("app/dashboard/founder/Disputes.tsx")            // they can see it
+    && /Disputes/.test(read("app/dashboard/founder/page.tsx"));    // it is on the page
 
   const pricing = claims("app/pricing/page.tsx");
   const free = pricing.slice(pricing.indexOf("const INCLUDED"), pricing.indexOf("const ABOVE"));

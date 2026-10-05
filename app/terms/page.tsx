@@ -78,12 +78,12 @@ export default function Terms() {
           </p>
         </Sub>
 
-        <Sub title="Dispute notifications and response tools">
+        <Sub title="Dispute notifications and assistance">
           <p className="body">
             Veyro provides users with notifications regarding eligible payment disputes and
-            chargebacks and functionality through which users may submit supporting information or
-            evidence. Paid-tier users may additionally receive enhanced dispute and chargeback
-            assistance from Veyro.
+            chargebacks and may provide links or other tools to help the relevant account holder
+            access and respond to the dispute through Stripe. Paid-tier users may additionally
+            receive enhanced dispute and chargeback assistance from Veyro.
           </p>
           <p className="body" style={{ marginTop: 12 }}>
             Veyro does not determine the outcome of any dispute or chargeback and does not
@@ -199,8 +199,8 @@ export default function Terms() {
           </p>
           <ul className="arrowlist" style={{ marginTop: 12 }}>
             <li>
-              Weekly payout scheduling, subject to Stripe&rsquo;s applicable requirements, account
-              status, reserves, holds and payout availability
+              Weekly payout support and visibility, including assistance accessing and configuring
+              Stripe&rsquo;s available payout scheduling options
             </li>
             <li>
               Dispute and chargeback assistance (Veyro provides templates, guidance and

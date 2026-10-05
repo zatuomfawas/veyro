@@ -14,7 +14,19 @@ export const RATE = 0.03;
 /** Veyro's fee, in minor units, for a month in which `earnedMinor` came in. */
 export function feeMinor(earnedMinor: number): number {
   const over = Math.max(0, earnedMinor - FREE_FLOOR_MINOR);
-  return Math.round(over * RATE);
+  // floor(over * 3 / 100), computed on integers.
+  //
+  // Two decisions in one line. Rounding is DOWN, always, so a fraction of a
+  // cent is never charged -- the brief puts it as "in the founder's favour",
+  // and it is also the only direction that cannot be accused of padding. This
+  // used to be Math.round, which overcharged by a cent whenever the remainder
+  // was at least half: 84c over the limit produced 3c instead of 2c.
+  //
+  // And the multiply happens before the divide, on integers, rather than
+  // multiplying by 0.03. Floating point does not represent 0.03 exactly, so
+  // over * 0.03 can land a hair below a whole number and floor to one cent
+  // less than it should. over * 3 is exact for every amount we will ever see.
+  return Math.floor((over * 3) / 100);
 }
 
 /**

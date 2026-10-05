@@ -74,6 +74,9 @@ model User {
   checkoutViews  CheckoutView[]         @relation("FounderCheckoutViews")
   payoutRequests FounderPayoutRequest[] @relation("FounderPayoutRequests")
   paymentAccount FounderPaymentAccount? @relation("FounderPaymentAccount")
+  monthlyLedgers MonthlyLedger[]        @relation("FounderMonthlyLedgers")
+  disputes       FounderDispute[]       @relation("FounderDisputes")
+  healthReviews  HealthReviewDraft[]    @relation("FounderHealthReviews")
 
   // A user is the founder in some consents and the guardian in others, so both
   // directions are named.
@@ -191,6 +194,29 @@ model FounderTransaction {
   /// with asynchronous payment methods. Null is displayed as "not yet known"
   /// rather than as zero: a missing fee and a zero fee are different facts.
   feeMinor Int?
+
+  /// What has been sent back to the customer on this payment, cumulative.
+  /// Partial refunds are normal, so this is an amount rather than a flag; the
+  /// REFUNDED status means fully refunded and is derived from it.
+  refundedMinor Int @default(0)
+
+  /// Lost to a dispute, cumulative. Separate from refundedMinor because a
+  /// chargeback is not a refund: the money leaves the same way but the cause,
+  /// the fee treatment and what we tell the founder all differ.
+  disputedMinor Int @default(0)
+
+  /// The USD value of `amountMinor`, fixed when the payment settled.
+  ///
+  /// Qualifying Monthly Earnings are denominated in USD (Terms, "Currency"),
+  /// so a non-USD payment has to be converted once and then never again. The
+  /// rate is Stripe's own for this transaction, read from the balance
+  /// transaction, and is stored beside the figure it produced so an invoice
+  /// can be reconstructed years later without asking what the rate was.
+  ///
+  /// Null while the balance transaction has not settled. For USD payments the
+  /// rate is null and this equals amountMinor.
+  usdAmountMinor Int?
+  exchangeRate   Decimal? @db.Decimal(20, 10)
 
   currency    String                   @default("USD") @db.Char(3)
   status      FounderTransactionStatus @default(PENDING)
@@ -355,4 +381,126 @@ model WebhookEvent {
   receivedAt  DateTime   @default(now())
 
   @@unique([provider, providerRef])
+}
+
+
+// ---------------------------------------------------------------- the paid tier
+
+/// One row per connected account per calendar month. The single source of
+/// truth for what a founder has earned and what Veyro has charged.
+///
+/// This exists because the fee is incremental: what a payment owes depends on
+/// everything that came before it in the same month. Recomputing that by
+/// scanning transactions on every charge would be both slow and racy, so the
+/// running totals live here and the row is locked while a fee is decided.
+///
+/// `month` is "YYYY-MM" in UTC, keyed on the Stripe timestamp of the payment
+/// (Terms, "Calendar month"). Never local time: a payment at 23:30 in Dubai
+/// on the 31st belongs to the month UTC says it does.
+model MonthlyLedger {
+  id        String @id @default(cuid())
+  founderId String
+  founder   User   @relation("FounderMonthlyLedgers", fields: [founderId], references: [id], onDelete: Cascade)
+
+  /// "YYYY-MM", UTC.
+  month String @db.Char(7)
+
+  /// Qualifying Monthly Earnings in USD minor units: successful charges, less
+  /// refunds, less disputes lost. May go down when a refund lands; never
+  /// causes a fee already collected to be returned.
+  qmeMinor Int @default(0)
+
+  /// Veyro platform fees incurred this month, in USD minor units. Only ever
+  /// increases. The ratchet in the Terms depends on that.
+  feeCollectedMinor Int @default(0)
+
+  /// Reserved while a charge is in flight, so two simultaneous checkouts
+  /// cannot both be told they are under the threshold. Released if the
+  /// payment never succeeds.
+  feeReservedMinor Int @default(0)
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+
+  @@unique([founderId, month])
+  @@index([month])
+}
+
+enum DisputeState {
+  NEEDS_RESPONSE
+  UNDER_REVIEW
+  WON
+  LOST
+  WARNING_CLOSED
+  OTHER
+}
+
+/// A chargeback, mirrored from Stripe so we can tell somebody about it.
+///
+/// On Standard accounts the account holder responds in their own Stripe
+/// dashboard; Veyro cannot submit evidence through the API on their behalf.
+/// So this model exists to notify and to link, which is what the Terms
+/// promise, and deliberately holds no evidence of its own.
+model FounderDispute {
+  id        String @id @default(cuid())
+  founderId String
+  founder   User   @relation("FounderDisputes", fields: [founderId], references: [id], onDelete: Cascade)
+
+  stripeDisputeId String       @unique
+  stripeChargeId  String
+  amountMinor     Int
+  currency        String       @db.Char(3)
+  reason          String
+  state           DisputeState @default(NEEDS_RESPONSE)
+
+  /// Stripe's evidence deadline. Null when Stripe did not supply one.
+  evidenceDueBy DateTime?
+
+  /// Set once the founder and guardian have been told, so a replayed webhook
+  /// does not email twice.
+  notifiedAt DateTime?
+
+  openedAt  DateTime @default(now())
+  closedAt  DateTime?
+  updatedAt DateTime @updatedAt
+
+  @@index([founderId, state])
+  @@index([founderId, openedAt])
+}
+
+enum ReviewState {
+  DRAFT
+  APPROVED
+  SENT
+  DISCARDED
+}
+
+/// A monthly account health review, drafted by a job and sent only by a human.
+///
+/// Counsel defines this as a human review, so the job may assemble findings
+/// and may not send them. Nothing moves from DRAFT to SENT without somebody
+/// approving it, and the test suite asserts that.
+model HealthReviewDraft {
+  id        String @id @default(cuid())
+  founderId String
+  founder   User   @relation("FounderHealthReviews", fields: [founderId], references: [id], onDelete: Cascade)
+
+  /// The month reviewed, "YYYY-MM" UTC.
+  month String @db.Char(7)
+
+  /// Machine-assembled findings. A reviewer edits this before approving.
+  findings Json
+
+  /// What the reviewer decided to say. Null until they have written it.
+  summary String?
+
+  state      ReviewState @default(DRAFT)
+  approvedBy String?
+  approvedAt DateTime?
+  sentAt     DateTime?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@unique([founderId, month])
+  @@index([state])
 }

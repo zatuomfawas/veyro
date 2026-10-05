@@ -71,21 +71,23 @@ export const metadata: Metadata = {
 type Item = readonly [name: string, detail: string, soon?: true];
 
 const INCLUDED: readonly Item[] = [
-  ["Payment setup", "Getting your parent verified and the payment account open."],
+  ["Core payment functionality", "Getting your parent verified, the payment account open, and payments working."],
   ["Dashboard", "Your products, your ledger, your payout history."],
   ["Integration", "One snippet, and you can take a payment."],
-  ["Payouts", "Request your money whenever it is available."],
+  ["Stripe payouts", "Your money reaches your bank on Stripe's schedule for the account."],
   ["Account status monitoring", "We watch the account's standing and what the processor still wants, and show you both."],
-  ["Dispute notifications and evidence submission", "We tell you when a payment is disputed, and you can send supporting information from the dashboard.", true],
+  ["Dispute notifications", "We tell you when a payment is disputed, with the amount, the reason and the deadline.", true],
+  ["Access to Stripe's dispute response process", "A direct route into the dispute, where the account holder can respond.", true],
   ["Standard support", "A person on the other end, for you and for your parent."],
 ] as const;
 
 // Worded to match the Terms rather than to sell past them: subject to
-// eligibility and availability, assistance rather than outcomes, a record
-// rather than tax advice.
+// eligibility and availability, assistance rather than outcomes, support and
+// visibility rather than control we do not have, a record rather than tax
+// advice.
 const ABOVE: readonly Item[] = [
-  ["Weekly payouts", "Instead of monthly, subject to processing and account status.", true],
-  ["Dispute and chargeback assistance", "Guidance and templates. We cannot decide how a dispute ends, and we will not pretend to.", true],
+  ["Weekly payout support", "Help getting Stripe's weekly schedule set up on the account, and visibility of what is coming.", true],
+  ["Enhanced dispute and chargeback assistance", "Guidance and templates. We cannot decide how a dispute ends, and we will not pretend to.", true],
   ["Enhanced Monthly Account Health Review", "A person reads the account and writes up anything material they find.", true],
   ["Priority support", "Target response within 24 hours.", true],
   ["Direct Guardian Support", "Your parent can talk to someone directly.", true],

@@ -247,6 +247,27 @@ export function sendPaymentNotification(
   );
 }
 
+/* ---------------- a payment was disputed ---------------- */
+
+/**
+ * Both halves of a chargeback notice.
+ *
+ * Two senders rather than one with a flag, because the two readers need
+ * different things: the founder needs to know their money is at risk and that
+ * a deadline exists, and the guardian needs to know they are the one Stripe
+ * expects to answer. Neither is told what the outcome will be.
+ */
+export function sendDisputeNotification(
+  to: string, subject: string, body: string,
+  context: { founderId: string; disputeId: string; audience: "founder" | "guardian" },
+) {
+  return send(to, subject, body + SIGNOFF, {
+    action: `email.dispute_${context.audience}`,
+    founderId: context.founderId,
+    meta: { disputeId: context.disputeId },
+  });
+}
+
 /* ---------------- payout requested ---------------- */
 
 export function sendPayoutNotification(
