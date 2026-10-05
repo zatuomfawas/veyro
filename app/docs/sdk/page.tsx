@@ -11,6 +11,7 @@ import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { SDK_ERROR_TABLE } from "@/lib/sdk-errors";
 import { Copyable } from "./Copyable";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
+import { SectionRail } from "@/app/_ui/SectionRail";
 
 export const viewport = buildViewport();
 
@@ -101,7 +102,8 @@ export default function SdkDocs() {
         </div>
       </div>
 
-      <main id="main" className="wrap-n" style={{ paddingTop: 32, paddingBottom: 56 }}>
+      <main id="main" className="wrap-lp longform has-rail" style={{ paddingTop: 32, paddingBottom: 56 }}>
+        <SectionRail label="Reference" />
         <span className="lp-eyebrow">Code first</span>
         <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>Add Veyro to your app.</h1>
         <p className="lead" style={{ marginTop: 16 }}>

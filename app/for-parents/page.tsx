@@ -4,6 +4,7 @@ import { buildViewport, SITE } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
+import { SectionRail } from "@/app/_ui/SectionRail";
 import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
@@ -162,7 +163,8 @@ export default function ForParents() {
         </div>
       </div>
 
-      <main id="main" className="wrap-lp longform" style={{ paddingTop: 32, paddingBottom: 56 }}>
+      <main id="main" className="wrap-lp longform has-rail" style={{ paddingTop: 32, paddingBottom: 56 }}>
+        <SectionRail />
         <span className="lp-eyebrow">For parents</span>
         <h1 className="d2" style={{ marginTop: 8, maxWidth: "24ch" }}>
           What you are actually being asked to agree to.

@@ -26,9 +26,17 @@ export const CSS = `
 .fw .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px;
   overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
 .fw {
-  /* ---- Type scale: 10 steps, nothing between them ---- */
-  --fs-1:11.5px; --fs-2:12.5px; --fs-3:14px;  --fs-4:15.5px; --fs-5:17px;
-  --fs-6:20px;   --fs-7:24px;   --fs-8:30px;  --fs-9:44px;   --fs-10:56px;
+  /* ---- Type scale: 10 steps, nothing between them ----
+     The reading steps (3 to 5) and the display steps (6 to 10) were set for a
+     denser interface than this turned out to be. On a 1400px screen a 15.5px
+     paragraph in a 66ch column reads as small print, so the reading sizes come
+     up about a step and the display sizes open up with them.
+
+     1 and 2 deliberately do NOT move. They are the label and chip sizes, and
+     the payment sequence in the hero fits 375px with about four pixels to
+     spare -- a bump there is a wrapped diagram on every phone. */
+  --fs-1:11.5px; --fs-2:12.5px; --fs-3:14.5px; --fs-4:16.5px; --fs-5:18.5px;
+  --fs-6:22px;   --fs-7:26px;   --fs-8:34px;   --fs-9:50px;   --fs-10:64px;
   /* ---- Weight: three only. 400 reads, 500 labels, 600 headings ---- */
   --fw-reg:400; --fw-med:500; --fw-bold:600;
   /* ---- Line height ---- */
@@ -1041,10 +1049,59 @@ export const CSS = `
    column, so they share one left edge; the few things that are genuinely wide
    -- the roles grid, the payment flow, the integration paths, a preview beside
    its words -- opt into the full width by name. */
-.fw .longform { display:grid; grid-template-columns:
-  [full-start] minmax(0, 1fr)
-  [content-start] minmax(0, var(--m-body)) [content-end]
-  minmax(0, 1fr) [full-end]; }
+/* Three tracks, not one column floating in the middle of nothing.
+   -------------------------------------------------------------------------
+   NOTE ON THE SYNTAX: two bracketed line-name groups cannot sit next to each
+   other. [rail-end] [content-start] is invalid, the whole declaration is
+   thrown away, and the grid falls back to implicit tracks that look close
+   enough to right that it took a computed-style dump to notice. They have to
+   be one bracket: [rail-end content-start].
+   -------------------------------------------------------------------------
+   The reading measure was right and the page around it was the wrong shape:
+   66 characters in a 1400px window left 400px of nothing down each side, on
+   the five longest pages on the site. The measure has not changed. What has
+   changed is that the space beside it now holds the two things a long page
+   cannot otherwise give you -- where you are in it, and the asides that would
+   otherwise interrupt the prose.
+
+   justify-content:center keeps the whole assembly centred when the window is
+   wider than the three tracks together, so the reading column stays where the
+   eye expects it instead of drifting left as the rail appears. */
+/* Both side tracks are earned, never assumed. A reserved 236px of nothing is
+   worse than the margin it was meant to fix, so the grid has four shapes and
+   the page gets whichever one its content justifies:
+
+     content                    nothing to put beside it
+     rail    + content          sections worth listing
+     content + note             asides worth lifting out
+     rail    + content + note   both
+
+   The rail is a class because it depends on runtime headings. The note track
+   asks the DOM with :has(), so adding a <MarginNote> is the whole of turning
+   it on -- there is no second flag to forget. */
+.fw .longform {
+  --lf-rail:208px; --lf-note:236px; --lf-gap:clamp(28px, 3.4vw, 60px);
+  display:grid; column-gap:var(--lf-gap); justify-content:center;
+  grid-template-columns:
+    [full-start content-start] minmax(0, var(--m-body)) [content-end full-end]; }
+.fw .longform.has-rail {
+  grid-template-columns:
+    [full-start rail-start] var(--lf-rail)
+    [rail-end content-start] minmax(0, var(--m-body)) [content-end full-end]; }
+/* Guarded, and the fallback is the note simply staying in the reading column
+   rather than being placed on a track that does not exist. */
+@supports selector(:has(*)) {
+  .fw .longform:has(> .lfnote) {
+    grid-template-columns:
+      [full-start content-start] minmax(0, var(--m-body))
+      [content-end note-start] var(--lf-note) [note-end full-end]; }
+  .fw .longform.has-rail:has(> .lfnote) {
+    grid-template-columns:
+      [full-start rail-start] var(--lf-rail)
+      [rail-end content-start] minmax(0, var(--m-body))
+      [content-end note-start] var(--lf-note) [note-end full-end]; }
+  .fw .longform > .lfnote { grid-column:note; }
+}
 .fw .longform > * { grid-column: content; min-width:0; }
 .fw .longform > .truthgrid,
 .fw .longform > .flow,
@@ -1068,10 +1125,97 @@ export const CSS = `
 .fw .longform > .calc,
 .fw .longform > .aud,
 .fw .longform > .mrail { margin-block:var(--sp-8); }
-/* Below the point where the middle column would be the whole width anyway,
-   the grid is just one column and costs nothing. */
+/* The rail is the first thing to go: below about 1180px the three tracks stop
+   fitting and the margin it lived in is gone anyway. The note track follows
+   at 1040, and below 900 the whole thing is one column again and costs
+   nothing. Each step drops furniture, never content: a margin note returns to
+   the flow rather than disappearing. */
+@media (max-width:1180px) {
+  .fw .longform.has-rail {
+    grid-template-columns:
+      [full-start content-start] minmax(0, var(--m-body)) [content-end full-end]; }
+  @supports selector(:has(*)) {
+    .fw .longform.has-rail:has(> .lfnote) {
+      grid-template-columns:
+        [full-start content-start] minmax(0, var(--m-body))
+        [content-end note-start] var(--lf-note) [note-end full-end]; }
+  }
+}
+@media (max-width:1040px) {
+  .fw .longform, .fw .longform.has-rail,
+  .fw .longform:has(> .lfnote), .fw .longform.has-rail:has(> .lfnote) {
+    grid-template-columns:
+      [full-start content-start] minmax(0, var(--m-body)) [content-end full-end]; }
+  .fw .longform > .lfnote { grid-column:content; }
+}
 @media (max-width:900px) {
   .fw .longform { display:block; }
+}
+
+/* ==== the section rail ===================================================
+   A spine with the sections hanging off it. The fill is scroll position, so
+   the line is both the decoration and the readout -- there is no separate
+   progress bar because the list is already a vertical axis. */
+.fw .lfrail { grid-column:rail; grid-row:1 / -1; position:sticky;
+  align-self:start; top:calc(var(--nav-h) + 28px);
+  max-height:calc(100vh - var(--nav-h) - 72px);
+  display:flex; flex-direction:column; min-width:0; }
+.fw .lfrail-k { font-size:var(--fs-1); letter-spacing:0.07em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:var(--fw-med); margin-bottom:var(--sp-4); }
+.fw .lfrail-body { position:relative; display:flex; min-height:0; flex:1 1 auto; }
+.fw .lfrail-line { position:relative; flex:none; width:2px; background:var(--line);
+  margin-right:var(--sp-4); }
+.fw .lfrail-fill { position:absolute; inset:0; background:var(--brand);
+  transform-origin:top; transform:scaleY(0); }
+.fw .lfrail-nav { display:flex; flex-direction:column; gap:2px; min-width:0;
+  overflow-y:auto; scrollbar-width:none; }
+.fw .lfrail-nav::-webkit-scrollbar { display:none; }
+.fw .lfrail-a { display:block; padding:5px 0; font-size:var(--fs-2); line-height:1.4;
+  color:var(--ink-3); text-decoration:none; border:0;
+  transition:color var(--t-2) var(--ease); }
+.fw .lfrail-a:hover { color:var(--ink-2); }
+/* The current section is the one piece of state here, so it gets weight and
+   the brand colour rather than a marker that would need its own alignment. */
+.fw .lfrail-a[data-on="1"] { color:var(--brand); font-weight:var(--fw-med); }
+.fw .lfrail-a:focus-visible { outline:var(--focus-w) solid var(--brand);
+  outline-offset:2px; }
+.fw .lfrail-foot { display:flex; align-items:baseline; gap:4px;
+  margin-top:var(--sp-4); padding-top:var(--sp-3); border-top:1px solid var(--line); }
+.fw .lfrail-sep { color:var(--ink-3); font-size:var(--fs-1); }
+@media (prefers-reduced-motion: reduce) {
+  .fw .lfrail-a { transition:none; }
+  .fw .lfrail-fill { transition:none; }
+}
+/* Hidden below the width where its track exists. This has to live AFTER the
+   rules above rather than inside the 1180 media query where it reads more
+   naturally: .lfrail sets display:flex, the two selectors have equal
+   specificity, and a media query does not beat source order. Written up
+   there it was simply ignored, and the rail overlapped the text at every
+   width from 1180 down -- which no amount of looking at a 1440px screen
+   would ever have shown. */
+@media (max-width:1180px) {
+  .fw .lfrail { display:none; }
+}
+
+/* ==== margin notes =======================================================
+   The right track. An aside that was interrupting the argument -- a date, a
+   caveat, a figure worth knowing but not worth a paragraph -- sits beside it
+   instead. Below 1040px the track is gone and the note returns to the flow as
+   an ordinary indented aside, because the content must not depend on the
+   window being wide. */
+.fw .lfnote { font-size:var(--fs-2); line-height:1.55;
+  color:var(--ink-3); border-top:2px solid var(--line); padding-top:var(--sp-3);
+  align-self:start; }
+.fw .lfnote strong { display:block; color:var(--ink-2); font-weight:var(--fw-med);
+  margin-bottom:2px; }
+.fw .lfnote .fig { margin:2px 0 4px; }
+/* A note the reader may want at any point, not at the point it happens to be
+   written. Sticky inside its track; back in the flow once the track is gone. */
+.fw .lfnote[data-sticky="1"] { position:sticky; top:calc(var(--nav-h) + 28px); }
+@media (max-width:1040px) {
+  .fw .lfnote { grid-column:content; border-top:0; border-left:2px solid var(--line);
+    padding:2px 0 2px var(--sp-4); margin:var(--sp-5) 0; }
+  .fw .lfnote[data-sticky="1"] { position:static; }
 }
 
 .fw .card-prose { max-width:78ch; }
@@ -2518,6 +2662,27 @@ export const CSS2 = `
 .fw .chip[data-on="1"][data-tone="slate"] { color:var(--slate); border-color:var(--slate-line); background:var(--slate-bg); }
 .fw .chip-sep { color:var(--ink-3); font-size:var(--fs-1); flex:none; }
 @media (prefers-reduced-motion: reduce) { .fw .chip { transition:none; } }
+
+/* ==== the eligibility page's two columns ==================================
+   A form with two fields and a page 1400px wide. Everything was stacked down
+   the left and the right half held nothing, which on the page that has to
+   look most trustworthy read as unfinished.
+
+   The sourcing moves up beside the tool rather than a screen below it: the
+   figures that say how far the coverage goes are the reason to believe the
+   answer, and they were out of sight at the moment the answer appeared. */
+.fw .ckgrid { display:grid; gap:var(--sp-7) clamp(32px, 5vw, 72px);
+  grid-template-columns:minmax(0, 1fr) minmax(0, 0.85fr); align-items:start;
+  margin-top:var(--sp-5); }
+.fw .cksource { padding-left:clamp(0px, 2vw, 28px);
+  border-left:1px solid var(--line); }
+.fw .cksource .figrow { grid-template-columns:repeat(2, minmax(0,1fr)); }
+@media (max-width:900px) {
+  .fw .ckgrid { grid-template-columns:1fr; gap:var(--sp-7); }
+  .fw .cksource { padding-left:0; border-left:0; padding-top:var(--sp-6);
+    border-top:1px solid var(--line); }
+  .fw .cksource .figrow { grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); }
+}
 
 /* ==== the eligibility answer ==============================================
    The one place on the site where motion is a response rather than an

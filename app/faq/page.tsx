@@ -10,6 +10,8 @@ import { ScrollProgress } from "@/app/_ui/ScrollProgress";
 import { FAQ } from "@/app/_ui/faq";
 import { MoneyRail } from "@/app/_ui/MoneyRail";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
+import { SectionRail } from "@/app/_ui/SectionRail";
+import { MarginNote } from "@/app/_ui/MarginNote";
 
 export const viewport = buildViewport();
 
@@ -59,7 +61,9 @@ export default function FaqPage() {
         </div>
       </div>
 
-      <main id="main" className="wrap-n" style={{ paddingTop: 40, paddingBottom: 56 }}>
+      <main id="main" className="wrap-lp longform has-rail" style={{ paddingTop: 40, paddingBottom: 56 }}>
+        {/* The sections of an FAQ are its questions, not its one heading. */}
+        <SectionRail label="Questions" selector=".disc-q" />
         <span className="lp-eyebrow">Questions</span>
         <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
           The ones people actually ask.
@@ -89,17 +93,12 @@ export default function FaqPage() {
           ))}
         </div>
 
-        <div className="card" style={{ marginTop: 40 }}>
-          <div className="card-b">
-            <h2 className="h4" style={{ marginTop: 0 }}>Not answered here?</h2>
-            <p className="body" style={{ marginBottom: 0 }}>
-              <Link className="linkbtn" href="/contact">Email us</Link> and a person will reply. If
-              you are a parent deciding whether to agree to this,{" "}
-              <Link className="linkbtn" href="/for-parents">what a guardian takes on</Link> is the
-              page written for you.
-            </p>
-          </div>
-        </div>
+        <MarginNote head="Not answered here?" sticky>
+          <Link className="linkbtn" href="/contact">Email us</Link> and a person will reply. If
+          you are a parent deciding whether to agree to this,{" "}
+          <Link className="linkbtn" href="/for-parents">what a guardian takes on</Link> is the
+          page written for you.
+        </MarginNote>
       </main>
 
       <ScrollTop />

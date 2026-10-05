@@ -195,19 +195,25 @@ function EligibilityCheck({
         </div></div>
       )}
       <div
-        className={embedded ? undefined : "wrap-n"}
+        className={embedded ? undefined : "wrap-lp"}
         style={embedded ? undefined : { marginTop: 8, marginBottom: 90 }}
       >
         {!embedded && (
           <>
-            <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>Check what applies to you</h1>
-            <p className="body" style={{ marginTop: 8, fontSize: "var(--fs-4)" }}>
-              Where you live and how old you are decide which route is open, and whether you need us at all.
-              No account, no email address.
+            <h1 className="d2">Check what applies to you</h1>
+            <p className="lead" style={{ marginTop: 10 }}>
+              Where you live and how old you are decide which route is open, and whether you need
+              us at all. No account, no email address.
             </p>
           </>
         )}
 
+        {/* Two questions do not fill a 1400px page, and the sourcing that
+            makes the answer worth anything was sitting a screen below it
+            where nobody reads it. Side by side: the tool, and what it is
+            standing on. One column again below 900. */}
+        <div className={embedded ? undefined : "ckgrid"}>
+        <div>
         <div className="card card-prose" style={{ marginTop: 20 }}><div className="card-b checkform">
           <Field label="Where do you live?">
             <select className="select" value={code} onChange={(e) => { setCode(e.target.value); setRegion(""); reset(); }}>
@@ -363,12 +369,14 @@ function EligibilityCheck({
 
         {/* The workings belong on the page devoted to this question. On the
             landing page the section around this already links to them. */}
+        </div>
+
         {/* This used to be one ten-line paragraph carrying the whole of the
             page's credibility, which is a lot to ask of a block nobody can
             scan. Same facts, same numbers, given the room to be read: the
             coverage as figures, the two filters as two things, and the
             sourcing on its own where it can be checked. */}
-        {!embedded && <div className="layer-tight">
+        {!embedded && <div className="cksource">
           <div className="lbl" style={{ marginBottom: "var(--sp-4)" }}>How we work this out</div>
 
           <div className="figrow">
@@ -411,6 +419,7 @@ function EligibilityCheck({
             the result above says so where it applies. Terms change, and none of this is legal or tax advice.
           </p>
         </div>}
+        </div>
       </div>
     </Shell>
   );

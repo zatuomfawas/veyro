@@ -8,6 +8,7 @@ import { MoneyRail } from "@/app/_ui/MoneyRail";
 import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
+import { SectionRail } from "@/app/_ui/SectionRail";
 
 export const viewport = buildViewport();
 
@@ -141,7 +142,9 @@ export default function LegalPage() {
         </div>
       </div>
 
-      <main id="main" className="wrap-s" style={{ paddingTop: 32, paddingBottom: 56 }}>
+      <main id="main" className="wrap-lp longform has-rail" style={{ paddingTop: 32, paddingBottom: 56 }}>
+        {/* The sections of this page are the six doubts, not its one heading. */}
+        <SectionRail label="What is unproven" selector=".numbered > li > span:first-child" />
         <span className="lp-eyebrow">Straight answers</span>
         <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>What is not settled yet.</h1>
         <p className="lead" style={{ marginTop: 16 }}>

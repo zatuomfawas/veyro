@@ -7,6 +7,7 @@ import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink, Icon } from "@/app/_ui/marks";
 import { Notice } from "@/app/_ui/form";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
+import { SectionRail } from "@/app/_ui/SectionRail";
 import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { StickyCta } from "@/app/_ui/StickyCta";
@@ -166,7 +167,8 @@ export default function GetStarted() {
         </div>
       </div>
 
-      <main id="main" className="wrap-lp longform has-sticky" style={{ paddingTop: 32 }}>
+      <main id="main" className="wrap-lp longform has-rail has-sticky" style={{ paddingTop: 32 }}>
+        <SectionRail />
         <span className="lp-eyebrow">Get started</span>
         <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
           From your app to your first payment.

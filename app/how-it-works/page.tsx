@@ -3,6 +3,7 @@ import { buildMetadata, buildViewport } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
+import { SectionRail } from "@/app/_ui/SectionRail";
 import { RoleStack } from "@/app/_ui/RoleStack";
 import { ScrollProgress } from "@/app/_ui/ScrollProgress";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
@@ -13,6 +14,7 @@ import { GuardianPermissions } from "@/app/_ui/GuardianPermissions";
 import { MoneyRail } from "@/app/_ui/MoneyRail";
 import { LiveWallet } from "@/app/_ui/LiveWallet";
 import { AudienceSplit } from "@/app/_ui/AudienceSplit";
+import { MarginNote } from "@/app/_ui/MarginNote";
 
 export const metadata = buildMetadata("how");
 export const viewport = buildViewport();
@@ -97,7 +99,8 @@ export default function HowItWorks() {
       {/* paddingBottom is inline, so it overrides .has-sticky's 86px on mobile.
           It must stay at or above 86 or the sticky CTA will cover the last
           paragraph. The class is kept because it states the intent. */}
-      <main id="main" className="wrap-lp longform has-sticky" style={{ paddingTop: 32 }}>
+      <main id="main" className="wrap-lp longform has-rail has-sticky" style={{ paddingTop: 32 }}>
+        <SectionRail />
         <span className="lp-eyebrow">How it works</span>
         <h1 className="d2" style={{ marginTop: 8, maxWidth: "24ch" }}>
           What Veyro does, and what Stripe does.
@@ -113,9 +116,10 @@ export default function HowItWorks() {
           four things that went wrong on the way. Written down because a claim about money and
           minors is worth nothing if you cannot check it.
         </p>
-        <p className="tiny" style={{ marginTop: 12 }}>
-          Last checked {UPDATED}. Not legal or tax advice.
-        </p>
+        <MarginNote head="Last checked">
+          {UPDATED}. The rules underneath this change, and when they do this page changes with
+          them. Nothing here is legal or tax advice.
+        </MarginNote>
 
         {/* Layer 2. This page is long on purpose and most of it is Layer 3 --
             the primary source, the country grading, the four things that went

@@ -6,6 +6,8 @@ import { Notice } from "@/app/_ui/form";
 import { ScrollProgress } from "@/app/_ui/ScrollProgress";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
+import { SectionRail } from "@/app/_ui/SectionRail";
+import { MarginNote } from "@/app/_ui/MarginNote";
 
 export const SUPPORT_EMAIL = "hello@withveyro.com";
 
@@ -60,10 +62,11 @@ export function LegalShell({
         </div>
       </div>
 
-      <main id="main" className="wrap-lp" style={{ paddingTop: 40, paddingBottom: 56 }}>
+      <main id="main" className="wrap-lp longform has-rail" style={{ paddingTop: 40, paddingBottom: 56 }}>
+        <SectionRail label="Clauses" />
         <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>{title}</h1>
         <p className="lead" style={{ marginTop: 12 }}>{lead}</p>
-        <p className="tiny" style={{ marginTop: 12 }}>Last updated {updated}.</p>
+        <MarginNote head="Last updated">{updated}.</MarginNote>
 
         <div style={{ marginTop: 24, maxWidth: "var(--m-wide)" }}>
           <Notice tone="amber" head="Read this first: these are not lawyer-reviewed">
