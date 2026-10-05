@@ -71,9 +71,9 @@ const COMMITMENTS: { head: string; body: React.ReactNode }[] = [
     head: "Most people will never pay Veyro anything.",
     body: (
       <>
-        Free under $100 a month in earnings, and 3% on whatever is above that. One product, not
-        a cheap one and a real one: the monitoring and the dispute handling are there whether you
-        are paying us or not. A dormant account costs us nothing, which is why the free limit is
+        Free under $100 a month in earnings, and 3% on whatever is above that. The core product
+        is the same whether you are paying us or not; some extra services switch on in the months
+        you are above the line. A dormant account costs us nothing, which is why the free limit is
         genuinely free rather than something paid users subsidise. Card processing fees are
         charged on top by the payment processor, which sets and deducts them.
       </>

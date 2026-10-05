@@ -172,7 +172,7 @@ export default function HowItWorks() {
             </span>
           </li>
           <li>
-            <span>Veyro keeps it compliant</span>
+            <span>Veyro keeps the account straight</span>
             <span>
               Watching what Stripe still needs from the account, surfacing it before it becomes a
               problem, and handling the tax paperwork. This is the part that does not exist
@@ -196,7 +196,7 @@ export default function HowItWorks() {
             <h3 className="path-t">Everything around it</h3>
             <p className="path-d">
               Proving the route is lawful, getting your parent through setup once, the dashboard,
-              the integration, keeping the account compliant as you earn, and the tax forms.
+              the integration, and watching the account&rsquo;s standing as you earn.
             </p>
           </div>
         </div>

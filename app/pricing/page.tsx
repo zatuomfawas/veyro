@@ -41,26 +41,48 @@ export const metadata: Metadata = {
 // No feature table with ticks and crosses: a comparison grid makes the free
 // column look like the deprived one, which is the opposite of true here.
 
-// One list. Everybody gets all of it.
+// Two lists, and every line in the first one is something that exists today.
 //
-// This page used to be two columns with different contents, and the free one
-// was missing compliance monitoring and dispute handling. That is not how the
-// product works -- an account under $100 a month is monitored and its
-// chargebacks are dealt with exactly like any other -- so the page was
-// describing a product we do not sell, in the direction that would matter
-// most to somebody who got a chargeback and had been told it was not covered.
+// This page has now been wrong in both directions. It began as two columns
+// that put compliance monitoring and dispute handling behind the paid one,
+// which was not the product. It was then rewritten as one product with
+// everything for everyone -- which overshot: the Terms counsel settled put
+// six enhanced services in months above $100, and marketing must not promise
+// more than the binding document does.
 //
-// Two items carry a threshold. They say so inline rather than being hoisted
-// into a second column, because the thing that changes is the cadence, not
-// whether you are covered.
+// So the first list was built by reading the code, not the old copy:
+//
+//   guardian verification      lib/stripe-account.ts, the consent flow
+//   dashboard and ledger       lib/ledger.ts
+//   integration snippet        AddToApp
+//   payouts                    RequestPayout
+//   account status monitoring  the account.updated webhook syncs status and
+//                              outstanding requirements; the dashboard shows
+//                              both, which is what the Terms describe
+//   support                    a person on the other end of the contact page
+//
+// Dispute features are NOT in that list. There is no dispute webhook, no
+// evidence submission and no dispute UI anywhere in the codebase, so there is
+// nothing truthful to say about disputes to someone earning under $100.
+// Tax forms are not in it either, for the same reason.
 const INCLUDED: readonly (readonly [string, string])[] = [
-  ["Guardian verification and account setup", "The whole of getting your parent verified and the payment account open."],
+  ["Guardian verification and account setup", "Getting your parent verified and the payment account open."],
   ["Integration snippet and dashboard", "One snippet, your products, your ledger, your payout history."],
-  ["Payouts", "Monthly, and weekly once you are earning over $100 a month."],
-  ["Compliance monitoring", "We watch the account's standing and tell you before the processor does."],
-  ["Dispute and chargeback handling", "We deal with them rather than forwarding you the email."],
-  ["Tax forms and quarterly estimates", "So the bill in April is not a surprise."],
-  ["Support", "For you, and for your parent from a person. Prioritised once you are earning."],
+  ["Payouts", "Request your money whenever it is available."],
+  ["Account status monitoring", "We watch the account's standing and what the processor still wants, and show you both."],
+  ["Support", "A person on the other end, for you and for your parent."],
+] as const;
+
+// The enhanced services, worded to match the Terms rather than to sell past
+// them: "subject to eligibility and availability", assistance rather than
+// outcomes, a record rather than tax advice.
+const ABOVE: readonly (readonly [string, string])[] = [
+  ["Weekly payouts", "Instead of monthly, subject to processing and account status."],
+  ["Dispute and chargeback assistance", "Guidance and templates. We cannot decide how a dispute ends, and we will not pretend to."],
+  ["Enhanced Monthly Account Health Review", "A person reads the account and writes up anything material they find."],
+  ["Priority support", "Target response within 24 hours."],
+  ["Direct Guardian Support", "Your parent can talk to someone directly."],
+  ["Annual Earnings & Payout Summary", "A record of what you earned and paid out. It is not tax advice."],
 ] as const;
 
 export default function Pricing() {
@@ -99,9 +121,9 @@ export default function Pricing() {
           One product. Different costs depending on what you earn.
         </h1>
         <p className="lead" style={{ marginTop: 12 }}>
-          There is no plan to choose and nothing to upgrade to. Everyone gets the same product,
-          the same monitoring and the same help with disputes. What changes with what you earn
-          is the price, and for two things the cadence.
+          There is no plan, no subscription and no upgrade button. Everyone gets the same core
+          product. In any month you earn more than $100, some extra services switch on for that
+          month, and switch off again in a month you do not.
         </p>
 
         {/* Section 1: the deal, stated as three lines rather than a table. */}
@@ -109,7 +131,11 @@ export default function Pricing() {
           <p className="deal-l">Free under <strong>$100</strong> a month.</p>
           <p className="deal-l"><strong>3%</strong> on everything you earn above $100.</p>
           <p className="deal-n">
-            Same product, same compliance, same dispute cover &mdash; at every size.
+            Same core product at every size. Extra services in the months you earn above $100.
+          </p>
+          <p className="deal-warn">
+            The fee is taken when a payment succeeds. If you later refund that customer, the fee
+            isn&rsquo;t returned.
           </p>
         </div>
 
@@ -123,13 +149,28 @@ export default function Pricing() {
 
         {/* Section 3: one list. No ticks and crosses: a comparison grid makes
             one column look like the deprived one, and here there isn't one. */}
-        <h2 className="h3">What you get</h2>
+        <h2 className="h3">What everyone gets</h2>
         <p className="body" style={{ marginTop: 8 }}>
-          All of it, whatever you earn. Two lines mention a threshold, and both are about how
-          often something happens rather than whether you are covered.
+          Whatever you earn, including nothing. Every line here is something that works today.
         </p>
         <dl className="tierlist" style={{ marginTop: "var(--sp-5)" }}>
           {INCLUDED.map(([t, d]) => (
+            <div key={t}>
+              <dt>{t}</dt>
+              <dd>{d}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <h2 className="h3" style={{ marginTop: "var(--sp-9)" }}>
+          In a month you earn above $100
+        </h2>
+        <p className="body" style={{ marginTop: 8 }}>
+          These are in addition to everything above, subject to eligibility and availability. They
+          apply in the months you are over the line, not to your account forever.
+        </p>
+        <dl className="tierlist" style={{ marginTop: "var(--sp-5)" }}>
+          {ABOVE.map(([t, d]) => (
             <div key={t}>
               <dt>{t}</dt>
               <dd>{d}</dd>
@@ -208,6 +249,12 @@ export default function Pricing() {
         <p className="body" style={{ marginTop: 12 }}>
           3% is a number we can say out loud. Someone earning $400 a month pays $9. A higher rate
           would not survive that sentence.
+        </p>
+        <p className="body" style={{ marginTop: 12 }}>
+          One thing to know before you take a payment: the fee is worked out and taken at the
+          moment a payment succeeds. If you refund that customer afterwards, the fee is not
+          returned to you. A refund does lower the running total used to decide whether later
+          payments that month are charged at all.
         </p>
 
         <div className="row" style={{ marginTop: "var(--sp-7)", gap: 8, flexWrap: "wrap" }}>

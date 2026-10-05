@@ -2777,6 +2777,13 @@ export const CSS2 = `
   font-variant-numeric:tabular-nums lining-nums; }
 .fw .deal-l strong { font-weight:var(--fw-bold); }
 .fw .deal-n { margin:var(--sp-4) 0 0; font-size:var(--fs-3); color:var(--ink-2); }
+/* A disclosure that has to be read before somebody transacts, not a footnote.
+   Given the amber rule rather than a tinted panel: tinted grounds are
+   transparent in the light theme by design, so a panel would be a box that
+   vanishes in the theme most people see. A left rule is visible in both. */
+.fw .deal-warn { margin:var(--sp-5) 0 0; padding-left:var(--sp-4);
+  border-left:3px solid var(--amber); font-size:var(--fs-3); line-height:1.55;
+  color:var(--ink); max-width:56ch; }
 
 /* The worked examples. A reader is being invited to check the arithmetic, so
    the figures are columns that line up rather than numbers in sentences:

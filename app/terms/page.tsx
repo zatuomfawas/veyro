@@ -10,12 +10,12 @@ const UPDATED = "16 September 2026";
 const SECTIONS = [
   { n: 1, title: "What Veyro is" },
   { n: 2, title: "Who may use Veyro" },
-  { n: 3, title: "Guardian, Account Ownership and Founder Access" },
+  { n: 3, title: "Guardian, account ownership and founder access" },
   { n: 4, title: "Your responsibilities" },
-  { n: 5, title: "Pricing and Fees" },
+  { n: 5, title: "Pricing and fees" },
   { n: 6, title: "Availability, and changes" },
-  { n: 7, title: "Limitation of Liability" },
-  { n: 8, title: "Ending Your Use of Veyro" },
+  { n: 7, title: "Limitation of liability" },
+  { n: 8, title: "Ending your use of Veyro" },
   { n: 9, title: "Governing law and disputes" },
   { n: 10, title: "Nothing here is legal advice" },
 ];
@@ -80,7 +80,7 @@ export default function Terms() {
         </p>
       </Clause>
 
-      <Clause n={3} title="Guardian, Account Ownership and Founder Access">
+      <Clause n={3} title="Guardian, account ownership and founder access">
         <Sub title="Guardian Onboarding">
           <p className="body">
             Where a Founder is under 18 years old, a parent or legal guardian must complete any
@@ -144,7 +144,7 @@ export default function Terms() {
         </p>
       </Clause>
 
-      <Clause n={5} title="Pricing and Fees">
+      <Clause n={5} title="Pricing and fees">
         <Sub title="Free Tier">
           <p className="body">
             Veyro does not charge a platform fee on the first US$100 of Qualifying Monthly
@@ -204,11 +204,19 @@ export default function Terms() {
 
         <Sub title="Refunds and Reversals">
           <p className="body">
-            Veyro platform fees are separate from Stripe processing fees. The treatment of
-            refunds, reversals and chargebacks for purposes of calculating Qualifying Monthly
-            Earnings and Veyro fees is determined in accordance with these Terms. Veyro platform
-            fees, once validly incurred, may remain payable notwithstanding a customer refund,
-            subject to applicable law.
+            Veyro platform fees are separate from Stripe processing fees.
+          </p>
+          <p className="body" style={{ marginTop: 12 }}>
+            A Veyro fee is incurred when a payment on which a Veyro fee is applicable succeeds,
+            based on Qualifying Monthly Earnings for that calendar month accumulated through and
+            including that payment. Refunds, reversals and chargebacks do not reduce or refund a
+            Veyro fee already incurred. However, they reduce Qualifying Monthly Earnings used to
+            determine whether any additional Veyro fee becomes payable on subsequent payments
+            during the same calendar month. No refund or credit will be issued solely because
+            subsequent refunds, reversals or chargebacks reduce Qualifying Monthly Earnings below
+            the amount previously used to calculate a Veyro fee. Veyro does not automatically
+            refund a Veyro platform fee already incurred, except where required by these Terms or
+            applicable law.
           </p>
         </Sub>
 
@@ -237,7 +245,7 @@ export default function Terms() {
         </p>
       </Clause>
 
-      <Clause n={7} title="Limitation of Liability">
+      <Clause n={7} title="Limitation of liability">
         <Sub title="Payment Processing">
           <p className="body">
             Payment processing services, including payment authorization, settlement, disputes,
@@ -263,7 +271,7 @@ export default function Terms() {
         </Sub>
       </Clause>
 
-      <Clause n={8} title="Ending Your Use of Veyro">
+      <Clause n={8} title="Ending your use of Veyro">
         <Sub title="Guardian-Initiated Closure">
           <p className="body">
             A guardian/account holder may request closure at any time, subject to outstanding
