@@ -49,13 +49,17 @@ test("the calendar month is UTC, not local", () => {
   assert.equal(qmeMonthKey(Date.UTC(2026, 10, 1, 0, 1) / 1000), "2026-11");
 });
 
-test("no fee can be taken before the Terms take effect, flag or no flag", () => {
-  const oneSecondBefore = FEES_EFFECTIVE_AT - 1000;
-  assert.equal(mayCollectFee(oneSecondBefore), false);
-  // And the date alone is not enough while the flag is off, which it is.
-  assert.equal(mayCollectFee(FEES_EFFECTIVE_AT), false);
+test("no fee can be taken before the Terms take effect", () => {
+  // The flag is on now, so the date is the only thing holding the line --
+  // which is exactly why it exists as a separate lock.
+  assert.equal(mayCollectFee(FEES_EFFECTIVE_AT - 1000), false);
+  assert.equal(mayCollectFee(FEES_EFFECTIVE_AT - 1), false);
+  assert.equal(mayCollectFee(FEES_EFFECTIVE_AT), true);
+  assert.equal(mayCollectFee(FEES_EFFECTIVE_AT + 1000), true);
 });
 
-test("the effective date is 5 November 2026 at 00:00 UTC", () => {
-  assert.equal(new Date(FEES_EFFECTIVE_AT).toISOString(), "2026-11-05T00:00:00.000Z");
+test("the effective date is 15 October 2026 at 00:00 UTC", () => {
+  // The same instant the Terms give as their Effective Date. If one moves
+  // without the other, a fee is taken under a document not yet in force.
+  assert.equal(new Date(FEES_EFFECTIVE_AT).toISOString(), "2026-10-15T00:00:00.000Z");
 });

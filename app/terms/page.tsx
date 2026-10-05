@@ -7,14 +7,18 @@ export const viewport = buildViewport();
 
 const UPDATED = "5 October 2026";
 /**
- * When these Terms begin to govern. Until then the version dated
- * 16 September 2026 applies, and is served at /terms/2026-09-16.
+ * When these Terms begin to govern, and the instant fees may first be taken.
+ * Until then the version dated 16 September 2026 applies, and is served at
+ * /terms/2026-09-16.
  *
- * AFTER 5 NOVEMBER 2026: delete EFFECTIVE and the <notice> below. The archive
+ * This date and FEES_EFFECTIVE_AT in lib/pricing.ts are the same moment and
+ * must stay that way.
+ *
+ * AFTER 15 OCTOBER 2026: delete EFFECTIVE and the <notice> below. The archive
  * route stays live permanently -- it is what somebody checks when they want
  * to know what they actually agreed to.
  */
-const EFFECTIVE = "5 November 2026";
+const EFFECTIVE = "15 October 2026";
 
 const SECTIONS = [
   { n: 1, title: "What Veyro is" },
@@ -262,6 +266,16 @@ export default function Terms() {
           <p className="body">
             Veyro does not charge a platform fee solely because an account exists where no
             Qualifying Monthly Earnings have been generated.
+          </p>
+        </Sub>
+
+        <Sub title="Transition">
+          <p className="body">
+            The initial fee schedule set out in these Terms applies to users who first enter into
+            a Veyro agreement on or after the Effective Date. For users who entered into an
+            agreement with Veyro before the Effective Date, any new or increased Veyro fees will
+            become effective only after at least 30 days&rsquo; prior notice. Fees validly
+            incurred before the effective date of any change will not be altered retroactively.
           </p>
         </Sub>
 

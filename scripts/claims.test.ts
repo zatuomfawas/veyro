@@ -120,8 +120,46 @@ test("fees cannot be collected before the Terms take effect", () => {
   // The page says fees start on 5 November. The code must agree, or the page
   // is making a commitment the system can break.
   const pricing = claims("app/pricing/page.tsx");
-  assert.match(pricing, /Fees start on 5 November 2026/);
+  assert.match(pricing, /Fees start on 15 October 2026/);
   const lib = read("lib/pricing.ts");
-  assert.match(lib, /FEE_COLLECTION_ENABLED = false/);
+  // Collection is on from 15 October. The date guard is now the only lock,
+  // so the test asserts it is present and correct rather than that the flag
+  // is off.
+  assert.match(lib, /FEE_COLLECTION_ENABLED = true/);
+  assert.match(lib, /Date\.UTC\(2026, 9, 15, 0, 0, 0\)/);
   assert.match(lib, /FEES_EFFECTIVE_AT/);
+});
+
+test("the fee start date in code and in the Terms are the same instant", () => {
+  // The single most dangerous thing that can drift in this codebase.
+  //
+  // FEES_EFFECTIVE_AT decides when money may be taken; EFFECTIVE on /terms
+  // decides when the document that provides for it is in force. If one moves
+  // without the other, Veyro either charges under Terms not yet operative, or
+  // publishes an obligation it is not yet enforcing. Both are the kind of
+  // mistake nobody notices until somebody is owed a refund.
+  const lib = read("lib/pricing.ts");
+  const terms = read("app/terms/page.tsx");
+
+  const m = lib.match(/FEES_EFFECTIVE_AT = Date\.UTC\((\d+), (\d+), (\d+)/);
+  assert.ok(m, "FEES_EFFECTIVE_AT is not in the form this test can read");
+  const [, y, mo, d] = m;
+  const iso = new Date(Date.UTC(Number(y), Number(mo), Number(d))).toISOString();
+  assert.equal(iso, "2026-10-15T00:00:00.000Z");
+
+  const e = terms.match(/const EFFECTIVE = "([^"]+)"/);
+  assert.ok(e, "EFFECTIVE is missing from the Terms");
+  assert.equal(e[1], "15 October 2026");
+});
+
+test("the annual summary is scheduled for 5 January, not 1 January", () => {
+  // Four days of slack so a payment made on 31 December has time to settle.
+  // A summary mailed before its webhooks land disagrees with the dashboard
+  // permanently, and it is a document people keep.
+  const vercel = JSON.parse(read("vercel.json"));
+  const job = vercel.crons.find((c: { path: string }) => c.path === "/api/cron/annual-summary");
+  assert.ok(job, "the annual summary cron is not registered");
+  const [, , day, month] = job.schedule.split(" ");
+  assert.equal(day, "5", "the summary must go out on the 5th");
+  assert.equal(month, "1", "the summary must go out in January");
 });

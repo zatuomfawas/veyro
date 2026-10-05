@@ -53,7 +53,7 @@ export const FAQ: FaqEntry[] = [
     a: (
       <>
       Nothing under $100 a month in earnings, which is most people. Above that, 3% on the
-      amount over $100, and <strong>fees start on 5 November 2026</strong> &mdash; nothing is
+      amount over $100, and <strong>fees start on 15 October 2026</strong> &mdash; nothing is
       charged before then. The core product is the same either way: account setup, the dashboard,
       payouts, account status monitoring and support. Some extra services switch on in the months
       you earn above $100.{" "}

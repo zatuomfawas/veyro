@@ -1,5 +1,5 @@
 // The Terms as they stood before counsel's October rewrite, kept at a stable
-// URL because they govern until the new ones take effect on 5 November 2026.
+// URL because they govern until the new ones take effect on 15 October 2026.
 //
 // The clause text below is restored unchanged from git (23ff1e6^, the last
 // commit before the rewrite began). Do not edit it. If something here is
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: "Terms of Service, 16 September 2026 (superseded)",
   description:
     "The Veyro Terms of Service dated 16 September 2026, kept for reference. "
-    + "These govern until the Terms dated 5 October 2026 take effect on 5 November 2026.",
+    + "These govern until the Terms dated 5 October 2026 take effect on 15 October 2026.",
   alternates: { canonical: SITE + "/terms/2026-09-16" },
   // Not indexed: search should land on the current Terms, and two near
   // identical legal documents in an index is how people read the wrong one.
@@ -54,7 +54,7 @@ export default function TermsArchive() {
         <strong>This is a superseded version, kept for reference.</strong>
         <p style={{ margin: "6px 0 0" }}>
           These Terms are dated 16 September 2026 and govern until{" "}
-          <strong>5 November 2026</strong>. From that date the{" "}
+          <strong>15 October 2026</strong>. From that date the{" "}
           <Link className="linkbtn" href="/terms">current Terms</Link> apply.
         </p>
       </div>

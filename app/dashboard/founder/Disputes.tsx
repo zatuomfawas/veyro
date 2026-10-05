@@ -16,7 +16,7 @@ import { disputeUrl, guidanceFor, DISPUTE_DISCLAIMER, EVIDENCE_HONESTY } from "@
 // The guidance below the link is the enhanced service and is shown only to
 // eligible accounts. What is NOT gated is knowing the dispute exists: every
 // founder sees the row, the reason and the deadline, because that is the
-// baseline the Terms promise from 5 November.
+// baseline the Terms promise from the Effective Date.
 
 export type DisputeRow = {
   id: string;

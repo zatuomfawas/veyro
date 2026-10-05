@@ -86,8 +86,8 @@ export function qmeMonthKey(stripeCreatedUnixSeconds: number): string {
  * switch says. Flipping the flag early cannot take a fee, because the guard
  * below is the thing the collection path has to get past.
  */
-export const FEES_EFFECTIVE_AT = Date.UTC(2026, 10, 5, 0, 0, 0); // 5 Nov 2026, 00:00 UTC
-export const FEE_COLLECTION_ENABLED = false;
+export const FEES_EFFECTIVE_AT = Date.UTC(2026, 9, 15, 0, 0, 0); // 15 Oct 2026, 00:00 UTC
+export const FEE_COLLECTION_ENABLED = true;
 
 /** Whether a fee may lawfully be taken at `nowMs`. Both locks must agree. */
 export function mayCollectFee(nowMs: number = Date.now()): boolean {

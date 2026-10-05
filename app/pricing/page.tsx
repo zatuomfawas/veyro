@@ -70,6 +70,11 @@ export const metadata: Metadata = {
 // something still missing, it fails too.
 type Item = readonly [name: string, detail: string, soon?: true];
 
+// The label a not-yet-built line carries. One constant, because the same words
+// appeared in three places and went stale in all of them the first time the
+// launch date moved.
+const SOON_LABEL = "From 15 October";
+
 const INCLUDED: readonly Item[] = [
   ["Core payment functionality", "Getting your parent verified, the payment account open, and payments working."],
   ["Dashboard", "Your products, your ledger, your payout history."],
@@ -92,6 +97,10 @@ const ABOVE: readonly Item[] = [
   ["Direct Guardian Support", "Human support for your parent or legal guardian."],
   ["Annual Earnings & Payout Summary", "A record of a year's earnings and payouts. It is not tax advice."],
 ] as const;
+
+// Whether anything on either list is still unbuilt. Drives the sentence above
+// the free list, so it cannot claim a label exists when none does.
+const ANY_SOON = [...INCLUDED, ...ABOVE].some((i) => i[2]);
 
 export default function Pricing() {
   return (
@@ -143,7 +152,7 @@ export default function Pricing() {
           </p>
           <p className="deal-warn">
             The fee is taken when a payment succeeds. If you later refund that customer, the fee
-            isn&rsquo;t returned. <strong>Fees start on 5 November 2026.</strong>
+            isn&rsquo;t returned. <strong>Fees start on 15 October 2026.</strong>
           </p>
         </div>
 
@@ -159,16 +168,18 @@ export default function Pricing() {
             one column look like the deprived one, and here there isn't one. */}
         <h2 className="h3">What everyone gets</h2>
         <p className="body" style={{ marginTop: 8 }}>
-          Whatever you earn, including nothing. Anything marked
-          <span className="soon soon-inline">From 5 November</span> is not built yet, and says so
-          rather than letting you find out.
+          Whatever you earn, including nothing.{" "}
+          {ANY_SOON
+            ? <>Anything marked <span className="soon soon-inline">{SOON_LABEL}</span> is not
+               built yet, and says so rather than letting you find out.</>
+            : <>Every line here works today.</>}
         </p>
         <dl className="tierlist" style={{ marginTop: "var(--sp-5)" }}>
           {INCLUDED.map(([t, d, soon]) => (
             <div key={t}>
               <dt>
                 {t}
-                {soon ? <span className="soon">From 5 November</span> : null}
+                {soon ? <span className="soon">{SOON_LABEL}</span> : null}
               </dt>
               <dd>{d}</dd>
             </div>
@@ -187,7 +198,7 @@ export default function Pricing() {
             <div key={t}>
               <dt>
                 {t}
-                {soon ? <span className="soon">From 5 November</span> : null}
+                {soon ? <span className="soon">{SOON_LABEL}</span> : null}
               </dt>
               <dd>{d}</dd>
             </div>
@@ -270,7 +281,7 @@ export default function Pricing() {
           One thing to know before you take a payment: the fee is worked out and taken at the
           moment a payment succeeds. If you refund that customer afterwards, the fee is not
           returned to you. A refund does lower the running total used to decide whether later
-          payments that month are charged at all. Fees start on 5 November 2026; nothing is
+          payments that month are charged at all. Fees start on 15 October 2026; nothing is
           charged before then.
         </p>
 

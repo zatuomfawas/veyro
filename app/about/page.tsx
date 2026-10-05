@@ -73,7 +73,7 @@ const COMMITMENTS: { head: string; body: React.ReactNode }[] = [
     body: (
       <>
         Free under $100 a month in earnings, and 3% on whatever is above that, starting
-        5 November 2026. The core product is the same whether you are paying us or not; some
+        15 October 2026. The core product is the same whether you are paying us or not; some
         extra services switch on in the months you are above the line. A dormant account costs us nothing, which is why the free limit is
         genuinely free rather than something paid users subsidise. Card processing fees are
         charged on top by the payment processor, which sets and deducts them.

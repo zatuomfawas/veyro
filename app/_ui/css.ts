@@ -1197,7 +1197,8 @@ export const CSS = `
   .fw .lfrail { display:none; }
 }
 
-/* "From 5 November" on a feature that is not built yet. Quiet enough not to
+/* The label on a feature that is not built yet, e.g. "From 15 October".
+   Quiet enough not to
    read as a badge of honour, loud enough that nobody misses it: this is the
    difference between a promise and a plan. */
 .fw .soon { display:inline-block; margin-left:8px; padding:1px 7px;

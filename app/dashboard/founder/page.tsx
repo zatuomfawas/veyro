@@ -406,7 +406,7 @@ export default async function FounderDashboard() {
             currency={primaryFold?.currency ?? "USD"}
             collecting={collecting}
             crossed={crossedThreshold}
-            feesStart="5 November 2026"
+            feesStart="15 October 2026"
           />
 
           {/* Context, not content. Figures a founder glances at, so they sit on

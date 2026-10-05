@@ -6,7 +6,9 @@ import { FREE_LIMIT_MINOR } from "@/lib/fees";
 // Shown whether or not fee collection is on. With it off the figure is what
 // the fee WOULD be, labelled as such -- that is how the engine gets verified
 // against real traffic before anybody is charged, and it means a founder is
-// never surprised by a number appearing for the first time on 5 November.
+// never surprised by a number appearing for the first time on the day it
+// starts costing them. The date itself comes in as a prop, so this file
+// does not need changing when it moves.
 //
 // The crossing notice (F2) lives here rather than in its own banner because
 // this is where somebody looks to find out where they stand. It is a fact
