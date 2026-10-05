@@ -1197,6 +1197,13 @@ export const CSS = `
   .fw .lfrail { display:none; }
 }
 
+/* A titled sub-part of a legal clause. Enough space above it to read as a
+   division rather than as an emphasised line in the preceding paragraph. */
+.fw .subclause { margin-top:var(--sp-6); }
+.fw .subclause:first-of-type { margin-top:var(--sp-5); }
+.fw .subclause > h3 { margin:0 0 var(--sp-2); }
+.fw .subclause > p:first-of-type { margin-top:0; }
+
 /* ==== margin notes =======================================================
    The right track. An aside that was interrupting the argument -- a date, a
    caveat, a figure worth knowing but not worth a paragraph -- sits beside it

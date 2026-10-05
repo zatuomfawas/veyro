@@ -6,7 +6,6 @@ import { Notice } from "@/app/_ui/form";
 import { ScrollProgress } from "@/app/_ui/ScrollProgress";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
-import { SectionRail } from "@/app/_ui/SectionRail";
 import { MarginNote } from "@/app/_ui/MarginNote";
 
 export const SUPPORT_EMAIL = "hello@withveyro.com";
@@ -62,8 +61,7 @@ export function LegalShell({
         </div>
       </div>
 
-      <main id="main" className="wrap-lp longform has-rail" style={{ paddingTop: 40, paddingBottom: 56 }}>
-        <SectionRail label="Clauses" />
+      <main id="main" className="wrap-lp longform" style={{ paddingTop: 40, paddingBottom: 56 }}>
         <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>{title}</h1>
         <p className="lead" style={{ marginTop: 12 }}>{lead}</p>
         <MarginNote head="Last updated">{updated}.</MarginNote>
@@ -131,6 +129,23 @@ export function LegalShell({
  * here from the contents list. Without it the header lands on top of the title
  * and you arrive mid-paragraph with no idea which clause you are in.
  */
+/**
+ * A named subsection inside a clause.
+ *
+ * Counsel's wording arrives as titled sub-parts -- "Legal Ownership", "Refunds
+ * and Reversals" -- and a clause that runs them together as paragraphs loses
+ * the structure a reader needs to cite one. The heading is h3 so it does not
+ * appear in the contents list, which indexes clauses.
+ */
+export function Sub({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="subclause">
+      <h3 className="h4">{title}</h3>
+      {children}
+    </div>
+  );
+}
+
 export function Clause({ n, title, children }: { n: number; title: string; children: React.ReactNode }) {
   return (
     <section
