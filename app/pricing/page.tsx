@@ -76,8 +76,8 @@ const INCLUDED: readonly Item[] = [
   ["Integration", "One snippet, and you can take a payment."],
   ["Stripe payouts", "Your money reaches your bank on Stripe's schedule for the account."],
   ["Account status monitoring", "We watch the account's standing and what the processor still wants, and show you both."],
-  ["Dispute notifications", "We tell you when a payment is disputed, with the amount, the reason and the deadline.", true],
-  ["Access to Stripe's dispute response process", "A direct route into the dispute, where the account holder can respond.", true],
+  ["Dispute notifications", "We tell you when a payment is disputed, with the amount, the reason and the deadline."],
+  ["Access to Stripe's dispute response process", "A direct route into the dispute, where the account holder can respond."],
   ["Standard support", "A person on the other end, for you and for your parent."],
 ] as const;
 

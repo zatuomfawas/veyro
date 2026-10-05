@@ -47,7 +47,7 @@ test("well above the limit, the running total always equals due(QME)", () => {
 test("a refund after the threshold lowers QME without returning the fee", () => {
   // Counsel's case one.
   let qme = 15000;
-  let collected = feeOnPaymentMinor(qme, 0);
+  const collected = feeOnPaymentMinor(qme, 0);
   assert.equal(collected, 150);
 
   qme -= 5000;                      // $50 refunded -> QME $100

@@ -19,6 +19,10 @@ import { redirect } from "next/navigation";
 import { buildViewport } from "@/lib/seo";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { currentMonthKey, hasCrossedLimit, isEligible, mayCollectFee } from "@/lib/fees";
+import { feeMinor as dueForQme } from "@/lib/pricing";
+import { ThisMonth } from "./ThisMonth";
+import { Disputes } from "./Disputes";
 import { foldWallet } from "@/lib/ledger";
 import { foldAnalytics } from "@/lib/analytics";
 import { consentState } from "@/lib/consent";
@@ -152,7 +156,7 @@ export default async function FounderDashboard() {
 
   const founderId = user.id;
 
-  const [consent, account, products, transactions, wallet, activity, payouts, notifications, analytics, weekRows, paymentCount] =
+  const [consent, account, products, transactions, wallet, activity, payouts, notifications, analytics, weekRows, paymentCount, monthLedger, disputes, eligibility] =
     await Promise.all([
     db.guardianConsent.findUnique({
       where: { founderId },
@@ -201,6 +205,17 @@ export default async function FounderDashboard() {
       select: { createdAt: true, amountMinor: true },
     }),
     db.founderTransaction.count({ where: { founderId, status: "COMPLETED" } }),
+    // This month's running totals, for the fee line. One row, already locked
+    // and maintained by the webhook -- never recomputed from transactions here.
+    db.monthlyLedger.findUnique({
+      where: { founderId_month: { founderId, month: currentMonthKey() } },
+    }),
+    db.founderDispute.findMany({
+      where: { founderId },
+      orderBy: [{ state: "asc" }, { openedAt: "desc" }],
+      take: 10,
+    }),
+    isEligible(founderId),
   ]);
 
   const state = consentState(consent);
@@ -230,6 +245,15 @@ export default async function FounderDashboard() {
     .slice(0, 5);
 
   const weekSeries = foldWeek(weekRows);
+
+  // This month, in USD minor units. The ledger is authoritative; a missing
+  // row simply means nothing has been earned this month yet.
+  const qmeMinor = monthLedger?.qmeMinor ?? 0;
+  const monthFeeMinor = dueForQme(qmeMinor);
+  const collecting = mayCollectFee();
+  // F2: the crossing is a fact about the month, shown while they are over the
+  // line -- not a banner to dismiss, because there is nothing to accept.
+  const crossedThreshold = hasCrossedLimit(qmeMinor);
 
   const firstLive = products.find((p) => p.status === "LIVE");
 
@@ -356,6 +380,15 @@ export default async function FounderDashboard() {
             />
           )}
 
+          <ThisMonth
+            qmeMinor={qmeMinor}
+            feeMinor={monthFeeMinor}
+            currency={primaryFold?.currency ?? "USD"}
+            collecting={collecting}
+            crossed={crossedThreshold}
+            feesStart="5 November 2026"
+          />
+
           {/* Context, not content. Figures a founder glances at, so they sit on
               a rule rather than inside four more bordered cards on a page whose
               whole problem is bordered cards. */}
@@ -402,6 +435,23 @@ export default async function FounderDashboard() {
             product id to be worth pasting -- deleting it would remove the
             ability to sell anything, not just the clutter. */}
           {/* ---------------- 6. transactions ---------------- */}
+          <Section title="Disputes">
+            <Disputes
+              rows={disputes.map((d) => ({
+                id: d.id,
+                stripeDisputeId: d.stripeDisputeId,
+                amountMinor: d.amountMinor,
+                currency: d.currency,
+                reason: d.reason,
+                state: d.state,
+                evidenceDueBy: d.evidenceDueBy?.toISOString() ?? null,
+                openedAt: d.openedAt.toISOString(),
+              }))}
+              eligible={eligibility.eligible}
+              guardianName={guardianName}
+            />
+          </Section>
+
           <Section title="Transactions">
             {transactions.length === 0 ? (
               /* Three situations, and the common one first. Veyro is the layer

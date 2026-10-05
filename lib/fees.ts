@@ -164,3 +164,20 @@ export async function isEligible(
 
 /** $100. Above this, and only above it, a month is chargeable. */
 export const FREE_LIMIT_MINOR = 10000;
+
+/**
+ * The current UTC month key, read once.
+ *
+ * Exists so a Server Component can ask for it without calling Date.now()
+ * itself: the purity rule treats a clock read during render as impure, and it
+ * is right to -- the same reason weekStart() lives in lib/week.ts rather than
+ * inline in the dashboard.
+ */
+export function currentMonthKey(): string {
+  return qmeMonthKey(Date.now() / 1000);
+}
+
+/** Whether this month's earnings have passed the free limit. */
+export function hasCrossedLimit(qmeMinor: number): boolean {
+  return qmeMinor > FREE_LIMIT_MINOR;
+}

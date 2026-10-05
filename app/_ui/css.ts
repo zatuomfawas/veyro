@@ -2786,6 +2786,41 @@ export const CSS2 = `
 .fw .pp-btn-d { display:block; margin-top:2px; font-size:var(--fs-2); color:var(--ink-3); }
 @media (prefers-reduced-motion: reduce) { .fw .pp-tick { transition:none; } }
 
+/* ==== this month, and disputes ===========================================
+   Two dashboard blocks that both carry money facts a founder has to be able
+   to take in at a glance, so both use the instrument type rather than prose. */
+.fw .month { margin-top:var(--sp-6); padding:var(--sp-5) 0;
+  border-top:1px solid var(--line); }
+.fw .month-line { display:flex; flex-wrap:wrap; align-items:baseline; gap:0 8px; }
+.fw .month-line .fig { display:inline; }
+.fw .month-sep { font-size:var(--fs-3); color:var(--ink-3); }
+.fw .month-free { font-size:var(--fs-3); color:var(--pine); font-weight:var(--fw-med); }
+.fw .month-line .fig[data-fee="1"] { color:var(--ink); }
+/* The crossing. Deliberately quiet: this is a fact about the month, not an
+   offer, and anything that looks like a sales banner would be exactly the
+   thing the brief says not to build. */
+.fw .month-crossed { margin-top:var(--sp-4); padding:var(--sp-4) var(--sp-5);
+  border-left:3px solid var(--pine); background:var(--surface);
+  font-size:var(--fs-3); line-height:1.55; }
+
+.fw .dispute { border:1px solid var(--line); background:var(--card);
+  padding:var(--sp-5); }
+.fw .dispute + .dispute { margin-top:var(--sp-4); }
+.fw .dispute-h { display:flex; align-items:center; justify-content:space-between;
+  gap:var(--sp-4); flex-wrap:wrap; }
+.fw .dispute-h .fig { display:inline; }
+/* A deadline is the one thing on this panel that can cost somebody money by
+   being missed, so it is the one thing drawn in the warning colour. */
+.fw .dispute-due { margin:var(--sp-3) 0 0; padding-left:var(--sp-4);
+  border-left:3px solid var(--amber); font-size:var(--fs-3); line-height:1.55;
+  color:var(--ink); }
+.fw .dispute-help { margin-top:var(--sp-4); padding-top:var(--sp-4);
+  border-top:1px solid var(--line-soft); }
+@media (max-width:560px) {
+  .fw .dispute { padding:var(--sp-4); }
+  .fw .month-line { gap:0 6px; }
+}
+
 /* ==== the deal, and the sum ==============================================
    Pricing used to be two bordered panels side by side, which is a comparison
    whether or not you mean it as one: the eye reads two boxes as two things to
