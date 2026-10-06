@@ -1084,12 +1084,35 @@ export const CSS = `
   display:grid; column-gap:var(--lf-gap); justify-content:center;
   grid-template-columns:
     [full-start content-start] minmax(0, var(--m-body)) [content-end full-end]; }
+/* full-start sits AFTER the rail, not before it.
+   -------------------------------------------------------------------------
+   When the rail track was added, full-start stayed where it was -- at the
+   very left edge -- so every full-bleed block (.flow, .truthgrid, .paths,
+   .stage) spanned straight across the navigation. The rail is sticky, so the
+   collision only appeared once a reader scrolled far enough for one of those
+   blocks to draw level with it, which is why it survived a screenshot of the
+   top of the page and showed up immediately for somebody actually reading.
+   "Full" means the full reading area, never the furniture beside it. */
 .fw .longform.has-rail {
   grid-template-columns:
-    [full-start rail-start] var(--lf-rail)
-    [rail-end content-start] minmax(0, var(--m-body)) [content-end full-end]; }
+    [rail-start] var(--lf-rail)
+    [rail-end full-start content-start] minmax(0, var(--m-body)) [content-end full-end]; }
 /* Guarded, and the fallback is the note simply staying in the reading column
    rather than being placed on a track that does not exist. */
+/* A margin note must not size the row it lands in.
+   -------------------------------------------------------------------------
+   Auto-placed, a note occupies one row, and a row is as tall as its tallest
+   item -- so a 163px note beside a 29px heading grew that row to 163px and
+   punched the difference into the reading column as a hole. The note is in
+   the margin precisely so it does NOT disturb the prose; a note that pushes
+   the next heading down the page is doing the opposite of its job.
+
+   Spanning twenty rows spreads its height across the content beside it
+   instead of loading it onto one. Those rows already total far more than any
+   note is tall, so nothing grows. Near the foot of a page the span runs into
+   implicit rows, which are empty and free. */
+.fw .longform > .lfnote { grid-row: span 20; align-self:start; }
+
 @supports selector(:has(*)) {
   .fw .longform:has(> .lfnote) {
     grid-template-columns:
@@ -1097,8 +1120,8 @@ export const CSS = `
       [content-end note-start] var(--lf-note) [note-end full-end]; }
   .fw .longform.has-rail:has(> .lfnote) {
     grid-template-columns:
-      [full-start rail-start] var(--lf-rail)
-      [rail-end content-start] minmax(0, var(--m-body))
+      [rail-start] var(--lf-rail)
+      [rail-end full-start content-start] minmax(0, var(--m-body))
       [content-end note-start] var(--lf-note) [note-end full-end]; }
   .fw .longform > .lfnote { grid-column:note; }
 }
@@ -1156,7 +1179,21 @@ export const CSS = `
    A spine with the sections hanging off it. The fill is scroll position, so
    the line is both the decoration and the readout -- there is no separate
    progress bar because the list is already a vertical axis. */
-.fw .lfrail { grid-column:rail; grid-row:1 / -1; position:sticky;
+/* grid-row:1 / 600, and the number is not arbitrary.
+   -------------------------------------------------------------------------
+   grid-row:1 / -1 does NOT do what it reads like here. The -1 line means the
+   last line of the EXPLICIT grid, and this grid declares columns only -- so
+   with no explicit rows, -1 resolves to line 1 and the rail occupied a single
+   row. That row then sized itself to the rail's full height, which punched a
+   680px hole into the top of every railed page: the eyebrow sat in row 1 and
+   the heading was pushed into row 2, below the whole navigation.
+   
+   The rail has to span the content, and the content's row count is not known
+   at authoring time. 600 is comfortably past the largest page (how-it-works
+   has about a hundred children) and costs nothing: the extra rows are
+   implicit, auto-sized, empty, and row-gap on this grid is zero, so they add
+   no height whatsoever. */
+.fw .lfrail { grid-column:rail; grid-row:1 / 600; position:sticky;
   align-self:start; top:calc(var(--nav-h) + 28px);
   max-height:calc(100vh - var(--nav-h) - 72px);
   display:flex; flex-direction:column; min-width:0; }
@@ -1248,10 +1285,11 @@ export const CSS = `
    note gets one row, its grid area is that row's height, and there is nowhere
    for it to stick to -- it scrolls away like any other block while claiming
    to be pinned. Spanning every row gives it the page to move down. */
-.fw .lfnote[data-sticky="1"] { grid-row:1 / -1; align-self:start;
+.fw .longform > .lfnote[data-sticky="1"] { grid-row:1 / 600; align-self:start;
   position:sticky; top:calc(var(--nav-h) + 28px); }
 @media (max-width:1040px) {
-  .fw .lfnote[data-sticky="1"] { grid-row:auto; }
+  .fw .longform > .lfnote,
+  .fw .longform > .lfnote[data-sticky="1"] { grid-row:auto; }
 }
 @media (max-width:1040px) {
   .fw .lfnote { grid-column:content; border-top:0; border-left:2px solid var(--line);
