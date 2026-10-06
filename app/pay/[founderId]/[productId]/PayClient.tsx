@@ -25,9 +25,41 @@ type Props = {
 
 type Intent = { clientSecret: string; stripeAccount: string };
 
+/**
+ * Which theme the page is in, tracked rather than read once.
+ *
+ * The payment form is a cross-origin iframe, so it inherits nothing: every
+ * colour inside it has to be handed to Stripe explicitly. Without this the
+ * card form stayed white on a dark checkout -- the one part of the site a
+ * stylesheet cannot reach, and the only place where getting it wrong happens
+ * while somebody is typing their card number.
+ *
+ * Read in an effect, never during render. The attribute lives on <html> and is
+ * set by a script before paint, so reading it during render gives the server
+ * one answer and the client another, which is hydration error #418.
+ *
+ * The observer is what makes the toggle work mid-checkout. Stripe's <Elements>
+ * applies a changed `appearance` through elements.update(), so the form
+ * recolours in place rather than remounting -- a remount would discard a
+ * half-entered card.
+ */
+function useThemeIsDark(): boolean {
+  const [dark, setDark] = useState(false);
+  useEffect(() => {
+    const el = document.documentElement;
+    const read = () => setDark(el.getAttribute("data-theme") === "dark");
+    read();
+    const mo = new MutationObserver(read);
+    mo.observe(el, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => mo.disconnect();
+  }, []);
+  return dark;
+}
+
 export default function PayClient({ founderId, productId, amountLabel, intentHint }: Props) {
   const [intent, setIntent] = useState<Intent | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const dark = useThemeIsDark();
 
   // One id for this page load, so the server can tell a repeated request from
   // this browser apart from a different customer opening the same product.
@@ -95,15 +127,32 @@ export default function PayClient({ founderId, productId, amountLabel, intentHin
         clientSecret: intent.clientSecret,
         appearance: {
           // Match the design system rather than shipping Stripe's default look.
-          variables: {
-            colorPrimary: "#111315",
-            colorBackground: "#ffffff",
-            colorText: "#111315",
-            colorDanger: "#9c2b22",
-            borderRadius: "0px",
-            fontSizeBase: "14px",
-            spacingUnit: "4px",
-          },
+          // The values are the same literals the stylesheet's two themes use:
+          // --brand, --card, --ink and --clay, on each side.
+          theme: dark ? "night" : "stripe",
+          variables: dark
+            ? {
+              colorPrimary: "#e8eaec",
+              colorBackground: "#14171a",
+              colorText: "#e8eaec",
+              colorTextSecondary: "#aab1b7",
+              colorTextPlaceholder: "#8c949b",
+              colorDanger: "#e39089",
+              borderRadius: "0px",
+              fontSizeBase: "14px",
+              spacingUnit: "4px",
+            }
+            : {
+              colorPrimary: "#111315",
+              colorBackground: "#ffffff",
+              colorText: "#111315",
+              colorTextSecondary: "#4a4f54",
+              colorTextPlaceholder: "#6b7075",
+              colorDanger: "#9c2b22",
+              borderRadius: "0px",
+              fontSizeBase: "14px",
+              spacingUnit: "4px",
+            },
         },
       }}
     >

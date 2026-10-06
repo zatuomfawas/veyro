@@ -1456,7 +1456,7 @@ export const CSS = `
 @media (max-width:900px) { .fw .reality { grid-template-columns:1fr; gap:0; } }
 .fw .lp-eyebrow { display:block; font-size:var(--fs-2); font-weight:var(--fw-med); letter-spacing:0.02em;
   color:var(--brand); }
-.fw .lp-dark .lp-eyebrow { color:#aeafaf; }
+.fw .lp-dark .lp-eyebrow { color:var(--ink-3); }
 .fw .sec-lead { max-width:62ch; }
 /* Five paragraphs ended on one short word — "fees.", "returns.", "name." —
    the worst at 32px under a 408px line. pretty is the property written for
@@ -1518,17 +1518,15 @@ export const CSS = `
 .fw .ddetail { display:block; font-size:var(--fs-2); color:#bcbdbd; margin-top:3px; max-width:56ch; }
 .fw .lp-dark .vd-ok { color:#a5bdb4; } .fw .lp-dark .vd-no { color:#d9aeab; }
 .fw .lp-dark .lp-note { color:#9b9c9d; }
-.fw .lp-dark .btn { background:var(--reverse); border-color:var(--reverse); color:var(--ink); }
-.fw .lp-dark .btn:hover { background:#fff; border-color:#fff; }
 /* On paper the secondary button is a lighter fill; on ink that reads as the
    same button twice, because both end up pale on dark. It becomes an outline
    here so the hierarchy survives the inversion — one filled, one drawn. */
-.fw .lp-dark .btn-2 { background:transparent; border-color:#676869; color:var(--reverse); }
-.fw .lp-dark .btn-2:hover { background:rgba(255,255,255,.09); border-color:var(--reverse); color:var(--reverse); }
-.fw .lp-dark .btn-2:active { background:rgba(255,255,255,.15); border-color:var(--reverse); }
-.fw .lp-dark .linkbtn { color:#e2e3e3; }
-.fw .lp-dark .linkbtn:hover { color:#ffffff; }
-.fw .lp-dark :focus-visible { outline-color:var(--reverse); }
+.fw .lp-dark .btn-2 { background:transparent; border-color:var(--control-line); color:var(--ink); }
+.fw .lp-dark .btn-2:hover { background:var(--surface); border-color:var(--ink); color:var(--ink); }
+.fw .lp-dark .btn-2:active { background:var(--surface-2); border-color:var(--ink); }
+.fw .lp-dark .linkbtn { color:var(--ink); }
+.fw .lp-dark .linkbtn:hover { color:var(--brand-h); }
+.fw .lp-dark :focus-visible { outline-color:var(--ink); }
 .fw .dlist li > span:last-child { margin-left:auto; }
 @media (max-width:900px) { .fw .ddemo-ctl { flex-direction:column; } }
 .fw .stagebar { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); border:1px solid var(--line);
@@ -1776,18 +1774,16 @@ export const CSS2 = `
 
    So only layout lives here, and the rail's tokens are set on .moneyband-rail
    below, which paints no background of its own. */
-.fw .moneyband .lp-h2 { color:var(--reverse); }
+.fw .moneyband .lp-h2 { color:var(--ink); }
 .fw .moneyband-h { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr);
   gap:var(--sp-7) var(--sp-10); align-items:end; }
 .fw .moneyband-lead { margin:0; font-size:var(--fs-4); line-height:1.6;
-  color:#bcbdbd; max-width:54ch; }
+  color:var(--ink-2); max-width:54ch; }
 /* The rail reads from four tokens and nothing else, so restating them here
    is the whole of making it work on a dark ground. Safe on this element: it
    has no background of its own to resolve against them. */
 .fw .moneyband-rail { margin-top:var(--sp-10); padding-top:var(--sp-8);
-  border-top:1px solid #2c2f31;
-  --line:#3a3e40; --ink:#f3f4f4; --ink-3:#9b9c9d; --brand:#5fb48f;
-  --paper:#111315; --control-line:#5a5e61; }
+  border-top:1px solid var(--line); }
 @media (max-width:900px) {
   .fw .moneyband-h { grid-template-columns:1fr; gap:var(--sp-5); align-items:start; }
   .fw .moneyband-rail { margin-top:var(--sp-7); padding-top:var(--sp-6); }
@@ -2043,7 +2039,9 @@ export const CSS2 = `
   font-weight:var(--fw-bold); }
 .fw .story-by { display:block; font-size:var(--fs-2); color:var(--ink-3); margin-top:var(--sp-5);
   font-weight:var(--fw-reg); letter-spacing:0; }
-.fw section.lp.lp-dark { background:var(--ink); }
+/* Specificity, not repetition: .fw section.ch sets background:transparent at
+   (0,2,1) and would otherwise beat the .lp-dark rule's (0,2,0). */
+.fw section.lp.lp-dark { background:var(--paper); }
 .fw section.lp:first-of-type { border-top:0; }
 .fw .skiplink { position:absolute; left:-9999px; top:0; z-index:200; background:var(--brand); color:var(--reverse);
   padding:10px 16px; font-size:var(--fs-3); font-weight:var(--fw-bold); }
@@ -2249,7 +2247,63 @@ export const CSS2 = `
 .fw .hrow:first-child { border-top:0; padding-top:2px; }
 .fw .hrow-t { display:block; font-size:var(--fs-3); font-weight:var(--fw-med); }
 .fw .hrow-s { display:block; font-size:var(--fs-1); color:var(--ink-3); margin-top:1px; }
-.fw .lp-dark { background:var(--ink); border-top:0; }
+/* The inverted band.
+   It used to be "the dark band", hard-coded: a near-black ground with pale
+   greys written into every rule inside it. That made it the one part of the
+   page that ignored the theme switch -- in dark mode it stayed black, so the
+   most prominent black thing on the site was the thing that would not turn
+   white.
+
+   It is now a scope that redefines its own tokens to the OPPOSITE of whatever
+   theme is running: dark on a light page, light on a dark one. Everything
+   inside already reads from --ink, --paper, --line and the rest, so inverting
+   the band is this block and nothing else -- the eyebrow, the heading, the
+   lead, the buttons and the rail all follow without a single rule of their
+   own.
+
+   Redefining a custom property on an element does apply to that element, so
+   grounding it with var(--paper) below picks up the value set here. That is
+   the trap the money band hit once: it grounded itself with var(--ink) while
+   redefining --ink on the same element, and came out white. Ground from the
+   token that names the ground. */
+.fw .lp-dark {
+  --paper:#111315; --surface:#1a1d20; --surface-2:#232629; --card:#191c1f;
+  --ink:#f3f4f4; --ink-2:#bcbdbd; --ink-3:#9b9c9d;
+  --reverse:#111315;
+  --brand:#f3f4f4; --brand-h:#ffffff; --brand-a:#ffffff;
+  --line:#3a3e40; --line-soft:#2c2f31; --line-hover:#4a4f52; --control-line:#5a5e61;
+  --placeholder:#9b9c9d;
+  --select-bg:#2e3841; --scrim:rgba(0,0,0,.62);
+  --pine:#5fb48f; --pine-h:#7cc9a6; --pine-bg:#12251e; --pine-line:#245040;
+  --amber:#d9a441; --amber-bg:#2a2112; --amber-line:#4f3f19;
+  --slate:#83aadb; --slate-bg:#15202e; --slate-line:#294660;
+  --clay:#e39089; --clay-bg:#2b1917; --clay-line:#5d322c; --clay-a:#3a201d;
+  --track-free:#163027; --track-rest:#24282c;
+  --skel-block:#383d42;
+  --nav-veil:rgba(15,17,19,.88);
+  color-scheme: dark;
+  background:var(--paper); color:var(--ink); border-top:0; }
+
+/* The same band on a dark page, where the inverse is the light set. These are
+   the light theme's own values, restated: a band that is the opposite of its
+   surroundings in both directions is what makes the two themes mirror rather
+   than one of them having a black stripe the other does not. */
+[data-theme="dark"] .fw .lp-dark {
+  --paper:#ffffff; --surface:#f7f7f6; --surface-2:#eeeeec; --card:#ffffff;
+  --ink:#111315; --ink-2:#4a4f54; --ink-3:#61666b;
+  --reverse:#ffffff;
+  --brand:#111315; --brand-h:#2b2f33; --brand-a:#000000;
+  --line:#e3e3e0; --line-soft:#eeeeec; --line-hover:#d4d4d1; --control-line:#878d92;
+  --placeholder:#6b7075;
+  --select-bg:#e2e3e3; --scrim:rgba(17,19,21,.32);
+  --pine:#12513a; --pine-h:#0b3a29; --pine-bg:transparent; --pine-line:#acc2ba;
+  --amber:#8a5a12; --amber-bg:transparent; --amber-line:#cdb899;
+  --slate:#22456b; --slate-bg:transparent; --slate-line:#adbac8;
+  --clay:#9c2b22; --clay-bg:transparent; --clay-line:#d5a6a2; --clay-a:#f3e6e4;
+  --track-free:#e4efe9; --track-rest:#ececeb;
+  --skel-block:#c5c8cb;
+  --nav-veil:rgba(255,255,255,.88);
+  color-scheme: light; }
 /* When the dark band is the last thing on the page, main's tail padding would
    show a strip of paper beneath it and make the band look misplaced rather
    than like the floor of the page. It absorbs that padding instead, so the
@@ -2265,9 +2319,6 @@ export const CSS2 = `
 @media (max-width:900px) {
   .fw main > section.lp-dark.ch-9:last-child { padding-bottom:calc(58px + var(--tail)); }
 }
-.fw .lp-dark .d1, .fw .lp-dark .d2, .fw .lp-dark h2, .fw .lp-dark .statement { color:var(--reverse); }
-.fw .lp-dark .body, .fw .lp-dark .small, .fw .lp-dark .lead { color:#bcbdbd; }
-.fw .lp-dark .tiny { color:#9b9c9d; }
 .fw .lp-center { text-align:center; }
 .fw .lp-center .mark { margin-left:auto; margin-right:auto; }
 .fw .lp-center .statement, .fw .lp-center .statement-sub, .fw .lp-center .d2 { margin-left:auto; margin-right:auto; }
@@ -3253,8 +3304,6 @@ export const CSS2 = `
    request" a black panel on a white dashboard, and the one thing on the page
    that ignored the theme switch. It is an ordinary surface now and inverts
    with everything else. */
-[data-theme="dark"] .fw section.lp.lp-dark { background:#080a0b; border:1px solid var(--line);
-  color:#e8eaec; }
 
 /* The toggle itself. A button, not a checkbox: it performs an action rather
    than recording a value, and it says which mode it will switch TO. */
@@ -3264,12 +3313,6 @@ export const CSS2 = `
    everywhere except here, where the ground did not invert with it. The
    headline figure went near-black on near-black. The panels state their own
    ink rather than inheriting a token whose meaning flipped underneath them. */
-[data-theme="dark"] .fw .lp-dark .lp-h2,
-[data-theme="dark"] .fw .lp-dark h2,
-[data-theme="dark"] .fw .lp-dark .d1,
-[data-theme="dark"] .fw .lp-dark .d2,
-[data-theme="dark"] .fw .lp-dark .statement { color:#e8eaec; }
-[data-theme="dark"] .fw .lp-dark .btn { background:#e8eaec; border-color:#e8eaec; color:#0f1113; }
 /* The theme switch. Square, because every other edge on this site is square
    and a pill here would read as imported from somewhere else. The track is a
    control boundary, so it takes --control-line and its 3:1, not --line.
@@ -3298,7 +3341,7 @@ export const CSS2 = `
 @media (pointer: coarse) { .fw .themeswitch { min-height:var(--tap); min-width:var(--tap); } }
 
 .fw .lp-tall { padding:var(--sp-10) 0; }
-.fw .lp-dark .statement-sub { color:#bcbdbd; }
+.fw .lp-dark .statement-sub { color:var(--ink-2); }
 /* The mark's own stroke angle, reused as a section divider */
 @media (max-width:760px) {
   .fw .lp-tall { padding:var(--sp-9) 0; }
