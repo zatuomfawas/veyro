@@ -25,11 +25,11 @@ import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
 import { audit } from "@/lib/auth";
-import { applyFeeForPayment, reduceQme } from "@/lib/fees";
+import { applyFeeForPayment, reduceQme, dueForQme, mayCollectFee } from "@/lib/fees";
 import { mapDisputeState } from "@/lib/disputes";
 import { notifyDispute } from "@/lib/dispute-notify";
 import { syncAccountFromStripe } from "@/lib/stripe-account";
-import { sendPaymentNotification } from "@/lib/email";
+import { sendPaymentNotification, sendThresholdEmail } from "@/lib/email";
 import { formatMinor } from "@/lib/money";
 
 export const runtime = "nodejs";
@@ -341,6 +341,24 @@ async function recordPayment(event: Stripe.Event): Promise<void> {
     const founder = await db.user.findUnique({ where: { id: founderId } });
     if (founder) {
       await sendPaymentNotification(founder.email, tx.amountMinor, tx.currency, founderId);
+
+      // F2. Outside the transaction, deliberately: a mail provider being slow
+      // must not hold a row lock that every other payment for this account is
+      // queued behind, and a send that fails must not roll back the payment
+      // that caused it. Which payment sends it was already decided under the
+      // lock, so this is only the sending.
+      if (fee?.crossedNow) {
+        await sendThresholdEmail(
+          founder.email,
+          {
+            qmeMinor: fee.qmeAfterMinor,
+            feeMinor: dueForQme(fee.qmeAfterMinor),
+            month: fee.month,
+            collecting: mayCollectFee(),
+          },
+          founderId,
+        );
+      }
     }
     await db.notification.create({
       data: {

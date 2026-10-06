@@ -21,9 +21,24 @@
 import { Resend } from "resend";
 import { audit } from "./auth";
 import { formatMinor } from "./money";
+// From pricing rather than fees: lib/fees.ts reaches for the database client,
+// and this module has to stay loadable without one.
+import { FREE_FLOOR_MINOR as FREE_LIMIT_MINOR, FEES_EFFECTIVE_LABEL } from "./pricing";
+import { textToHtml } from "./email-html";
 
-const FROM = "Veyro <noreply@withveyro.com>";
-const REPLY_TO = "hello@withveyro.com";
+// One address, sending and receiving.
+//
+// It used to send as noreply@ and set Reply-To to hello@. That worked, but it
+// asks the reader to trust a header their mail client may not show: the name
+// on the message said "do not reply" while the footer invited a reply. Sending
+// as the inbox a person actually reads makes the invitation true at a glance,
+// and removes the commonest reason transactional mail gets filtered -- a
+// From address that accepts no mail.
+//
+// Both halves are the same constant so they cannot drift apart.
+const SUPPORT_INBOX = "hello@withveyro.com";
+const FROM = `Veyro <${SUPPORT_INBOX}>`;
+const REPLY_TO = SUPPORT_INBOX;
 
 /**
  * The public origin, for links inside emails.
@@ -65,6 +80,7 @@ async function send(
       subject,
       replyTo: REPLY_TO,
       text,
+      html: textToHtml(text),
       ...(attachments?.length ? { attachments } : {}),
     });
 
@@ -247,6 +263,71 @@ export function sendPaymentNotification(
       + `Your wallet: ${SITE}/dashboard/founder`
       + SIGNOFF,
     { action: "email.payment_sent", founderId, meta: { amountMinor, currency } },
+  );
+}
+
+/* ---------------- passed the free limit ---------------- */
+
+/**
+ * The month just went over $100 (F2).
+ *
+ * A notice, not an offer. The dashboard panel this mirrors was written with
+ * no button and no "upgrade" on purpose, and the email keeps that: there is
+ * nothing to accept, because the services apply in any month that is over the
+ * line whether or not anybody reads this.
+ *
+ * It branches on `collecting` for one reason that matters more than tone.
+ * Until the Terms introducing the fee are in force, passing $100 costs
+ * nothing, and an email that implied otherwise would be claiming money was
+ * owed under a document that does not yet govern. Before the date it says
+ * what the fee WILL be and when; after it, what it IS.
+ *
+ * The services are named and not described. The detail lives on the dashboard
+ * and in the Terms, and restating it in a third place is how a promise we can
+ * keep turns into one we cannot -- on Standard connected accounts the payout
+ * schedule belongs to the account holder, so "support" is the honest word and
+ * anything stronger would be wrong.
+ *
+ * @param qmeMinor this month's qualifying earnings, USD minor units
+ * @param feeMinor what the month owes so far, USD minor units. Shown as a
+ *   real figure when collecting, and as the future figure when not.
+ */
+export function sendThresholdEmail(
+  founderEmail: string,
+  args: { qmeMinor: number; feeMinor: number; month: string; collecting: boolean },
+  founderId: string,
+) {
+  const qme = formatMinor(args.qmeMinor, "USD");
+  const fee = formatMinor(args.feeMinor, "USD");
+  const limit = formatMinor(FREE_LIMIT_MINOR, "USD");
+
+  const money = args.collecting
+    ? `The first ${limit} of every month is free, and 3% applies to the amount above it. `
+      + `So far this month that is ${fee}.\n\n`
+      + "It is taken from payments as they arrive, not billed to you separately, and it is "
+      + "only ever charged on the amount over the line."
+    : `Nothing is being charged. Veyro's fee starts on ${FEES_EFFECTIVE_LABEL}, and from then `
+      + `it is 3% of the amount above ${limit} in a month. On this month's earnings so far `
+      + `that would be ${fee}.\n\n`
+      + `The first ${limit} of a month is always free.`;
+
+  return send(
+    founderEmail,
+    `You've passed ${limit} this month`,
+    `Your earnings this month have reached ${qme}.\n\n`
+      + money
+      + "\n\n"
+      + "Payout support and priority support apply for the rest of the month. There is nothing "
+      + "to accept \u2014 they apply in any month you are over the line.\n\n"
+      + `Your dashboard: ${SITE}/dashboard/founder\n`
+      + `What this costs: ${SITE}/pricing`
+      + SIGNOFF,
+    {
+      action: "email.threshold_sent",
+      founderId,
+      meta: { qmeMinor: args.qmeMinor, feeMinor: args.feeMinor, month: args.month,
+        collecting: args.collecting },
+    },
   );
 }
 

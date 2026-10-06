@@ -18,7 +18,8 @@
 //                 and the date one cannot be overridden by the flag.
 import { Prisma } from "@/generated/prisma/client";
 import { db } from "@/lib/db";
-import { feeMinor, feeOnPaymentMinor, qmeMonthKey, mayCollectFee } from "@/lib/pricing";
+import { feeMinor, feeOnPaymentMinor, qmeMonthKey, mayCollectFee, crossedFreeLimit }
+  from "@/lib/pricing";
 
 export { qmeMonthKey, mayCollectFee };
 
@@ -41,8 +42,11 @@ async function lockMonth(tx: Tx, founderId: string, month: string) {
     update: {},
   });
   const rows = await tx.$queryRaw<
-    { id: string; qmeMinor: number; feeCollectedMinor: number; feeReservedMinor: number }[]
-  >`SELECT id, "qmeMinor", "feeCollectedMinor", "feeReservedMinor"
+    {
+      id: string; qmeMinor: number; feeCollectedMinor: number; feeReservedMinor: number;
+      thresholdNotifiedAt: Date | null;
+    }[]
+  >`SELECT id, "qmeMinor", "feeCollectedMinor", "feeReservedMinor", "thresholdNotifiedAt"
       FROM "MonthlyLedger"
      WHERE "founderId" = ${founderId} AND "month" = ${month}
      FOR UPDATE`;
@@ -61,6 +65,13 @@ export type FeeDecision = {
   alreadyCollectedMinor: number;
   /** False when the fee was computed but not taken, because collection is off. */
   collected: boolean;
+  /**
+   * True for the ONE payment that took this month past the free limit and
+   * found nobody had been told yet. The caller sends the email; this decides
+   * who sends it, and does so while holding the row lock so two concurrent
+   * payments cannot both decide they were the one.
+   */
+  crossedNow: boolean;
 };
 
 /**
@@ -90,11 +101,26 @@ export async function applyFeeForPayment(
   const fee = feeOnPaymentMinor(qmeAfterMinor, row.feeCollectedMinor);
   const collect = mayCollectFee(args.now ?? Date.now());
 
+  // The crossing is claimed here, under the lock, rather than by comparing
+  // before and after in the caller. The marker -- not the before figure -- is
+  // what makes it once per month: a refund can drop a month back under the
+  // limit and a later payment can carry it over again, and that is one month
+  // that passed $100, not two.
+  //
+  // Marking before the email is sent means a send that fails is not retried.
+  // That is the right way round: send() never throws and writes
+  // email.send_failed to the audit log, so a failure is visible, whereas
+  // marking afterwards would let two payments in the same second each send
+  // one. A missed notice is a gap; a duplicate is the product looking broken
+  // about money.
+  const crossedNow = crossedFreeLimit(qmeAfterMinor, row.thresholdNotifiedAt != null);
+
   await tx.monthlyLedger.update({
     where: { founderId_month: { founderId: args.founderId, month } },
     data: {
       qmeMinor: qmeAfterMinor,
       ...(collect ? { feeCollectedMinor: { increment: fee } } : {}),
+      ...(crossedNow ? { thresholdNotifiedAt: new Date() } : {}),
     },
   });
 
@@ -104,6 +130,7 @@ export async function applyFeeForPayment(
     feeMinor: fee,
     alreadyCollectedMinor: row.feeCollectedMinor,
     collected: collect && fee > 0,
+    crossedNow,
   };
 }
 

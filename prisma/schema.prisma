@@ -419,6 +419,14 @@ model MonthlyLedger {
   /// payment never succeeds.
   feeReservedMinor Int @default(0)
 
+  /// When the founder was emailed that this month passed the free limit.
+  /// Set inside the same locked transaction that records the crossing, so two
+  /// concurrent payments cannot both decide they were the one that crossed.
+  /// Null means not yet told; it is never cleared, so a refund that drops the
+  /// month back under the limit and a later payment that re-crosses it do not
+  /// produce a second email about the same month.
+  thresholdNotifiedAt DateTime?
+
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 

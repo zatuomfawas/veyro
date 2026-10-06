@@ -89,6 +89,39 @@ export function qmeMonthKey(stripeCreatedUnixSeconds: number): string {
 export const FEES_EFFECTIVE_AT = Date.UTC(2026, 9, 15, 0, 0, 0); // 15 Oct 2026, 00:00 UTC
 export const FEE_COLLECTION_ENABLED = true;
 
+/**
+ * Is this the payment that took the month past the free limit, and has
+ * nobody been told yet?
+ *
+ * Pure, and separated from the database work in lib/fees.ts, so the rule that
+ * decides how often a founder is emailed can be tested without standing a
+ * Postgres up. The caller is responsible for reading `alreadyNotified` and
+ * writing it back under the same row lock -- this function only decides.
+ *
+ * Note it is `>`, not `>=`. A month that earns exactly $100 is free and is
+ * not a crossing, which is the same boundary feeMinor() uses.
+ *
+ * `alreadyNotified` is what makes it once per month rather than once per
+ * crossing. A refund can drop a month back under the limit and a later
+ * payment can carry it over again; that is one month that passed $100, and
+ * one email.
+ */
+export function crossedFreeLimit(qmeAfterMinor: number, alreadyNotified: boolean): boolean {
+  return qmeAfterMinor > FREE_FLOOR_MINOR && !alreadyNotified;
+}
+
+/**
+ * The same instant, worded for a reader.
+ *
+ * Derived rather than typed out, because this string goes in an email that
+ * tells someone when they will start being charged, and a hand-copied date
+ * that drifts from the one the code enforces is the single worst sentence
+ * this product could send.
+ */
+export const FEES_EFFECTIVE_LABEL = new Date(FEES_EFFECTIVE_AT).toLocaleDateString("en-GB", {
+  day: "numeric", month: "long", year: "numeric", timeZone: "UTC",
+});
+
 /** Whether a fee may lawfully be taken at `nowMs`. Both locks must agree. */
 export function mayCollectFee(nowMs: number = Date.now()): boolean {
   return FEE_COLLECTION_ENABLED && nowMs >= FEES_EFFECTIVE_AT;
