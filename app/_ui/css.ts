@@ -1886,6 +1886,11 @@ export const CSS2 = `
 .fw section.lp { padding:var(--lp-pad) 0; border-top:1px solid var(--line);
   scroll-margin-top:calc(var(--nav-h) + var(--sp-4)); }
 .fw [id]:focus { outline:none; }
+/* An in-page link's landing spot.
+   The dashboard header is sticky, so an anchor with no scroll margin puts the
+   heading it precedes underneath it: you arrive having apparently scrolled to
+   the wrong place. Zero height, so it only ever moves where a scroll stops. */
+.fw .anchor { scroll-margin-top:calc(var(--nav-h) + var(--sp-4)); }
 .fw #main { scroll-margin-top:calc(var(--nav-h) + var(--sp-4)); }
 .fw section.lp:nth-of-type(even) { background:var(--surface); }
 

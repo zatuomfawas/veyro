@@ -41,6 +41,7 @@ import { DashNav, Section, EmptyState, SUPPORT_EMAIL, fmtDate } from "@/app/_ui/
 import InviteGuardian, { ResendInvite } from "./InviteGuardian";
 import Notifications from "@/app/_ui/Notifications";
 import { AddToApp } from "./AddToApp";
+import { RevealAnchor } from "./RevealAnchor";
 import RequestPayout from "./RequestPayout";
 import { EarningsHero } from "./EarningsHero";
 import { weekStart, foldWeek } from "@/lib/week";
@@ -330,6 +331,9 @@ export default async function FounderDashboard() {
     <div className="fw">
       <style>{CSS + CSS2}</style>
       <DashNav role="FOUNDER" current="dashboard" />
+      {/* Makes the in-page links reach targets inside the folded Account &
+          setup section. See RevealAnchor.tsx. */}
+      <RevealAnchor />
 
       <main id="main" className="wrap-w" style={{ paddingTop: 24, paddingBottom: 56 }}>
         {/* ---------------- header ---------------- */}
@@ -631,7 +635,7 @@ export default async function FounderDashboard() {
             )}
           </Section>
           {/* ---------------- payouts ---------------- */}
-          <div id="payouts" />
+          <div id="payouts" className="anchor" />
           <Section
             title="Payouts"
             aside={
@@ -759,7 +763,7 @@ export default async function FounderDashboard() {
               </Section>
   
               {/* ---------------- 2. guardian ---------------- */}
-              <div id="guardian" />
+              <div id="guardian" className="anchor" />
               <Section
                 title="Your guardian"
                 aside={
@@ -958,6 +962,7 @@ export default async function FounderDashboard() {
                   </div>
                 )}
               </Section>
+            <div id="products" className="anchor" />
             <Section title="Products">
               <p className="body" style={{ margin: 0 }}>
                 What people pay for, and the checkout link for each one, live on their
