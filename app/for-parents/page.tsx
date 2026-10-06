@@ -11,6 +11,8 @@ import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { GuardianPermissions } from "@/app/_ui/GuardianPermissions";
 import { ParentPanel } from "@/app/_ui/ParentPanel";
 import { MoneyRail } from "@/app/_ui/MoneyRail";
+import { MarginNote } from "@/app/_ui/MarginNote";
+import { supportMailto } from "@/lib/support";
 
 export const viewport = buildViewport();
 
@@ -39,18 +41,28 @@ export const metadata: Metadata = {
 // questions are in the order they are actually asked, and each answer leads
 // with the unwelcome half.
 
-type QA = { q: string; a: React.ReactNode };
+type QA = {
+  q: string;
+  /** Two or three words. The answer, before the reasoning. */
+  verdict: string;
+  /** pine = yes, amber = qualified, slate = not ours to answer. */
+  tone: "pine" | "amber" | "slate";
+  /** One sentence a reader can stop at and still have the truth. */
+  lead: string;
+  a: React.ReactNode;
+};
 
 const QUESTIONS: QA[] = [
   {
     q: "Is this legal?",
+    verdict: "Permitted, not settled",
+    tone: "amber",
+    lead:
+      "The processor's own written policy allows it. No court has ruled on it, and we are not going to pretend one has.",
     a: (
       <>
         <p className="body" style={{ marginTop: 0 }}>
-          The payment processor&rsquo;s own written policy permits someone aged 13 to 17 to hold a
-          connected account when a parent or legal guardian is the verified adult on it. That is
-          their guidance, not our reading of it, and it is quoted in full &mdash; named, dated and
-          unedited &mdash; on{" "}
+          That policy is quoted in full &mdash; named, dated and unedited &mdash; on{" "}
           <Link className="linkbtn" href="/how-it-works">how it works</Link>, and it is what this
           product is built on.
         </p>
@@ -67,13 +79,14 @@ const QUESTIONS: QA[] = [
   },
   {
     q: "Am I liable if it goes wrong?",
+    verdict: "Yes \u2014 and that is the point",
+    tone: "pine",
+    lead:
+      "You are the account owner, because an adult has to be the party anyone can actually hold to the agreement.",
     a: (
       <>
         <p className="body" style={{ marginTop: 0 }}>
-          You are the account owner. That is the honest answer and it is the point: an adult has
-          to be the enforceable party, because a contract with a minor is voidable at the
-          minor&rsquo;s election. It is you who gets identity-checked, not your child, and the
-          account exists in your name.
+          A contract with a minor is voidable at the minor&rsquo;s election, which is why the enforceable party has to be an adult. It is you who gets identity-checked, not your child, and the account exists in your name.
         </p>
         <p className="body" style={{ marginTop: 12 }}>
           In practice that means refunds, chargebacks and disputes on this account are ultimately
@@ -91,13 +104,14 @@ const QUESTIONS: QA[] = [
   },
   {
     q: "Does this mess up my taxes?",
+    verdict: "Possibly. Ask an accountant",
+    tone: "slate",
+    lead:
+      "Tax documentation for the account is issued against you. What that means for your household is a question for somebody who knows it.",
     a: (
       <>
         <p className="body" style={{ marginTop: 0 }}>
-          Possibly, and this is the question to take to an accountant rather than to a website.
-          Because you are the account owner, tax documentation the processor issues for the
-          account is issued against you. That is a real consequence of the arrangement and not something
-          to wave away.
+          That is a real consequence of the arrangement and not something to wave away. It follows from your being the account owner, which is the thing that makes the whole route lawful in the first place.
         </p>
         <p className="body" style={{ marginTop: 12 }}>
           What Veyro does is keep the two things separable: the account is for your child&rsquo;s
@@ -114,12 +128,14 @@ const QUESTIONS: QA[] = [
   },
   {
     q: "Can I stop it if I need to?",
+    verdict: "Yes, completely",
+    tone: "pine",
+    lead:
+      "You can close or freeze the account at any time, directly with the processor. Nothing in Veyro can prevent that.",
     a: (
       <>
         <p className="body" style={{ marginTop: 0 }}>
-          Yes. You own the account and you can close or freeze it at any time, with the processor
-          directly and not through us. Nothing in Veyro can prevent that, and nothing in Veyro is
-          designed to.
+          Nothing in Veyro is designed to prevent it either. The account is yours, and the route to closing it does not pass through us.
         </p>
         <p className="body" style={{ marginTop: 12 }}>
           What you do not do is approve each payout. You verify yourself once at setup, and after
@@ -180,6 +196,19 @@ export default function ForParents() {
             below cannot fix that as quickly as showing them. The controls are
             the part that matters: the fear is being locked in, and a visible
             Close the account answers it before the prose gets there. */}
+        {/* The one thing a parent may want at any point on this page, so it
+            stays with them rather than waiting at the bottom. It is also what
+            fills the right-hand track: the alternative was 236px of nothing
+            beside two thousand words about liability. */}
+        <MarginNote head="Rather talk to a person?" sticky>
+          <a className="linkbtn" href={supportMailto({
+            audience: "guardian", priority: false,
+            subject: "A question before I agree",
+          })}>Email us directly</a>{" "}
+          and a person replies &mdash; not a form, and not your child&rsquo;s account manager.
+          Reading all of this and still saying no is a perfectly good outcome.
+        </MarginNote>
+
         <ParentPanel />
 
         <p className="body" style={{ marginTop: "var(--sp-6)" }}>
@@ -194,12 +223,38 @@ export default function ForParents() {
 
         {/* Layer 3: the four questions, at length, for the reader who wants
             them. */}
-        {QUESTIONS.map((x, i) => (
-          <section key={x.q}>
-            <h2 className="h3" style={{ marginTop: i === 0 ? 0 : 36 }}>{x.q}</h2>
-            <div style={{ marginTop: 8 }}>{x.a}</div>
-          </section>
-        ))}
+        {/* Four answers, each readable at two depths.
+            ------------------------------------------------------------------
+            These were four headings with three paragraphs under each, stacked,
+            and nothing to catch the eye between the top of one and the top of
+            the next. A parent who has been sent a link by their kid and wants
+            to know whether this is a scam will not read eleven paragraphs to
+            find out -- they will scan, and a wall of prose gives them nothing
+            to scan.
+
+            So each one now states its answer before its reasoning: a verdict
+            in two or three words, then one sentence that is true on its own,
+            then the detail for whoever wants it. The verdict colours are the
+            product's own -- pine for yes, amber for a real caveat, slate for
+            a question that is not ours to answer -- so four of them read as a
+            summary of the whole page. */}
+        <ol className="qalist">
+          {QUESTIONS.map((x, i) => (
+            <li className="qa" key={x.q}>
+              <div className="qa-head">
+                <span className="fig-ref qa-n">{String(i + 1).padStart(2, "0")}</span>
+                <h2 className="qa-q">{x.q}</h2>
+              </div>
+              {/* A sibling of the flex row, not a member of it. Inside, the
+                  only way to drop the badge onto its own line was
+                  flex-basis:100%, which sets the flex base size -- so a
+                  three-word verdict stretched the width of the column. */}
+              <span className="chip qa-verdict" data-tone={x.tone} data-on="1">{x.verdict}</span>
+              <p className="qa-lead">{x.lead}</p>
+              <div className="qa-body">{x.a}</div>
+            </li>
+          ))}
+        </ol>
 
         <hr className="rule" style={{ margin: "36px 0 28px" }} />
 

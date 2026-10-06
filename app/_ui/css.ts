@@ -1715,6 +1715,47 @@ export const CSS2 = `
   text-wrap:balance; }
 .fw h1.hero-h { margin:0; }
 
+/* ==== the parents' four answers ==========================================
+   Each one states its answer before its reasoning, so the page can be read
+   in five seconds or in five minutes and is honest at both speeds.
+
+   The left rule is the device that makes four of these read as a set rather
+   than as four headings that happen to follow each other. It takes the
+   verdict's colour, so scanning the rules down the page gives the shape of
+   the answers before a word is read: amber, pine, slate, pine. */
+.fw .qalist { list-style:none; margin:0; padding:0; counter-reset:qa; }
+.fw .qa { position:relative; padding:0 0 0 var(--sp-6);
+  border-left:3px solid var(--line); }
+.fw .qa + .qa { margin-top:var(--sp-9); }
+.fw .qa:has(.chip[data-tone="pine"])  { border-left-color:var(--pine); }
+.fw .qa:has(.chip[data-tone="amber"]) { border-left-color:var(--amber); }
+.fw .qa:has(.chip[data-tone="slate"]) { border-left-color:var(--slate); }
+
+.fw .qa-head { display:flex; align-items:baseline; flex-wrap:wrap; gap:0 var(--sp-3); }
+.fw .qa-n { flex:none; }
+.fw .qa-q { margin:0; font-size:var(--fs-6); line-height:1.3;
+  letter-spacing:-0.016em; font-weight:var(--fw-bold); }
+/* The verdict sits on its own line below the question rather than beside it:
+   at these lengths a wrapped chip trailing a wrapped heading reads as debris.
+   It is a sibling of the flex row, not a member of it -- as a flex item the
+   only way to force the line break was flex-basis:100%, and that sets the
+   flex base size, so a three-word badge stretched the width of the column. */
+.fw .qa-verdict { display:inline-flex; margin-top:var(--sp-3); }
+
+/* The one sentence somebody can stop at. Larger than the detail beneath it
+   and darker, because it is the answer and the rest is the working. */
+.fw .qa-lead { margin:var(--sp-4) 0 0; font-size:var(--fs-5); line-height:1.5;
+  color:var(--ink); max-width:52ch; }
+/* And the detail, set back a step so the hierarchy survives being skimmed. */
+.fw .qa-body { margin-top:var(--sp-4); }
+.fw .qa-body > .body:first-child { margin-top:0; }
+
+@media (max-width:760px) {
+  .fw .qa { padding-left:var(--sp-5); }
+  .fw .qa + .qa { margin-top:var(--sp-8); }
+  .fw .qa-lead { font-size:var(--fs-4); }
+}
+
 /* ==== the money band ======================================================
    The dark break in the middle of the page. Built on .lp-dark's ground so
    the two dark sections agree, but laid out differently from the closing
