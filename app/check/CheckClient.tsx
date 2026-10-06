@@ -14,18 +14,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { CSS, CSS2 } from "@/app/_ui/css";
-import { Icon, Wordmark, SkipLink } from "@/app/_ui/marks";
 import { Btn, Field, Notice } from "@/app/_ui/form";
-
-function Brand({ onClick, size = 20 }: { onClick?: () => void; size?: number }) {
-  return (
-    <button className="brand" onClick={onClick} aria-label="Veyro, home"
-      style={{ background: "none", border: 0, cursor: onClick ? "pointer" : "default", padding: 0 }}>
-      <Wordmark size={size} tile />
-    </button>
-  );
-}
 
 /* ------------------------------------------------------------------ *
  * Eligibility
@@ -180,39 +169,35 @@ function EligibilityCheck({
   const ready = code !== "" && age !== null && age > 4 && age < 100 && (!regions || region !== "");
   const reset = () => setR(null);
 
-  const Shell = embedded ? "div" : "main";
-
+  // No Shell indirection any more. It existed to switch between <main> and
+  // <div>, and the page's <main> now lives in app/check/page.tsx along with
+  // the rest of the chrome -- so both branches had become "div", which is a
+  // ternary that has stopped deciding anything.
   return (
-    <Shell
-      {...(embedded ? {} : { id: "main", style: { minHeight: "100vh", background: "var(--surface)" } })}
-    >
+    <div className={embedded ? undefined : "ckpage"}>
       {!embedded && (
-        <div className="wrap-n"><div className="lp-nav" style={{ borderBottom: 0 }}>
-          <Brand onClick={() => go("landing")} />
-          <Btn variant="2" size="sm" onClick={() => go("landing")}>
-            <Icon name="back" size={13} />Back to home
-          </Btn>
-        </div></div>
+        <div className="wrap-lp ckhead">
+          <span className="lp-eyebrow">Eligibility</span>
+          <h1 className="ckhead-h">Check what applies to you</h1>
+          <p className="ckhead-lead">
+            Two questions. Where you live and when you were born decide which route is open, and
+            whether you need us at all. No account, no email address, and the answer is the same
+            whether it is yes or no.
+          </p>
+        </div>
       )}
-      <div
-        className={embedded ? undefined : "wrap-lp"}
-        style={embedded ? undefined : { marginTop: 8, marginBottom: 90 }}
-      >
-        {!embedded && (
-          <>
-            <h1 className="d2">Check what applies to you</h1>
-            <p className="lead" style={{ marginTop: 10 }}>
-              Where you live and how old you are decide which route is open, and whether you need
-              us at all. No account, no email address.
-            </p>
-          </>
-        )}
 
-        {/* Two questions do not fill a 1400px page, and the sourcing that
-            makes the answer worth anything was sitting a screen below it
-            where nobody reads it. Side by side: the tool, and what it is
-            standing on. One column again below 900. */}
-        <div className={embedded ? undefined : "ckgrid"}>
+        {/* The tool, centred and on its own.
+            ------------------------------------------------------------------
+            It was a narrow card in the left half of a two-column grid, with
+            the sourcing in the right half: a 240px box beside a 450px column,
+            neither aligned to the other, and the actual question a visitor
+            came to answer reduced to the smaller of two things on the page.
+
+            Two questions do not need a column layout. They need to be the
+            biggest thing on the screen, with the evidence underneath for
+            whoever wants it. */}
+        <div className={embedded ? undefined : "wrap-lp cktool"}>
         <div>
         <div className="card card-prose" style={{ marginTop: 20 }}><div className="card-b checkform">
           <Field label="Where do you live?">
@@ -370,13 +355,16 @@ function EligibilityCheck({
         {/* The workings belong on the page devoted to this question. On the
             landing page the section around this already links to them. */}
         </div>
+        </div>
 
-        {/* This used to be one ten-line paragraph carrying the whole of the
-            page's credibility, which is a lot to ask of a block nobody can
-            scan. Same facts, same numbers, given the room to be read: the
-            coverage as figures, the two filters as two things, and the
-            sourcing on its own where it can be checked. */}
-        {!embedded && <div className="cksource">
+        {/* The evidence, as a band across the page.
+            ------------------------------------------------------------------
+            It was one ten-line paragraph carrying the whole of the page's
+            credibility, which is a lot to ask of a block nobody can scan;
+            then it was a narrow right-hand column. Same facts, same numbers,
+            now given the full width underneath the tool -- which is also what
+            stops the page ending in six hundred pixels of nothing. */}
+        {!embedded && <div className="ckevidence"><div className="wrap-lp">
           <div className="lbl" style={{ marginBottom: "var(--sp-4)" }}>How we work this out</div>
 
           <div className="figrow">
@@ -401,27 +389,27 @@ function EligibilityCheck({
               <span className="fig-sub">Brazil, 18 and over only</span>
             </div>
           </div>
+          <div className="ckfilters">
 
-          <p className="tiny" style={{ marginTop: "var(--sp-6)", maxWidth: "var(--m-body)" }}>
+          <p className="tiny">
             <strong>Filter one is reach:</strong> how the payment provider gets to your country at all, which is
             what the four figures above divide up.
           </p>
-          <p className="tiny" style={{ marginTop: "var(--sp-3)", maxWidth: "var(--m-body)" }}>
+          <p className="tiny">
             <strong>Filter two is age:</strong> the age at which you can enter a binding contract where you live,
             because the provider&rsquo;s terms defer to local law rather than assuming 18. Scotland is 16, seven
             Canadian provinces and territories are 19, Mississippi is 21, and Singapore separates contracting age
             from adulthood entirely.
           </p>
-          <p className="tiny" style={{ marginTop: "var(--sp-3)", maxWidth: "var(--m-body)" }}>
+          <p className="tiny">
             <strong>Beyond those two, the route is treated as open.</strong> Stripe confirmed the mechanism to us
             directly on 8 September 2026, so we do not mark a country closed unless its own law sets a higher age
             or the provider carves it out. What Stripe would not confirm is availability country by country, and
             the result above says so where it applies. Terms change, and none of this is legal or tax advice.
           </p>
-        </div>}
-        </div>
-      </div>
-    </Shell>
+          </div>
+        </div></div>}
+    </div>
   );
 }
 
@@ -462,11 +450,8 @@ export default function CheckClient() {
     router.push(route === "signup" ? "/auth/signup" : "/");
   };
 
-  return (
-    <div className="fw">
-      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
-      <SkipLink />
-      <EligibilityCheck go={go} />
-    </div>
-  );
+  // No .fw wrapper, no stylesheet, no skip link: app/check/page.tsx provides
+  // all three along with the nav and the footer. Rendering them here as well
+  // nested one .fw inside another and put two skip links in the tab order.
+  return <EligibilityCheck go={go} />;
 }

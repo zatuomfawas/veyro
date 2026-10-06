@@ -2892,26 +2892,66 @@ export const CSS2 = `
 .fw .chip-sep { color:var(--ink-3); font-size:var(--fs-1); flex:none; }
 @media (prefers-reduced-motion: reduce) { .fw .chip { transition:none; } }
 
-/* ==== the eligibility page's two columns ==================================
-   A form with two fields and a page 1400px wide. Everything was stacked down
-   the left and the right half held nothing, which on the page that has to
-   look most trustworthy read as unfinished.
+/* ==== the eligibility checker ============================================
+   A page with one job, laid out so that job is the biggest thing on it.
 
-   The sourcing moves up beside the tool rather than a screen below it: the
-   figures that say how far the coverage goes are the reason to believe the
-   answer, and they were out of sight at the moment the answer appeared. */
-.fw .ckgrid { display:grid; gap:var(--sp-7) clamp(32px, 5vw, 72px);
-  grid-template-columns:minmax(0, 1fr) minmax(0, 0.85fr); align-items:start;
-  margin-top:var(--sp-5); }
-.fw .cksource { padding-left:clamp(0px, 2vw, 28px);
-  border-left:1px solid var(--line); }
-.fw .cksource .figrow { grid-template-columns:repeat(2, minmax(0,1fr)); }
-@media (max-width:900px) {
-  .fw .ckgrid { grid-template-columns:1fr; gap:var(--sp-7); }
-  .fw .cksource { padding-left:0; border-left:0; padding-top:var(--sp-6);
-    border-top:1px solid var(--line); }
-  .fw .cksource .figrow { grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); }
+   It has been wrong twice. First everything was stacked down the left of a
+   1400px page with the right half empty. Then it was two columns -- a 240px
+   form beside a 450px column of sourcing, neither aligned to the other, and
+   the question a visitor actually came to answer reduced to the smaller of
+   the two. Two questions do not need a column layout.
+
+   Now: a header, the tool centred under it at a width that suits a form
+   rather than an article, the answer directly beneath, and the evidence as a
+   band across the full width below. The band is also what stops the page
+   ending in six hundred pixels of nothing, which is what it did when the
+   content ran out at half the viewport height. */
+.fw .ckpage { background:var(--surface); }
+.fw .ckhead { padding:var(--sp-10) 0 var(--sp-8); text-align:center; }
+.fw .ckhead-h { margin:var(--sp-3) 0 0; font-size:clamp(30px, 4vw, 46px);
+  line-height:1.08; letter-spacing:-0.03em; font-weight:var(--fw-bold); }
+.fw .ckhead-lead { margin:var(--sp-5) auto 0; font-size:var(--fs-5); line-height:1.55;
+  color:var(--ink-2); max-width:58ch; }
+
+/* The tool. 640px is a form's width, not an article's -- wide enough for two
+   fields side by side and narrow enough that the Check button is never a
+   stretched bar the width of a desktop. */
+.fw .cktool { max-width:640px; margin-inline:auto; padding-bottom:var(--sp-10); }
+.fw .cktool .card { margin-top:0 !important; }
+/* Overrides the 46ch cap the shared card-prose rule puts on anything holding
+   a .checkform. That cap was written when this card sat in a wide column and
+   needed reining in; here the card IS the column. */
+.fw .cktool .card.card-prose { max-width:none; }
+.fw .cktool .card-b { padding:var(--sp-7); }
+/* Two fields across on anything wider than a phone. Stacked, a two-question
+   form is a tall thin ladder with a button at the bottom. */
+.fw .cktool .checkform { display:grid; grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:var(--sp-5); align-items:end; }
+.fw .cktool .checkform > .field:only-child { grid-column:1 / -1; }
+.fw .cktool .checkform > .btn,
+.fw .cktool .checkform > button { grid-column:1 / -1; justify-content:center; }
+@media (max-width:560px) {
+  .fw .cktool .checkform { grid-template-columns:1fr; gap:var(--sp-4); }
+  .fw .cktool .card-b { padding:var(--sp-5); }
+  .fw .ckhead { padding:var(--sp-8) 0 var(--sp-6); }
 }
+
+/* The evidence band. A different ground from the tool above it, so the page
+   reads as answer-then-working rather than as one long column. */
+.fw .ckevidence { background:var(--paper); border-top:1px solid var(--line);
+  padding:var(--sp-9) 0 var(--sp-10); }
+/* 132px, not 160. At 375 the content box is 343px and two 160px tracks plus
+   the gap came to 344 -- one pixel over, so the four figures fell to one per
+   row and the band became a tall ladder on exactly the screen with least
+   room for one. */
+.fw .ckevidence .figrow { grid-template-columns:repeat(auto-fit, minmax(132px, 1fr));
+  margin-top:var(--sp-5); }
+/* The two filters read side by side here; the band is wide enough for it and
+   stacking them would put the page back into one narrow strip. */
+.fw .ckevidence .ckfilters { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+  gap:var(--sp-5) var(--sp-8); margin-top:var(--sp-7);
+  padding-top:var(--sp-6); border-top:1px solid var(--line); }
+.fw .ckevidence .ckfilters p { margin:0; max-width:52ch; }
 
 /* ==== the eligibility answer ==============================================
    The one place on the site where motion is a response rather than an
