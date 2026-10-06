@@ -18,7 +18,11 @@ export default function SetUpPayments({
   const [error, setError] = useState<string | null>(null);
 
   return (
-    <div>
+    // The top margin lives here rather than at the call sites. All four of
+    // them put this directly under a paragraph explaining what it does, and a
+    // button one paragraph-margin below its own explanation reads as floating
+    // loose rather than as the thing that sentence just described.
+    <div style={{ marginTop: "var(--sp-5)" }}>
       {error && (
         <div style={{ marginBottom: 12 }}>
           <Notice tone="clay" head="That didn&rsquo;t work">{error}</Notice>

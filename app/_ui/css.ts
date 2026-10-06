@@ -689,26 +689,25 @@ export const CSS = `
 .fw .ck-d { display:block; font-size:var(--fs-2); line-height:1.45; color:var(--ink-3); margin-top:2px;
   max-width:60ch; }
 
-/* The column count follows the item count rather than being declared.
-   It was repeat(5,...) from when there were five steps; dropping to four left
-   a 261px column standing empty at the right end with the top rule running
-   across it, which read as a missing step. auto-flow cannot go stale that
-   way. */
-  border-top:1px solid var(--ink);
-  /* An <ol> brings padding-inline-start:40px and a 1em block margin of its
-     own. Without this reset the whole row sat 40px right of the heading above
-     it at every width — the numbers are rendered as text here, so the marker
-     box it was reserving was space for nothing. */
-  margin:0; padding:0; }
-/* Every cell had padding-left:0, which is right for the first — it lines up
-   with the page's own left edge — and wrong for the rest, whose text sat hard
-   against the divider belonging to the cell before it. */
-  color:var(--ink-3); font-variant-numeric:tabular-nums; }
-/* The miniature. Pushed to the bottom of the cell so all four line up along one
-   baseline however long the description above them runs — four fragments at
-   four different heights would read as clutter rather than as a row. */
-  border:1px solid var(--line); padding:3px 6px; max-width:100%; overflow:hidden;
-  text-overflow:ellipsis; white-space:nowrap; }
+/* Three declaration blocks used to sit here with no selectors: the remains of
+   a component whose rules were deleted by removing the selector lines and
+   leaving the bodies behind. They styled nothing, so they looked harmless.
+   They were not.
+
+   CSS error recovery reads a qualified rule's prelude up to the first "{".
+   With no brace of their own, the orphans ran on and swallowed the next real
+   rule's selector into their prelude -- so ".fw .choice { display:flex; ... }"
+   was parsed as the tail end of one enormous invalid selector and dropped
+   whole. One rule, silently absent from a 1027-rule sheet.
+
+   What that looked like: the signup page's "I am a parent or guardian"
+   checkbox fell back to the browser's own button styling, which centres its
+   text, and the 15px tick box fell back to display:inline, which ignores
+   width and height. It rendered as a 2px sliver floating above a centred
+   label -- reported as "a line above the button".
+
+   Nothing replaces them. If a selector ever goes, its declarations go with
+   it. */
 
 .fw .choice { display:flex; gap:10px; align-items:flex-start; padding:12px 13px; border:1px solid var(--line); cursor:pointer; background:var(--card); text-align:left; width:100%; }
 .fw .choice:hover { border-color:var(--ink-3); }

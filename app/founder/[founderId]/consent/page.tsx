@@ -195,7 +195,7 @@ export default async function GuardianConsentPage({
               Use the email address this invitation was sent to. If you have not got a Veyro account
               yet, create one as a parent or guardian. You need to be 18 or over.
             </p>
-            <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
+            <div className="row" style={{ gap: 8, flexWrap: "wrap", marginTop: "var(--sp-5)" }}>
               <Link className="btn" href={authUrlWithNext("/auth/signin", here)}>Sign in</Link>
               <Link className="btn btn-2" href={authUrlWithNext("/auth/signup", here)}>
                 Create a guardian account
