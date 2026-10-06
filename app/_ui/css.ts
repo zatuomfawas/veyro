@@ -1714,6 +1714,115 @@ export const CSS2 = `
   font-weight:var(--fw-reg); color:var(--ink-2); margin-top:var(--sp-5); max-width:30ch;
   text-wrap:balance; }
 .fw h1.hero-h { margin:0; }
+
+/* ==== the money band ======================================================
+   The dark break in the middle of the page. Built on .lp-dark's ground so
+   the two dark sections agree, but laid out differently from the closing
+   one: heading and lead side by side rather than stacked and centred, and
+   the rail given the whole width beneath them.
+
+   The rail's own tokens are redefined here rather than overridden
+   per-element. Everything inside it reads from --line, --ink, --ink-3 and
+   --brand, so restating those four for this subtree is the whole of making
+   it work on a dark ground -- and it means the rail is not carrying a second
+   set of colours it only uses in one place. */
+/* The ground comes from .lp-dark, which the markup also carries. Setting it
+   here was a self-reference bug worth remembering: .lp-dark grounds itself
+   with background:var(--ink), and this rule redefined --ink on the very same
+   element -- so the background resolved against the NEW near-white value and
+   the band rendered white, with light grey text on it. Tokens for a subtree
+   have to be redefined on a child of the element that paints with them, not
+   on the element itself.
+
+   So only layout lives here, and the rail's tokens are set on .moneyband-rail
+   below, which paints no background of its own. */
+.fw .moneyband .lp-h2 { color:var(--reverse); }
+.fw .moneyband-h { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:var(--sp-7) var(--sp-10); align-items:end; }
+.fw .moneyband-lead { margin:0; font-size:var(--fs-4); line-height:1.6;
+  color:#bcbdbd; max-width:54ch; }
+/* The rail reads from four tokens and nothing else, so restating them here
+   is the whole of making it work on a dark ground. Safe on this element: it
+   has no background of its own to resolve against them. */
+.fw .moneyband-rail { margin-top:var(--sp-10); padding-top:var(--sp-8);
+  border-top:1px solid #2c2f31;
+  --line:#3a3e40; --ink:#f3f4f4; --ink-3:#9b9c9d; --brand:#5fb48f;
+  --paper:#111315; --control-line:#5a5e61; }
+@media (max-width:900px) {
+  .fw .moneyband-h { grid-template-columns:1fr; gap:var(--sp-5); align-items:start; }
+  .fw .moneyband-rail { margin-top:var(--sp-7); padding-top:var(--sp-6); }
+}
+
+/* ==== heading beside content =============================================
+   The alternative to centring everything. The heading holds the left column
+   and sticks while the content scrolls past it, so a reader three steps into
+   a list still has the question those steps answer in view.
+
+   Sticky only where there is a second column to scroll against: below 900
+   the grid folds and a pinned heading would just sit on top of the content
+   it introduces. */
+.fw .aside-grid { display:grid; grid-template-columns:minmax(0,0.78fr) minmax(0,1.22fr);
+  gap:var(--sp-10); align-items:start; }
+.fw .aside-head { position:sticky; top:calc(var(--nav-h) + var(--sp-7)); }
+.fw .aside-head .lp-h2 { max-width:16ch; }
+.fw .aside-body { min-width:0; }
+@media (max-width:900px) {
+  .fw .aside-grid { grid-template-columns:1fr; gap:var(--sp-6); }
+  .fw .aside-head { position:static; }
+  .fw .aside-head .lp-h2 { max-width:20ch; }
+}
+
+/* ==== the hero =============================================================
+   Rebuilt so the largest thing on the page is the sentence that does the
+   work. The wordmark used to hold that slot at 56px, with the proposition
+   beneath it at a third the size -- which put the brand name, meaningless to
+   a first-time reader, above the one line that tells them what this is.
+
+   The two columns are aligned to their tops rather than centred. Centring
+   made the left column float against a much taller card, with the text
+   starting a hundred pixels below the wallet's first line and ending a
+   hundred above its last; tops-aligned, the headline and the balance begin
+   together, which is the comparison the hero is making. */
+.fw .hero-grid { align-items:start; }
+.fw .hero-left { display:flex; flex-direction:column; min-width:0; }
+
+/* A small claim of audience, before the big one of capability. The dot is a
+   token square rather than an emoji: an emoji would be the one thing on this
+   page rendering in somebody else's typeface. */
+.fw .hero-kicker { display:flex; align-items:center; gap:9px; margin:0;
+  font-size:var(--fs-2); letter-spacing:0.04em; text-transform:uppercase;
+  font-weight:var(--fw-med); color:var(--ink-3); }
+.fw .hero-kicker-dot { width:7px; height:7px; flex:none; background:var(--brand); }
+
+/* clamp, not a step on the scale. The headline is two lines by design and
+   has to stay two lines from 1440 down to about 900, where the grid folds --
+   a fixed size either wraps to three on a laptop or shrinks the impact on a
+   desktop. text-wrap:balance keeps the break even if the <br> is overridden
+   by a narrower box. */
+.fw .hero-h1 { margin:var(--sp-5) 0 0; font-size:clamp(34px, 4.6vw, 62px);
+  line-height:1.04; letter-spacing:-0.035em; font-weight:var(--fw-bold);
+  color:var(--ink); text-wrap:balance; }
+.fw .hero-lead { margin:var(--sp-5) 0 0; font-size:var(--fs-5); line-height:1.55;
+  color:var(--ink-2); max-width:46ch; }
+
+.fw .hero-cta { display:flex; flex-wrap:wrap; gap:10px; margin-top:var(--sp-7); }
+
+/* The three figures that close the column. They sit on a rule rather than in
+   cards: three more bordered boxes directly under two buttons would read as a
+   second row of controls. */
+.fw .hero-facts { display:flex; flex-wrap:wrap; gap:var(--sp-7);
+  margin:var(--sp-8) 0 0; padding-top:var(--sp-5);
+  border-top:1px solid var(--line); }
+.fw .hero-facts > div { min-width:0; }
+.fw .hero-facts dd { margin:3px 0 0; }
+
+@media (max-width:900px) {
+  .fw .hero-h1 { font-size:clamp(30px, 8vw, 40px); }
+  .fw .hero-lead { font-size:var(--fs-4); max-width:none; }
+  .fw .hero-facts { gap:var(--sp-5) var(--sp-6); margin-top:var(--sp-6); }
+  .fw .hero-cta > .btn { flex:1 1 auto; justify-content:center; }
+}
+
 /* The hero's second line. It is the qualifier on the headline above it, not a
    paragraph, so it stays one line of plain type: the argument that used to
    live here moved into the wallet on the right, which makes it better than

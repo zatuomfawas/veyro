@@ -91,93 +91,141 @@ export default async function Home() {
         <div className="hero-band">
           <div className="wrap-lp hero">
             <div className="split-lead hero-grid">
-              <div>
-                <h1 className="hero-h">
-                  <Wordmark hero />
-                  <span className="tagline">You can take payments before you&rsquo;re 18.</span>
-                </h1>
-
-                {/* "Block you at 18" is a compression rather than a claim we
-                    cannot stand behind, and the clause after it supplies the
-                    context: on your own the bar is majority age, and the
-                    guardian route this product arranges is what moves it. The
-                    figure further down carries its own qualifier — "with a
-                    guardian on the account" — so the two are consistent read
-                    together.
-
-                    Where it is not universally true, the page says so within a
-                    line: the disclaimer directly below, and the checker as the
-                    secondary CTA, which exists precisely to answer "does this
-                    apply where I live" and which returns no for Brazil. */}
-                {/* Layer 1 is one sentence and one visual, and the sentence
-                    is the subhead rather than this paragraph. What used to sit
-                    here was the argument -- why this is hard, what we do about
-                    it -- which is Layer 2 work being done above the fold in
-                    prose. The wallet on the right now carries it: a reader who
-                    watches a sale land and a payout get requested has been
-                    told what this is without reading a word of it. */}
-                <p className="hero-sub">From 13, with a parent or guardian on the account.</p>
-
-                <div className="row" style={{ marginTop: "var(--sp-6)", gap: 8, flexWrap: "wrap" }}>
-                  <Link className="btn btn-lg" href="/check">Check eligibility</Link>
-                  <Link className="btn btn-2 btn-lg" href="/get-started">Start free</Link>
-                </div>
-                <p className="tiny" style={{ marginTop: 12 }}>
-                  Two questions, no account needed. Free under $100 a month, which is most people.
+              <div className="hero-left">
+                {/* The wordmark is no longer the h1.
+                    ------------------------------------------------------
+                    It was, at 56px, with the actual proposition underneath
+                    it at a third the size -- so the largest thing on the
+                    page was a word that means nothing to anybody who has
+                    not heard of us, and the sentence that does the work
+                    read as its subtitle. The logo is in the nav, two inches
+                    above, and does not need saying twice. */}
+                <p className="hero-kicker">
+                  <span className="hero-kicker-dot" aria-hidden="true" />
+                  For builders aged 13 to 17
                 </p>
 
+                {/* No hard break. At a clamped size the right place to wrap
+                    moves with the viewport, and text-wrap:balance picks it
+                    better than a <br> frozen at one width ever could. */}
+                {/* No hard break. At a clamped size the right place to wrap
+                    moves with the viewport, and text-wrap:balance picks it
+                    better than a <br> frozen at one width ever could. */}
+                <h1 className="hero-h1">You can take payments before you&rsquo;re 18.</h1>
+
+                <p className="hero-lead">
+                  Not with a workaround, and not in your parent&rsquo;s name. Your own products,
+                  your own checkout, your own money &mdash; with a parent verified once on the
+                  account, which is the part that makes it lawful.
+                </p>
+
+                <div className="hero-cta">
+                  <Link className="btn btn-lg" href="/get-started">Start &mdash; it&rsquo;s free</Link>
+                  <Link className="btn btn-2 btn-lg" href="/check">Check if it works where you live</Link>
+                </div>
+
+                {/* Three facts, as figures. They answer the three things a
+                    reader is actually weighing -- can I, where, and what
+                    does it cost -- without a paragraph each, and they fill
+                    the bottom of a column that was ending in white space. */}
+                <dl className="hero-facts">
+                  <div>
+                    <dt className="fig-k">From age</dt>
+                    <dd className="fig fig-sm">13</dd>
+                  </div>
+                  <div>
+                    <dt className="fig-k">Countries</dt>
+                    <dd className="fig fig-sm">43</dd>
+                  </div>
+                  <div>
+                    <dt className="fig-k">Under $100 a month</dt>
+                    <dd className="fig fig-sm fig-pos">Free</dd>
+                  </div>
+                </dl>
               </div>
 
-              <div>
+              <div className="hero-right">
                 <LiveWallet />
               </div>
             </div>
           </div>
         </div>
 
-        {/* ---- Layer 2: where the money goes, as one picture ---- */}
-        <section className="lp ch ch-surface">
+        {/* ---- the money, on a dark band ----
+            Five sections in a row used the same shape: a centred eyebrow, a
+            centred h2 at 44px, a centred lead, then a grid. Read end to end
+            it was one rhythm repeated until it stopped registering, and the
+            page had no moment that felt different from the moment before it.
+
+            This one is dark and full-bleed. It earns the emphasis -- it is
+            the claim the whole product rests on, that the money is never
+            ours -- and it gives the page a break in the middle that you can
+            see from the scrollbar. */}
+        <section className="lp ch lp-dark moneyband">
           <div className="wrap-lp">
-            <div className="headc" style={{ marginBottom: "var(--sp-8)" }}>
-              <span className="lp-eyebrow">Where the money goes</span>
-              <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
-                It never stops here.
-              </h2>
-              <p className="lp-lead" style={{ marginTop: "var(--sp-4)" }}>
-                A customer pays, and the money lands in an account with your name on the
-                products and your guardian&rsquo;s name on the paperwork. Veyro is the checkout
-                at one end and the record at the other. It is never the thing holding your money.
+            <div className="moneyband-h">
+              <div>
+                <span className="lp-eyebrow">Where the money goes</span>
+                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                  It never stops here.
+                </h2>
+              </div>
+              <p className="moneyband-lead">
+                A customer pays, and the money lands in an account with your name on the products
+                and your guardian&rsquo;s name on the paperwork. Veyro is the checkout at one end
+                and the record at the other. It is never the thing holding your money.
               </p>
             </div>
 
-            <MoneyRail />
+            <div className="moneyband-rail">
+              <MoneyRail />
+            </div>
+          </div>
+        </section>
 
-            <div className="layer">
-              <div className="headc" style={{ marginBottom: "var(--sp-7)" }}>
+        {/* ---- the three steps, asymmetric ----
+            Heading pinned to the left and sticky, steps running down the
+            right. A reader scanning the three keeps the question they are
+            answering in view, and the page stops centring everything. */}
+        <section className="lp ch ch-surface">
+          <div className="wrap-lp">
+            <div className="aside-grid">
+              <div className="aside-head">
                 <span className="lp-eyebrow">Start to paid</span>
                 <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
                   Three steps. One of them is your parent.
                 </h2>
+                <p className="body" style={{ marginTop: "var(--sp-4)" }}>
+                  The whole of it, from nothing to money in an account with your name on the
+                  products.
+                </p>
+                <p className="small" style={{ marginTop: "var(--sp-5)" }}>
+                  <Link className="linkbtn" href="/how-it-works">
+                    What Veyro does, and what it sits on
+                  </Link>
+                </p>
               </div>
-              <Journey />
+              <div className="aside-body">
+                <Journey />
+              </div>
             </div>
-
-            <p className="small centred-note" style={{ marginTop: "var(--sp-7)" }}>
-              <Link className="linkbtn" href="/how-it-works">What Veyro does, and what it sits on</Link>
-            </p>
           </div>
         </section>
 
-        {/* ---- Layer 3: whichever of the two readers you are ---- */}
+        {/* ---- whichever of the two readers you are ---- */}
         <section className="lp ch">
           <div className="wrap-lp">
-            <div className="headc">
-              <span className="lp-eyebrow">Two people have to say yes</span>
-              <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
-                One of them is reading over your shoulder.
-              </h2>
+            <div className="aside-grid">
+              <div className="aside-head">
+                <span className="lp-eyebrow">Two people have to say yes</span>
+                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                  One of them is reading over your shoulder.
+                </h2>
+              </div>
+              <div className="aside-body">
+                <AudienceSplit />
+              </div>
             </div>
-            <AudienceSplit />
           </div>
         </section>
 
