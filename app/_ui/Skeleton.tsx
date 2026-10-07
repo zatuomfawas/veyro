@@ -208,3 +208,91 @@ export function NarrowSkeleton({ what }: { what: string }) {
     </div>
   );
 }
+
+/**
+ * One column of rows, under a page heading: the founder's products.
+ *
+ * Not PageSkeleton, which draws two columns. That page is a single Section
+ * holding a list and a form, and a two-column placeholder would rearrange
+ * itself into one the moment the real thing arrived -- the exact fault the
+ * DashboardSkeleton comment above exists to warn about.
+ */
+export function ListSkeleton({
+  what, rows = 3,
+}: { what: string; rows?: number }) {
+  return (
+    <div className="fw">
+      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
+      <main className="wrap-w" style={{ paddingTop: 24, paddingBottom: 56 }}>
+        <p className="sr-only" role="status" aria-live="polite">
+          Loading {what}&hellip;
+        </p>
+
+        <div aria-hidden="true">
+          <Bar w="220px" h={26} />
+          <Bar w="340px" h={12} mt={10} />
+
+          <div className="skel-card" style={{ marginTop: 24 }}>
+            <Bar w="140px" h={14} />
+            {Array.from({ length: rows }, (_, i) => (
+              <div className="skel-row" key={i}>
+                <Bar w="46%" h={12} />
+                <Bar w="92px" h={12} />
+              </div>
+            ))}
+            {/* The add-a-product form, which is always on this page whether or
+                not there is anything in the list above it. */}
+            <Bar w="100%" h={1} mt={24} />
+            <Bar w="180px" h={14} mt={20} />
+            <Bar w="100%" h={38} mt={14} />
+            <Bar w="100%" h={38} mt={10} />
+            <Bar w="150px" h={40} mt={16} />
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+/**
+ * The auth shell's shape: a nav line, then text beside a card.
+ *
+ * Used where an auth page waits on the database rather than only on the
+ * person -- /auth/verify looks a token up before it can say anything, and
+ * that is a page somebody reaches by clicking a link in an email, so a blank
+ * screen reads as a dead link rather than as a slow one.
+ */
+export function AuthSkeleton({ what }: { what: string }) {
+  return (
+    <div className="fw">
+      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
+      <div className="navbar">
+        <div className="wrap-lp">
+          <div className="lp-nav">
+            <Bar w="86px" h={21} />
+            <Bar w="120px" h={14} />
+          </div>
+        </div>
+      </div>
+      <main className="wrap-lp" style={{ paddingTop: 40, paddingBottom: 56 }}>
+        <p className="sr-only" role="status" aria-live="polite">
+          Loading {what}&hellip;
+        </p>
+
+        <div className="truthgrid" aria-hidden="true" style={{ alignItems: "start" }}>
+          <div>
+            <Bar w="70%" h={26} />
+            <Bar w="100%" h={11} mt={16} />
+            <Bar w="86%" h={11} mt={8} />
+          </div>
+          <div className="skel-card">
+            <Bar w="55%" h={14} />
+            <Bar w="100%" h={11} mt={14} />
+            <Bar w="78%" h={11} mt={8} />
+            <Bar w="100%" h={40} mt={20} />
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
