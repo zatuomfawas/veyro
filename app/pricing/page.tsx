@@ -7,7 +7,6 @@ import { feeMinor, EXAMPLE_EARNINGS_MINOR } from "@/lib/pricing";
 import { formatMinor } from "@/lib/money";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
-import { SectionRail } from "@/app/_ui/SectionRail";
 import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
@@ -131,38 +130,60 @@ export default function Pricing() {
         </div>
       </div>
 
-      <main id="main" className="wrap-lp longform has-rail" style={{ paddingTop: 32, paddingBottom: 56 }}>
-        <SectionRail />
-        <span className="lp-eyebrow">Pricing</span>
-        <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)", maxWidth: "22ch" }}>
-          One product. Different costs depending on what you earn.
-        </h1>
-        <p className="lead" style={{ marginTop: 12 }}>
-          There is no plan, no subscription and no upgrade button. Everyone gets the same core
-          product. In any month you earn more than $100, some extra services switch on for that
-          month, and switch off again in a month you do not.
-        </p>
+      {/* Instrument first.
+          ------------------------------------------------------------------
+          This page answers one question -- what will this cost ME -- and the
+          only thing on it that answers it with the reader's own number was
+          below the fold, inside a 66ch reading column, with the call to
+          action at 3,246px of 3,752.
 
-        {/* Section 1: the deal, stated as three lines rather than a table. */}
-        <div className="deal">
-          <p className="deal-l">Free under <strong>$100</strong> a month.</p>
-          <p className="deal-l"><strong>3%</strong> on everything you earn above $100.</p>
-          <p className="deal-n">
-            Same core product at every size. Extra services in the months you earn above $100.
-          </p>
-          <p className="deal-warn">
-            The fee is taken when a payment succeeds. If you later refund that customer, the fee
-            isn&rsquo;t returned. <strong>Fees start on 15 October 2026.</strong>
-          </p>
+          The calculator is in the first screen now, at the width an
+          instrument wants, with the deal stated beside it. Everything after
+          is the reasoning, chaptered, for the reader who wants to know why
+          the numbers are those numbers rather than what they are. */}
+      <main id="main">
+
+        <div className="hero-band">
+          <div className="wrap-lp gs-hero">
+            <div className="gs-hero-grid">
+              <div>
+                <p className="hero-kicker">
+                  <span className="hero-kicker-dot" aria-hidden="true" />
+                  Pricing
+                </p>
+                <h1 className="hero-h1" style={{ maxWidth: "16ch" }}>
+                  One product. One number.
+                </h1>
+                <p className="hero-lead">
+                  No plan, no subscription, no upgrade button. Everyone gets the same core
+                  product; in a month you earn over $100, some extra services switch on, and
+                  switch off again in a month you do not.
+                </p>
+
+                <div className="deal" style={{ marginTop: "var(--sp-6)" }}>
+                  <p className="deal-l">Free under <strong>$100</strong> a month.</p>
+                  <p className="deal-l"><strong>3%</strong> on everything you earn above $100.</p>
+                  <p className="deal-warn">
+                    The fee is taken when a payment succeeds. If you later refund that customer,
+                    the fee isn&rsquo;t returned. <strong>Fees start on 15 October 2026.</strong>
+                  </p>
+                </div>
+
+                <div className="hero-cta">
+                  <Link className="btn btn-lg" href="/auth/signup">Start &mdash; it&rsquo;s free</Link>
+                  <Link className="btn btn-2 btn-lg" href="/get-started">See the whole path</Link>
+                </div>
+              </div>
+
+              {/* Their number, not ours. An example someone cannot see
+                  themselves in is an example that gets argued with. */}
+              <PriceCalculator />
+            </div>
+          </div>
         </div>
 
-        {/* Section 2: the instrument, so the reader can put their own number
-            in rather than find themselves in someone else's example. */}
-        <div className="layer-tight">
-          <PriceCalculator />
-        </div>
-
-        <hr className="rule" style={{ margin: "var(--sp-9) 0 var(--sp-7)" }} />
+        <section className="lp ch ch-surface">
+          <div className="wrap-lp longform">
 
         {/* Section 3: one list. No ticks and crosses: a comparison grid makes
             one column look like the deprived one, and here there isn't one. */}
@@ -205,11 +226,15 @@ export default function Pricing() {
           ))}
         </dl>
 
-        <hr className="rule" style={{ margin: "var(--sp-9) 0 var(--sp-7)" }} />
 
         {/* Section 4: the examples, computed rather than typed. Every figure
             in this table comes from the same function the calculator above
             uses, so the table cannot quietly stop agreeing with the rule. */}
+          </div>
+        </section>
+
+        <section className="lp ch">
+          <div className="wrap-lp longform">
         <h2 className="h3">What people actually pay</h2>
         <p className="body" style={{ marginTop: 8 }}>
           The sum is: take what you earned, subtract the first $100, and take 3% of the rest.
@@ -247,7 +272,6 @@ export default function Pricing() {
           every transaction.
         </MarginNote>
 
-        <hr className="rule" style={{ margin: "var(--sp-9) 0 var(--sp-7)" }} />
 
         <MarginNote head="What a seller costs us">
           <span className="fig fig-md">$3.25</span>
@@ -255,6 +279,11 @@ export default function Pricing() {
           account costs nothing, which is the whole reason the free limit can be real.
         </MarginNote>
 
+          </div>
+        </section>
+
+        <section className="lp ch ch-surface">
+          <div className="wrap-lp longform">
         <h2 className="h3">Why these numbers</h2>
         <p className="body" style={{ marginTop: 8 }}>
           Running an active seller costs about $3.25 a month before anyone earns a penny &mdash;
@@ -289,6 +318,8 @@ export default function Pricing() {
           <Link className="btn btn-lg" href="/get-started">Start &mdash; it&rsquo;s free</Link>
           <Link className="btn btn-2 btn-lg" href="/for-parents">For parents</Link>
         </div>
+          </div>
+        </section>
       </main>
 
       <ScrollTop />
