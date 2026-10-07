@@ -2,22 +2,38 @@ import Link from "next/link";
 
 // The FAQ, written once.
 //
-// It appears on the homepage and again at /faq. Two copies would drift: one
-// would keep an answer that stopped being true, and the wrong one would be the
-// one a worried parent read. `homepage` marks the subset the landing page
-// shows; /faq shows everything.
+// `homepage` is gone: the landing page stopped rendering questions when it was
+// rebuilt around showing rather than explaining, so the flag marked a subset
+// nothing read. /faq is the only consumer.
+//
+// `audience` replaced it, and earns its place. Half of these are a parent's
+// questions and half are a founder's, and they were interleaved -- so whoever
+// was reading, every other answer was addressed to somebody else. The two
+// readers of this product want different things and the page can say which is
+// which.
+
+export type FaqAudience = "founder" | "parent" | "either";
 
 export type FaqEntry = {
   q: string;
   a: React.ReactNode;
-  /** Shown on the homepage as well as /faq. */
-  homepage?: boolean;
+  /** Who is actually asking. Decides which group the question is filed under. */
+  audience: FaqAudience;
 };
+
+export const AUDIENCE_GROUPS: { key: FaqAudience; title: string; lead: string }[] = [
+  { key: "founder", title: "If you are the one building",
+    lead: "Cost, countries, what happens at 18, and why signup asks what it asks." },
+  { key: "parent", title: "If you are the adult being asked",
+    lead: "What your name on the account does and does not mean, and what control you keep." },
+  { key: "either", title: "Either way",
+    lead: "The three that decide whether any of this is worth trusting." },
+];
 
 export const FAQ: FaqEntry[] = [
   {
     q: "Does my parent own my business?",
-    homepage: true,
+    audience: "parent",
     a: (
       <>
       No. They are the verified adult on the payment account, which is what the provider
@@ -28,7 +44,7 @@ export const FAQ: FaqEntry[] = [
   },
   {
     q: "Can my guardian stop a payout?",
-    homepage: true,
+    audience: "parent",
     a: (
       <>
       Not through Veyro, and that is the honest version of it. Veyro has no
@@ -42,7 +58,7 @@ export const FAQ: FaqEntry[] = [
   },
   {
     q: "Does Veyro see my identity documents?",
-    homepage: true,
+    audience: "either",
     a: (
       <>
       Never. Identity checks happen on the provider&rsquo;s own hosted form. Veyro stores a
@@ -52,6 +68,7 @@ export const FAQ: FaqEntry[] = [
   },
   {
     q: "What does it cost?",
+    audience: "founder",
     
     a: (
       <>
@@ -84,6 +101,7 @@ export const FAQ: FaqEntry[] = [
   },
   {
     q: "How does age verification actually work?",
+    audience: "either",
     
     a: (
       <>
@@ -97,7 +115,7 @@ export const FAQ: FaqEntry[] = [
   },
   {
     q: "What happens when I turn 18?",
-    homepage: true,
+    audience: "founder",
     a: (
       <>
       Nothing automatic. The guardian&rsquo;s name stays on the payment
@@ -108,6 +126,7 @@ export const FAQ: FaqEntry[] = [
   },
   {
     q: "Which countries are supported, and how do I check?",
+    audience: "founder",
     
     a: (
       <>
@@ -120,6 +139,7 @@ export const FAQ: FaqEntry[] = [
   },
   {
     q: "Why does setup ask all these business-sounding questions?",
+    audience: "founder",
     
     a: (
       <>
@@ -132,7 +152,7 @@ export const FAQ: FaqEntry[] = [
   },
   {
     q: "Is this settled law?",
-    homepage: true,
+    audience: "either",
     a: (
       <>
       No. Provider policy permitting a minor to hold an account with a guardian as the

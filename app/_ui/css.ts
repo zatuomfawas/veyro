@@ -1431,6 +1431,42 @@ export const CSS = `
   .fw .pnext-a > .btn { flex:1 1 auto; justify-content:center; }
 }
 
+/* The question index, and the answers it jumps to.
+   Nine <details> all shut showed 228 words on a 1,651px page -- the
+   questions visible and every answer hidden, which is the wrong half to
+   hide. Open answers cost length; the index buys the scanning back. */
+.fw .qindex { border-top:1px solid var(--ink); padding-top:var(--sp-4); }
+.fw .qindex-k { display:block; font-size:var(--fs-1); font-weight:var(--fw-med);
+  letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-3);
+  margin-bottom:var(--sp-3); }
+.fw .qindex-l { list-style:none; margin:0; padding:0; }
+.fw .qindex-l li + li { border-top:1px solid var(--line-soft); }
+.fw .qindex-a { display:grid; grid-template-columns:auto minmax(0,1fr); gap:var(--sp-4);
+  padding:9px 0; font-size:var(--fs-3); line-height:1.45; color:var(--ink-2); }
+.fw .qindex-a:hover { color:var(--ink); }
+.fw .qindex-n { font-size:var(--fs-1); color:var(--ink-3);
+  font-variant-numeric:tabular-nums; letter-spacing:0.06em; padding-top:3px; }
+
+/* An answer that is already open. A <dl>, because that is what a list of
+   questions and answers is, and scroll-margin because every one of them is
+   a jump target from the index above. */
+.fw .qa-open { margin:0; border-top:1px solid var(--ink); }
+.fw .qa-item { padding:var(--sp-6) 0; border-bottom:1px solid var(--line);
+  scroll-margin-top:calc(var(--nav-h) + var(--sp-5)); }
+.fw .qa-item:first-child { padding-top:var(--sp-5); }
+.fw .qa-q { display:grid; grid-template-columns:auto minmax(0,1fr); gap:var(--sp-4);
+  margin:0; font-size:var(--fs-5); line-height:1.3; letter-spacing:-0.016em;
+  font-weight:var(--fw-med); color:var(--ink); }
+.fw .qa-n { font-size:var(--fs-1); color:var(--ink-3); font-variant-numeric:tabular-nums;
+  letter-spacing:0.06em; padding-top:7px; }
+.fw .qa-a { margin:var(--sp-3) 0 0; padding-left:calc(var(--fs-1) * 2 + var(--sp-4));
+  font-size:var(--fs-3); line-height:1.65; color:var(--ink-2); max-width:62ch; }
+@media (max-width:520px) {
+  .fw .qa-q { grid-template-columns:1fr; gap:0; }
+  .fw .qa-n { padding-top:0; margin-bottom:2px; }
+  .fw .qa-a { padding-left:0; }
+}
+
 .fw .preview-stack { display:flex; flex-direction:column; gap:var(--sp-6); }
 .fw .preview-stack > :last-child { align-self:center; width:100%; max-width:560px; }
 
