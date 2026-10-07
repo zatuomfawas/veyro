@@ -1312,6 +1312,101 @@ export const CSS = `
    Stacked, the words sit in the article column and the object centres below
    them. What is left either side of it is margin on both sides, which reads as
    a measure rather than as something that failed to load. */
+/* Get started: the hero, the message block, and the one split.
+   ----------------------------------------------------------------------
+   The page this belongs to used a longform column with a rail, which put
+   637px of content in a 1432px viewport and stacked the other 538px down
+   one side as nothing. These are landing sections instead, so the width
+   is carried rather than left over. */
+
+/* The hero runs full-bleed, so every text block in it needs a measure of
+   its own or it inherits the container's 1600px.
+
+   Measured, not guessed. Left alone, the headline set as ONE 1,336px line
+   at 62px -- a 36-character sentence stretched across the whole screen,
+   which scans as a banner rather than as a sentence. 20ch at display size
+   breaks it over two lines, which is the shape the homepage hero has and
+   the reason that one works.
+
+   The lead keeps --m-lead, 52ch. An earlier pass here set --m-wide, 76ch,
+   on the theory that a full-width hero wants a wider measure. That was
+   backwards: 46ch was the deliberate value and 76ch is at the outer edge
+   of readable for an 18.5px line. Wider container, same eye.
+
+   The facts share the lead's measure so the rule above them ends where the
+   text does, instead of ruling off 1,336px for three short figures. */
+.fw .gs-hero { padding-top:var(--sp-9); padding-bottom:var(--sp-9); }
+.fw .gs-hero .hero-h1 { max-width:20ch; }
+.fw .gs-hero .hero-lead { max-width:var(--m-lead); }
+
+/* Promise and action on the left, the path on the right.
+   A text-only hero left 700px of a 1432px screen empty -- the same fault
+   this rebuild exists to fix, reproduced at the top of the page. The three
+   phases went here rather than into a section of their own below: it fills
+   the column with the thing a reader most wants next, puts the time budget
+   beside the promise instead of a screen below it, and removes a whole
+   section from the page. */
+.fw .gs-hero-grid { display:grid; grid-template-columns:var(--split-a) var(--split-b);
+  gap:var(--sp-8) var(--sp-10); align-items:center; }
+@media (max-width:980px) {
+  .fw .gs-hero-grid { grid-template-columns:1fr; gap:var(--sp-8); }
+}
+
+/* The three phases, vertical. Numbered down the left so the eye has one
+   column to run, and the owner stated on every row -- the handoff in the
+   middle is the whole point of grouping them this way. */
+.fw .gs-phases { list-style:none; margin:0; padding:0; border-top:1px solid var(--ink); }
+.fw .gs-phase { display:grid; grid-template-columns:auto minmax(0,1fr);
+  gap:0 var(--sp-5); padding:var(--sp-5) 0; border-bottom:1px solid var(--line); }
+.fw .gs-phase-n { grid-row:1 / 4; font-size:var(--fs-2); color:var(--ink-3);
+  font-variant-numeric:tabular-nums; letter-spacing:0.06em; padding-top:3px; }
+.fw .gs-phase-h { display:flex; flex-wrap:wrap; align-items:baseline; gap:var(--sp-2) var(--sp-3); }
+.fw .gs-phase-t { margin:0; font-size:var(--fs-5); letter-spacing:-0.018em; }
+.fw .gs-phase-time { font-size:var(--fs-2); color:var(--ink-3);
+  font-variant-numeric:tabular-nums; }
+.fw .gs-phase-d { margin:6px 0 0; font-size:var(--fs-3); line-height:1.6;
+  color:var(--ink-2); max-width:54ch; }
+/* The owner reads as a label, not a button: the middle row saying "Your
+   parent" is the single most important word on this page. */
+/* justify-self, not just inline-block: this is a grid item, and a grid item
+   stretches to its column unless told otherwise -- so the label rendered as
+   a 700px empty box with two words at the left end of it. */
+.fw .gs-phase-who { display:inline-block; justify-self:start; margin-top:var(--sp-3); font-size:var(--fs-1);
+  font-weight:var(--fw-med); letter-spacing:0.04em; text-transform:uppercase;
+  color:var(--ink-3); border:1px solid var(--line); padding:3px 7px; }
+.fw .gs-phase[data-who="parent"] .gs-phase-who { color:var(--pine);
+  border-color:var(--pine-line); background:var(--pine-bg); }
+@media (max-width:520px) {
+  .fw .gs-phase { grid-template-columns:1fr; gap:0; }
+  .fw .gs-phase-n { grid-row:auto; padding-top:0; margin-bottom:4px; }
+}
+
+/* Text beside the thing it describes, at the asymmetric split the rest of
+   the site uses. Collapses before the preview is squeezed: 560px of
+   checkout card plus a 45ch column needs about 900px to stay honest. */
+.fw .gs-split { display:grid; grid-template-columns:var(--split-a) var(--split-b);
+  gap:var(--sp-8) var(--sp-10); align-items:center; margin-top:var(--sp-9); }
+@media (max-width:900px) {
+  .fw .gs-split { grid-template-columns:1fr; gap:var(--sp-6); margin-top:var(--sp-7); }
+}
+
+/* The message a founder sends their parent.
+   Bordered and labelled so it reads as a quotable block rather than as
+   more of the page's own prose -- the whole point is that these words are
+   not addressed to the person reading them. Measure is tight on purpose:
+   it is a text message, and a text message that runs 76 characters a line
+   does not look like one. */
+.fw .askg { margin-top:var(--sp-7); border:1px solid var(--line); background:var(--card); }
+.fw .askg-h { display:flex; align-items:center; justify-content:space-between; gap:var(--sp-4);
+  padding:var(--sp-3) var(--sp-4); border-bottom:1px solid var(--line); background:var(--surface); }
+.fw .askg-k { font-size:var(--fs-2); font-weight:var(--fw-med); letter-spacing:0.02em;
+  color:var(--ink-3); text-transform:uppercase; }
+.fw .askg-b { padding:var(--sp-5) var(--sp-6) var(--sp-6); }
+.fw .askg-b p { margin:0; font-size:var(--fs-3); line-height:1.65; color:var(--ink-2);
+  max-width:58ch; }
+.fw .askg-b p + p { margin-top:var(--sp-4); }
+@media (max-width:600px) { .fw .askg-b { padding:var(--sp-4) var(--sp-4) var(--sp-5); } }
+
 .fw .preview-stack { display:flex; flex-direction:column; gap:var(--sp-6); }
 .fw .preview-stack > :last-child { align-self:center; width:100%; max-width:560px; }
 
@@ -1803,7 +1898,12 @@ export const CSS2 = `
 .fw .aside-head .lp-h2 { max-width:16ch; }
 .fw .aside-body { min-width:0; }
 @media (max-width:900px) {
-  .fw .aside-grid { grid-template-columns:1fr; gap:var(--sp-6); }
+  /* minmax(0,1fr), not 1fr. A bare 1fr is minmax(AUTO,1fr), and the auto
+     floor refuses to go below the widest item's min-content -- so a <pre>
+     of code expanded the single column to 587px inside a 343px phone and
+     the section overflowed its own container. The code block scrolls on
+     its own; the track has no business sizing itself to it. */
+  .fw .aside-grid { grid-template-columns:minmax(0,1fr); gap:var(--sp-6); }
   .fw .aside-head { position:static; }
   .fw .aside-head .lp-h2 { max-width:20ch; }
 }
