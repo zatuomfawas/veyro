@@ -1553,6 +1553,80 @@ export const CSS = `
    marked. See the funnel note in get-started/page.tsx. */
 .fw .ctc-route[data-flag="1"] { background:var(--pine-bg); box-shadow:inset 2px 0 0 var(--pine); }
 
+/* The three legal documents, which are no longer one layout.
+   ----------------------------------------------------------------------
+   They shared a shell, and the case for that was real: legal pages looking
+   alike is a signal, not an oversight. But they are opened for three
+   different reasons -- a contract for its clauses and dates, a privacy
+   policy for what is held about you, an accessibility statement for whether
+   the thing works with your screen reader -- and the shared shell answered
+   none of those in less than four paragraphs. Each gets the object that
+   answers its own question, above the prose. */
+
+/* Terms: the figures a contract is checked for. */
+.fw .lglkey { display:flex; flex-wrap:wrap; gap:var(--sp-6) var(--sp-9);
+  margin:var(--sp-7) 0 0; padding-top:var(--sp-5); border-top:1px solid var(--ink); }
+.fw .lglkey > div { min-width:0; }
+.fw .lglkey dd { margin:3px 0 0; }
+
+/* Terms: the clause list across the top. In a contract the numbers are how
+   people cite it, so the index is read once rather than followed. */
+.fw .lglindex { margin-top:var(--sp-8); }
+.fw .lglindex-l { list-style:none; margin:0; padding:0; display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:1px;
+  background:var(--line); border:1px solid var(--line); }
+.fw .lglindex-a { display:grid; grid-template-columns:auto minmax(0,1fr); gap:var(--sp-3);
+  background:var(--card); padding:var(--sp-4); font-size:var(--fs-3); line-height:1.4;
+  color:var(--ink-2); height:100%; }
+.fw .lglindex-a:hover { background:var(--surface); color:var(--ink); }
+.fw .lglindex-n { font-size:var(--fs-1); color:var(--ink-3);
+  font-variant-numeric:tabular-nums; letter-spacing:0.06em; padding-top:3px; }
+
+/* The document body when there is no sticky rail beside it. */
+.fw .lglbody { max-width:var(--m-wide); }
+
+/* Privacy: held against never received, side by side, because the second
+   column is the more interesting half and it was buried in clause 2. */
+.fw .inv { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:1px; background:var(--line); border:1px solid var(--line);
+  margin-top:var(--sp-7); }
+@media (max-width:820px) { .fw .inv { grid-template-columns:1fr; } }
+.fw .inv-side { background:var(--card); padding:var(--sp-5) var(--sp-6) var(--sp-6); min-width:0; }
+.fw .inv-side[data-side="never"] { background:var(--surface); }
+.fw .inv-k { display:block; font-size:var(--fs-1); font-weight:var(--fw-med);
+  letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-3);
+  margin-bottom:var(--sp-4); }
+.fw .inv-side[data-side="never"] .inv-k { color:var(--pine); }
+.fw .inv-l { list-style:none; margin:0; padding:0; }
+.fw .inv-l li { padding:var(--sp-3) 0; border-top:1px solid var(--line-soft); }
+.fw .inv-l li:first-child { border-top:0; padding-top:0; }
+.fw .inv-l b { display:block; font-size:var(--fs-3); font-weight:var(--fw-med); }
+.fw .inv-l span { display:block; margin-top:2px; font-size:var(--fs-2); line-height:1.55;
+  color:var(--ink-2); }
+.fw .inv-n { margin:var(--sp-4) 0 0; font-size:var(--fs-2); line-height:1.55;
+  color:var(--ink-3); }
+
+/* Accessibility: a conformance record. Three states, the same size, because
+   the untested column is the one that matters most and shrinking it would be
+   the statement contradicting itself. */
+/* Exactly three columns, not auto-fit. There are three states and there
+   always will be; auto-fit wrapped them into a 2x2 and left an empty cell
+   sitting in the corner of an accessibility statement. */
+.fw .conf { list-style:none; margin:var(--sp-7) 0 0; padding:0; display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr)); gap:1px;
+  background:var(--line); border:1px solid var(--line); }
+@media (max-width:860px) { .fw .conf { grid-template-columns:1fr; } }
+.fw .conf-c { background:var(--card); padding:var(--sp-5); min-width:0; }
+.fw .conf-k { display:block; font-size:var(--fs-1); font-weight:var(--fw-med);
+  letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-3);
+  padding-bottom:var(--sp-3); border-bottom:1px solid var(--line); }
+.fw .conf-c[data-state="measured"] .conf-k { color:var(--pine); }
+.fw .conf-c[data-state="untested"] { background:var(--surface); }
+.fw .conf-c[data-state="untested"] .conf-k { color:var(--amber); }
+.fw .conf-l { list-style:none; margin:var(--sp-3) 0 0; padding:0; }
+.fw .conf-l li { padding:var(--sp-2) 0; font-size:var(--fs-2); line-height:1.55;
+  color:var(--ink-2); }
+
 .fw .preview-stack { display:flex; flex-direction:column; gap:var(--sp-6); }
 .fw .preview-stack > :last-child { align-self:center; width:100%; max-width:560px; }
 

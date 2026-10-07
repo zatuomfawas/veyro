@@ -6,7 +6,6 @@ import { Notice } from "@/app/_ui/form";
 import { ScrollProgress } from "@/app/_ui/ScrollProgress";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
-import { MarginNote } from "@/app/_ui/MarginNote";
 import { PageNext } from "@/app/_ui/PageNext";
 
 export const SUPPORT_EMAIL = "hello@withveyro.com";
@@ -35,7 +34,8 @@ export type Section = { n: number; title: string };
  * people rely on into noise.
  */
 export function LegalShell({
-  title, lead, updated, sections, children, effective, notice, next }: {
+  title, lead, updated, sections, children, effective, notice, next,
+  masthead, shape = "aside" }: {
   title: string;
   lead: string;
   updated: string;
@@ -51,6 +51,28 @@ export function LegalShell({
    * one that actually explains the arrangement. A page may pass its own.
    */
   next?: React.ReactNode;
+  /**
+   * A page-specific instrument, above the document.
+   *
+   * These three pages used to be identical but for their words, which was a
+   * defensible position and is not the one taken now: they do different jobs
+   * and a reader wants a different thing from each. A contract is read for
+   * its clauses and its dates; a privacy policy is read to find out what is
+   * held about you; an accessibility statement is read to find out whether
+   * the thing works with your screen reader. Each supplies the object that
+   * answers its own question.
+   */
+  masthead?: React.ReactNode;
+  /**
+   * How the document itself is laid out.
+   *
+   *   index     clause list across the top, text full measure underneath.
+   *             For a contract, where the numbers ARE the navigation.
+   *   aside     sticky contents beside the text. The original.
+   *   plain     no contents at all, for a document short enough that one
+   *             would be furniture.
+   */
+  shape?: "index" | "aside" | "plain";
 }) {
   return (
     <div className="fw">
@@ -71,13 +93,21 @@ export function LegalShell({
         </div>
       </div>
 
-      <main id="main" className="wrap-lp longform" style={{ paddingTop: 40, paddingBottom: 56 }}>
+      {/* No .longform on main.
+          ------------------------------------------------------------------
+          It put every child on the reading measure, which is correct for the
+          clauses and wrong for the object above them: the accessibility
+          board came out at 636px and wrapped three cards into a 2x2 grid
+          with an empty cell, and the privacy inventory had nowhere to put
+          its second column. The prose carries its own measure now and the
+          masthead gets the page. */}
+      <main id="main" className="wrap-lp" style={{ paddingTop: 40, paddingBottom: 56 }}>
         <h1 className="d2" style={{ fontSize: "var(--fs-8)" }}>{title}</h1>
-        <p className="lead" style={{ marginTop: 12 }}>{lead}</p>
-        <MarginNote head="Last updated">
-          {updated}.
+        <p className="lead" style={{ marginTop: 12, maxWidth: "var(--m-lead)" }}>{lead}</p>
+        <p className="tiny" style={{ marginTop: "var(--sp-3)" }}>
+          Last updated {updated}.
           {effective ? <> Takes effect {effective}.</> : null}
-        </MarginNote>
+        </p>
 
         <div style={{ marginTop: 24, maxWidth: "var(--m-wide)" }}>
           <Notice tone="amber" head="Read this first: these are not lawyer-reviewed">
@@ -97,6 +127,31 @@ export function LegalShell({
 
         {notice}
 
+        {masthead}
+
+        {shape === "index" && (
+          /* The clause list across the top rather than down the side. In a
+             contract the numbers are how people refer to it -- "clause 5" --
+             so the index is a thing you read once and then cite, not a rail
+             that follows you. */
+          <nav className="lglindex" aria-label="On this page">
+            <h2 className="lp-eyebrow" style={{ marginBottom: "var(--sp-3)" }}>The clauses</h2>
+            <ol className="lglindex-l">
+              {sections.map((sec) => (
+                <li key={sec.n}>
+                  <a className="lglindex-a" href={`#clause-${sec.n}`}>
+                    <span className="lglindex-n">{String(sec.n).padStart(2, "0")}</span>
+                    <span>{sec.title}</span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )}
+
+        {shape !== "aside" ? (
+          <div className="lglbody" style={{ marginTop: "var(--sp-8)" }}>{children}</div>
+        ) : (
         <div className="truthgrid" style={{ marginTop: 40, alignItems: "start" }}>
           {/* Contents. Sticky below the header on desktop; at ≤900px truthgrid
               collapses and this simply sits above the text. */}
@@ -122,9 +177,9 @@ export function LegalShell({
 
           <div style={{ maxWidth: "var(--m-wide)" }}>
             {children}
-
           </div>
         </div>
+        )}
 
         {/* Measured before this existed: Terms, Privacy and Accessibility all
             ended on a mailto and nothing else. A reader who finishes a legal

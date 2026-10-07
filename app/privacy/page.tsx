@@ -27,6 +27,38 @@ export default function Privacy() {
       lead="What Veyro holds, what it is built never to receive, and how data about people under 18 is handled."
       updated={UPDATED}
       sections={SECTIONS}
+      masthead={
+        /* The one thing anybody opens a privacy policy to find out is what is
+           held about them. It was four paragraphs in; it is the first object
+           on the page now, with its counterpart beside it -- because what is
+           deliberately NOT received is the more interesting half here, and it
+           was buried in clause 2. */
+        <div className="inv">
+          <div className="inv-side" data-side="held">
+            <span className="inv-k">Held by Veyro</span>
+            <ul className="inv-l">
+              <li><b>Name, email, country</b><span>To sign you in and decide which rules apply.</span></li>
+              <li><b>Date of birth</b><span>The age rules turn on the exact date. Never shown publicly.</span></li>
+              <li><b>Password hash</b><span>argon2id. The password itself is never stored.</span></li>
+              <li><b>Products, payments, payouts</b><span>The ledger your wallet is folded from.</span></li>
+              <li><b>Guardian invitations</b><span>Who agreed to what, and when.</span></li>
+              <li><b>An audit log</b><span>Significant actions, with timestamps.</span></li>
+            </ul>
+          </div>
+          <div className="inv-side" data-side="never">
+            <span className="inv-k">Never received</span>
+            <ul className="inv-l">
+              <li><b>Identity documents</b><span>Passports, licences, national ID numbers. Entered on Stripe&rsquo;s own form.</span></li>
+              <li><b>Bank details</b><span>Payout accounts go to Stripe, not to us.</span></li>
+              <li><b>Card numbers</b><span>Entered into Stripe&rsquo;s payment element. They never touch our servers.</span></li>
+            </ul>
+            <p className="inv-n">
+              Architecture, not a promise about our intentions. We store a reference to the
+              Stripe account and nothing that would let anyone impersonate you.
+            </p>
+          </div>
+        </div>
+      }
     >
       <Clause n={1} title="What we collect">
         <p className="body" style={{ marginTop: 0 }}>

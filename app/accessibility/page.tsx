@@ -23,6 +23,43 @@ export default function Accessibility() {
       lead="What Veyro aims for, what has actually been checked, and what has not."
       updated={UPDATED}
       sections={SECTIONS}
+      shape="plain"
+      masthead={
+        /* Somebody opens an accessibility statement to find out whether the
+           thing works for them, and the honest answer here is "measured in
+           three places, and never once tried with a screen reader". That
+           belongs at the top as a state, not four clauses down as prose.
+
+           The untested column is not dressed as a failure and not hidden as
+           a footnote. It is the same size as the other two. */
+        <ul className="conf">
+          <li className="conf-c" data-state="measured">
+            <span className="conf-k">Measured</span>
+            <ul className="conf-l">
+              <li>Colour contrast, every pairing, worst case 4.55:1</li>
+              <li>One h1, one main landmark, skip link first</li>
+              <li>Every grid collapses; nothing fixed above 360px</li>
+            </ul>
+          </li>
+          <li className="conf-c" data-state="design">
+            <span className="conf-k">Built in</span>
+            <ul className="conf-l">
+              <li>Labelled inputs, errors announced with role=&quot;alert&quot;</li>
+              <li>Focus rings never removed</li>
+              <li>44px touch targets, above the 24px minimum</li>
+              <li>prefers-reduced-motion honoured</li>
+            </ul>
+          </li>
+          <li className="conf-c" data-state="untested">
+            <span className="conf-k">Not tested</span>
+            <ul className="conf-l">
+              <li>No screen reader testing. Not VoiceOver, NVDA or JAWS</li>
+              <li>Nobody who relies on assistive technology has used this</li>
+              <li>Written to be readable by them is not the same as knowing</li>
+            </ul>
+          </li>
+        </ul>
+      }
     >
       <Clause n={1} title="The target">
         <p className="body" style={{ marginTop: 0 }}>

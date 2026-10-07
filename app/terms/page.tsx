@@ -41,6 +41,26 @@ export default function Terms() {
       updated={UPDATED}
       effective={EFFECTIVE}
       sections={SECTIONS}
+      shape="index"
+      masthead={
+        /* A contract is read for two things before a word of it: when it
+           starts governing you, and what the clauses are. Both were a margin
+           note and a sidebar. */
+        <dl className="lglkey">
+          <div>
+            <dt className="fig-k">Takes effect</dt>
+            <dd className="fig fig-sm">{EFFECTIVE}</dd>
+          </div>
+          <div>
+            <dt className="fig-k">Clauses</dt>
+            <dd className="fig fig-sm">{SECTIONS.length}</dd>
+          </div>
+          <div>
+            <dt className="fig-k">Governing law</dt>
+            <dd className="fig fig-sm">Not yet set</dd>
+          </div>
+        </dl>
+      }
       notice={
         <div className="archive-note" data-tone="pending">
           <strong>These Terms take effect on {EFFECTIVE}.</strong>
