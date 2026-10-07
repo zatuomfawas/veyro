@@ -3,7 +3,6 @@ import { buildMetadata, buildViewport } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
-import { SectionRail } from "@/app/_ui/SectionRail";
 import { RoleStack } from "@/app/_ui/RoleStack";
 import { ScrollProgress } from "@/app/_ui/ScrollProgress";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
@@ -99,39 +98,61 @@ export default function HowItWorks() {
       {/* paddingBottom is inline, so it overrides .has-sticky's 86px on mobile.
           It must stay at or above 86 or the sticky CTA will cover the last
           paragraph. The class is kept because it states the intent. */}
-      <main id="main" className="wrap-lp longform has-rail has-sticky" style={{ paddingTop: 32 }}>
-        <SectionRail />
-        <span className="lp-eyebrow">How it works</span>
-        <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)", maxWidth: "24ch" }}>
-          What Veyro does, and what Stripe does.
-        </h1>
-        <p className="lead" style={{ marginTop: 12 }}>
-          Stripe moves the money. It has allowed a 13-year-old to hold an account with an adult
-          behind it for years. Veyro is everything around that: proving the arrangement is lawful,
-          getting your parent through it in one sitting, and keeping the account straight after.
-          Here is the whole of it, in order, with nothing left mysterious.
-        </p>
-        <p className="body" style={{ marginTop: 12, maxWidth: "var(--m-body)" }}>
-          Below is the whole of it, including the primary source we hold ourselves to and the
-          four things that went wrong on the way. Written down because a claim about money and
-          minors is worth nothing if you cannot check it.
-        </p>
-        <MarginNote head="Last checked">
-          {UPDATED}. The rules underneath this change, and when they do this page changes with
-          them. Nothing here is legal or tax advice.
-        </MarginNote>
+      {/* Chaptered, not railed.
+          ------------------------------------------------------------------
+          Measured before the change: 9,400px, 2,986 words, thirteen <h2>s at
+          one weight in a single 52ch column, and the only call to action at
+          8,526px -- 91% of the way down. The page had the right content and
+          the shape of a transcript.
 
-        {/* Layer 2. This page is long on purpose and most of it is Layer 3 --
-            the primary source, the country grading, the four things that went
-            wrong. A reader who gets the shape of it in one picture first reads
-            the rest as detail rather than as argument. The detailed version of
-            the same path, with what happens at each stop, is further down
-            under "How the money moves"; this is deliberately the short one. */}
-        <MoneyRail />
+          It is full-width chapters now, with the ground alternating at each
+          boundary so a reader can see where one argument ends. .longform
+          stays INSIDE each chapter, which is what keeps the reading measure
+          and the margin notes working; the chapters only change what happens
+          outside the text column.
 
-        <hr className="rule" style={{ margin: "var(--sp-7) 0" }} />
+          The rail went with it. A sticky index of thirteen flat headings was
+          a symptom of the problem rather than a fix for it, and chapters that
+          look different do the job it was doing. */}
+      <main id="main" className="has-sticky">
 
-        <h2 className="h3">In order</h2>
+        <div className="hero-band">
+          <div className="wrap-lp gs-hero">
+            <div className="gs-hero-grid">
+              <div>
+                <p className="hero-kicker">
+                  <span className="hero-kicker-dot" aria-hidden="true" />
+                  How it works
+                </p>
+                <h1 className="hero-h1">What Veyro does, and what Stripe does.</h1>
+                <p className="hero-lead">
+                  Stripe moves the money, and has let a 13-year-old hold an account with an adult
+                  behind it for years. Veyro is everything around that: proving the arrangement is
+                  lawful, getting your parent through it in one sitting, and keeping the account
+                  straight after.
+                </p>
+                <div className="hero-cta">
+                  <Link className="btn btn-lg" href="/check">Check what applies to you</Link>
+                  <Link className="btn btn-2 btn-lg" href="/get-started">See the whole path</Link>
+                </div>
+                <p className="tiny" style={{ marginTop: "var(--sp-6)", maxWidth: "46ch" }}>
+                  Last checked {UPDATED}. The rules underneath this change, and when they do this
+                  page changes with them. Nothing here is legal or tax advice.
+                </p>
+              </div>
+
+              {/* The shape of it in one picture, before any of the argument.
+                  A reader who has this reads the rest as detail rather than
+                  as persuasion. The detailed version of the same path is in
+                  "How the money moves" near the end; this is the short one. */}
+              <MoneyRail />
+            </div>
+          </div>
+        </div>
+
+        <section className="lp ch ch-surface">
+          <div className="wrap-lp longform">
+        <h2 className="h3" style={{ marginTop: 0 }}>In order</h2>
         <ol className="numbered" style={{ marginTop: 16 }}>
           <li>
             <span>You sign up</span>
@@ -202,6 +223,11 @@ export default function HowItWorks() {
         </div>
 
         {/* ---------------------------------------------------------------- */}
+          </div>
+        </section>
+
+        <section className="lp ch">
+          <div className="wrap-lp longform">
         <div className="truthgrid" style={{ marginBottom: 40, alignItems: "start" }}>
           <div>
             <h2 className="h3" style={{ marginTop: 0 }}>Four parties, in order</h2>
@@ -227,6 +253,11 @@ export default function HowItWorks() {
         </p>
 
         {/* ---------------------------------------------------------------- */}
+          </div>
+        </section>
+
+        <section className="lp ch ch-surface">
+          <div className="wrap-lp longform">
         <h2 className="h3" style={{ marginTop: 32 }}>What we established</h2>
         <p className="body" style={{ marginTop: 8 }}>
           We wrote to Stripe support describing the model in plain terms. A platform onboarding
@@ -313,6 +344,11 @@ export default function HowItWorks() {
         </div>
 
         {/* ---------------------------------------------------------------- */}
+          </div>
+        </section>
+
+        <section className="lp ch">
+          <div className="wrap-lp longform">
         <h2 className="h3" style={{ marginTop: 32 }}>What we hit building it</h2>
         <p className="body" style={{ marginTop: 8 }}>
           Getting an answer is one thing. Building on it is another. Four things we hit, in the
@@ -371,6 +407,11 @@ export default function HowItWorks() {
         </ol>
 
         {/* ---------------------------------------------------------------- */}
+          </div>
+        </section>
+
+        <section className="lp ch ch-surface">
+          <div className="wrap-lp longform">
         <MarginNote head="Where it reaches">
           <span className="fig fig-md">43</span>
           countries can sign up directly. Two are sales-contact only, five run on an extended
@@ -447,7 +488,11 @@ export default function HowItWorks() {
             showing: this is the page for someone who wants the mechanics, and
             keeping them on a page nobody had scrolled to was the reason the
             homepage was so long. */}
-        <hr className="rule" style={{ margin: "36px 0 28px" }} />
+          </div>
+        </section>
+
+        <section className="lp ch">
+          <div className="wrap-lp longform">
         <h2 className="h3">An adult on the account, not on your business</h2>
         <p className="body" style={{ marginTop: 8 }}>
           This is the part people get wrong, so it is worth being exact. Stripe needs a verified
@@ -470,7 +515,11 @@ export default function HowItWorks() {
         </div>
 
         {/* ---------------------------------------------------------------- */}
-        <hr className="rule" style={{ margin: "36px 0 28px" }} />
+          </div>
+        </section>
+
+        <section className="lp ch ch-surface">
+          <div className="wrap-lp longform">
         <MarginNote head="Veyro never holds it">
           The money goes from the customer to an account in your guardian&rsquo;s name. We are the
           checkout at one end and the record at the other, and never in the path between.
@@ -508,7 +557,6 @@ export default function HowItWorks() {
         <LiveWallet />
 
         {/* ---------------------------------------------------------------- */}
-        <hr className="rule" style={{ margin: "36px 0 28px" }} />
         <h2 className="h3">Two ways to take the payment</h2>
         <p className="body" style={{ marginTop: 8 }}>
           Both take the same money into the same account. Pick whichever matches what you have
@@ -535,7 +583,11 @@ export default function HowItWorks() {
         </div>
 
         {/* ---------------------------------------------------------------- */}
-        <hr className="rule" style={{ margin: "36px 0 28px" }} />
+          </div>
+        </section>
+
+        <section className="lp ch">
+          <div className="wrap-lp longform">
         <h2 className="h3">Whichever of the two you are</h2>
         <p className="body" style={{ marginTop: 8 }}>
           This page is written for both of you, which means half of it is addressed to someone
@@ -543,7 +595,6 @@ export default function HowItWorks() {
         </p>
         <AudienceSplit />
 
-        <hr className="rule" style={{ margin: "var(--sp-9) 0 var(--sp-7)" }} />
 
         <h2 className="h3">Find out what applies to you</h2>
         <p className="body" style={{ marginTop: 8 }}>
@@ -559,6 +610,8 @@ export default function HowItWorks() {
             Read Stripe&rsquo;s Help Center
           </a>
         </div>
+          </div>
+        </section>
       </main>
 
       <ScrollTop />
