@@ -134,7 +134,7 @@ export default function Pricing() {
       <main id="main" className="wrap-lp longform has-rail" style={{ paddingTop: 32, paddingBottom: 56 }}>
         <SectionRail />
         <span className="lp-eyebrow">Pricing</span>
-        <h1 className="d2" style={{ marginTop: 8, maxWidth: "22ch" }}>
+        <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)", maxWidth: "22ch" }}>
           One product. Different costs depending on what you earn.
         </h1>
         <p className="lead" style={{ marginTop: 12 }}>

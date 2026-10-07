@@ -80,15 +80,18 @@ const GAPS: Gap[] = [
     ),
   },
   {
-    h: "Your guardian cannot block a payout, and that is not a feature",
+    h: "Veyro gives your guardian no veto, and that is not a feature",
     body: (
       <>
         On a Stripe Standard connected account the platform cannot hold money, delay a payout or
-        approve one, so neither we nor your guardian can. They are notified of every payout
-        request and keep a permanent record. The honest version is that this follows from
-        Veyro&rsquo;s platform being registered in the UAE, which limits us to Standard accounts
-        — not from anything about the under-18 rules. If another product promises a guardian
-        veto, ask which account type it uses.
+        approve one, so Veyro has no approval step to offer: your guardian is notified of every
+        request and keeps a permanent record, and that is all we give them. We used to write
+        that as &ldquo;nobody can block a payout&rdquo;, which was wrong and is corrected here
+        rather than quietly deleted &mdash; Standard hands the account holder a full Stripe
+        dashboard, so the bank details, the payout schedule and the account itself are the
+        guardian&rsquo;s. Not a veto on one payout; control of the account underneath. That we
+        are on Standard at all follows from Veyro&rsquo;s platform being registered in the UAE,
+        not from anything about the under-18 rules.
       </>
     ),
   },

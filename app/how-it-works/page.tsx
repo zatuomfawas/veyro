@@ -102,7 +102,7 @@ export default function HowItWorks() {
       <main id="main" className="wrap-lp longform has-rail has-sticky" style={{ paddingTop: 32 }}>
         <SectionRail />
         <span className="lp-eyebrow">How it works</span>
-        <h1 className="d2" style={{ marginTop: 8, maxWidth: "24ch" }}>
+        <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)", maxWidth: "24ch" }}>
           What Veyro does, and what Stripe does.
         </h1>
         <p className="lead" style={{ marginTop: 12 }}>
@@ -334,12 +334,15 @@ export default function HowItWorks() {
             <span>Standard hands the account holder the keys, and that costs you a promise</span>
             <span>
               A Standard connected account comes with a full Stripe dashboard and its own payout
-              schedule. The platform cannot hold the money, delay a payout, or approve one. So your
-              guardian is notified of every payout request and keeps a permanent record of it.
-              they do not get a veto. On Express or Custom we could build them one, which means the
-              honest version is that our platform&rsquo;s registration, not the under-18 rules, is
-              why that feature does not exist. If another product promises a guardian veto, ask
-              which account type it uses.
+              schedule. The platform cannot hold the money, delay a payout, or approve one, so
+              Veyro has no per-payout approval to offer: your guardian is notified of every
+              request and keeps a permanent record, and that is all we give them. What Standard
+              does give them is the account &mdash; the dashboard, the bank details, the payout
+              schedule, the ability to close it. So the accurate sentence is that Veyro gives
+              them no veto, not that nobody has one. On Express or Custom we could build an
+              approval step, which means our platform&rsquo;s registration rather than the
+              under-18 rules is why that feature does not exist. If another product promises a
+              per-payout guardian veto, ask which account type it uses.
             </span>
           </li>
           <li>
@@ -450,10 +453,13 @@ export default function HowItWorks() {
           This is the part people get wrong, so it is worth being exact. Stripe needs a verified
           adult behind every account. Your guardian is that adult. They are not a partner, not an
           owner and not an approver: they do not own what you build, they cannot take your
-          products off you, and on the account type this runs on they cannot block a payout even
-          if they wanted to. What they do is one identity check, once, on Stripe&rsquo;s own form
-          — and then they get told every time you request money, and keep a permanent record of
-          it. <Link className="linkbtn" href="/for-parents">What a guardian is agreeing to</Link>.
+          products off you, and Veyro gives them no button to approve or refuse a payout. What
+          they do is one identity check, once, on Stripe&rsquo;s own form &mdash; and then they
+          get told every time you request money, and keep a permanent record of it. They do own
+          the Stripe account, though, so closing it or changing where the money lands is theirs
+          to do; it happens in Stripe rather than here, and it is a conversation rather than a
+          control panel. <Link className="linkbtn" href="/for-parents">What a guardian is
+          agreeing to</Link>.
         </p>
 
         {/* The same checklist the homepage shows, directly under the paragraph

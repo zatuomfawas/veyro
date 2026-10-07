@@ -31,9 +31,12 @@ export const FAQ: FaqEntry[] = [
     homepage: true,
     a: (
       <>
-      No. On the account type this is built on, the
-      guardian is notified of every payout request and keeps a permanent record, but the
-      provider gives nobody a veto, so neither can we.
+      Not through Veyro, and that is the honest version of it. Veyro has no
+      approve-or-decline button for a payout and never asks for one: your guardian is notified
+      of every request and keeps a permanent record, and that is the whole of what we give
+      them. But they do hold the Stripe account itself, with its full dashboard, so the bank
+      details and the payout schedule are theirs to change and the account is theirs to close.
+      Not a veto on any one payout &mdash; control of the account the payouts come from.
       </>
     ),
   },

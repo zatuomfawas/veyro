@@ -183,7 +183,7 @@ export default function ForParents() {
       <main id="main" className="wrap-lp longform has-rail" style={{ paddingTop: 32, paddingBottom: 56 }}>
         <SectionRail />
         <span className="lp-eyebrow">For parents</span>
-        <h1 className="d2" style={{ marginTop: 8, maxWidth: "24ch" }}>
+        <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)", maxWidth: "24ch" }}>
           What you are actually being asked to agree to.
         </h1>
         <p className="lead" style={{ marginTop: 12 }}>
