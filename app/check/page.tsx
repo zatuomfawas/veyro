@@ -5,6 +5,7 @@ import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { MobileNav } from "@/app/_ui/MobileNav";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
+import { PageNext } from "@/app/_ui/PageNext";
 import CheckClient from "./CheckClient";
 
 // Real Next.js metadata — server-rendered into the first byte of HTML, unlike
@@ -58,6 +59,22 @@ export default function CheckPage() {
 
       <main id="main">
         <CheckClient />
+
+        {/* The checker answers one question and then stopped dead. Whichever
+            answer somebody got, there is a next move: a yes goes to signup,
+            and a no is still owed the reason and a person to argue with. */}
+        <div className="wrap-lp" style={{ paddingBottom: "var(--sp-9)" }}>
+          <PageNext
+            head="Got your answer?"
+            lead="If it works where you live, the next step is about five minutes of your own
+              and ten of a parent's. If it does not, the limit is the payment provider's rather
+              than ours, and it is worth telling us where you are."
+            primary={{ href: "/get-started", label: "See the whole path" }}
+            secondary={{ href: "/for-parents", label: "The page for your parent" }}
+            note="The checker reads published sources and no account is involved, so nothing you
+              typed was stored."
+          />
+        </div>
       </main>
 
       <SiteFooter />

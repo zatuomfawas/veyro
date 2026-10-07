@@ -9,6 +9,7 @@ import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { SectionRail } from "@/app/_ui/SectionRail";
+import { PageNext } from "@/app/_ui/PageNext";
 
 export const viewport = buildViewport();
 
@@ -197,6 +198,15 @@ export default function LegalPage() {
           {" · "}
           <Link className="linkbtn" href="/privacy">Privacy</Link>
         </p>
+        <PageNext
+          head="Read the worst of it. Now the rest."
+          lead="Everything above is true and none of it is the whole picture. How the thing is
+            actually built, and what the adult on the account is actually agreeing to."
+          primary={{ href: "/how-it-works", label: "How it is built" }}
+          secondary={{ href: "/for-parents", label: "What a guardian takes on" }}
+          note="If one of these six is the thing stopping you, say which — it is the most useful
+            mail we get."
+        />
       </main>
 
       <ScrollTop />

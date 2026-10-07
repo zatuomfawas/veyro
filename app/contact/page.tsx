@@ -5,6 +5,7 @@ import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
+import { PageNext } from "@/app/_ui/PageNext";
 
 export const viewport = buildViewport();
 
@@ -91,6 +92,13 @@ export default function Contact() {
             </p>
           </div>
         </div>
+        <PageNext
+          head="Faster than waiting for us"
+          lead="Most questions already have an answer written down, and the eligibility checker
+            settles the commonest one in about twenty seconds without an account."
+          primary={{ href: "/faq", label: "Read the questions" }}
+          secondary={{ href: "/check", label: "Check where you live" }}
+        />
       </main>
 
       <SiteFooter />

@@ -7,6 +7,7 @@ import { ScrollProgress } from "@/app/_ui/ScrollProgress";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { MarginNote } from "@/app/_ui/MarginNote";
+import { PageNext } from "@/app/_ui/PageNext";
 
 export const SUPPORT_EMAIL = "hello@withveyro.com";
 
@@ -34,7 +35,7 @@ export type Section = { n: number; title: string };
  * people rely on into noise.
  */
 export function LegalShell({
-  title, lead, updated, sections, children, effective, notice }: {
+  title, lead, updated, sections, children, effective, notice, next }: {
   title: string;
   lead: string;
   updated: string;
@@ -44,6 +45,12 @@ export function LegalShell({
   effective?: string;
   /** Shown above the document. For a version that is not yet in force. */
   notice?: React.ReactNode;
+  /**
+   * The exit. Legal pages share one because the reader's next move is the
+   * same whichever of the three they finished -- ask a person, or read the
+   * one that actually explains the arrangement. A page may pass its own.
+   */
+  next?: React.ReactNode;
 }) {
   return (
     <div className="fw">
@@ -116,12 +123,29 @@ export function LegalShell({
           <div style={{ maxWidth: "var(--m-wide)" }}>
             {children}
 
-            <p className="tiny" style={{ marginTop: 40 }}>
-              Questions about this page:{" "}
-              <a className="linkbtn" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
-            </p>
           </div>
         </div>
+
+        {/* Measured before this existed: Terms, Privacy and Accessibility all
+            ended on a mailto and nothing else. A reader who finishes a legal
+            document has a question or a decision, and neither is served by a
+            dead end. */}
+        {next ?? (
+          <PageNext
+            head="Still deciding?"
+            lead="These documents describe the arrangement. The two pages below explain it in
+              plain words — one for a founder, one for the adult being asked to sign."
+            primary={{ href: "/how-it-works", label: "How it actually works" }}
+            secondary={{ href: "/for-parents", label: "What a guardian takes on" }}
+            note={
+              <>
+                Questions about this page go to{" "}
+                <a className="linkbtn" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>{" "}
+                and a person answers them.
+              </>
+            }
+          />
+        )}
       </main>
 
       <ScrollTop />

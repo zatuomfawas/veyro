@@ -1407,6 +1407,30 @@ export const CSS = `
 .fw .askg-b p + p { margin-top:var(--sp-4); }
 @media (max-width:600px) { .fw .askg-b { padding:var(--sp-4) var(--sp-4) var(--sp-5); } }
 
+/* The end of a page. See PageNext.tsx for why every page now has one.
+   Text and action side by side rather than stacked: stacked, it is a fifth
+   heading at the bottom of a long document and reads as more page. Beside
+   each other on one rule, it reads as the exit. */
+.fw .pnext { margin-top:var(--sp-10); padding-top:var(--sp-7);
+  border-top:1px solid var(--ink); }
+.fw .pnext-in { display:flex; flex-wrap:wrap; align-items:center;
+  justify-content:space-between; gap:var(--sp-6) var(--sp-8); }
+.fw .pnext-t { min-width:0; flex:1 1 32ch; }
+.fw .pnext-h { margin:0; font-size:var(--fs-6); letter-spacing:-0.022em;
+  line-height:1.2; color:var(--ink); }
+.fw .pnext-l { margin:var(--sp-2) 0 0; font-size:var(--fs-3); line-height:1.55;
+  color:var(--ink-2); max-width:54ch; }
+/* flex:none so the buttons keep their size when the sentence is long; the
+   text column is the one that gives. */
+.fw .pnext-a { display:flex; flex-wrap:wrap; gap:8px; flex:none; }
+.fw .pnext-n { margin:var(--sp-5) 0 0; font-size:var(--fs-2); line-height:1.5;
+  color:var(--ink-3); max-width:var(--m-body); }
+@media (max-width:720px) {
+  .fw .pnext { margin-top:var(--sp-8); }
+  .fw .pnext-a { width:100%; }
+  .fw .pnext-a > .btn { flex:1 1 auto; justify-content:center; }
+}
+
 .fw .preview-stack { display:flex; flex-direction:column; gap:var(--sp-6); }
 .fw .preview-stack > :last-child { align-self:center; width:100%; max-width:560px; }
 

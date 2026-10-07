@@ -12,6 +12,7 @@ import { GuardianPermissions } from "@/app/_ui/GuardianPermissions";
 import { ParentPanel } from "@/app/_ui/ParentPanel";
 import { MoneyRail } from "@/app/_ui/MoneyRail";
 import { MarginNote } from "@/app/_ui/MarginNote";
+import { PageNext } from "@/app/_ui/PageNext";
 import { supportMailto } from "@/lib/support";
 
 export const viewport = buildViewport();
@@ -290,6 +291,15 @@ export default function ForParents() {
           <Link className="linkbtn" href="/contact">contact us</Link>. A parent who reads all of
           this and still says no was right to, and that is a perfectly good outcome.
         </p>
+        <PageNext
+          head="Want the uncomfortable version?"
+          lead="This page is written to be fair to Veyro. The other one is written to be fair to
+            you: every part of this that is untested, unfinished, or weaker than it sounds."
+          primary={{ href: "/legal", label: "What is not settled yet" }}
+          secondary={{ href: "/contact", label: "Ask a person" }}
+          note="You are not committing to anything by reading. A guardian invite needs your
+            agreement, and declining is a normal answer the page offers as plainly as accepting."
+        />
       </main>
 
       <ScrollTop />

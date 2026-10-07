@@ -12,6 +12,7 @@ import { MoneyRail } from "@/app/_ui/MoneyRail";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { SectionRail } from "@/app/_ui/SectionRail";
 import { MarginNote } from "@/app/_ui/MarginNote";
+import { PageNext } from "@/app/_ui/PageNext";
 
 export const viewport = buildViewport();
 
@@ -99,6 +100,13 @@ export default function FaqPage() {
           <Link className="linkbtn" href="/for-parents">what a guardian takes on</Link> is the
           page written for you.
         </MarginNote>
+        <PageNext
+          head="Not the question you had?"
+          lead="These are the ten that come up most. Anything else goes to a person, and a person
+            answers it — there is no ticket queue to disappear into."
+          primary={{ href: "/contact", label: "Ask us directly" }}
+          secondary={{ href: "/get-started", label: "See the whole path" }}
+        />
       </main>
 
       <ScrollTop />

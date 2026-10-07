@@ -6,6 +6,7 @@ import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { Notice } from "@/app/_ui/form";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
+import { PageNext } from "@/app/_ui/PageNext";
 
 export const viewport = buildViewport();
 export const dynamic = "force-dynamic";
@@ -129,6 +130,13 @@ export default function Status() {
           <Link className="linkbtn" href="/contact">Contact</Link> &middot;{" "}
           <Link className="linkbtn" href="/about">What is not finished yet</Link>
         </p>
+        <PageNext
+          head="Something looking wrong?"
+          lead="This page lists what Veyro runs on, not whether your payment arrived. If a
+            specific payment looks wrong, the fastest route is a person with the reference."
+          primary={{ href: "/contact", label: "Tell us what you are seeing" }}
+          secondary={{ href: "/how-it-works", label: "Where a payment sits" }}
+        />
       </main>
 
       <SiteFooter />
