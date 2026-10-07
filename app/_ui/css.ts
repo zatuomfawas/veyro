@@ -438,6 +438,16 @@ export const CSS = `
   text-decoration:underline; text-underline-offset:2px; }
 .fw .linkbtn:hover { color:var(--pine-h); }
 .fw .btn-lg { height:var(--h-lg); padding:0 var(--sp-5); font-size:var(--fs-4); }
+/* The page's single most important action.
+   160x46 at 16.5px/500 did not read as the primary next step beside a
+   secondary button two pixels shorter. This is taller, wider, and a weight
+   heavier -- size and spacing doing the work, because the one thing it must
+   not do is introduce a colour. The monochrome system already has the
+   strongest possible treatment in it: solid --brand. This just stops
+   whispering it. */
+.fw .btn-xl { height:56px; padding:0 var(--sp-7); font-size:var(--fs-5);
+  font-weight:var(--fw-bold); letter-spacing:-0.012em; }
+@media (max-width:620px) { .fw .btn-xl { height:52px; width:100%; justify-content:center; } }
 .fw .btn-sm { height:var(--h-sm); padding:0 var(--sp-3); font-size:var(--fs-2); border-radius:0; }
 .fw .btn-w { width:100%; }
 
@@ -874,8 +884,13 @@ export const CSS = `
    like a product someone wants, so it gets a window frame, a chart and an
    accent edge. It is the exception that makes the restraint elsewhere read as
    restraint rather than as a lack of ideas. */
+/* The wallet, at the size a product surface should be.
+   Its internals are all relative to this font-size, so one declaration
+   brings the balance, the chips, the ledger rows and the footer up together
+   rather than needing each one nudged. Clamped so it cannot outgrow a
+   narrow column on the way down to a phone. */
 .fw .dp { border:1px solid var(--line); background:var(--card); box-shadow:var(--lift);
-  overflow:hidden; }
+  overflow:hidden; font-size:clamp(14.5px, 1.12vw, 16.5px); }
 .fw .dp-bar { display:flex; align-items:center; gap:10px; padding:10px var(--sp-5);
   border-bottom:1px solid var(--line); background:var(--surface); }
 .fw .dp-dots { display:flex; gap:5px; }
@@ -1479,6 +1494,41 @@ export const CSS = `
    blocks, their captions, the figures -- already reads from --surface,
    --line, --ink and --brand, which .lp-dark redefines, so none of it needs
    a rule of its own. */
+/* The reference below the hero.
+   ----------------------------------------------------------------------
+   The steps were .longform, which centres a 66ch reading column: about
+   636px of content in a 1,432px section, so every step sat in a narrow
+   strip with roughly 400px of nothing down each side -- symmetric, which
+   is the kind of emptiness that reads as a page that ran out. On a page
+   whose content is mostly code, and where the snippets were scrolling
+   inside a column narrower than the code itself, that was the worst
+   available container.
+
+   Left-anchored flow instead. Everything starts on the section's own left
+   edge, the same edge the hero headline starts on, so the whole page reads
+   down one line. Prose keeps a measure because prose needs one; code,
+   tables and panels take the width because they have something to do with
+   it. A two-column split was the other candidate and was rejected on
+   contact with the content: three of these sections have no code in them
+   at all, so the right column would have been empty a third of the time.
+
+   The remaining space sits to the right of paragraphs only, which is what
+   documentation looks like, rather than in two matching gutters. */
+.fw .sdkref > * { max-width:var(--m-body); }
+/* The things that earn the width. :has() so a Copyable -- a wrapper div
+   around a caption and a <pre> -- is caught without needing a class on it. */
+.fw .sdkref > .code,
+.fw .sdkref > .tbl-wrap,
+.fw .sdkref > table,
+.fw .sdkref > .ruled,
+.fw .sdkref > :has(.code),
+.fw .sdkref > :has(> table) { max-width:none; }
+.fw .sdkref .code { max-width:100%; }
+/* Headings get their air back. In .longform the measure was doing the
+   separating; on a full-width column the space has to be stated. */
+.fw .sdkref > h2 { margin-top:var(--sp-9); }
+.fw .sdkref > h2:first-child { margin-top:0; }
+
 .fw .sdk-hero { padding-top:var(--lp-pad); padding-bottom:var(--lp-pad); }
 .fw .sdk-hero-grid { display:grid; grid-template-columns:var(--split-a) var(--split-b);
   gap:var(--sp-8) var(--sp-10); align-items:center; }
@@ -2752,7 +2802,12 @@ export const CSS2 = `
 
 /* 9. The ending is the only heading on the page allowed past 44px. Scale is
    what makes it read as a conclusion rather than a tenth section. */
-.fw section.ch-9 .lp-h2 { font-size:var(--lp-1); line-height:1.04; max-width:16ch; }
+/* The closing statement is a step below the hero, not above it.
+   It was --lp-1, 64px, against a hero headline that clamps to 62 -- so the
+   largest type on the homepage was the sign-off rather than the promise.
+   62 / 50 / 44 now: hero, closing statement, section. Each step is
+   visible and the order is the order of importance. */
+.fw section.ch-9 .lp-h2 { font-size:var(--fs-9); line-height:1.06; max-width:18ch; }
 
 @media (max-width:900px) {
   /* Mobile gets its own composition rather than the desktop one folded flat:
@@ -3198,6 +3253,51 @@ export const CSS2 = `
    and a lift underneath a count is two effects competing for the same glance.
    The counting is the signal. */
 .fw .lw-bal { margin-top:5px; }
+
+/* The month, as terms you can interrogate.
+   ----------------------------------------------------------------------
+   A balance is a number you either trust or do not. Five terms that add up
+   to it, each one able to say what it is, is the difference between showing
+   a figure and showing the product that produced it.
+
+   Laid out as a row that wraps rather than a table: it is an equation, and
+   an equation reads along a line. */
+.fw .lw-flow { display:flex; flex-wrap:wrap; align-items:stretch; gap:4px;
+  margin-top:var(--sp-5); padding-top:var(--sp-4); border-top:1px solid var(--line); }
+.fw .lw-op { display:flex; align-items:center; font-size:var(--fs-2); color:var(--ink-3);
+  padding:0 2px; }
+.fw .lw-term { display:flex; flex-direction:column; gap:2px; align-items:flex-start;
+  appearance:none; background:none; border:0; cursor:pointer; text-align:left;
+  padding:5px 7px; font:inherit; color:inherit; min-width:0;
+  transition:background-color var(--t), opacity var(--t), color var(--t); }
+.fw .lw-term-k { font-size:var(--fs-1); font-weight:var(--fw-med); letter-spacing:0.04em;
+  text-transform:uppercase; color:var(--ink-3); white-space:nowrap; }
+.fw .lw-term-v { font-size:var(--fs-3); font-weight:var(--fw-med);
+  font-variant-numeric:tabular-nums; white-space:nowrap; }
+/* The last term is the answer, so it carries the weight the others do not. */
+.fw .lw-term[data-k="available"] .lw-term-v { color:var(--pine); font-weight:var(--fw-bold); }
+.fw .lw-term:hover, .fw .lw-term[data-on="1"] { background:var(--surface-2); }
+.fw .lw-term[data-on="1"] .lw-term-k { color:var(--ink); }
+/* Asking about one term quietens the others. The dimming is on the card so
+   the ledger below goes with them -- the point of the gesture is that the
+   answer is the only lit thing, not that one chip got brighter. */
+.fw .dp[data-dim="1"] .lw-term:not([data-on="1"]),
+.fw .dp[data-dim="1"] .led,
+.fw .dp[data-dim="1"] .lw-chips,
+.fw .dp[data-dim="1"] .dp-foot { opacity:.45; }
+.fw .dp .led, .fw .dp .lw-chips, .fw .dp .dp-foot { transition:opacity var(--t); }
+
+/* Two lines of height, always. The card must not resize as the pointer
+   crosses it -- a product surface that twitches is the opposite of the
+   impression this is here to make. */
+.fw .lw-note { margin:var(--sp-3) 0 0; font-size:var(--fs-2); line-height:1.5;
+  color:var(--ink-2); min-height:calc(var(--fs-2) * 1.5 * 2); max-width:46ch; }
+
+@media (max-width:420px) {
+  .fw .lw-flow { gap:2px; }
+  .fw .lw-term { padding:4px 5px; }
+  .fw .lw-op { display:none; }
+}
 /* The row reserves its box immediately and reveals its contents. Collapsing
    the height instead would make the card grow under the reader's eye. */
 .fw .lw-new { opacity:0; transition:opacity var(--t-3) var(--ease-out); }
@@ -3206,6 +3306,10 @@ export const CSS2 = `
   from { opacity:0; transform:translateY(-8px); }
   to { opacity:1; transform:none; }
 }
+.fw .dp-cta { appearance:none; font:inherit; cursor:pointer;
+  transition:background-color var(--t), border-color var(--t), color var(--t); }
+.fw .dp-cta:hover { background:var(--brand-h); }
+.fw .dp-cta:active { background:var(--brand-a); }
 .fw .dp-cta[data-state="done"] { background:var(--pine-bg); color:var(--pine);
   border-color:var(--pine-line); }
 @media (prefers-reduced-motion: reduce) {
@@ -3697,7 +3801,14 @@ export const CSS2 = `
      half now. The text column keeps more than enough for its own measures:
      the tagline caps at 30ch and the lead at 56ch, both of which fit inside
      what is left at 1024 and up. */
-  .fw .hero-grid { grid-template-columns:minmax(0,0.88fr) minmax(0,1.12fr); }
+  /* The product takes the page, not the paragraph.
+     Measured before: a 563px text column against a 717px wallet, and the
+     text column was the TALLER of the two at 545px against 487. Whatever
+     the widths said, the thing commanding the hero was prose. The split is
+     0.74/1.26 now and the wallet's own type comes up with it, so the
+     product surface is both wider and visually heavier than the sentence
+     introducing it. */
+  .fw .hero-grid { grid-template-columns:minmax(0,0.74fr) minmax(0,1.26fr); }
 }
 /* minmax(0,1fr), not 1fr: a bare 1fr track is floored at its item's min-content,
    so one long unbreakable line in the hero widened the track past the viewport

@@ -186,7 +186,7 @@ export function BuyButton() {
         </section>
 
         <section className="lp ch" id="reference">
-          <div className="wrap-lp longform">
+          <div className="wrap-lp sdkref">
         {/* ---------------- 1 ---------------- */}
         <h2 className="h3">1. What you need</h2>
         <div className="ruled" style={{ marginTop: 14 }}>
@@ -300,7 +300,7 @@ document.querySelector("#buy").addEventListener("click", () => {
         </section>
 
         <section className="lp ch ch-surface">
-          <div className="wrap-lp longform">
+          <div className="wrap-lp sdkref">
         <h2 className="h3" style={{ marginTop: 34 }}>4. Check it before you ship</h2>
         <p className="body" style={{ marginTop: 8, maxWidth: "var(--m-body)" }}>
           Paste this into your browser console, anywhere. It answers from Veyro, so it tells you
@@ -348,7 +348,7 @@ document.querySelector("#buy").addEventListener("click", () => {
         </section>
 
         <section className="lp ch">
-          <div className="wrap-lp longform">
+          <div className="wrap-lp sdkref">
         <h2 className="h3">If an AI tool is writing this for you</h2>
         <p className="body" style={{ marginTop: 8, maxWidth: "var(--m-body)" }}>
           Copy one of these, fill in the brackets, and paste it in. They are written so the
@@ -367,7 +367,7 @@ document.querySelector("#buy").addEventListener("click", () => {
         </section>
 
         <section className="lp ch ch-surface">
-          <div className="wrap-lp longform">
+          <div className="wrap-lp sdkref">
         <h2 className="h3">When something goes wrong</h2>
         <p className="body" style={{ marginTop: 8, maxWidth: "var(--m-body)" }}>
           Every refusal comes back with a <span className="mono">code</span>, a sentence in plain
@@ -402,7 +402,7 @@ document.querySelector("#buy").addEventListener("click", () => {
         </section>
 
         <section className="lp ch">
-          <div className="wrap-lp longform">
+          <div className="wrap-lp sdkref">
         <h2 className="h3">Where the card details go</h2>
         <p className="body" style={{ marginTop: 8, maxWidth: "var(--m-body)" }}>
           Not to your app, and not to your server. The button opens Veyro&rsquo;s own checkout

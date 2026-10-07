@@ -1,11 +1,6 @@
 "use client";
 
-// The hero's right-hand side: a founder wallet that actually does something.
-//
-// The static preview this replaces was a good picture of the product and a bad
-// argument for it. A picture of a dashboard says "we drew a dashboard"; a
-// balance that moves when a payment lands says "this is running". The whole
-// difference the homepage needs is in those few seconds.
+// The hero's product surface: a founder wallet you can actually poke.
 //
 // What it does, once, when scrolled into view:
 //
@@ -13,48 +8,56 @@
 //   a sale arrives         a row slides into the ledger
 //   it settles             the row walks received -> settling -> available
 //
-// Then it stops. A loop would turn the hero into a screensaver and the
-// figures into decoration; this runs the product's actual sequence one time
-// and leaves the result on screen, which is also the frame someone
-// screenshotting it gets.
+// Then it stops. A loop would turn the hero into a screensaver.
 //
-// TWO THINGS THIS DELIBERATELY DOES NOT DO, both of which it used to:
+// WHAT IS NEW: the month's arithmetic is a row of controls rather than a
+// figure you take on trust. Hover or focus any term and the line underneath
+// says what that number is; the others go quiet so the one you asked about is
+// the one you see. Requesting a payout is a real click with a real state
+// change.
 //
-// It does not move the balance between two real figures. It showed $171.86
-// stepping up to $195.00 as the sale settled, which is arithmetically right
-// and reads as a glitch -- two numbers in the one place the page wants you
-// to look, smaller one first. There is one balance here and it is $195.00.
+// THE RULE THIS FILE IS STILL BUILT AROUND: nothing changes without a cause
+// the viewer can see. That rule is why the button used to be inert -- it
+// flipped itself to "Payout requested" on a timer, which is the interface
+// claiming something happened that nobody did. A click is a cause. The timer
+// was the problem, not the state change, so the button works now and nothing
+// moves on its own.
 //
-// It does not change the button. "Request a payout" is a call to action, and
-// flipping it to "Payout requested" on a timer is the interface claiming
-// something happened that nobody did. The payment lifecycle is the chips'
-// job; the button stays an invitation. For the same reason the sequence ends
-// at Available rather than Requested: available is a state money is in, and
-// requested is something a person chooses to do.
+// WHAT THE PAYOUT STATE DELIBERATELY DOES NOT DO: imply a duration. There is
+// no progress bar, no countdown, no "arriving in 2 days". On a Standard
+// connected account the payout runs on the provider's schedule and Veyro
+// cannot predict it, so the state says what is true -- it has been asked for
+// -- and says who decides when.
 //
-// THE RULE THIS FILE IS BUILT AROUND: nothing changes without a cause the
-// viewer can see. The sale row sliding in is the cause of the chips moving.
-// The count is a first-sight flourish on a figure that never changes again.
+// ACCESSIBILITY: this used to be role="img" with aria-hidden on the body,
+// which was right when it was a picture. It is not a picture any more, and
+// focusable controls inside an aria-hidden subtree are reachable by keyboard
+// and invisible to a screen reader, which is the worst of both. The figures
+// are real buttons, the description is a visually-hidden summary, and the
+// explanation line is a live region.
 
-import { Fragment, useEffect, useReducer, useRef } from "react";
+import { Fragment, useEffect, useReducer, useRef, useState } from "react";
 import { formatMinor } from "@/lib/money";
+import { feeMinor, FREE_FLOOR_MINOR } from "@/lib/pricing";
 import { CountUp } from "@/app/_ui/CountUp";
 
-// The arithmetic has to survive a sceptical parent adding it up. The sale is
-// the one the ledger shows arriving; $195.00 is the balance it is part of,
-// across the fourteen payments the card does not have room to list.
+// The arithmetic has to survive a sceptical parent adding it up.
 const SALE_GROSS_MINOR = 2400;
 const SALE_FEE_MINOR = 86;
-const BALANCE_MINOR = 19500;
+
+// One month, and it balances: 210.00 - 8.55 - 3.30 - 3.15 = 195.00.
+const COLLECTED_MINOR = 21000;
+const PROCESSING_MINOR = 855;
+const SETTLING_MINOR = 315;
+// Not a literal. The example fee is computed by the same function that
+// decides what a founder is actually charged, so a change to the pricing
+// model cannot leave a wrong number sitting in the hero.
+const VEYRO_FEE_MINOR = feeMinor(COLLECTED_MINOR);
+const BALANCE_MINOR =
+  COLLECTED_MINOR - PROCESSING_MINOR - VEYRO_FEE_MINOR - SETTLING_MINOR;
 
 type Phase = 0 | 1 | 2 | 3;
-// 0 before the sale arrives (what the server renders)
-// 1 the row slides in, received
-// 2 settling
-// 3 available  <- where it stops
 
-// The balance count runs first and finishes before the sale starts arriving,
-// so the two are read as two things rather than as one confusing one.
 const SEQUENCE: { at: number; to: Phase }[] = [
   { at: 1500, to: 1 },
   { at: 2400, to: 2 },
@@ -66,10 +69,39 @@ const PRIOR = [
   { name: "Sticker pack", sub: "Paid", amt: 1135 },
 ];
 
+/** The month, as five terms that add up. */
+type TermKey = "collected" | "processing" | "veyro" | "settling" | "available";
+
+const TERMS: { k: TermKey; label: string; amount: number; op?: string; note: string }[] = [
+  {
+    k: "collected", label: "Collected", amount: COLLECTED_MINOR,
+    note: "Everything customers paid this month, before anything is taken out.",
+  },
+  {
+    k: "processing", label: "Processing", amount: PROCESSING_MINOR, op: "−",
+    note: "The card processor's own fee. It sets this and deducts it; Veyro never touches it.",
+  },
+  {
+    k: "veyro", label: "Veyro", amount: VEYRO_FEE_MINOR, op: "−",
+    note: `3% of the amount above ${formatMinor(FREE_FLOOR_MINOR, "USD")}. `
+      + `On ${formatMinor(COLLECTED_MINOR, "USD")} that is 3% of `
+      + `${formatMinor(COLLECTED_MINOR - FREE_FLOOR_MINOR, "USD")}.`,
+  },
+  {
+    k: "settling", label: "Settling", amount: SETTLING_MINOR, op: "−",
+    note: "Paid, but not cleared yet. It joins the balance once the processor releases it.",
+  },
+  {
+    k: "available", label: "Available", amount: BALANCE_MINOR, op: "=",
+    note: "Yours to request, whenever you like. Nobody has to approve it.",
+  },
+];
+
 export function LiveWallet() {
-  // Starts at the opening state, which is what the server rendered. Nothing
-  // below ever sets a phase lower than the one before it.
   const [phase, setPhase] = useReducer((_: Phase, n: Phase) => n, 0 as Phase);
+  /** Which term the pointer or keyboard is on. Null means none. */
+  const [term, setTerm] = useState<TermKey | null>(null);
+  const [requested, setRequested] = useState(false);
   const node = useRef<HTMLDivElement>(null);
   const ran = useRef(false);
 
@@ -80,8 +112,6 @@ export function LiveWallet() {
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced || typeof IntersectionObserver === "undefined") {
-      // Straight to the end. One state change, no animation: the same final
-      // frame everyone else arrives at, reached without the journey.
       ran.current = true;
       setPhase(3);
       return;
@@ -93,10 +123,6 @@ export function LiveWallet() {
       ran.current = true;
       io.disconnect();
       for (const s of SEQUENCE) timers.push(setTimeout(() => setPhase(s.to), s.at));
-      // 0.15, not a third. The card is tall -- 479px -- and on a short window
-      // a third of it may never be on screen at once while the reader is
-      // looking straight at the hero, which would mean the sequence silently
-      // never plays. A sixth is enough to know it has been seen.
     }, { threshold: 0.15 });
 
     io.observe(el);
@@ -106,40 +132,84 @@ export function LiveWallet() {
   const saleVisible = phase >= 1;
   const saleState = phase >= 3 ? "available" : phase === 2 ? "settling" : "received";
   const saleTone = phase >= 3 ? "pine" : phase === 2 ? "amber" : "slate";
+  const active = TERMS.find((t) => t.k === term);
 
   return (
-    <div
-      className="dp" ref={node}
-      role="img"
-      aria-label={
-        "Example founder wallet showing $195.00 available to request. A $24.00 sale arrives "
-        + "and settles into it, leaving $23.14 after the processing fee."
-      }
-    >
+    <div className="dp" ref={node} data-dim={term ? "1" : undefined}>
+      {/* The whole thing in words, for anyone not seeing it. The controls
+          below are real and reachable; this is the summary they sit in. */}
+      <p className="sr-only">
+        An example founder wallet. {formatMinor(COLLECTED_MINOR, "USD")} collected this month,
+        less {formatMinor(PROCESSING_MINOR, "USD")} in processing fees,{" "}
+        {formatMinor(VEYRO_FEE_MINOR, "USD")} to Veyro and{" "}
+        {formatMinor(SETTLING_MINOR, "USD")} still settling, leaving{" "}
+        {formatMinor(BALANCE_MINOR, "USD")} available to request. Every figure is invented.
+      </p>
+
       <div className="dp-bar" aria-hidden="true">
         <span className="dp-dots"><i /><i /><i /></span>
         <span className="dp-title">Your wallet</span>
         <span className="dp-tag">Example</span>
       </div>
 
-      <div className="dp-body" aria-hidden="true">
+      <div className="dp-body">
         <div className="dp-head">
           <div>
-            <span className="fig-k">Available to request</span>
-            {/* The money animation: the figure counts from the opening
-                balance to the closing one as the sale becomes available. It
-                is the only number on the site that moves, and it only moves
-                up. */}
+            <span className="fig-k">{requested ? "Requested" : "Available to request"}</span>
             <span className="fig fig-xl lw-bal">
               <CountUp amountMinor={BALANCE_MINOR} currency="USD" />
             </span>
           </div>
-          <span className="dp-cta">Request a payout</span>
+          <button
+            type="button"
+            className="dp-cta"
+            data-state={requested ? "done" : undefined}
+            aria-pressed={requested}
+            onClick={() => setRequested((v) => !v)}
+          >
+            {requested ? "Payout requested" : "Request a payout"}
+          </button>
         </div>
 
-        {/* The sequence, named. This is the one place on the marketing site
-            where a payment's whole life is visible at once, and the chips are
-            the same component the rest of the site uses for it. */}
+        {/* The month's arithmetic, as controls. Hover, focus or tap a term
+            and the line below says what it is; the rest go quiet so the
+            answer is the only thing lit. */}
+        <div
+          className="lw-flow"
+          onMouseLeave={() => setTerm(null)}
+        >
+          {TERMS.map((t) => (
+            <Fragment key={t.k}>
+              {t.op ? <span className="lw-op" aria-hidden="true">{t.op}</span> : null}
+              <button
+                type="button"
+                className="lw-term"
+                data-k={t.k}
+                data-on={term === t.k ? "1" : undefined}
+                onMouseEnter={() => setTerm(t.k)}
+                onFocus={() => setTerm(t.k)}
+                onBlur={() => setTerm(null)}
+                onClick={() => setTerm((v) => (v === t.k ? null : t.k))}
+                aria-describedby="lw-note"
+              >
+                <span className="lw-term-k">{t.label}</span>
+                <span className="lw-term-v">{formatMinor(t.amount, "USD")}</span>
+              </button>
+            </Fragment>
+          ))}
+        </div>
+
+        {/* One line, and it always holds the height of two so the card
+            cannot change size as you move across the terms. */}
+        <p className="lw-note" id="lw-note" role="status" aria-live="polite">
+          {requested && !active
+            ? "Asked for. The processor pays out on its own schedule — Veyro cannot speed that "
+              + "up, slow it down, or stop it."
+            : active
+              ? active.note
+              : "Hover any term to see what it is."}
+        </p>
+
         <div className="chips lw-chips">
           {([
             ["Received", "slate", phase >= 1],
@@ -147,16 +217,13 @@ export function LiveWallet() {
             ["Available", "pine", phase >= 3],
           ] as const).map(([label, tone, on], i) => (
             <Fragment key={label}>
-              {i > 0 && <span className="chip-sep">&rarr;</span>}
+              {i > 0 && <span className="chip-sep" aria-hidden="true">&rarr;</span>}
               <span className="chip" data-tone={tone} data-on={on ? "1" : undefined}>{label}</span>
             </Fragment>
           ))}
         </div>
 
-        <div className="led lw-led">
-          {/* The arriving row. It holds its space from the first paint so the
-              card never changes height -- a hero that grows by 44px as you
-              read it is worse than one that does not move at all. */}
+        <div className="led lw-led" aria-hidden="true">
           <div className="led-row lw-new" data-in={saleVisible ? "1" : undefined}>
             <span className="led-n">
               Notion Second Brain template
@@ -183,7 +250,7 @@ export function LiveWallet() {
           ))}
         </div>
 
-        <div className="dp-foot">
+        <div className="dp-foot" aria-hidden="true">
           <span className="dp-dot" /> Last payout $49.50, sent to your bank on 20 Sept
         </div>
       </div>

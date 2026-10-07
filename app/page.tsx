@@ -13,7 +13,6 @@ import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { StickyCta } from "@/app/_ui/StickyCta";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { Journey } from "@/app/_ui/Journey";
-import { ParentAccount } from "@/app/_ui/ParentAccount";
 import { AudienceSplit } from "@/app/_ui/AudienceSplit";
 
 export const metadata = buildMetadata("landing");
@@ -113,15 +112,21 @@ export default async function Home() {
                     better than a <br> frozen at one width ever could. */}
                 <h1 className="hero-h1">You can take payments before you&rsquo;re 18.</h1>
 
+                {/* Two sentences, down from four lines of them. The clause
+                    that went -- "not with a workaround, and not in your
+                    parent's name" -- was the opening move of the
+                    free-workaround argument, and that argument now lives in
+                    full on /how-it-works rather than half-stated here. On a
+                    phone it was five lines of lead pushing the product
+                    surface off the first screen. */}
                 <p className="hero-lead">
-                  Not with a workaround, and not in your parent&rsquo;s name. Your own products,
-                  your own checkout, your own money &mdash; with a parent verified once on the
-                  account, which is the part that makes it lawful.
+                  Your own products, your own checkout, your own money &mdash; with a parent
+                  verified once on the account. That once is what makes it lawful.
                 </p>
 
                 <div className="hero-cta">
-                  <Link className="btn btn-lg" href="/get-started">Start &mdash; it&rsquo;s free</Link>
-                  <Link className="btn btn-2 btn-lg" href="/check">Check if it works where you live</Link>
+                  <Link className="btn btn-lg btn-xl" href="/get-started">Start &mdash; it&rsquo;s free</Link>
+                  <Link className="btn btn-2 btn-lg" href="/check">Check where you live</Link>
                 </div>
 
                 {/* Three facts, as figures. They answer the three things a
@@ -229,12 +234,18 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ---- the objection that decides it ---- */}
-        <section className="lp ch ch-surface">
-          <div className="wrap-lp">
-            <ParentAccount />
-          </div>
-        </section>
+        {/* The five-answer "why not just use your parent's account?" block
+            lived here and now lives on /how-it-works.
+
+            Three reasons, and they were all measurable. It was the longest
+            run of explanatory prose on the page, on a page already 15-25%
+            too long. Its heading was the only one that did not anchor to
+            the page's left edge -- 454px against 48 everywhere else, which
+            is most of why the homepage read as a collection of blocks. And
+            a reader who is still weighing a free workaround has not been
+            convinced by the hero, so the argument belongs on the page they
+            go to when they want the mechanics, not in the middle of the
+            one that is meant to show rather than argue. */}
 
         {/* ---- 4. what it costs, then the ask ---- */}
         <section className="lp ch ch-9 lp-dark">
