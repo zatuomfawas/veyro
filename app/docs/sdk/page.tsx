@@ -112,6 +112,40 @@ export default function SdkDocs() {
           minutes.
         </p>
 
+        {/* The install line, in the first screen.
+            ---------------------------------------------------------------
+            This page kept the sidebar it had, deliberately -- docs are the
+            one archetype on this site that SHOULD look like docs, and giving
+            it the marketing hero treatment would have been variation for its
+            own sake.
+
+            What it did not have was any code above the fold, and its only
+            call to action sat at 7,052px of a 7,558px page: 93% down, so a
+            developer who had decided had to scroll past the whole reference
+            to act on it. A developer evaluating an SDK wants two things in
+            the first screen -- what to type, and how long this is going to
+            take. Both are here now. */}
+        <div className="sdkstart">
+          <div className="sdkstart-c">
+            <Copyable label="Install" code={`npm install ${PKG}`} />
+            <p className="tiny" style={{ marginTop: "var(--sp-3)", marginBottom: 0 }}>
+              No API key, no webhook, no server code. The whole integration is the two snippets
+              in step 3.
+            </p>
+          </div>
+          <div className="sdkstart-a">
+            <span className="fig-k">You will need</span>
+            <ul className="ticks" style={{ marginTop: "var(--sp-3)" }}>
+              <li>A product with a price, for its ID</li>
+              <li>A verified guardian, if you are under 18</li>
+            </ul>
+            <div className="row" style={{ marginTop: "var(--sp-5)", gap: 8, flexWrap: "wrap" }}>
+              <Link className="btn" href="/auth/signup">Get a product ID</Link>
+              <Link className="btn btn-2" href="/get-started">The steps, in order</Link>
+            </div>
+          </div>
+        </div>
+
         {!PUBLISHED && (
           <div style={{ marginTop: 24, maxWidth: "var(--m-body)" }}>
             <Notice tone="amber" head={`${PKG} is not on npm yet`}>

@@ -1467,6 +1467,75 @@ export const CSS = `
   .fw .qa-a { padding-left:0; }
 }
 
+/* The SDK page's opening block: what to type, and what you need to type it.
+   Two columns rather than stacked, because a developer reads the command and
+   the prerequisites as one answer to "can I use this right now". */
+.fw .sdkstart { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,0.85fr);
+  gap:var(--sp-6) var(--sp-8); align-items:start; margin-top:var(--sp-6);
+  padding:var(--sp-6); border:1px solid var(--line); background:var(--surface); }
+.fw .sdkstart-c { min-width:0; }
+/* The code block carries its own top margin for the stacked case; inside this
+   panel the panel's padding is already doing that job. */
+.fw .sdkstart-c > div:first-child { margin-top:0 !important; }
+.fw .sdkstart-a { min-width:0; }
+@media (max-width:860px) {
+  .fw .sdkstart { grid-template-columns:1fr; padding:var(--sp-5); }
+}
+
+/* The status board. The one page on this site you check rather than read,
+   so it is laid out as a board: four cards, state on each, scannable without
+   reading a sentence. */
+.fw .stat-h { display:grid; grid-template-columns:var(--split-a) var(--split-b);
+  gap:var(--sp-5) var(--sp-9); align-items:end; }
+.fw .stat-lead { margin:0; font-size:var(--fs-3); line-height:1.65; color:var(--ink-2);
+  max-width:62ch; }
+@media (max-width:820px) { .fw .stat-h { grid-template-columns:1fr; align-items:start; } }
+
+.fw .statgrid { list-style:none; margin:var(--sp-8) 0 0; padding:0; display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:1px;
+  background:var(--line); border:1px solid var(--line); }
+/* Hairline gaps rather than gutters: the cards read as one instrument with
+   four readings, which is what a board is, instead of four loose panels. */
+.fw .statcard { background:var(--card); padding:var(--sp-5); display:flex;
+  flex-direction:column; gap:var(--sp-2); min-width:0; }
+.fw .statcard-h { display:flex; align-items:baseline; justify-content:space-between;
+  gap:var(--sp-3); flex-wrap:wrap; }
+.fw .statcard-n { font-size:var(--fs-4); font-weight:var(--fw-med); letter-spacing:-0.012em; }
+.fw .statcard-r { margin:0; font-size:var(--fs-2); line-height:1.55; color:var(--ink-2); }
+.fw .statcard-l { margin-top:auto; padding-top:var(--sp-3); font-size:var(--fs-2); }
+/* The unmonitored card is not dressed as a failure -- it is a fact, and the
+   amber would read as an incident. It is simply quieter. */
+.fw .statcard[data-monitored="0"] .statcard-l { color:var(--ink-3); }
+
+.fw .statnote { margin-top:var(--sp-8); padding-top:var(--sp-6);
+  border-top:1px solid var(--ink); }
+
+/* Contact: one address and four routes.
+   The address is the largest thing on the page because it is the whole
+   product of the page; the routes sit side by side so a reader finds their
+   own case without reading the three that are not theirs. */
+.fw .ctc-h { display:grid; grid-template-columns:var(--split-a) var(--split-b);
+  gap:var(--sp-6) var(--sp-9); align-items:center; }
+.fw .ctc-card { border:1px solid var(--line); background:var(--surface);
+  padding:var(--sp-6); min-width:0; }
+.fw .ctc-mail { display:block; margin-top:var(--sp-2); font-size:clamp(18px, 2.4vw, 26px);
+  line-height:1.25; letter-spacing:-0.01em; color:var(--ink);
+  text-decoration:underline; text-underline-offset:4px; word-break:break-word; }
+.fw .ctc-mail:hover { color:var(--pine); }
+@media (max-width:820px) { .fw .ctc-h { grid-template-columns:1fr; } }
+
+.fw .ctc-routes { list-style:none; margin:var(--sp-6) 0 0; padding:0; display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
+  gap:1px; background:var(--line); border:1px solid var(--line); }
+.fw .ctc-route { background:var(--card); padding:var(--sp-5); min-width:0; }
+.fw .ctc-route-t { margin:0; font-size:var(--fs-4); font-weight:var(--fw-med);
+  letter-spacing:-0.012em; }
+.fw .ctc-route-d { margin:var(--sp-2) 0 0; font-size:var(--fs-2); line-height:1.6;
+  color:var(--ink-2); }
+/* The parent's route is the one most likely to go unsent, so it is the one
+   marked. See the funnel note in get-started/page.tsx. */
+.fw .ctc-route[data-flag="1"] { background:var(--pine-bg); box-shadow:inset 2px 0 0 var(--pine); }
+
 .fw .preview-stack { display:flex; flex-direction:column; gap:var(--sp-6); }
 .fw .preview-stack > :last-child { align-self:center; width:100%; max-width:560px; }
 

@@ -4,7 +4,6 @@ import { buildViewport, SITE } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
-import { Notice } from "@/app/_ui/form";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { PageNext } from "@/app/_ui/PageNext";
 
@@ -72,64 +71,66 @@ export default function Status() {
         </div>
       </div>
 
-      <main id="main" className="wrap-n" style={{ paddingTop: 40, paddingBottom: 56 }}>
-        <span className="lp-eyebrow">Status</span>
-        <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>What Veyro runs on.</h1>
+      {/* A board, not a list.
+          ------------------------------------------------------------------
+          Every other page on this site is something to read. This one is
+          something to check, and a reader arrives at it mid-problem wanting
+          one answer in one glance: is it them, or is it us. Prose in a 70ch
+          column was the wrong instrument -- it made someone read four
+          paragraphs to find out there is nothing to report.
 
-        <div style={{ marginTop: 24 }}>
-          <Notice tone="amber" head="Veyro does not have uptime monitoring yet">
-            <p style={{ margin: "0 0 8px" }}>
-              So this page shows no health lights for our own application and no uptime percentage.
-              A status page that reports green without measuring anything is a claim, not a status,
-              and the first outage would prove it was never checked.
-            </p>
-            <p style={{ margin: 0 }}>
-              If something is not working, email{" "}
-              <a className="linkbtn" href={`mailto:${EMAIL}`}>{EMAIL}</a> and you will get a real
-              answer about what is happening.
-            </p>
-          </Notice>
+          Four cards, each stating its own monitoring honestly. Veyro's own
+          row says "not measured" rather than green, because a status page
+          that reports green without measuring anything is a claim, and the
+          first outage proves it was never checked. */}
+      <main id="main" className="wrap-lp" style={{ paddingTop: 40, paddingBottom: 56 }}>
+        <div className="stat-h">
+          <div>
+            <span className="lp-eyebrow">Status</span>
+            <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)", maxWidth: "16ch" }}>
+              What Veyro runs on.
+            </h1>
+          </div>
+          <p className="stat-lead">
+            Veyro has no uptime monitoring yet, so there is no health light for our own
+            application and no uptime percentage here. The providers that do publish real
+            monitoring are linked below. If something is not working,{" "}
+            <a className="linkbtn" href={`mailto:${EMAIL}`}>email us</a> and you will get a real
+            answer about what is happening.
+          </p>
         </div>
 
-        <h2 className="h3" style={{ marginTop: 40 }}>Dependencies</h2>
-        <div className="reqlist" style={{ marginTop: 16 }}>
+        <ul className="statgrid">
           {DEPENDENCIES.map((d) => (
-            <div className="reqrow" key={d.name}>
-              <div>
-                <span className="req-t">
-                  {d.name}{" "}
-                  {d.monitored
-                    ? <span className="badge b-slate" style={{ marginLeft: 8 }}>Provider status</span>
-                    : <span className="badge b-grey" style={{ marginLeft: 8 }}>Not monitored</span>}
-                </span>
-                <span className="req-d">
-                  {d.role}
-                  {d.href && (
-                    <>
-                      {" "}
-                      <a className="linkbtn" href={d.href} target="_blank" rel="noreferrer noopener">
-                        Their status page
-                      </a>
-                    </>
-                  )}
+            <li className="statcard" data-monitored={d.monitored ? "1" : "0"} key={d.name}>
+              <div className="statcard-h">
+                <span className="statcard-n">{d.name}</span>
+                <span className={"badge " + (d.monitored ? "b-slate" : "b-grey")}>
+                  {d.monitored ? "Provider status" : "Not measured"}
                 </span>
               </div>
-            </div>
+              <p className="statcard-r">{d.role}</p>
+              {d.href ? (
+                <a className="linkbtn statcard-l" href={d.href} target="_blank" rel="noreferrer noopener">
+                  Their status page
+                </a>
+              ) : (
+                <span className="statcard-l tiny">Measured by nobody, including us.</span>
+              )}
+            </li>
           ))}
+        </ul>
+
+        <div className="statnote">
+          <h2 className="h4" style={{ marginTop: 0 }}>If a payment looks wrong</h2>
+          <p className="body" style={{ margin: "var(--sp-3) 0 0", maxWidth: "var(--m-body)" }}>
+            Veyro never holds your money, so a missing payment or a delayed payout is almost
+            always something happening at Stripe rather than here. Your wallet is folded from
+            records Veyro keeps, so it can also be behind if a webhook was delayed. Either way,
+            send the payment reference and we will tell you which it is.
+          </p>
         </div>
 
-        <h2 className="h3" style={{ marginTop: 40 }}>If a payment looks wrong</h2>
-        <p className="body" style={{ marginTop: 12 }}>
-          Veyro never holds your money, so a missing payment or a delayed payout is almost always
-          something happening at Stripe rather than here. Your wallet is folded from records Veyro
-          keeps, so it can also be behind if a webhook was delayed. Either way, email us with the
-          payment reference and we will tell you which it is.
-        </p>
-
-        <p className="tiny" style={{ marginTop: 32 }}>
-          <Link className="linkbtn" href="/contact">Contact</Link> &middot;{" "}
-          <Link className="linkbtn" href="/about">What is not finished yet</Link>
-        </p>
         <PageNext
           head="Something looking wrong?"
           lead="This page lists what Veyro runs on, not whether your payment arrived. If a
