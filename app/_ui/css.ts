@@ -1467,19 +1467,36 @@ export const CSS = `
   .fw .qa-a { padding-left:0; }
 }
 
-/* The SDK page's opening block: what to type, and what you need to type it.
-   Two columns rather than stacked, because a developer reads the command and
-   the prerequisites as one answer to "can I use this right now". */
-.fw .sdkstart { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,0.85fr);
-  gap:var(--sp-6) var(--sp-8); align-items:start; margin-top:var(--sp-6);
-  padding:var(--sp-6); border:1px solid var(--line); background:var(--surface); }
-.fw .sdkstart-c { min-width:0; }
-/* The code block carries its own top margin for the stacked case; inside this
-   panel the panel's padding is already doing that job. */
-.fw .sdkstart-c > div:first-child { margin-top:0 !important; }
-.fw .sdkstart-a { min-width:0; }
-@media (max-width:860px) {
-  .fw .sdkstart { grid-template-columns:1fr; padding:var(--sp-5); }
+/* The SDK page's hero: the integration itself, on black.
+   ----------------------------------------------------------------------
+   The one page here that opens on a dark band, and the only one that
+   should. Dark code surfaces are what a developer reads as "documentation"
+   before they read a word, and a signature that every page shared would
+   not be a signature.
+
+   The band is .lp-dark, so it inverts with the theme rather than being the
+   one black thing that ignores the switch. Everything inside -- the code
+   blocks, their captions, the figures -- already reads from --surface,
+   --line, --ink and --brand, which .lp-dark redefines, so none of it needs
+   a rule of its own. */
+.fw .sdk-hero { padding-top:var(--lp-pad); padding-bottom:var(--lp-pad); }
+.fw .sdk-hero-grid { display:grid; grid-template-columns:var(--split-a) var(--split-b);
+  gap:var(--sp-8) var(--sp-10); align-items:center; }
+.fw .sdk-hero-t { min-width:0; }
+.fw .sdk-hero-t .hero-h1 { max-width:16ch; }
+.fw .sdk-hero-t .hero-lead { max-width:46ch; }
+.fw .sdk-hero-code { min-width:0; }
+/* The first Copyable carries its own top margin for the stacked case; at the
+   top of this column the grid gap has already done that. */
+.fw .sdk-hero-code > div:first-child { margin-top:0 !important; }
+/* Code in the hero may run long. It scrolls in its own box rather than
+   setting the width of the band. */
+.fw .sdk-hero-code .code { max-width:100%; }
+.fw .sdk-hero-n { margin:var(--sp-5) 0 0; font-size:var(--fs-2); line-height:1.6;
+  color:var(--ink-3); max-width:52ch; }
+@media (max-width:980px) {
+  .fw .sdk-hero-grid { grid-template-columns:1fr; gap:var(--sp-7); }
+  .fw .sdk-hero-t .hero-lead { max-width:none; }
 }
 
 /* The status board. The one page on this site you check rather than read,

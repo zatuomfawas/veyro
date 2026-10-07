@@ -4,14 +4,12 @@ import type { Metadata } from "next";
 import { buildViewport, SITE } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
-import { Notice } from "@/app/_ui/form";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { SDK_ERROR_TABLE } from "@/lib/sdk-errors";
 import { Copyable } from "./Copyable";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
-import { SectionRail } from "@/app/_ui/SectionRail";
 
 export const viewport = buildViewport();
 
@@ -35,12 +33,12 @@ export const metadata: Metadata = {
 // prompts cannot disagree about what to type.
 const PKG = "veyro-sdk";
 
-/** True once the package is on npm. Until then the docs say so.
-    veyro-sdk@0.1.0 went up on 27 September 2026, so the amber notice that
-    warned npm install would 404 is retired. Nothing else is gated on this:
-    the install block and the no-package fallback below both render either
-    way, because the REST route is a genuine alternative and not a stopgap. */
-const PUBLISHED = true;
+// veyro-sdk@0.1.0 went up on npm on 27 September 2026. There used to be a
+// PUBLISHED flag here gating an amber "npm install will 404" notice; it had
+// been hard-coded true since that date, so the notice was unreachable and the
+// flag was a switch wired to nothing. The no-package route below stays
+// regardless, because the REST endpoints are a genuine alternative rather
+// than a stopgap for an unpublished package.
 
 const AI_PROMPTS: [string, string][] = [
   [
@@ -102,64 +100,93 @@ export default function SdkDocs() {
         </div>
       </div>
 
-      <main id="main" className="wrap-lp longform has-rail" style={{ paddingTop: 32, paddingBottom: 56 }}>
-        <SectionRail label="Reference" />
-        <span className="lp-eyebrow">Code first</span>
-        <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>Add Veyro to your app.</h1>
-        <p className="lead" style={{ marginTop: 16 }}>
-          You already built the thing. This is how it starts taking money: one product ID, one
-          button, and nothing about payment infrastructure you have to learn first. Give it five
-          minutes.
-        </p>
+      {/* Code on black, in the first screen.
+          ------------------------------------------------------------------
+          This is the page that turns an interested developer into an
+          integrated one, and a developer decides in about thirty seconds on
+          three things: what the code looks like, how much of it there is,
+          and whether it will fit. None of the three were above the fold --
+          the first snippet sat roughly two thousand pixels down, behind
+          prose, and the only call to action was at 7,052px of 7,558.
 
-        {/* The install line, in the first screen.
-            ---------------------------------------------------------------
-            This page kept the sidebar it had, deliberately -- docs are the
-            one archetype on this site that SHOULD look like docs, and giving
-            it the marketing hero treatment would have been variation for its
-            own sake.
+          So the whole integration is the hero, copyable, and it is on black.
+          Dark code surfaces are the convention a developer reads as "this is
+          documentation" before they read a word, and no other page here uses
+          the treatment, which makes it the page's signature rather than a
+          repeat of the marketing layout.
 
-            What it did not have was any code above the fold, and its only
-            call to action sat at 7,052px of a 7,558px page: 93% down, so a
-            developer who had decided had to scroll past the whole reference
-            to act on it. A developer evaluating an SDK wants two things in
-            the first screen -- what to type, and how long this is going to
-            take. Both are here now. */}
-        <div className="sdkstart">
-          <div className="sdkstart-c">
-            <Copyable label="Install" code={`npm install ${PKG}`} />
-            <p className="tiny" style={{ marginTop: "var(--sp-3)", marginBottom: 0 }}>
-              No API key, no webhook, no server code. The whole integration is the two snippets
-              in step 3.
-            </p>
-          </div>
-          <div className="sdkstart-a">
-            <span className="fig-k">You will need</span>
-            <ul className="ticks" style={{ marginTop: "var(--sp-3)" }}>
-              <li>A product with a price, for its ID</li>
-              <li>A verified guardian, if you are under 18</li>
-            </ul>
-            <div className="row" style={{ marginTop: "var(--sp-5)", gap: 8, flexWrap: "wrap" }}>
-              <Link className="btn" href="/auth/signup">Get a product ID</Link>
-              <Link className="btn btn-2" href="/get-started">The steps, in order</Link>
+          .lp-dark rather than a hard-coded black: in light mode -- which is
+          what most visitors see -- it is black, and in dark mode it inverts
+          with everything else rather than becoming the one band that ignores
+          the theme switch. */}
+      <main id="main" className="has-sticky">
+
+        <section className="lp lp-dark sdk-hero">
+          <div className="wrap-lp">
+            <div className="sdk-hero-grid">
+              <div className="sdk-hero-t">
+                <p className="hero-kicker">
+                  <span className="hero-kicker-dot" aria-hidden="true" />
+                  Add Veyro to your app
+                </p>
+                <h1 className="hero-h1">One component. No server code.</h1>
+                <p className="hero-lead">
+                  You already built the thing. This is the whole of what it takes to start
+                  charging for it &mdash; a product ID, a button, and a callback that fires when
+                  the money has actually landed.
+                </p>
+
+                <div className="hero-cta">
+                  <Link className="btn btn-lg" href="/auth/signup">Get a product ID</Link>
+                  <a className="btn btn-2 btn-lg" href="#reference">Jump to the reference</a>
+                </div>
+
+                {/* The three numbers a developer is actually weighing before
+                    they read any of it. */}
+                <dl className="hero-facts">
+                  <div>
+                    <dt className="fig-k">Dependencies</dt>
+                    <dd className="fig fig-sm">1</dd>
+                  </div>
+                  <div>
+                    <dt className="fig-k">Server code</dt>
+                    <dd className="fig fig-sm">None</dd>
+                  </div>
+                  <div>
+                    <dt className="fig-k">API keys</dt>
+                    <dd className="fig fig-sm">None</dd>
+                  </div>
+                </dl>
+              </div>
+
+              <div className="sdk-hero-code">
+                <Copyable label="Terminal" code={`npm install ${PKG}`} />
+                <Copyable
+                  label="BuyButton.tsx"
+                  code={`import { VeyroCheckout } from "${PKG}/react";
+
+export function BuyButton() {
+  return (
+    <VeyroCheckout
+      productId="your-product-id"
+      onSuccess={(id) => unlock(id)}
+    >
+      Buy now — $25
+    </VeyroCheckout>
+  );
+}`}
+                />
+                <p className="sdk-hero-n">
+                  That is the integration. Everything below is detail, failure modes, and the
+                  version without the package.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        {!PUBLISHED && (
-          <div style={{ marginTop: 24, maxWidth: "var(--m-body)" }}>
-            <Notice tone="amber" head={`${PKG} is not on npm yet`}>
-              Everything on this page is built and the endpoints are live, but the package has not
-              been published, so <span className="mono">npm install {PKG}</span> will answer 404
-              today. Until it does, the same thing works with no package at all — see{" "}
-              <Link className="linkbtn" href="#nopackage">Without the SDK</Link> below. This notice
-              comes down when the install works.
-            </Notice>
-          </div>
-        )}
-
-        <hr className="rule" style={{ margin: "30px 0" }} />
-
+        <section className="lp ch" id="reference">
+          <div className="wrap-lp longform">
         {/* ---------------- 1 ---------------- */}
         <h2 className="h3">1. What you need</h2>
         <div className="ruled" style={{ marginTop: 14 }}>
@@ -269,6 +296,11 @@ document.querySelector("#buy").addEventListener("click", () => {
         />
 
         {/* ---------------- 4 ---------------- */}
+          </div>
+        </section>
+
+        <section className="lp ch ch-surface">
+          <div className="wrap-lp longform">
         <h2 className="h3" style={{ marginTop: 34 }}>4. Check it before you ship</h2>
         <p className="body" style={{ marginTop: 8, maxWidth: "var(--m-body)" }}>
           Paste this into your browser console, anywhere. It answers from Veyro, so it tells you
@@ -312,6 +344,11 @@ document.querySelector("#buy").addEventListener("click", () => {
         <hr className="rule" style={{ margin: "34px 0 30px" }} />
 
         {/* ---------------- prompts ---------------- */}
+          </div>
+        </section>
+
+        <section className="lp ch">
+          <div className="wrap-lp longform">
         <h2 className="h3">If an AI tool is writing this for you</h2>
         <p className="body" style={{ marginTop: 8, maxWidth: "var(--m-body)" }}>
           Copy one of these, fill in the brackets, and paste it in. They are written so the
@@ -326,6 +363,11 @@ document.querySelector("#buy").addEventListener("click", () => {
         <hr className="rule" style={{ margin: "34px 0 30px" }} />
 
         {/* ---------------- errors ---------------- */}
+          </div>
+        </section>
+
+        <section className="lp ch ch-surface">
+          <div className="wrap-lp longform">
         <h2 className="h3">When something goes wrong</h2>
         <p className="body" style={{ marginTop: 8, maxWidth: "var(--m-body)" }}>
           Every refusal comes back with a <span className="mono">code</span>, a sentence in plain
@@ -356,6 +398,11 @@ document.querySelector("#buy").addEventListener("click", () => {
 
         <hr className="rule" style={{ margin: "34px 0 30px" }} />
 
+          </div>
+        </section>
+
+        <section className="lp ch">
+          <div className="wrap-lp longform">
         <h2 className="h3">Where the card details go</h2>
         <p className="body" style={{ marginTop: 8, maxWidth: "var(--m-body)" }}>
           Not to your app, and not to your server. The button opens Veyro&rsquo;s own checkout
@@ -371,6 +418,8 @@ document.querySelector("#buy").addEventListener("click", () => {
           <Link className="btn btn-lg" href="/get-started">Get a product ID</Link>
           <Link className="btn btn-2 btn-lg" href="/contact">Ask us something</Link>
         </div>
+          </div>
+        </section>
       </main>
 
       <ScrollTop />
