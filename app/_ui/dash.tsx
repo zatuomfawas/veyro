@@ -10,6 +10,7 @@ import Link from "next/link";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import SignOut from "@/app/_ui/SignOut";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
+import { MobileNav } from "@/app/_ui/MobileNav";
 
 export const SUPPORT_EMAIL = "hello@withveyro.com";
 
@@ -43,10 +44,26 @@ export function DashNav({
         <div className="wrap-w">
           <nav className="lp-nav" aria-label="Dashboard">
           <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
+          {/* Four controls did not fit a phone.
+              ------------------------------------------------------------
+              Measured at 375: the links row needs about 306px of buttons
+              and has 245px to put them in, because at pointer:coarse every
+              one of them is a 44px target. It wrapped to two rows, which
+              made .lp-links 92px tall inside a 62px bar -- so it sat at
+              top:-15 and spilled above and below it. That is the
+              misalignment: not the wordmark drifting, the links overflowing
+              a fixed-height row.
+
+              Same answer the marketing nav already uses: the two
+              navigation LINKS go behind the Menu button below 760px, and
+              the two things that are not navigation -- the theme switch
+              and Sign out -- stay where they are. Nothing is lost; the menu
+              carries both links. .hide-s and .mobmenu are exact
+              complements at that breakpoint, so neither duplicates. */}
           <div className="lp-links">
             {home && (
               <Link
-                className="btn btn-q btn-sm"
+                className="btn btn-q btn-sm hide-s"
                 href={home}
                 aria-current={current === "dashboard" ? "page" : undefined}
               >
@@ -54,7 +71,7 @@ export function DashNav({
               </Link>
             )}
             <Link
-              className="btn btn-q btn-sm"
+              className="btn btn-q btn-sm hide-s"
               href="/dashboard/settings"
               aria-current={current === "settings" ? "page" : undefined}
             >
@@ -63,6 +80,12 @@ export function DashNav({
             {/* Before Sign out, so the destructive control stays last. */}
             <ThemeToggle />
             <SignOut />
+            <MobileNav
+              items={[
+                ...(home ? [{ href: home, label: "Dashboard" }] : []),
+                { href: "/dashboard/settings", label: "Settings" },
+              ]}
+            />
             </div>
           </nav>
         </div>
