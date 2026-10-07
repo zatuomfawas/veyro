@@ -1494,7 +1494,7 @@ export const CSS = `
    blocks, their captions, the figures -- already reads from --surface,
    --line, --ink and --brand, which .lp-dark redefines, so none of it needs
    a rule of its own. */
-/* The reference below the hero.
+/* A left-anchored reference column. Used by the SDK docs and by Pricing.
    ----------------------------------------------------------------------
    The steps were .longform, which centres a 66ch reading column: about
    636px of content in a 1,432px section, so every step sat in a narrow
@@ -1514,20 +1514,29 @@ export const CSS = `
 
    The remaining space sits to the right of paragraphs only, which is what
    documentation looks like, rather than in two matching gutters. */
-.fw .sdkref > * { max-width:var(--m-body); }
+/* The one figure that used to be a margin note. It needed the .longform
+   grid, and that grid was why this page's chapters sat at 398px while the
+   rest of the site anchors at 48. */
+.fw .reach { display:flex; align-items:baseline; gap:var(--sp-4);
+  margin-top:var(--sp-7); padding-top:var(--sp-5); border-top:1px solid var(--line);
+  max-width:var(--m-wide); }
+.fw .reach-b { margin:0; font-size:var(--fs-3); line-height:1.6; color:var(--ink-2);
+  max-width:56ch; }
+
+.fw .refflow > * { max-width:var(--m-body); }
 /* The things that earn the width. :has() so a Copyable -- a wrapper div
    around a caption and a <pre> -- is caught without needing a class on it. */
-.fw .sdkref > .code,
-.fw .sdkref > .tbl-wrap,
-.fw .sdkref > table,
-.fw .sdkref > .ruled,
-.fw .sdkref > :has(.code),
-.fw .sdkref > :has(> table) { max-width:none; }
-.fw .sdkref .code { max-width:100%; }
+.fw .refflow > .code,
+.fw .refflow > .tbl-wrap,
+.fw .refflow > table,
+.fw .refflow > .ruled,
+.fw .refflow > :has(.code),
+.fw .refflow > :has(> table) { max-width:none; }
+.fw .refflow .code { max-width:100%; }
 /* Headings get their air back. In .longform the measure was doing the
    separating; on a full-width column the space has to be stated. */
-.fw .sdkref > h2 { margin-top:var(--sp-9); }
-.fw .sdkref > h2:first-child { margin-top:0; }
+.fw .refflow > h2 { margin-top:var(--sp-9); max-width:20ch; }
+.fw .refflow > h2:first-child { margin-top:0; }
 
 .fw .sdk-hero { padding-top:var(--lp-pad); padding-bottom:var(--lp-pad); }
 .fw .sdk-hero-grid { display:grid; grid-template-columns:var(--split-a) var(--split-b);

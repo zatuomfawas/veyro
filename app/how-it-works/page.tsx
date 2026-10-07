@@ -14,7 +14,6 @@ import { MoneyRail } from "@/app/_ui/MoneyRail";
 import { ParentAccount } from "@/app/_ui/ParentAccount";
 import { LiveWallet } from "@/app/_ui/LiveWallet";
 import { AudienceSplit } from "@/app/_ui/AudienceSplit";
-import { MarginNote } from "@/app/_ui/MarginNote";
 
 export const metadata = buildMetadata("how");
 export const viewport = buildViewport();
@@ -152,8 +151,8 @@ export default function HowItWorks() {
         </div>
 
         <section className="lp ch ch-surface">
-          <div className="wrap-lp longform">
-        <h2 className="h3" style={{ marginTop: 0 }}>In order</h2>
+          <div className="wrap-lp refflow">
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>In order</h2>
         <ol className="numbered" style={{ marginTop: 16 }}>
           <li>
             <span>You sign up</span>
@@ -203,7 +202,7 @@ export default function HowItWorks() {
           </li>
         </ol>
 
-        <h2 className="h3" style={{ marginTop: 36 }}>Who does what</h2>
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>Who does what</h2>
         <div className="paths" style={{ marginTop: 20 }}>
           <div className="path">
             <span className="path-k">Stripe</span>
@@ -228,10 +227,10 @@ export default function HowItWorks() {
         </section>
 
         <section className="lp ch">
-          <div className="wrap-lp longform">
+          <div className="wrap-lp refflow">
         <div className="truthgrid" style={{ marginBottom: 40, alignItems: "start" }}>
           <div>
-            <h2 className="h3" style={{ marginTop: 0 }}>Four parties, in order</h2>
+            <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>Four parties, in order</h2>
             <p className="small" style={{ marginTop: 12 }}>
               The most common misunderstanding is that Veyro is the payment provider. It is not.
               Money moves between a customer and the founder&rsquo;s own Stripe account, and Veyro
@@ -241,7 +240,7 @@ export default function HowItWorks() {
           <RoleStack />
         </div>
 
-        <h2 className="h3">What everyone else gets wrong</h2>
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>What everyone else gets wrong</h2>
         <p className="body" style={{ marginTop: 8 }}>
           Search it and the answer comes back unanimous: you have to be 18 to accept online
           payments. Forums say it. Blog posts say it. Ask an AI assistant and it will tell you the
@@ -269,8 +268,8 @@ export default function HowItWorks() {
         </section>
 
         <section className="lp ch">
-          <div className="wrap-lp longform">
-        <h2 className="h3" style={{ marginTop: 32 }}>What we established</h2>
+          <div className="wrap-lp refflow">
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>What we established</h2>
         <p className="body" style={{ marginTop: 8 }}>
           We wrote to Stripe support describing the model in plain terms. A platform onboarding
           founders aged 13 to 17, with a parent or legal guardian as the adult on the account, and
@@ -285,7 +284,7 @@ export default function HowItWorks() {
         </p>
 
         {/* ---------------------------------------------------------------- */}
-        <h2 className="h3" style={{ marginTop: 32 }}>The rules, in writing</h2>
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>The rules, in writing</h2>
         <p className="body" style={{ marginTop: 8 }}>
           The reply came from Arthur at Stripe Support on {REPLY_DATE}. The core of it:
         </p>
@@ -360,8 +359,8 @@ export default function HowItWorks() {
         </section>
 
         <section className="lp ch">
-          <div className="wrap-lp longform">
-        <h2 className="h3" style={{ marginTop: 32 }}>What we hit building it</h2>
+          <div className="wrap-lp refflow">
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>What we hit building it</h2>
         <p className="body" style={{ marginTop: 8 }}>
           Getting an answer is one thing. Building on it is another. Four things we hit, in the
           order we hit them.
@@ -423,15 +422,17 @@ export default function HowItWorks() {
         </section>
 
         <section className="lp ch ch-surface">
-          <div className="wrap-lp longform">
-        <MarginNote head="Where it reaches">
+          <div className="wrap-lp refflow">
+        <aside className="reach">
           <span className="fig fig-md">43</span>
-          countries can sign up directly. Two are sales-contact only, five run on an extended
-          network whose rules we have not read, and Brazil is 18 and over.{" "}
-          <Link className="linkbtn" href="/check">Check yours</Link>.
-        </MarginNote>
+          <p className="reach-b">
+            countries can sign up directly. Two are sales-contact only, five run on an extended
+            network whose rules we have not read, and Brazil is 18 and over.{" "}
+            <Link className="linkbtn" href="/check">Check yours</Link>.
+          </p>
+        </aside>
 
-        <h2 className="h3" style={{ marginTop: 32 }}>What this means where you live</h2>
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>What this means where you live</h2>
         <p className="body" style={{ marginTop: 8 }}>
           Two questions decide it, and most people only ask the first.
         </p>
@@ -504,8 +505,8 @@ export default function HowItWorks() {
         </section>
 
         <section className="lp ch">
-          <div className="wrap-lp longform">
-        <h2 className="h3">An adult on the account, not on your business</h2>
+          <div className="wrap-lp refflow">
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>An adult on the account, not on your business</h2>
         <p className="body" style={{ marginTop: 8 }}>
           This is the part people get wrong, so it is worth being exact. Stripe needs a verified
           adult behind every account. Your guardian is that adult. They are not a partner, not an
@@ -531,14 +532,14 @@ export default function HowItWorks() {
         </section>
 
         <section className="lp ch ch-surface">
-          <div className="wrap-lp longform">
+          <div className="wrap-lp refflow">
         {/* A margin note here said "Veyro never holds it" and then said it
             again in two sentences -- 300 lines after "Who does what" had
             already defined exactly that, and directly above a diagram that
             shows it. Three statements of one fact, one of which is a
             picture. The picture stays. */}
 
-        <h2 className="h3">How the money moves</h2>
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>How the money moves</h2>
         <p className="body" style={{ marginTop: 8, marginBottom: 24 }}>
           Five stops, one direction. Veyro is the first stop and the last; the money itself only
           ever touches Stripe.
@@ -570,7 +571,7 @@ export default function HowItWorks() {
         <LiveWallet />
 
         {/* ---------------------------------------------------------------- */}
-        <h2 className="h3">Two ways to take the payment</h2>
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>Two ways to take the payment</h2>
         <p className="body" style={{ marginTop: 8 }}>
           Both take the same money into the same account. Pick whichever matches what you have
           built so far.
@@ -600,8 +601,8 @@ export default function HowItWorks() {
         </section>
 
         <section className="lp ch">
-          <div className="wrap-lp longform">
-        <h2 className="h3">Whichever of the two you are</h2>
+          <div className="wrap-lp refflow">
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>Whichever of the two you are</h2>
         <p className="body" style={{ marginTop: 8 }}>
           This page is written for both of you, which means half of it is addressed to someone
           else whichever one you are. The short version, split:
@@ -609,7 +610,7 @@ export default function HowItWorks() {
         <AudienceSplit />
 
 
-        <h2 className="h3">Find out what applies to you</h2>
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>Find out what applies to you</h2>
         <p className="body" style={{ marginTop: 8 }}>
           Two questions: where you live and what year you were born. It runs in your browser, takes
           about twenty seconds, and tells you when you don&rsquo;t need us at all. Its country data

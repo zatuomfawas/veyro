@@ -186,9 +186,9 @@ export function BuyButton() {
         </section>
 
         <section className="lp ch" id="reference">
-          <div className="wrap-lp sdkref">
+          <div className="wrap-lp refflow">
         {/* ---------------- 1 ---------------- */}
-        <h2 className="h3">1. What you need</h2>
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>1. What you need</h2>
         <div className="ruled" style={{ marginTop: 14 }}>
           <div>
             <h3 className="h4" style={{ margin: 0 }}>A product with a price</h3>
@@ -213,11 +213,11 @@ export function BuyButton() {
         </div>
 
         {/* ---------------- 2 ---------------- */}
-        <h2 className="h3" style={{ marginTop: 34 }}>2. Install it</h2>
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>2. Install it</h2>
         <Copyable label="Terminal" code={`npm install ${PKG}`} />
 
         {/* ---------------- 3 ---------------- */}
-        <h2 className="h3" style={{ marginTop: 34 }}>3. Add the button</h2>
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>3. Add the button</h2>
         <p className="body" style={{ marginTop: 8, maxWidth: "var(--m-body)" }}>
           React, with the component:
         </p>
@@ -265,7 +265,7 @@ document.querySelector("#buy").addEventListener("click", () => {
 
         {/* ---------------- without the package ---------------- */}
         <div id="nopackage" />
-        <h2 className="h3" style={{ marginTop: 34 }}>Without the SDK</h2>
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>Without the SDK</h2>
         <p className="body" style={{ marginTop: 8, maxWidth: "var(--m-body)" }}>
           The package is a convenience, not a requirement — it calls two public endpoints. This
           does the same job with no dependency, and works today whether or not the package is
@@ -300,8 +300,8 @@ document.querySelector("#buy").addEventListener("click", () => {
         </section>
 
         <section className="lp ch ch-surface">
-          <div className="wrap-lp sdkref">
-        <h2 className="h3" style={{ marginTop: 34 }}>4. Check it before you ship</h2>
+          <div className="wrap-lp refflow">
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>4. Check it before you ship</h2>
         <p className="body" style={{ marginTop: 8, maxWidth: "var(--m-body)" }}>
           Paste this into your browser console, anywhere. It answers from Veyro, so it tells you
           about your product rather than about your code.
@@ -333,7 +333,7 @@ document.querySelector("#buy").addEventListener("click", () => {
         </div>
 
         {/* ---------------- 5 ---------------- */}
-        <h2 className="h3" style={{ marginTop: 34 }}>5. Go live</h2>
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>5. Go live</h2>
         <p className="body" style={{ marginTop: 8, maxWidth: "var(--m-body)" }}>
           There is no switch. Once that check comes back ready, the button takes real money. Your
           first payment appears in your wallet, and{" "}
@@ -348,8 +348,8 @@ document.querySelector("#buy").addEventListener("click", () => {
         </section>
 
         <section className="lp ch">
-          <div className="wrap-lp sdkref">
-        <h2 className="h3">If an AI tool is writing this for you</h2>
+          <div className="wrap-lp refflow">
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>If an AI tool is writing this for you</h2>
         <p className="body" style={{ marginTop: 8, maxWidth: "var(--m-body)" }}>
           Copy one of these, fill in the brackets, and paste it in. They are written so the
           assistant changes the payment button and nothing else.
@@ -367,8 +367,8 @@ document.querySelector("#buy").addEventListener("click", () => {
         </section>
 
         <section className="lp ch ch-surface">
-          <div className="wrap-lp sdkref">
-        <h2 className="h3">When something goes wrong</h2>
+          <div className="wrap-lp refflow">
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>When something goes wrong</h2>
         <p className="body" style={{ marginTop: 8, maxWidth: "var(--m-body)" }}>
           Every refusal comes back with a <span className="mono">code</span>, a sentence in plain
           words, and a <span className="mono">fixPrompt</span> you can act on or paste back into
@@ -402,8 +402,8 @@ document.querySelector("#buy").addEventListener("click", () => {
         </section>
 
         <section className="lp ch">
-          <div className="wrap-lp sdkref">
-        <h2 className="h3">Where the card details go</h2>
+          <div className="wrap-lp refflow">
+        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>Where the card details go</h2>
         <p className="body" style={{ marginTop: 8, maxWidth: "var(--m-body)" }}>
           Not to your app, and not to your server. The button opens Veyro&rsquo;s own checkout
           page, and the card form on it belongs to Stripe. Your site never receives a card number,

@@ -183,11 +183,11 @@ export default function Pricing() {
         </div>
 
         <section className="lp ch ch-surface">
-          <div className="wrap-lp longform">
+          <div className="wrap-lp refflow">
 
         {/* Section 3: one list. No ticks and crosses: a comparison grid makes
             one column look like the deprived one, and here there isn't one. */}
-        <h2 className="h3">What everyone gets</h2>
+        <h2 className="lp-h2" style={{ maxWidth: "18ch" }}>What everyone gets</h2>
         <p className="body" style={{ marginTop: 8 }}>
           Whatever you earn, including nothing.{" "}
           {ANY_SOON
@@ -234,8 +234,8 @@ export default function Pricing() {
         </section>
 
         <section className="lp ch">
-          <div className="wrap-lp longform">
-        <h2 className="h3">What people actually pay</h2>
+          <div className="wrap-lp refflow">
+        <h2 className="lp-h2" style={{ maxWidth: "18ch" }}>What people actually pay</h2>
         <p className="body" style={{ marginTop: 8 }}>
           The sum is: take what you earned, subtract the first $100, and take 3% of the rest.
           Here it is run for five months of different sizes.
@@ -283,8 +283,8 @@ export default function Pricing() {
         </section>
 
         <section className="lp ch ch-surface">
-          <div className="wrap-lp longform">
-        <h2 className="h3">Why these numbers</h2>
+          <div className="wrap-lp refflow">
+        <h2 className="lp-h2" style={{ maxWidth: "18ch" }}>Why these numbers</h2>
         <p className="body" style={{ marginTop: 8 }}>
           Running an active seller costs about $3.25 a month before anyone earns a penny &mdash;
           the processor charges $2.00 for the account, $0.25 a payout, and a quarter of a percent
