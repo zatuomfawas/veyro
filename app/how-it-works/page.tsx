@@ -532,10 +532,11 @@ export default function HowItWorks() {
 
         <section className="lp ch ch-surface">
           <div className="wrap-lp longform">
-        <MarginNote head="Veyro never holds it">
-          The money goes from the customer to an account in your guardian&rsquo;s name. We are the
-          checkout at one end and the record at the other, and never in the path between.
-        </MarginNote>
+        {/* A margin note here said "Veyro never holds it" and then said it
+            again in two sentences -- 300 lines after "Who does what" had
+            already defined exactly that, and directly above a diagram that
+            shows it. Three statements of one fact, one of which is a
+            picture. The picture stays. */}
 
         <h2 className="h3">How the money moves</h2>
         <p className="body" style={{ marginTop: 8, marginBottom: 24 }}>

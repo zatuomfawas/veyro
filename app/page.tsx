@@ -257,7 +257,7 @@ export default async function Home() {
               some extra services switch on in the months you earn above $100.
             </p>
             <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
-              <Link className="btn btn-lg" href="/get-started">Start &mdash; it&rsquo;s free</Link>
+              <Link className="btn btn-lg btn-xl" href="/get-started">Start &mdash; it&rsquo;s free</Link>
             </div>
             <p className="tiny" style={{ marginTop: 16 }}>
               <Link className="linkbtn" href="/pricing">What the 3% buys</Link>

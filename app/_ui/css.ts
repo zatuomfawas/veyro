@@ -3246,8 +3246,14 @@ export const CSS2 = `
    The hero is the first thing painted and the last thing that should reflow,
    so the arriving row holds its height from the first frame and only its
    contents fade in. */
-.fw .lw-chips { margin-top:var(--sp-5); padding-top:var(--sp-4);
-  border-top:1px solid var(--line); }
+/* No rule above the chips.
+   The card had four stacked horizontal rules -- the title bar, the
+   equation row, the chips, the ledger -- and the equation row is one I
+   added. Four lines in one small surface is the "everything is boxed in"
+   fault, and the chips are a caption for the ledger directly beneath
+   them rather than a zone of their own. Space separates them now; the
+   ledger keeps its rule because a list of rows needs a top edge. */
+.fw .lw-chips { margin-top:var(--sp-6); }
 .fw .lw-led { margin-top:var(--sp-4); }
 /* No animation on the figure itself. The digits now count to the new balance,
    and a lift underneath a count is two effects competing for the same glance.
