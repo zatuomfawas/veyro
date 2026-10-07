@@ -11,7 +11,7 @@ import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { GuardianPermissions } from "@/app/_ui/GuardianPermissions";
 import { ParentPanel } from "@/app/_ui/ParentPanel";
 import { MoneyRail } from "@/app/_ui/MoneyRail";
-import { MarginNote } from "@/app/_ui/MarginNote";
+import { TalkToAPerson } from "./TalkToAPerson";
 import { PageNext } from "@/app/_ui/PageNext";
 import { supportMailto } from "@/lib/support";
 
@@ -201,14 +201,6 @@ export default function ForParents() {
             stays with them rather than waiting at the bottom. It is also what
             fills the right-hand track: the alternative was 236px of nothing
             beside two thousand words about liability. */}
-        <MarginNote head="Rather talk to a person?" sticky>
-          <a className="linkbtn" href={supportMailto({
-            audience: "guardian", priority: false,
-            subject: "A question before I agree",
-          })}>Email us directly</a>{" "}
-          and a person replies &mdash; not a form, and not your child&rsquo;s account manager.
-          Reading all of this and still saying no is a perfectly good outcome.
-        </MarginNote>
 
         <ParentPanel />
 
@@ -302,6 +294,16 @@ export default function ForParents() {
         />
       </main>
 
+      {/* Was a sticky margin note. See TalkToAPerson.tsx for why it is a
+          closeable panel now and why it is not a modal. The href is built
+          here so the component stays presentational and the mailto tagging
+          rules keep living in lib/support. */}
+      <TalkToAPerson
+        href={supportMailto({
+          audience: "guardian", priority: false,
+          subject: "A question before I agree",
+        })}
+      />
       <ScrollTop />
       <SiteFooter />
     </div>

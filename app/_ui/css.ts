@@ -2427,6 +2427,58 @@ export const CSS2 = `
 .fw .skiplink:focus { left:0; }
 .fw .progress { position:fixed; top:0; left:0; right:0; height:2px; background:transparent; z-index:90; }
 .fw .progress i { display:block; height:100%; background:var(--brand); }
+/* "Rather talk to a person?" -- a panel, not a modal.
+   ----------------------------------------------------------------------
+   Bottom LEFT on a wide screen, because the scroll-to-top button owns the
+   right and two fixed things in one corner is how you get a button you
+   cannot press. Full width at the bottom on a phone, where there is no
+   left corner worth having.
+
+   Styled from the same tokens as a .card -- one border, one surface, no
+   shadow beyond --lift. It is the page offering help, not a notification.
+   Nothing about it should read as urgent: a parent who is deciding whether
+   to agree to something does not need to be hurried. */
+.fw .talkpop { position:fixed; left:24px; bottom:24px; z-index:72;
+  width:min(340px, calc(100vw - 48px));
+  background:var(--card); border:1px solid var(--ink); box-shadow:var(--lift);
+  padding:var(--sp-5); }
+.fw .talkpop-h { display:flex; align-items:flex-start; justify-content:space-between;
+  gap:var(--sp-4); }
+.fw .talkpop-t { margin:0; font-size:var(--fs-4); font-weight:var(--fw-bold);
+  letter-spacing:-0.012em; line-height:1.25; }
+.fw .talkpop-b { margin:var(--sp-3) 0 0; font-size:var(--fs-2); line-height:1.6;
+  color:var(--ink-2); }
+/* The close control is a real target, not an 11px glyph. --tap on both axes
+   even with a fine pointer, because this is the one control on the panel and
+   missing it means the panel stays. */
+.fw .talkpop-x { appearance:none; background:none; border:0; cursor:pointer;
+  font:inherit; color:var(--ink-3); line-height:1; flex:none;
+  width:var(--tap); height:var(--tap); margin:calc(var(--sp-3) * -1) calc(var(--sp-3) * -1) 0 0;
+  display:flex; align-items:center; justify-content:center; font-size:20px;
+  transition:color var(--t), background-color var(--t); }
+.fw .talkpop-x:hover { color:var(--ink); background:var(--surface-2); }
+
+/* It arrives rather than appearing. One short move, and nothing under
+   prefers-reduced-motion, which the global block below already enforces by
+   zeroing animation-duration. */
+@keyframes veyro-talkpop { from { opacity:0; transform:translateY(8px); } }
+.fw .talkpop { animation:veyro-talkpop var(--t-2) var(--ease) both; }
+
+@media (max-width:620px) {
+  .fw .talkpop { left:16px; right:16px; bottom:16px; width:auto; padding:var(--sp-4); }
+  /* On a phone the panel is full width, so the scroll-to-top button is on
+     top of it rather than beside it -- measured, not guessed: the panel's
+     top edge came out at 658px and the button spans 623 to 667.
+
+     216 = the panel's 16px offset + its measured 138px + a 62px gap. The
+     slack is deliberate: the copy can wrap to another line on a narrower
+     phone or at a larger text size, and a collision that only appears at
+     200% zoom is the kind nobody finds. :has() so the button only moves
+     while the panel is actually there, and drops back the moment it is
+     dismissed. */
+  .fw:has(.talkpop) .totop { bottom:216px; }
+}
+
 .fw .totop { position:fixed; right:24px; bottom:96px; z-index:70; display:flex; align-items:center; gap:9px;
   background:var(--card); border:1px solid var(--ink); color:var(--ink); font-size:var(--fs-2); font-weight:var(--fw-bold);
   letter-spacing:0.02em; padding:6px 13px 6px 6px; cursor:pointer; }
