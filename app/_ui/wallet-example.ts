@@ -1,0 +1,45 @@
+// The one invented month, shared by everything that shows a wallet.
+//
+// It used to live inside LiveWallet, which was fine while LiveWallet was the
+// only thing drawing it. The hero shows a smaller, calmer version of the
+// same account now, and two components inventing their own figures is how
+// the homepage ends up quoting $195 while /how-it-works quotes $190 -- a
+// discrepancy nobody would catch, in the one kind of number a visitor
+// checks.
+//
+// The arithmetic has to survive a sceptical parent adding it up:
+//
+//   210.00 collected
+//  -  8.55 the processor's fee
+//  -  3.30 Veyro's fee, computed, not typed
+//  -  3.15 still settling
+//  = 195.00 available
+//
+// Every figure here is invented, and every surface that renders them says so
+// where a reader can see it.
+import { feeMinor } from "@/lib/pricing";
+
+export const COLLECTED_MINOR = 21000;
+export const PROCESSING_MINOR = 855;
+export const SETTLING_MINOR = 315;
+
+/**
+ * Not a literal. The example fee is computed by the same function that
+ * decides what a founder is actually charged, so a change to the pricing
+ * model cannot leave a wrong number sitting in the hero.
+ */
+export const VEYRO_FEE_MINOR = feeMinor(COLLECTED_MINOR);
+
+export const BALANCE_MINOR =
+  COLLECTED_MINOR - PROCESSING_MINOR - VEYRO_FEE_MINOR - SETTLING_MINOR;
+
+/** The sale LiveWallet animates into the ledger. */
+export const SALE_GROSS_MINOR = 2400;
+export const SALE_FEE_MINOR = 86;
+export const SALE_NAME = "Notion Second Brain template";
+
+/** Settled rows, newest first. */
+export const PRIOR = [
+  { name: "Commission slot", sub: "Paid", when: "2 Oct", amt: 4339 },
+  { name: "Sticker pack", sub: "Paid", when: "28 Sept", amt: 1135 },
+] as const;

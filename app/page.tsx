@@ -4,7 +4,7 @@ import { currentUser } from "@/lib/auth";
 import { defaultLandingFor } from "@/lib/next-path";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
-import { HeroPreview } from "@/app/_ui/HeroPreview";
+import { HeroWallet } from "@/app/_ui/HeroWallet";
 import { MoneyRail } from "@/app/_ui/MoneyRail";
 import { Reveal } from "@/app/_ui/Reveal";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
@@ -106,68 +106,63 @@ export default async function Home() {
             page, and the pair sits centred inside it.
 
             And the preview only showed half the product. See HeroPreview. */}
+        {/* ---- the hero ----
+            FIVE THINGS CAME OUT OF THIS AND NOTHING WENT IN.
+
+            The eyebrow ("For builders aged 13 to 17", with its own square
+            bullet) was a decorated label above the headline, competing with
+            it for the first glance. The audience is in the first five words
+            of the supporting line now, where it is read rather than
+            registered.
+
+            The three figures -- from age 13, signup countries 43, under
+            $100 free -- were a second row of content directly under two
+            buttons, and the pricing half of them is already three figures
+            in the closing section. A visitor who wants the numbers is one
+            click from /check and /pricing; a visitor reading a hero is not
+            weighing a country list.
+
+            The disclosure line under them went with the figures it was
+            qualifying. The conditionality is in the verb now -- Veyro HELPS
+            you take payments, it does not promise you can -- and the
+            primary action is literally "check eligibility", which is the
+            same sentence as a button.
+
+            And the preview lost its checkout pane, its joining sentence and
+            the whole fee arithmetic. See HeroWallet for what survived.
+
+            What is left is four things in the order they should be read:
+            headline, one line, one action, one picture. */}
         <div className="hero-band">
           <div className="wrap-lp hero">
             <div className="hero-grid">
               <div className="hero-left">
-                <p className="hero-kicker">
-                  <span className="hero-kicker-dot" aria-hidden="true" />
-                  For builders aged 13 to 17
-                </p>
-
                 {/* No hard break. At a clamped size the right place to wrap
                     moves with the viewport, and text-wrap:balance picks it
                     better than a <br> frozen at one width ever could. */}
                 <h1 className="hero-h1">Build your business. Start getting paid.</h1>
 
                 <p className="hero-lead">
-                  Veyro sets you up to take online payments with a parent or guardian as the
-                  verified adult, gives you a checkout link for what you make, and keeps every
-                  payment, fee and payout in one place.
+                  Veyro helps founders aged 13 to 17 take online payments, with a parent or
+                  guardian as the verified adult. Create checkout links, and track every
+                  payment in one place.
                 </p>
 
+                {/* One button and one link, not two buttons. Two filled
+                    rectangles side by side are two primary actions however
+                    they are coloured, and the hero only has one thing it
+                    wants you to do. */}
                 <div className="hero-cta">
                   <Link className="btn btn-lg btn-xl" href="/check">Check eligibility</Link>
-                  <Link className="btn btn-2 btn-lg" href="/how-it-works">How it works</Link>
+                  <Link className="hero-alt" href="/how-it-works">
+                    How it works
+                    <span aria-hidden="true">&rarr;</span>
+                  </Link>
                 </div>
-
-                {/* Three figures that close the column. They sit on a rule
-                    rather than in cards: three more bordered boxes directly
-                    under two buttons would read as a second row of
-                    controls. */}
-                <dl className="hero-facts">
-                  <div>
-                    <dt className="fig-k">From age</dt>
-                    <dd className="fig fig-sm">13</dd>
-                  </div>
-                  <div>
-                    {/* "Countries 43" on its own reads as "43 countries can
-                        take payments". It is the number the provider
-                        supports self-serve signup in, which /how-it-works,
-                        /check and /legal all state the same way. */}
-                    <dt className="fig-k">Signup countries</dt>
-                    <dd className="fig fig-sm">43</dd>
-                  </div>
-                  <div>
-                    <dt className="fig-k">Under $100 a month</dt>
-                    <dd className="fig fig-sm fig-pos">Free</dd>
-                  </div>
-                </dl>
-
-                {/* The "software, not a bank" half of this sentence moved
-                     out: the trust section says it, the footer says it, and
-                     three times on one page is a page arguing with itself.
-                     What stays is the qualifier the figures above need, next
-                     to the figures. */}
-                <p className="hero-foot">
-                  Whether you can take payments depends on your country and on the payment
-                  provider&rsquo;s own checks, so start by{" "}
-                  <Link className="linkbtn" href="/check">checking yours</Link>.
-                </p>
               </div>
 
               <div className="hero-right">
-                <HeroPreview />
+                <HeroWallet />
               </div>
             </div>
           </div>

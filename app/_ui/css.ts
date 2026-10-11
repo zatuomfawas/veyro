@@ -4007,6 +4007,16 @@ export const CSS2 = `
    measure set on the type beneath it: inside the centred closing section
    it stretched a paragraph to 1170px of centred type. The layout blocks are
    listed instead, so a measure set on the type stays the type's own. */
+/* The band breathes now that there is less in it.
+   52/44 was sized for a column that carried a kicker, a headline, a lead,
+   two buttons, three figures and a disclosure. With four elements in it the
+   same padding reads as cramped rather than tight: 63px above the headline
+   against a 63px navbar is the hero starting the instant the chrome ends.
+   Scoped to the homepage, because /get-started and /docs/sdk have their own
+   hero rhythms. */
+.fw .home .hero { padding-block:88px 80px; }
+@media (max-width:980px) { .fw .home .hero { padding-block:56px 48px; } }
+
 .fw .home .wrap-lp > .hero-grid,
 .fw .home .wrap-lp > .aside-grid,
 .fw .home .wrap-lp > .secth,
@@ -4039,81 +4049,124 @@ export const CSS2 = `
    first line was a balance. The preview is two panes now and taller than the
    copy, so centring is what puts the headline against the middle of it
    rather than leaving the copy to trail off halfway up. */
-.fw .hero-h1 { font-size:clamp(33px, 3.9vw, 54px); max-width:15ch; }
-.fw .hero-lead { max-width:44ch; }
+/* The headline has room now that nothing is stacked under the buttons, so
+   it takes the size it was always worth. Two lines at every width the grid
+   holds, which is what the full stop in the middle is for. */
+.fw .hero-h1 { margin-top:0; font-size:clamp(34px, 4.1vw, 58px); max-width:14ch; }
+.fw .hero-lead { max-width:42ch; }
+.fw .hero-cta { align-items:center; gap:var(--sp-6); margin-top:var(--sp-8); }
+@media (max-width:560px) {
+  /* Stacked, the 24px gap plus the link's own 44px tap target read as
+     ninety pixels of nothing between two actions that belong together. */
+  .fw .hero-cta { gap:var(--sp-2); margin-top:var(--sp-7); }
+  .fw .hero-alt { align-self:flex-start; }
+}
 
-/* The one disclosure that belongs in a hero: software, not a bank, and
-   eligibility is not ours to promise. Small, under the figures, where it
-   qualifies the "43 countries" directly above it rather than arguing. */
-.fw .hero-foot { margin:var(--sp-5) 0 0; font-size:var(--fs-2); line-height:1.55;
-  color:var(--ink-3); max-width:52ch; }
+/* The secondary action is a link, not a button.
+   ---------------------------------------------------------------------
+   Two filled rectangles side by side are two primary actions however they
+   are coloured, and the hero has exactly one thing it wants you to do. As a
+   link with an arrow it is still obviously clickable, still a 44px target,
+   and no longer competing. */
+.fw .hero-alt { display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+  font-size:var(--fs-4); font-weight:var(--fw-med); color:var(--ink);
+  text-decoration:none; border-bottom:1px solid var(--line); padding-bottom:1px; }
+.fw .hero-alt:hover { border-bottom-color:var(--ink); }
+.fw .hero-alt:focus-visible { outline:2px solid var(--pine); outline-offset:3px; }
+.fw .hero-alt > span { transition:transform var(--t) var(--ease); }
+.fw .hero-alt:hover > span { transform:translateX(3px); }
+@media (prefers-reduced-motion: reduce) { .fw .hero-alt > span { transition:none; } }
 
-/* ---------------------------------------------------------------- the preview
-   One surface, two panes, and a line between them that says what the two
-   panes have to do with each other. Not two cards: a hero with two floating
-   mockups in it is a hero about mockups. */
-.fw .hp { border:1px solid var(--line); background:var(--card); box-shadow:var(--lift);
+/* ------------------------------------------------------------- the preview
+   One object, not a composition of them.
+   ---------------------------------------------------------------------
+   What was here styled a two-pane surface: a checkout row, a joining rule
+   with a sentence on it, and a frame bar, wrapped round a cut-down wallet
+   that had given up its own frame. It worked, and it was four nested
+   containers and nine borders to say one thing.
+
+   This is a card. A bar that admits the figures are invented, a money
+   position, two rows, one line of fine print. The borders are the two that
+   separate those parts from each other and nothing else, because a border
+   that is not separating anything is decoration. */
+.fw .hw { border:1px solid var(--line); background:var(--card); box-shadow:var(--lift);
   overflow:hidden; }
-/* The frame's own bar. It exists for one reason: to say that the figures
-   below are invented, which the wallet used to say in a title bar that bare
-   mode removes. */
-.fw .hp-bar { display:flex; align-items:center; gap:var(--sp-3);
-  padding:10px var(--sp-6); border-bottom:1px solid var(--line);
-  background:var(--surface); }
-.fw .hp-bar-t { font-size:var(--fs-2); font-weight:var(--fw-bold); color:var(--ink-2); }
-.fw .hp-bar .dp-tag { margin-left:auto; }
+.fw .hw-bar { display:flex; align-items:center; gap:var(--sp-3);
+  padding:11px var(--sp-6); border-bottom:1px solid var(--line); background:var(--surface); }
+.fw .hw-bar-t { font-size:var(--fs-2); font-weight:var(--fw-bold); color:var(--ink-2); }
+.fw .hw-bar .dp-tag { margin-left:auto; }
+.fw .hw-body { padding:var(--sp-6); }
 
-.fw .hp-pane { padding:var(--sp-5) var(--sp-6); }
-.fw .hp-pane-b { padding:var(--sp-5) 0 0; }
+/* The money position. The two figures are a pair and sit as one group, so
+   the action can be the only thing on the other side of the row -- which is
+   what makes it findable without being loud. */
+/* flex-end, not flex-start. Top-aligned, the action sat level with the
+   AVAILABLE label and floated well above the figure that is the card's
+   actual centre of gravity; on the baseline of the balance it reads as
+   belonging to it. */
+.fw .hw-top { display:flex; align-items:flex-end; justify-content:space-between;
+  gap:var(--sp-5); flex-wrap:wrap; }
+.fw .hw-figs { display:flex; align-items:flex-start; gap:var(--sp-8); min-width:0; }
+.fw .hw-bal { display:block; margin-top:2px; letter-spacing:-0.035em; }
+.fw .hw-pending .fig { display:block; margin-top:6px; color:var(--ink-2); }
 
-/* The pane labels. These are the only text in the preview that is about the
-   preview rather than in it, so they are the quietest thing in it. */
-.fw .hp-k { display:block; font-size:var(--fs-1); letter-spacing:0.07em;
-  text-transform:uppercase; font-weight:var(--fw-bold); color:var(--ink-3); }
-.fw .hp-pane-b > .hp-k { padding-inline:var(--sp-6); }
+/* Outline, not filled. A filled control here would be the second solid
+   rectangle in the hero and would argue with "Check eligibility" twenty
+   pixels to its left. */
+.fw .hw-cta { display:inline-flex; align-items:center; height:var(--h-md);
+  padding:0 var(--sp-5); border:1px solid var(--control-line); background:var(--paper);
+  color:var(--ink); font-size:var(--fs-2); font-weight:var(--fw-bold);
+  text-decoration:none; white-space:nowrap; }
+.fw .hw-cta:hover { border-color:var(--brand); }
+.fw .hw-cta:focus-visible { outline:2px solid var(--pine); outline-offset:2px; }
 
-.fw .hp-pay { display:flex; align-items:center; gap:var(--sp-4); margin-top:var(--sp-3); }
-.fw .hp-pay-n { min-width:0; font-size:var(--fs-4); font-weight:var(--fw-med); color:var(--ink);
+/* Two rows, on one rule. They are a ledger, so they are a list, and the
+   amounts are tabular so the two line up on the decimal. */
+.fw .hw-led { list-style:none; margin:var(--sp-6) 0 0; padding:var(--sp-5) 0 0;
+  border-top:1px solid var(--line); }
+.fw .hw-led > li { display:flex; align-items:baseline; gap:var(--sp-4);
+  padding:var(--sp-3) 0; }
+.fw .hw-led > li + li { border-top:1px solid var(--line-soft); }
+.fw .hw-n { min-width:0; flex:1 1 auto; font-size:var(--fs-3); color:var(--ink);
   overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.fw .hp-pay-v { margin-left:auto; font-variant-numeric:tabular-nums;
-  font-size:var(--fs-4); font-weight:var(--fw-bold); color:var(--ink); }
-/* A span, not a button. A disabled button reads as broken and a live one
-   would be a control that does nothing; the pane's label already says this
-   is the customer's screen, so it is a picture of a button. */
-.fw .hp-pay-b { flex:none; display:inline-flex; align-items:center; height:var(--h-sm);
-  padding:0 var(--sp-4); background:var(--brand); color:var(--reverse);
-  font-size:var(--fs-2); font-weight:var(--fw-bold); }
-.fw .hp-note { margin:var(--sp-3) 0 0; font-size:var(--fs-2); color:var(--ink-3); }
-
-/* The join. A rule with a sentence on it, which is the arrow between two
-   cards done in a way that survives being read aloud. */
-.fw .hp-join { display:flex; align-items:center; gap:var(--sp-3); margin:0;
-  padding:var(--sp-4) var(--sp-6); border-block:1px solid var(--line);
-  background:var(--surface); font-size:var(--fs-2); line-height:1.5; color:var(--ink-2); }
-.fw .hp-join-d { flex:none; width:var(--marker); height:var(--marker); background:var(--pine); }
-
-/* Nested: the wallet gives up its frame and its title bar, because .hp is
-   already both. Without this it is a card inside a card with two title bars
-   three rows apart. */
-.fw .dp-bare { border:0; box-shadow:none; background:transparent; overflow:visible; }
-.fw .dp-bare .dp-body { padding:var(--sp-4) var(--sp-6) var(--sp-6); }
+/* A fixed column so the two dates line up with each other rather than
+   each one sitting wherever its amount leaves room. */
+.fw .hw-w { flex:none; width:5.5rem; text-align:right; font-size:var(--fs-2);
+  color:var(--ink-3); }
+.fw .hw-a { flex:none; font-variant-numeric:tabular-nums; font-size:var(--fs-3);
+  font-weight:var(--fw-bold); color:var(--ink); }
+.fw .hw-foot { margin:var(--sp-5) 0 0; font-size:var(--fs-2); color:var(--ink-3); }
 
 @media (max-width:980px) {
-  /* The preview leads on a phone only after the words have. It stays full
-     width and keeps its proportions; nothing here shrinks type to fit. */
-  .fw .hp-bar { padding:9px var(--sp-5); }
-  .fw .hp-pane { padding:var(--sp-4) var(--sp-5); }
-  .fw .hp-pane-b > .hp-k { padding-inline:var(--sp-5); }
-  .fw .dp-bare .dp-body { padding:var(--sp-3) var(--sp-5) var(--sp-5); }
-  .fw .hp-join { padding:var(--sp-4) var(--sp-5); }
+  .fw .hw-bar { padding:10px var(--sp-5); }
+  .fw .hw-body { padding:var(--sp-5); }
+}
+@media (max-width:560px) {
+  /* The name wraps rather than truncating.
+     At 375px "Notion Second Brain template" came out "Notion Second ...",
+     and an ellipsis in a product preview reads as a layout that did not fit
+     rather than as a long name. The date and the amount stay on the first
+     baseline beside it, so the row still scans as one line of ledger. */
+  .fw .hw-led > li { align-items:baseline; }
+  .fw .hw-n { white-space:normal; overflow:visible; }
+  .fw .hw-w { width:auto; }
 }
 @media (max-width:420px) {
-  /* Three things on one row stop fitting: the name gives up the row rather
-     than the price and the button, because those two are the point. */
-  .fw .hp-pay { flex-wrap:wrap; gap:var(--sp-2) var(--sp-4); }
-  .fw .hp-pay-n { flex:1 0 100%; white-space:normal; }
-  .fw .hp-pay-v { margin-left:0; }
-  .fw .hp-pay-b { margin-left:auto; }
+  /* The action takes its own line rather than squeezing the balance. */
+  .fw .hw-top { gap:var(--sp-5); }
+  .fw .hw-cta { width:100%; justify-content:center; }
+  .fw .hw-figs { gap:var(--sp-6); }
+}
+@media (max-width:400px) {
+  /* The two figures stack.
+     At 320px the balance alone is ~195px inside a 248px content box, so
+     SETTLING and its value ran off the right-hand edge -- and because the
+     card is overflow:hidden they were silently clipped rather than pushing
+     the page wide, which is why a page-level overflow check never saw it.
+     Stacked, the pair fits at any width, and the secondary figure sits
+     where a secondary figure belongs. */
+  .fw .hw-figs { flex-direction:column; gap:var(--sp-4); }
+  .fw .hw-bal { font-size:var(--fs-8); }
 }
 
 /* ---------------------------------------------------------------- the problem

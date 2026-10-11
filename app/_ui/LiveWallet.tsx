@@ -1,6 +1,14 @@
 "use client";
 
-// The hero's product surface: a founder wallet you can actually poke.
+// The full founder wallet: the month, interrogable, on /how-it-works.
+//
+// It was the homepage hero's product surface too, in a cut-down "bare" mode
+// with a reduced row count. That is gone. The hero needs a money position a
+// visitor reads in two seconds; this needs the whole month a sceptic can add
+// up. Trying to be both gave the hero five interrogable terms, three status
+// chips, a live region and a ledger -- fourteen things competing with a
+// headline. app/_ui/HeroWallet.tsx is the calm one; this is the thorough
+// one, and they share their figures through wallet-example.ts.
 //
 // What it does, once, when scrolled into view:
 //
@@ -52,24 +60,16 @@
 
 import { Fragment, useEffect, useReducer, useRef, useState } from "react";
 import { formatMinor } from "@/lib/money";
-import { feeMinor, FREE_FLOOR_MINOR } from "@/lib/pricing";
+import { FREE_FLOOR_MINOR } from "@/lib/pricing";
 import { CountUp } from "@/app/_ui/CountUp";
 import { PAYOUTS_URL } from "@/lib/stripe-urls";
-
-// The arithmetic has to survive a sceptical parent adding it up.
-const SALE_GROSS_MINOR = 2400;
-const SALE_FEE_MINOR = 86;
-
-// One month, and it balances: 210.00 - 8.55 - 3.30 - 3.15 = 195.00.
-const COLLECTED_MINOR = 21000;
-const PROCESSING_MINOR = 855;
-const SETTLING_MINOR = 315;
-// Not a literal. The example fee is computed by the same function that
-// decides what a founder is actually charged, so a change to the pricing
-// model cannot leave a wrong number sitting in the hero.
-const VEYRO_FEE_MINOR = feeMinor(COLLECTED_MINOR);
-const BALANCE_MINOR =
-  COLLECTED_MINOR - PROCESSING_MINOR - VEYRO_FEE_MINOR - SETTLING_MINOR;
+// The invented month lives in one file now, because the hero draws a calmer
+// version of the same account and two components inventing their own
+// figures is how two pages end up quoting different balances.
+import {
+  COLLECTED_MINOR, PROCESSING_MINOR, SETTLING_MINOR, VEYRO_FEE_MINOR, BALANCE_MINOR,
+  SALE_GROSS_MINOR, SALE_FEE_MINOR, SALE_NAME, PRIOR,
+} from "@/app/_ui/wallet-example";
 
 type Phase = 0 | 1 | 2 | 3;
 
@@ -79,10 +79,6 @@ const SEQUENCE: { at: number; to: Phase }[] = [
   { at: 3300, to: 3 },
 ];
 
-const PRIOR = [
-  { name: "Commission slot", sub: "Paid", amt: 4339 },
-  { name: "Sticker pack", sub: "Paid", amt: 1135 },
-];
 
 /** The month, as five terms that add up. */
 type TermKey = "collected" | "processing" | "veyro" | "settling" | "available";
@@ -116,28 +112,7 @@ const TERMS: { k: TermKey; label: string; amount: number; op?: string; note: str
   },
 ];
 
-export function LiveWallet({ bare = false, rows = PRIOR.length }: {
-  /**
-   * Drop the frame and the title bar, because something outside is already
-   * providing them.
-   *
-   * The hero shows a checkout and this wallet as two panes of one surface --
-   * a payment arriving, and the money it becomes. Rendered whole, that is a
-   * card inside a card with two title bars three rows apart, which is the
-   * stacked-mockup look rather than a product. Bare, it is the lower half of
-   * one object.
-   */
-  bare?: boolean;
-  /**
-   * How many settled rows to list under the new sale.
-   *
-   * The hero shows one. Three made the preview 778px tall against a 440px
-   * column of copy, so the sentence the hero exists for floated in the
-   * middle of a much taller picture -- and the third row says nothing the
-   * second did not.
-   */
-  rows?: number;
-} = {}) {
+export function LiveWallet() {
   const [phase, setPhase] = useReducer((_: Phase, n: Phase) => n, 0 as Phase);
   /** Which term the pointer or keyboard is on. Null means none. */
   const [term, setTerm] = useState<TermKey | null>(null);
@@ -177,7 +152,7 @@ export function LiveWallet({ bare = false, rows = PRIOR.length }: {
   const active = TERMS.find((t) => t.k === term);
 
   return (
-    <div className={"dp" + (bare ? " dp-bare" : "")} ref={node} data-dim={term ? "1" : undefined}>
+    <div className="dp" ref={node} data-dim={term ? "1" : undefined}>
       {/* The whole thing in words, for anyone not seeing it. The controls
           below are real and reachable; this is the summary they sit in. */}
       <p className="sr-only">
@@ -189,13 +164,11 @@ export function LiveWallet({ bare = false, rows = PRIOR.length }: {
         who is the account holder. Every figure is invented.
       </p>
 
-      {!bare && (
-        <div className="dp-bar" aria-hidden="true">
-          <span className="dp-dots"><i /><i /><i /></span>
-          <span className="dp-title">Your wallet</span>
-          <span className="dp-tag">Example</span>
-        </div>
-      )}
+      <div className="dp-bar" aria-hidden="true">
+        <span className="dp-dots"><i /><i /><i /></span>
+        <span className="dp-title">Your wallet</span>
+        <span className="dp-tag">Example</span>
+      </div>
 
       <div className="dp-body">
         <div className="dp-head">
@@ -268,7 +241,7 @@ export function LiveWallet({ bare = false, rows = PRIOR.length }: {
         <div className="led lw-led" aria-hidden="true">
           <div className="led-row lw-new" data-in={saleVisible ? "1" : undefined}>
             <span className="led-n">
-              Notion Second Brain template
+              {SALE_NAME}
               <span className="led-sub">
                 {formatMinor(SALE_GROSS_MINOR, "USD")} &minus;{" "}
                 {formatMinor(SALE_FEE_MINOR, "USD")} fee
@@ -280,7 +253,7 @@ export function LiveWallet({ bare = false, rows = PRIOR.length }: {
             </span>
           </div>
 
-          {PRIOR.slice(0, rows).map((r) => (
+          {PRIOR.map((r) => (
             <div className="led-row" key={r.name}>
               <span className="led-n">
                 {r.name}
