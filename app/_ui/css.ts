@@ -982,7 +982,10 @@ export const CSS = `
 .fw .objrow:last-child { border-bottom:1px solid var(--line); }
 .fw .obj-q { display:flex; gap:10px; align-items:flex-start; margin:0;
   font-size:var(--fs-4); font-weight:var(--fw-bold); letter-spacing:-0.012em; }
-.fw .obj-a { margin:0; font-size:var(--fs-3); line-height:1.6; color:var(--ink-2); }
+/* 87 characters a line measured on /how-it-works, where this block gets the
+   full page width. The row should span; the answer inside it should not. */
+.fw .obj-a { margin:0; font-size:var(--fs-3); line-height:1.6; color:var(--ink-2);
+  max-width:var(--m-wide); }
 .fw .obj-mark { width:20px; height:20px; flex:none; display:flex; align-items:center;
   justify-content:center; margin-top:2px; color:var(--pine);
   background:var(--pine-bg); border:1px solid var(--pine-line); }
@@ -1526,13 +1529,54 @@ export const CSS = `
 .fw .refflow > * { max-width:var(--m-body); }
 /* The things that earn the width. :has() so a Copyable -- a wrapper div
    around a caption and a <pre> -- is caught without needing a class on it. */
+/* The things that earn the width.
+   ----------------------------------------------------------------------
+   Measured on How it works before this list grew: content stopped at
+   684-772px in a 1,432px viewport, leaving 660-748px empty down the right
+   of every section. About half the page.
+
+   The cause was this rule capping EVERY child at the reading measure,
+   which is right for a paragraph and wrong for a diagram. The payment
+   flow, the four-party grid, the two-path split and the audience split
+   are all structural objects that were being squeezed into a 636px strip
+   and then surrounded by nothing.
+
+   Prose keeps its 66ch, because 66ch is why it is readable. Everything
+   that is not prose takes the room. That gives a long explainer the shape
+   it should have had -- a narrow column of text punctuated by full-width
+   figures -- rather than one narrow column and a wide margin. */
 .fw .refflow > .code,
 .fw .refflow > .tbl-wrap,
 .fw .refflow > table,
 .fw .refflow > .ruled,
+.fw .refflow > .truthgrid,
+.fw .refflow > .paths,
+.fw .refflow > .numbered,
+.fw .refflow > .flow,
+.fw .refflow > .aud,
+.fw .refflow > .gperm,
+.fw .refflow > .reqlist,
+.fw .refflow > .stagebar,
+.fw .refflow > .dp,
+.fw .refflow > .reach,
 .fw .refflow > :has(.code),
-.fw .refflow > :has(> table) { max-width:none; }
+.fw .refflow > :has(> table),
+.fw .refflow > :has(> .flow),
+.fw .refflow > :has(> .aud),
+.fw .refflow > :has(> .dp),
+.fw .refflow > :has(> .gperm) { max-width:none; }
 .fw .refflow .code { max-width:100%; }
+
+/* The quoted reply from the provider.
+   The chapter it lives in is the page's evidence, and it was prose at 66ch
+   with 660px of nothing beside it. A quotation that IS the source document
+   should not look like another paragraph: it takes the wider measure, a
+   ground, and the brand rule it already had. */
+.fw .srcquote { margin:var(--sp-5) 0 0; padding:var(--sp-5) var(--sp-6);
+  border-left:2px solid var(--brand); background:var(--surface);
+  font-size:var(--fs-4); line-height:1.6; color:var(--ink);
+  max-width:var(--m-wide); }
+.fw .refflow > .srcquote { max-width:var(--m-wide); }
 /* Headings get their air back. In .longform the measure was doing the
    separating; on a full-width column the space has to be stated. */
 .fw .refflow > h2 { margin-top:var(--sp-9); max-width:20ch; }
@@ -2645,13 +2689,20 @@ export const CSS2 = `
 .fw .numbered li { counter-increment:s; display:grid; grid-template-columns:2.2rem minmax(0,15ch) minmax(0,1fr); gap:18px; padding:12px 0; border-bottom:1px solid var(--line); align-items:baseline; }
 .fw .numbered li::before { content:counter(s,decimal-leading-zero); font-size:var(--fs-2); letter-spacing:0.03em; color:var(--ink-3); }
 .fw .numbered li > span:first-of-type { font-size:var(--fs-4); font-weight:var(--fw-bold); }
-.fw .numbered li > span:last-of-type { font-size:var(--fs-3); color:var(--ink-2); line-height:1.55; }
+/* The description column keeps a measure even when the list is allowed the
+   full width. Releasing .numbered to span the page let these run to about
+   120 characters a line, which is past the point the eye finds the start of
+   the next one -- filling the space at the cost of the thing the space is
+   for. The list spans; the sentences inside it do not. */
+.fw .numbered li > span:last-of-type { font-size:var(--fs-3); color:var(--ink-2);
+  line-height:1.55; max-width:var(--m-wide); }
 @media (max-width:760px) { .fw .numbered li { grid-template-columns:2.2rem minmax(0,1fr); gap:6px 16px; }
   .fw .numbered li > span:last-of-type { grid-column:2; } }
 .fw .ruled { margin:0; border-top:1px solid var(--ink); }
 .fw .ruled > div { display:grid; grid-template-columns:minmax(0,16ch) minmax(0,1fr); gap:24px; padding:13px 0; border-bottom:1px solid var(--line); }
 .fw .ruled dt { font-size:var(--fs-4); font-weight:var(--fw-bold); letter-spacing:-0.006em; }
-.fw .ruled dd { margin:0; font-size:var(--fs-3); line-height:1.6; color:var(--ink-2); }
+.fw .ruled dd { margin:0; font-size:var(--fs-3); line-height:1.6; color:var(--ink-2);
+  max-width:var(--m-wide); }
 @media (max-width:760px) { .fw .ruled > div { grid-template-columns:1fr; gap:5px; } }
 .fw .arrowlist { list-style:none; margin:0; padding:0; }
 .fw .arrowlist li { padding:5px 0 5px 0; font-size:var(--fs-3); color:var(--ink-2); position:relative; }

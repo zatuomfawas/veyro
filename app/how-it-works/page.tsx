@@ -57,22 +57,15 @@ const Q_ARCHITECTURE =
   "verification while not handling identity documents, banking credentials, or funds directly is " +
   "the recommended approach.";
 
+/**
+ * A quotation from the provider's reply.
+ *
+ * Styled as a document rather than as a sentence. This is the evidence the
+ * whole page rests on, and at a 66ch reading measure it looked like one more
+ * paragraph in a chapter that already had 660px of empty space beside it.
+ */
 function Quote({ children }: { children: React.ReactNode }) {
-  return (
-    <blockquote
-      style={{
-        margin: "16px 0 0",
-        padding: "2px 0 2px 20px",
-        borderLeft: "2px solid var(--brand)",
-        fontSize: "var(--fs-4)",
-        lineHeight: 1.6,
-        color: "var(--ink)",
-        maxWidth: "var(--m-body)",
-      }}
-    >
-      {children}
-    </blockquote>
-  );
+  return <blockquote className="srcquote">{children}</blockquote>;
 }
 
 export default function HowItWorks() {
@@ -268,8 +261,24 @@ export default function HowItWorks() {
         </section>
 
         <section className="lp ch">
-          <div className="wrap-lp refflow">
-        <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>What we established</h2>
+          {/* The page's evidence chapter, and the only one that is prose all
+              the way down -- a quoted support reply and the reading of it.
+              With nothing wide in it the content stopped at 772px and left
+              660px of empty beside every paragraph.
+
+              So the heading does the work the figures do elsewhere: it sits
+              in its own sticky column while the argument runs past it. The
+              reader keeps "what we established" in view for the whole of
+              what was established, which is the one chapter where that
+              actually helps. */}
+          <div className="wrap-lp aside-grid">
+            <div className="aside-head">
+              <h2 className="lp-h2">What we established</h2>
+              <p className="small" style={{ marginTop: "var(--sp-4)" }}>
+                Quoted exactly, with the summary of our own message marked as a summary.
+              </p>
+            </div>
+            <div className="aside-body">
         <p className="body" style={{ marginTop: 8 }}>
           We wrote to Stripe support describing the model in plain terms. A platform onboarding
           founders aged 13 to 17, with a parent or legal guardian as the adult on the account, and
@@ -355,6 +364,7 @@ export default function HowItWorks() {
         </div>
 
         {/* ---------------------------------------------------------------- */}
+            </div>
           </div>
         </section>
 
