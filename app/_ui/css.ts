@@ -1627,6 +1627,46 @@ export const CSS = `
    amber would read as an incident. It is simply quieter. */
 .fw .statcard[data-monitored="0"] .statcard-l { color:var(--ink-3); }
 
+/* For parents: the does / does not pair, and the disclosure block.
+   Two columns of the same weight, because "what Veyro does not do" is the
+   half a guardian is actually checking and shrinking it would answer the
+   question dishonestly. */
+.fw .gfair { display:grid; grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:var(--sp-7) var(--sp-9); margin-top:var(--sp-8);
+  padding-top:var(--sp-6); border-top:1px solid var(--line); }
+@media (max-width:760px) { .fw .gfair { grid-template-columns:1fr; gap:var(--sp-6); } }
+/* The "does not" column takes the muted mark rather than the pine tick: a
+   row of green ticks against a list of things that do not happen reads as
+   reassurance when it is a limitation. */
+/* .ticks had no rule at all.
+   ----------------------------------------------------------------------
+   It is used in five places -- the audience split, the dispute panel, the
+   SDK docs, get-started and now this page -- and has been rendering as a
+   browser-default bulleted list the whole time, which is why it never
+   looked like the rest of the system. Giving it the square marker the
+   design system already uses everywhere else fixes all five.
+
+   --marker is the token the setup steps and the money rail already use, so
+   this is adopting the house mark rather than inventing a sixth one. */
+.fw .ticks { list-style:none; margin:0; padding:0; display:flex;
+  flex-direction:column; gap:var(--sp-3); }
+.fw .ticks li { position:relative; padding-left:calc(var(--marker) + 11px);
+  font-size:var(--fs-3); line-height:1.55; color:var(--ink-2); }
+.fw .ticks li::before { content:""; position:absolute; left:0;
+  top:calc(0.55em - var(--marker) / 2);
+  width:var(--marker); height:var(--marker); background:var(--pine); }
+/* A row of green marks against a list of things that do NOT happen reads as
+   reassurance when it is a limitation. The negative list takes the muted
+   mark and the muted ink. */
+.fw .ticks[data-no="1"] li::before { background:var(--ink-3); }
+.fw .ticks[data-no="1"] li { color:var(--ink-2); }
+
+/* The counterparty disclosure. A ground rather than a rule, because it is
+   the one block on the page that is a statement of fact about who the
+   reader is contracting with rather than part of the argument. */
+.fw .gbefore { margin-top:var(--sp-8); padding:var(--sp-6);
+  background:var(--card); border:1px solid var(--line); max-width:var(--m-wide); }
+
 .fw .statnote { margin-top:var(--sp-8); padding-top:var(--sp-6);
   border-top:1px solid var(--ink); }
 

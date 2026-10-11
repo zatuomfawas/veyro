@@ -15,24 +15,41 @@
 //                     shape of their involvement and is hard to say in words.
 //   the controls      what stays available afterwards, forever.
 //
-// Everything here mirrors the real guardian dashboard rather than inventing a
-// nicer one. It is labelled Example and the controls are inert: a parent who
-// clicks Close account on a marketing page has been lied to about what a
-// button is, and this product cannot afford that with this reader.
+// It is labelled Example and the controls are inert: a parent who clicks
+// Close account on a marketing page has been lied to about what a button is,
+// and this product cannot afford that with this reader.
+//
+// THE CONTROLS ARE STRIPE'S, AND THE PANEL NOW SAYS SO. It used to claim it
+// "mirrors the real guardian dashboard", which was not true -- Veyro's
+// guardian dashboard has no pause, no export and no close. Those three are
+// real, but they are the account holder's powers inside Stripe, which the
+// guardian has because the account is theirs. Attributing them correctly is
+// both honest and the stronger reassurance: a control that lives in Stripe
+// cannot be taken away by anything Veyro does.
 
 import { useEffect, useReducer, useRef } from "react";
 
 const STEPS = [
   ["Invited", "Your child sends you a link.", false],
   ["You agree", "You read what it is and accept.", true],
-  ["You verify", "Your ID, on the processor's form. Ten minutes, once.", true],
-  ["Payouts on", "They can be paid. You are done.", false],
+  // "Ten minutes" is an estimate of filling somebody else's form, not a
+  // measured figure -- no connected account on this platform has completed
+  // onboarding yet. Hedged to match how the rest of the site words it rather
+  // than asserted flat.
+  ["You verify", "Your ID, on the processor's own form. Usually about ten minutes.", true],
+  // Not "you are done". The schema models REQUIREMENTS_DUE and the guardian
+  // dashboard renders a Requirements list with a resume button, because Stripe
+  // does come back and ask for more. Promising a single final approval would
+  // be contradicted by the product the first time it happens.
+  ["Payouts on", "They can be paid. Stripe may still come back for more later.", false],
 ] as const;
 
+// All three are Stripe's, not Veyro's. Veyro's guardian dashboard provides
+// none of them, so the labels say where they are.
 const CONTROLS = [
-  ["Pause payouts", "Stops money leaving, keeps the account open."],
-  ["Close the account", "Ends it. Nothing here can stop you."],
-  ["Export every record", "Every payment and fee, as a file, whenever you want it."],
+  ["Pause payouts", "In Stripe. Stops money leaving, keeps the account open."],
+  ["Close the account", "In Stripe. Nothing in Veyro can stop you."],
+  ["Export your records", "In Stripe, which holds the payments and the payouts."],
 ] as const;
 
 export function ParentPanel() {
@@ -98,7 +115,7 @@ export function ParentPanel() {
         </div>
 
         <div className="pp-ctl">
-          <h3 className="fig-k">And afterwards, always</h3>
+          <h3 className="fig-k">Afterwards, in Stripe</h3>
           <div className="pp-btns">
             {CONTROLS.map(([t, d]) => (
               <div className="pp-btn" key={t}>
@@ -108,8 +125,8 @@ export function ParentPanel() {
             ))}
           </div>
           <p className="tiny" style={{ marginTop: "var(--sp-4)", marginBottom: 0 }}>
-            Shown as an example. The real ones are in your account, and none of them needs
-            us to agree.
+            Shown as an example. The real ones are in your Stripe dashboard rather than here
+            &mdash; which is the point: none of them depends on Veyro agreeing.
           </p>
         </div>
       </div>
