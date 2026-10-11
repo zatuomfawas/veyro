@@ -1,134 +1,109 @@
 import { formatMinor } from "@/lib/money";
-import { CountUp } from "@/app/_ui/CountUp";
 import {
   BALANCE_MINOR, COLLECTED_MINOR, PROCESSING_MINOR, VEYRO_FEE_MINOR, SETTLING_MINOR,
   SALE_GROSS_MINOR, SALE_FEE_MINOR, SALE_NAME, PRIOR,
 } from "@/app/_ui/wallet-example";
+import { CountUp } from "@/app/_ui/CountUp";
 
-// The hero's product visual: one money position, and a sale arriving.
+// The hero's money position. Not a card: the page itself.
 //
-// WHAT IT IS NOT, STILL. Not a checkout pane bolted to a wallet, not five
-// interrogable fee terms, not three status chips, not a live region. Those
-// came out for good reasons and they stay out. What came back is motion,
-// and one line of arithmetic that earns its place.
+// WHAT WENT. A border, a grey header strip and an "EXAMPLE" chip in the
+// corner. Together they framed this as a screenshot of a product sitting
+// beside a headline, rather than as the product. The chip was the worst of
+// the three -- an all-caps badge stapled to the one surface on the site
+// that shows instead of explaining, undercutting it at the moment it is
+// meant to carry the page.
 //
-// AND NOT A WAY OUT OF THE FUNNEL. It carried a "View in Stripe" link to
-// dashboard.stripe.com, which was accurate -- that genuinely is where
-// payouts are scheduled -- and wrong for the hero. A visitor here has no
-// Veyro account and no context; the link dropped them into somebody else's
-// onboarding, and it put the processor's name on a button at the exact
-// moment a reader is deciding whether they could skip us and go straight
-// there. That objection is the one the whole site is built to answer (see
-// the note in GuardianPermissions on why the processor is not named in the
-// six lines it renders), and the hero is the worst possible place to raise
-// it. The card is an example; it has no controls at all now, and the one
-// action in the hero is the one CTA beside it.
+// WHAT REPLACED THE CHIP. A plain sentence under the figures: an example
+// wallet, yours once your country is supported and a guardian is verified.
+// It is honest in words a person reads rather than a badge that shouts, and
+// it carries the eligibility qualifier the headline above it needs -- so
+// one line does the work of a disclaimer, a caption and a condition.
 //
-// The payout fact stays, as prose. It is load-bearing: it is the
-// correction to a claim this site shipped saying nobody could block a
-// payout, when the guardian owns the connected account.
+// WHY TWO HAIRLINES SURVIVED. Taking every frame away was the obvious move
+// and it is half wrong. Unbounded, invented figures stop reading as an
+// example of somebody's wallet and start reading as THIS visitor's data,
+// which makes the honesty problem worse rather than better. A rule above
+// and below bounds the surface in the page's own language, and puts the
+// honest line immediately beneath the lower rule where it reads as a
+// caption to the thing it closes.
 //
-// THE TWO MOVEMENTS, AND WHY EACH ONE IS TRUE.
+// THE FEES LINE IS SPLIT, AND THAT IS A CORRECTION. It read "$11.85 fees",
+// which is true -- $8.55 to the card processor plus $3.30 to Veyro -- and
+// unverifiable, because the published schedule is 3% above $100 and 3% of
+// $110 is $3.30, not $11.85. Anyone checking the hero with a calculator
+// found a number that did not match the pricing page. Same figures, named
+// separately, and now the 3% is the one you can check. Veyro's fee being
+// the smaller of the two is also the better thing to show.
 //
-// The balance counts from zero. See CountUp: it counts from nothing to the
-// real figure, never between two real balances. An earlier version stepped
-// $171.86 up to $195.00 as the sale settled, which was accurate and read as
-// a glitch -- the smaller number on screen first, in the one place the page
-// wants you to look. Counting from zero is a flourish; counting from
-// another balance is a change, and a change needs a cause the viewer saw.
-//
-// The newest row arrives. That IS a cause the viewer sees, and it is the
-// product's whole emotional point: somebody bought the thing you made. It
-// slides in once, holds a pine tint for a beat, and settles. The row's box
-// is reserved from the first paint, so nothing below it moves.
-//
-// They are two beats, in order: the balance settles at 850ms, the sale
-// lands at 950ms, and everything is still by 1.9s. Overlapped, they read as
-// one busy moment; sequenced, the card looks like it is working. The old
-// hero sequence ran 3.3s and was still rearranging itself while you read
-// the headline.
-//
-// THE ARITHMETIC LINE replaced a second figure block. "Available $195.00"
-// beside "Settling $3.15" left a 145px hole between the figures and the
-// action, and it invited the question it did not answer: where did the
-// other fifteen dollars go. Collected, fees, settling -- one line, computed
-// from the same constants, and the difference is the balance above it.
-//
-// NOTHING IS EVER A ZERO WAITING TO BE FILLED IN. The server renders the
-// final state: full balance, both rows present. The arrival is a CSS
-// animation with fill-mode both, so the only thing that hides the row is a
-// declarative rule that prefers-reduced-motion switches off -- there is no
-// state, no effect and no moment where a failed hydration could leave the
-// card empty. CountUp is the one client island in the hero, and it starts
-// from the real figure too.
+// EVERY FIGURE RECONCILES. feeMinor() computes the $3.30 from the same
+// function that charges a real founder, and 210.00 - 8.55 - 3.30 - 3.15 is
+// 195.00 exactly. /how-it-works renders the same constants.
 
 const NET_MINOR = SALE_GROSS_MINOR - SALE_FEE_MINOR;
-const FEES_MINOR = PROCESSING_MINOR + VEYRO_FEE_MINOR;
+
+/** The month, named so each figure can be checked on its own. */
+const BREAKDOWN = [
+  { k: "Collected", v: COLLECTED_MINOR },
+  { k: "Card fees", v: PROCESSING_MINOR },
+  { k: "Veyro fee", v: VEYRO_FEE_MINOR },
+  { k: "Settling", v: SETTLING_MINOR },
+] as const;
 
 export function HeroWallet() {
   return (
     <div className="hw">
-      {/* Says "Example" where a sighted reader can see it, not only in the
-          screen-reader summary. The figures are invented and a product
-          preview that does not admit it is a different kind of product. */}
-      <div className="hw-bar" aria-hidden="true">
-        <span className="hw-bar-t">Your wallet</span>
-        <span className="dp-tag">Example</span>
-      </div>
+      <p className="sr-only">
+        An example founder wallet. {formatMinor(COLLECTED_MINOR, "USD")} collected this month,
+        less {formatMinor(PROCESSING_MINOR, "USD")} in card processing fees,{" "}
+        {formatMinor(VEYRO_FEE_MINOR, "USD")} to Veyro and{" "}
+        {formatMinor(SETTLING_MINOR, "USD")} still settling, leaving an available balance of{" "}
+        {formatMinor(BALANCE_MINOR, "USD")}. The two most recent payments are listed. Payouts
+        are scheduled in Stripe by the guardian, who is the account holder. Every figure is
+        invented.
+      </p>
 
-      <div className="hw-body">
-        <p className="sr-only">
-          An example founder wallet. {formatMinor(COLLECTED_MINOR, "USD")} collected this month,
-          less {formatMinor(FEES_MINOR, "USD")} in fees and{" "}
-          {formatMinor(SETTLING_MINOR, "USD")} still settling, leaving an available balance of{" "}
-          {formatMinor(BALANCE_MINOR, "USD")}. The two most recent payments are listed. Payouts
-          are scheduled in Stripe by the guardian, who is the account holder. Every figure is
-          invented.
-        </p>
+      <div className="hw-grid" aria-hidden="true">
+        <div className="hw-money">
+          {/* Sentence case. An all-caps label on the single most important
+              number in the hero is the one place the page could least
+              afford to look machine-set. */}
+          <span className="hw-k">Available</span>
+          <span className="hw-bal">
+            <CountUp amountMinor={BALANCE_MINOR} currency="USD" durationMs={850} />
+          </span>
 
-        <div className="hw-top" aria-hidden="true">
-          <div className="hw-figs">
-            <span className="fig-k">Available</span>
-            <span className="fig fig-xl hw-bal">
-              {/* 850ms rather than the default 1100, so the balance has
-                  settled before the sale lands on top of it. Two beats,
-                  not one blur. */}
-              <CountUp amountMinor={BALANCE_MINOR} currency="USD" durationMs={850} />
-            </span>
-            {/* Where the balance came from, computed rather than typed.
-                Inside the figure block rather than beside it: when the
-                card narrows and the action wraps onto its own line, a
-                sibling here would have put the button between the balance
-                and the sentence explaining it. */}
-            <p className="hw-sum">
-              <span>{formatMinor(COLLECTED_MINOR, "USD")} collected</span>
-              <span className="hw-dot" aria-hidden="true" />
-              <span>{formatMinor(FEES_MINOR, "USD")} fees</span>
-              <span className="hw-dot" aria-hidden="true" />
-              <span>{formatMinor(SETTLING_MINOR, "USD")} settling</span>
-            </p>
-          </div>
+          <dl className="hw-break">
+            {BREAKDOWN.map((f) => (
+              <div key={f.k}>
+                <dt>{f.k}</dt>
+                <dd>{formatMinor(f.v, "USD")}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
 
-        <ul className="hw-led" aria-hidden="true">
-          <li className="hw-new">
-            <span className="hw-n">{SALE_NAME}</span>
-            <span className="hw-w">Just now</span>
-            <span className="hw-a fig-pos">+{formatMinor(NET_MINOR, "USD")}</span>
-          </li>
-          {PRIOR.slice(0, 1).map((r) => (
-            <li key={r.name}>
-              <span className="hw-n">{r.name}</span>
-              <span className="hw-w">{r.when}</span>
-              <span className="hw-a">{formatMinor(r.amt, "USD")}</span>
+        <div className="hw-side">
+          <ul className="hw-led">
+            <li className="hw-new">
+              <span className="hw-n">{SALE_NAME}</span>
+              <span className="hw-w">Just now</span>
+              <span className="hw-a fig-pos">+{formatMinor(NET_MINOR, "USD")}</span>
             </li>
-          ))}
-        </ul>
-
-        {/* The one sentence the card cannot do without. "View in Stripe"
-            only makes sense once you know whose Stripe, and this is the
-            fact the rest of the site is at pains to establish. */}
-        <p className="hw-foot">Payouts are scheduled in Stripe, by your guardian.</p>
+            {PRIOR.slice(0, 1).map((r) => (
+              <li key={r.name}>
+                <span className="hw-n">{r.name}</span>
+                <span className="hw-w">{r.when}</span>
+                <span className="hw-a">{formatMinor(r.amt, "USD")}</span>
+              </li>
+            ))}
+          </ul>
+          {/* Load-bearing for accuracy, and the stated exception to keeping
+              the processor out of marketing copy: the guardian holds the
+              payout settings, and this is the correction to a claim the
+              site shipped saying nobody could block a payout. */}
+          <p className="hw-foot">Payouts are scheduled in Stripe, by your guardian.</p>
+        </div>
       </div>
     </div>
   );

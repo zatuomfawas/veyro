@@ -3988,164 +3988,141 @@ export const CSS2 = `
 @media (max-width:940px) { .fw .hero-grid { grid-template-columns:minmax(0,1fr) !important; gap:32px !important; } }
 
 /* ============================================================ HOMEPAGE
-   The hero's own measure.
+   The hero: a sequence down the page.
    ---------------------------------------------------------------------
-   .wrap-lp is --lp-max, 1600px, which is right for a chaptered page of
-   sections and wrong for a hero. At 1440 it gave the two columns 1344px to
-   share, so the copy sat against the left edge, the preview against the
-   right, and roughly 90px of nothing opened between them -- and the copy
-   column came out at 477px against an 810px preview, which is the wrong way
-   round for a hero whose job is the sentence.
+   It was a two-column split, headline left and a bordered wallet card
+   right. The split is the default SaaS hero and it cost the wallet its
+   job: at 616px inside a 1240px measure, parked in the right-hand half,
+   it read as a screenshot beside a sentence rather than as the product.
 
-   1240px, centred inside the page's own padding. The columns are near enough
-   even now, the gap is a gap rather than a canyon, and the whole composition
-   reads as one object in the middle of the page instead of two things pushed
-   to the edges. */
-/* Named blocks, not every child.
-   ---------------------------------------------------------------------
-   A blanket .home .wrap-lp > * was three classes deep and so beat every
-   measure set on the type beneath it: inside the centred closing section
-   it stretched a paragraph to 1170px of centred type. The layout blocks are
-   listed instead, so a measure set on the type stays the type's own. */
-/* The band breathes now that there is less in it.
-   52/44 was sized for a column that carried a kicker, a headline, a lead,
-   two buttons, three figures and a disclosure. With four elements in it the
-   same padding reads as cramped rather than tight: 63px above the headline
-   against a 63px navbar is the hero starting the instant the chrome ends.
-   Scoped to the homepage, because /get-started and /docs/sdk have their own
-   hero rhythms. */
-.fw .home .hero { padding-block:88px 80px; }
-@media (max-width:980px) { .fw .home .hero { padding-block:56px 48px; } }
+   Statement, surface, qualifying line, action -- each the full width of
+   the measure, each starting at the same left edge. Left-aligned rather
+   than centred, which is the one part of this a different designer would
+   not arrive at: every vertical hero on the web is centred, and centring
+   would break the only alignment spine the page has, since every section
+   below begins at this same edge. */
+/* 81px of dead band came off the bottom. Taking all of it off overshot:
+   the band is tinted and has a bottom border, so at zero the call to
+   action sat 1px from the edge of its own ground. 48px is the band
+   closing rather than the band running out. */
+.fw .home .hero { padding-block:76px 48px; }
+@media (max-width:980px) { .fw .home .hero { padding-block:48px 40px; } }
 
-.fw .home .wrap-lp > .hero-grid,
+.fw .home .wrap-lp > .hero-stack,
 .fw .home .wrap-lp > .aside-grid,
 .fw .home .wrap-lp > .secth,
 .fw .home .wrap-lp > .secth-body,
 .fw .home .wrap-lp > .moneyband-h,
 .fw .home .wrap-lp > .moneyband-rail { max-width:var(--home-max); margin-inline:auto; }
-/* The centred section constrains its container rather than its children,
-   for the same reason. */
 .fw .home .wrap-lp.lp-center { max-width:calc(var(--home-max) + var(--gut) * 2); }
-.fw .hero-grid { display:grid; grid-template-columns:minmax(0,0.92fr) minmax(0,1fr);
-  gap:clamp(32px, 4vw, 64px); align-items:center; }
-@media (max-width:980px) {
-  .fw .hero-grid { grid-template-columns:minmax(0,1fr); gap:var(--sp-8); }
-}
 
-/* The buttons only stretch when stretching is the point.
-   ---------------------------------------------------------------------
-   The 900px rule gives .hero-cta > .btn flex:1 1 auto, which is right on a
-   phone -- a full-width target is easier to hit and the column is narrow
-   enough that it still reads as a button. In the folded-but-wide band it is
-   not: at 820px the hero is one column of 788px, so the two buttons came out
-   400px and 345px wide and read as two template slabs rather than a primary
-   action and a quiet second one. Between the fold and the phone they keep
-   their own width, which also keeps the hierarchy the hero was built on. */
+/* The statement, sized to span the measure.
+   The old headline coloured its second sentence pine. Accenting half a
+   sentence in another colour is the most reliable tell of a page nobody
+   composed; the weight comes from scale and tracking instead. */
+.fw .hero-h1 { margin:0; font-size:clamp(36px, 5.1vw, 74px); line-height:1.02;
+  letter-spacing:-0.04em; font-weight:var(--fw-bold); color:var(--ink);
+  max-width:none; text-wrap:balance; }
+
+/* The line that closes the surface. It is the caption, the condition and
+   the honest-demo note in one, so it sits tight under the lower rule. */
+.fw .hero-note { margin:var(--sp-4) 0 0; font-size:var(--fs-3); line-height:1.55;
+  color:var(--ink-3); max-width:58ch; }
+
+.fw .hero-cta { display:flex; align-items:center; flex-wrap:wrap;
+  gap:var(--sp-6); margin-top:var(--sp-7); }
+@media (max-width:560px) {
+  .fw .hero-cta { gap:var(--sp-2); margin-top:var(--sp-6); }
+  .fw .hero-alt { align-self:flex-start; }
+}
+/* The buttons only stretch where stretching is the point.
+   The base rule at 900px gives .hero-cta > .btn flex:1 1 auto, which is
+   right on a phone -- a full-width target is easier to hit. At 768 it is
+   not: the call to action came out 580px wide with the secondary link
+   shoved against the right margin, which is two template slabs rather
+   than a primary and a quiet second. This override was lost when the hero
+   block was rewritten; it is back. */
 @media (min-width:561px) and (max-width:980px) {
   .fw .hero-cta > .btn { flex:0 0 auto; }
 }
 
-/* Tops-aligned was right when the right-hand column was a single card whose
-   first line was a balance. The preview is two panes now and taller than the
-   copy, so centring is what puts the headline against the middle of it
-   rather than leaving the copy to trail off halfway up. */
-/* The headline has room now that nothing is stacked under the buttons, so
-   it takes the size it was always worth. Two lines at every width the grid
-   holds, which is what the full stop in the middle is for. */
-.fw .hero-h1 { margin-top:0; font-size:clamp(34px, 4.1vw, 58px); max-width:14ch; }
-/* The payoff half, in the money colour. The only use of pine at this size
-   anywhere on the site, which is what keeps it meaning something. */
-.fw .hero-h1-pay { color:var(--pine); }
-.fw .hero-lead { max-width:42ch; }
-.fw .hero-cta { align-items:center; gap:var(--sp-6); margin-top:var(--sp-8); }
-@media (max-width:560px) {
-  /* Stacked, the 24px gap plus the link's own 44px tap target read as
-     ninety pixels of nothing between two actions that belong together. */
-  .fw .hero-cta { gap:var(--sp-2); margin-top:var(--sp-7); }
-  .fw .hero-alt { align-self:flex-start; }
-}
-
-/* The secondary action is a link, not a button.
-   ---------------------------------------------------------------------
-   Two filled rectangles side by side are two primary actions however they
-   are coloured, and the hero has exactly one thing it wants you to do. As a
-   link with an arrow it is still obviously clickable, still a 44px target,
-   and no longer competing. */
-.fw .hero-alt { display:inline-flex; align-items:center; gap:7px; min-height:var(--tap);
+/* The secondary action is a link, not a second button, and it no longer
+   carries an appended arrow. */
+.fw .hero-alt { display:inline-flex; align-items:center; min-height:var(--tap);
   font-size:var(--fs-4); font-weight:var(--fw-med); color:var(--ink);
   text-decoration:none; border-bottom:1px solid var(--line); padding-bottom:1px; }
 .fw .hero-alt:hover { border-bottom-color:var(--ink); }
 .fw .hero-alt:focus-visible { outline:2px solid var(--pine); outline-offset:3px; }
-.fw .hero-alt > span { transition:transform var(--t) var(--ease); }
-.fw .hero-alt:hover > span { transform:translateX(3px); }
-@media (prefers-reduced-motion: reduce) { .fw .hero-alt > span { transition:none; } }
 
-/* ------------------------------------------------------------- the preview
-   One object, not a composition of them.
+/* ---------------------------------------------------------- the surface
+   Two hairlines, and no other chrome.
    ---------------------------------------------------------------------
-   What was here styled a two-pane surface: a checkout row, a joining rule
-   with a sentence on it, and a frame bar, wrapped round a cut-down wallet
-   that had given up its own frame. It worked, and it was four nested
-   containers and nine borders to say one thing.
+   A border, a grey header strip and an all-caps EXAMPLE chip all came
+   off. Taking the last rule off as well was the obvious next move and it
+   is half wrong: unbounded, invented figures stop reading as an example
+   of somebody's wallet and start reading as this visitor's own. The rules
+   bound the surface in the page's own language and give the honest line
+   below something to be a caption to. */
+.fw .hw { margin-top:var(--sp-8); padding:var(--sp-9) 0;
+  border-block:1px solid var(--line); }
+/* No align-items:start. The zones have to stretch to the row, or the
+   payout line's margin-top:auto has nothing to push against and the
+   right-hand zone stops ninety pixels above the lower rule. */
+.fw .hw-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:var(--sp-9); align-items:stretch; }
+.fw .hw-money { min-width:0; }
 
-   This is a card. A bar that admits the figures are invented, a money
-   position, two rows, one line of fine print. The borders are the two that
-   separate those parts from each other and nothing else, because a border
-   that is not separating anything is decoration. */
-.fw .hw { border:1px solid var(--line); background:var(--card); box-shadow:var(--lift);
-  overflow:hidden; }
-.fw .hw-bar { display:flex; align-items:center; gap:var(--sp-3);
-  padding:11px var(--sp-6); border-bottom:1px solid var(--line); background:var(--surface); }
-.fw .hw-bar-t { font-size:var(--fs-2); font-weight:var(--fw-bold); color:var(--ink-2); }
-.fw .hw-bar .dp-tag { margin-left:auto; }
-.fw .hw-body { padding:var(--sp-6); }
+/* Sentence case, and quiet. An all-caps label on the most important
+   number in the hero was the tell this section exists to remove. */
+.fw .hw-k { display:block; font-size:var(--fs-3); color:var(--ink-3); }
+.fw .hw-bal { display:block; margin-top:var(--sp-2);
+  font-size:clamp(46px, 6.2vw, 92px); line-height:1; letter-spacing:-0.045em;
+  font-weight:var(--fw-bold); color:var(--ink);
+  font-variant-numeric:tabular-nums lining-nums; font-feature-settings:"tnum" 1; }
 
-/* The money position.
-   There was an action on the right of this row -- "View in Stripe" -- and
-   it is gone, because a hero has no business sending a visitor who has
-   never heard of us into somebody else's dashboard. See HeroWallet for the
-   funnel reasoning. With nothing opposite it, the figure block takes the
-   row; the two stacked comments that used to be here were both about
-   aligning against that button. */
-.fw .hw-top { display:flex; align-items:flex-end; gap:var(--sp-5); flex-wrap:wrap; }
-.fw .hw-figs { min-width:0; flex:1 1 auto; }
-.fw .hw-bal { display:block; margin-top:2px; letter-spacing:-0.038em; }
+/* The month, named figure by figure so each one can be checked alone. It
+   was a single "$11.85 fees", which folds the card processor's $8.55 into
+   Veyro's $3.30 and leaves neither verifiable against a published 3%. */
+.fw .hw-break { display:flex; flex-wrap:wrap; gap:var(--sp-5) var(--sp-7);
+  margin:var(--sp-7) 0 0; }
+.fw .hw-break > div { min-width:0; }
+.fw .hw-break dt { font-size:var(--fs-2); color:var(--ink-3); }
+.fw .hw-break dd { margin:3px 0 0; font-size:var(--fs-4); font-weight:var(--fw-bold);
+  color:var(--ink); font-variant-numeric:tabular-nums; }
 
-/* Where the balance came from.
-   Two figures side by side left a 145px hole between them and the button,
-   and the card read as half empty while quietly raising the question it did
-   not answer: where did the other fifteen dollars go. One tabular line,
-   computed from the same constants, and the difference is the figure above
-   it. */
-.fw .hw-sum { display:flex; align-items:center; flex-wrap:wrap; gap:0 var(--sp-3);
-  margin:var(--sp-3) 0 0; font-size:var(--fs-2); color:var(--ink-3);
-  font-variant-numeric:tabular-nums; }
-.fw .hw-dot { width:3px; height:3px; border-radius:50%; background:var(--control-line);
-  flex:none; }
+/* The ledger sits in the second zone rather than under the balance, so a
+   1240px surface does not strand a product name and its amount at
+   opposite ends of the screen. */
+/* The ledger is the shorter of the two zones, so it hangs from the top of
+   the balance rather than the top of the row -- the two zones then read as
+   one surface instead of two stacks of different heights. */
+.fw .hw-side { min-width:0; display:flex; flex-direction:column;
+  padding-top:var(--sp-7); }
+@media (max-width:860px) { .fw .hw-side { padding-top:var(--sp-6); } }
+.fw .hw-led { list-style:none; margin:0; padding:0; }
+.fw .hw-led > li { display:flex; align-items:baseline; gap:var(--sp-4);
+  padding:var(--sp-4) 0; border-bottom:1px solid var(--line-soft); }
+.fw .hw-led > li:first-child { padding-top:0; }
+.fw .hw-n { min-width:0; flex:1 1 auto; font-size:var(--fs-3); color:var(--ink); }
+.fw .hw-w { flex:none; font-size:var(--fs-2); color:var(--ink-3); }
+.fw .hw-a { flex:none; font-variant-numeric:tabular-nums; font-size:var(--fs-3);
+  font-weight:var(--fw-bold); color:var(--ink); }
+/* margin-top:auto, so the payout line falls to the foot of its zone.
+   The ledger is two rows and the money column is four figures deep, so
+   left to itself the right-hand zone stopped ninety pixels short and left
+   a void above the lower rule. Pinned, the two zones close together. */
+.fw .hw-foot { margin:var(--sp-6) 0 0; font-size:var(--fs-2); color:var(--ink-3); }
+@media (min-width:861px) { .fw .hw-foot { margin-top:auto; padding-top:var(--sp-6); } }
 
-/* Two rows, on one rule. They are a ledger, so they are a list, and the
-   amounts are tabular so the two line up on the decimal. */
-.fw .hw-led { list-style:none; margin:var(--sp-5) 0 0; padding:var(--sp-5) 0 0;
-  border-top:1px solid var(--line); }
-
-/* The sale arriving.
-   ---------------------------------------------------------------------
-   The product's whole emotional point: somebody bought the thing you made.
-   It is the one movement in the hero that is a cause rather than a
-   flourish, which is why the balance above it is allowed to count.
-
-   Declarative, with no state behind it. fill-mode both holds the from-state
-   through the delay, so the row is hidden by a rule that reduced motion
-   switches off -- there is no effect to run, nothing to hydrate, and no
-   arrangement in which a reader ends up looking at an empty card. The row's
-   box is reserved from the first paint and only its contents move, so
-   nothing below it shifts. */
+/* The one movement, and it is the product doing something: a sale lands.
+   Declarative, with fill-mode both, so what hides the row is a rule that
+   prefers-reduced-motion switches off -- no state, nothing to hydrate,
+   and no arrangement where a reader meets an empty ledger. The row's box
+   is reserved from the first paint, so nothing below it shifts. */
 @keyframes veyro-hw-in {
   from { opacity:0; transform:translateY(-7px); }
   to { opacity:1; transform:none; }
 }
-/* The beat that says "this one is new". A wash, not a border: a border
-   would change the row's shape and the two rows would stop lining up. */
 @keyframes veyro-hw-flash {
   from { opacity:0.11; }
   to { opacity:0; }
@@ -4158,42 +4135,17 @@ export const CSS2 = `
 @media (prefers-reduced-motion: reduce) {
   .fw .hw-new > *, .fw .hw-new::before { animation:none; }
 }
-.fw .hw-led > li { display:flex; align-items:baseline; gap:var(--sp-4);
-  padding:var(--sp-3) 0; }
-.fw .hw-led > li + li { border-top:1px solid var(--line-soft); }
-.fw .hw-n { min-width:0; flex:1 1 auto; font-size:var(--fs-3); color:var(--ink);
-  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-/* A fixed column so the two dates line up with each other rather than
-   each one sitting wherever its amount leaves room. */
-.fw .hw-w { flex:none; width:5.5rem; text-align:right; font-size:var(--fs-2);
-  color:var(--ink-3); }
-.fw .hw-a { flex:none; font-variant-numeric:tabular-nums; font-size:var(--fs-3);
-  font-weight:var(--fw-bold); color:var(--ink); }
-.fw .hw-foot { margin:var(--sp-5) 0 0; font-size:var(--fs-2); color:var(--ink-3); }
 
-@media (max-width:980px) {
-  .fw .hw-bar { padding:10px var(--sp-5); }
-  .fw .hw-body { padding:var(--sp-5); }
+@media (max-width:860px) {
+  /* The ledger goes under the money rather than beside it, with a rule
+     between the two zones so they stay distinguishable. */
+  .fw .hw-grid { grid-template-columns:minmax(0,1fr); gap:var(--sp-6); }
+  .fw .hw-side { padding-top:var(--sp-6); border-top:1px solid var(--line-soft); }
+  .fw .hw { padding:var(--sp-6) 0; margin-top:var(--sp-7); }
 }
-@media (max-width:560px) {
-  /* The name wraps rather than truncating.
-     At 375px "Notion Second Brain template" came out "Notion Second ...",
-     and an ellipsis in a product preview reads as a layout that did not fit
-     rather than as a long name. The date and the amount stay on the first
-     baseline beside it, so the row still scans as one line of ledger. */
-  .fw .hw-led > li { align-items:baseline; }
-  .fw .hw-n { white-space:normal; overflow:visible; }
-  .fw .hw-w { width:auto; }
-}
-@media (max-width:400px) {
-  /* One figure fits where two did not. At 320px the balance alone is
-     ~195px inside a 248px content box, and a second figure beside it ran
-     off the right-hand edge -- clipped silently, because the card is
-     overflow:hidden, which is why a page-level overflow check never saw
-     it. The arithmetic wraps instead, which is what a line of text is
-     for. */
-  .fw .hw-bal { font-size:var(--fs-8); }
-  .fw .hw-sum { gap:0 var(--sp-2); }
+@media (max-width:420px) {
+  .fw .hw-break { gap:var(--sp-4) var(--sp-6); }
+  .fw .hw-n { white-space:normal; }
 }
 
 /* ---------------------------------------------------------------- the problem

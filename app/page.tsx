@@ -88,90 +88,56 @@ export default async function Home() {
 
       <main id="main" className="has-sticky home">
         {/* ---- the hero ----
-            Three things were wrong with the one this replaces.
+            A SEQUENCE DOWN THE PAGE, NOT A SPLIT ACROSS IT.
 
-            The headline was a permission ("You can take payments before
-            you're 18"), which is the objection answered rather than the
-            product described. A visitor who has not met us does not yet know
-            there is a rule to be let through; they know they built something
-            and want to sell it. So the headline is the two things they want,
-            in their order, and the permission moves into the line below
-            where it belongs as a qualifier.
+            It was headline-left, wallet-right: the most common SaaS hero
+            arrangement there is, and it reads as "headline, and also here
+            is a screenshot". The wallet was 616px of a 1240px measure,
+            parked in the right-hand half, which made it supporting
+            evidence rather than the thing being shown.
 
-            The composition was flung apart. .wrap-lp is 1600px, so at 1440
-            the two columns sat at the extreme edges with a canyon between
-            them and the copy column squeezed to 477px against an 810px
-            wallet -- the preview was the protagonist and the sentence was
-            the caption. The hero now has its own measure, narrower than the
-            page, and the pair sits centred inside it.
+            Now: statement, surface, the line that qualifies both, action.
+            The statement spans the full measure and the surface spans it
+            too, so the two share a left edge and a right edge and read as
+            one object rather than two columns.
 
-            And the preview only showed half the product. See HeroPreview. */}
-        {/* ---- the hero ----
-            FIVE THINGS CAME OUT OF THIS AND NOTHING WENT IN.
+            LEFT-ALIGNED, NOT CENTRED, and that is the part a different
+            designer would not arrive at. Centring is what this brief asks
+            for by implication and it is the default twice over: every
+            vertical hero on the web is centred, and centring here would
+            break the only alignment spine the page has -- every section
+            below starts at the same left edge this does.
 
-            The eyebrow ("For builders aged 13 to 17", with its own square
-            bullet) was a decorated label above the headline, competing with
-            it for the first glance. The audience is in the first five words
-            of the supporting line now, where it is read rather than
-            registered.
-
-            The three figures -- from age 13, signup countries 43, under
-            $100 free -- were a second row of content directly under two
-            buttons, and the pricing half of them is already three figures
-            in the closing section. A visitor who wants the numbers is one
-            click from /check and /pricing; a visitor reading a hero is not
-            weighing a country list.
-
-            The disclosure line under them went with the figures it was
-            qualifying. The conditionality is in the verb now -- Veyro HELPS
-            you take payments, it does not promise you can -- and the
-            primary action is literally "check eligibility", which is the
-            same sentence as a button.
-
-            And the preview lost its checkout pane, its joining sentence and
-            the whole fee arithmetic. See HeroWallet for what survived.
-
-            What is left is four things in the order they should be read:
-            headline, one line, one action, one picture. */}
+            THE HEADLINE IS THE OLD ONE. "Build your business. Start
+            getting paid." could run on Stripe, Gumroad, Shopify or Paddle
+            unchanged, which is the test it fails. This one cannot be said
+            by anybody else. I tried to beat it -- "Get paid before you're
+            18", "Take payments at 15", "You don't have to be 18 to get
+            paid for this" -- and did not, so it is reused on purpose
+            rather than out of inertia. No two-tone colour accent: the
+            weight comes from scale and tracking. */}
         <div className="hero-band">
           <div className="wrap-lp hero">
-            <div className="hero-grid">
-              <div className="hero-left">
-                {/* No hard break. At a clamped size the right place to wrap
-                    moves with the viewport, and text-wrap:balance picks it
-                    better than a <br> frozen at one width ever could. */}
-                {/* Two sentences, two weights of ink. The first is what
-                    you do; the second is what you get, and it is set in
-                    pine -- the colour this design system reserves for
-                    money. It is the one place on the page where the brand
-                    colour and the brand promise are the same words, and it
-                    costs no extra element to say it. */}
-                <h1 className="hero-h1">
-                  Build your business.{" "}
-                  <span className="hero-h1-pay">Start getting paid.</span>
-                </h1>
+            <div className="hero-stack">
+              <h1 className="hero-h1">
+                You can take payments before you&rsquo;re 18.
+              </h1>
 
-                <p className="hero-lead">
-                  Veyro helps founders aged 13 to 17 take online payments, with a parent or
-                  guardian as the verified adult. Create checkout links, and track every
-                  payment in one place.
-                </p>
+              <HeroWallet />
 
-                {/* One button and one link, not two buttons. Two filled
-                    rectangles side by side are two primary actions however
-                    they are coloured, and the hero only has one thing it
-                    wants you to do. */}
-                <div className="hero-cta">
-                  <Link className="btn btn-lg btn-xl" href="/check">Check eligibility</Link>
-                  <Link className="hero-alt" href="/how-it-works">
-                    How it works
-                    <span aria-hidden="true">&rarr;</span>
-                  </Link>
-                </div>
-              </div>
+              {/* One line, three jobs: it says the figures are invented, it
+                  says what has to be true before they are yours, and it
+                  names the guardian. The badge it replaces said only the
+                  first, in capitals, on top of the product. */}
+              <p className="hero-note">
+                An example wallet. Yours once your country is supported and a parent or
+                guardian is verified on the account.
+              </p>
 
-              <div className="hero-right">
-                <HeroWallet />
+              <div className="hero-cta">
+                <Link className="btn btn-lg btn-xl" href="/check">Check eligibility</Link>
+                {/* No appended arrow. The link works without one. */}
+                <Link className="hero-alt" href="/how-it-works">How it works</Link>
               </div>
             </div>
           </div>
