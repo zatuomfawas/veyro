@@ -142,12 +142,12 @@ export default function About() {
             The em dash in the third paragraph is deliberate and must stay.
             DESIGN.md forbids em dashes in copy, and that rule is right for
             marketing and interface text, which is written in the product's
-            voice. This section is not that: it is Mike Daniels' own account in
+            voice. This section is not that: it is Moutaz Duwaji's own account in
             his own phrasing, quoted as given. Do not let a find-and-replace
             pass flatten it. See DESIGN.md, "Patterns that are forbidden". */}
         <div className="truthgrid" style={{ marginTop: 40, alignItems: "start" }}>
           <div>
-            <h2 className="h3" style={{ marginTop: 0 }}>Built by Mike Daniels</h2>
+            <h2 className="h3" style={{ marginTop: 0 }}>Built by Moutaz Duwaji</h2>
             <p className="small" style={{ marginTop: 8 }}>
               Veyro is a small, early project. There is no team page below this, because there is no
               team.
@@ -179,7 +179,7 @@ export default function About() {
             <p className="body" style={{ marginTop: 16, fontWeight: 500, color: "var(--ink)" }}>
               Build your business. Invite your guardian. Start selling.
             </p>
-            <p className="tiny" style={{ marginTop: 16 }}>Mike Daniels</p>
+            <p className="tiny" style={{ marginTop: 16 }}>Moutaz Duwaji</p>
           </div>
         </div>
 
