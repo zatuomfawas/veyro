@@ -11,17 +11,19 @@ import Link from "next/link";
 // The two panels differ in ground as well as in heading because a reader
 // looking for "the bit that is for me" is reading shape before words.
 
-// Three of these six were overstated, and all three were about control of
-// money. "You decide when the money moves" is the founder's line and it is
-// the guardian who holds the payout settings; "You verify once, not every
-// time they get paid" is contradicted by REQUIREMENTS_DUE; and the export
-// comes from Stripe, which holds the payments, not from Veyro. Each is
-// replaced by the nearest true version rather than dropped, because all
-// three are answering a question somebody actually has.
+// Four of these six were overstated, and all four were about control of
+// money. "You decide when the money moves" and then "Ask for a payout
+// whenever you like" were both the founder's line about a setting the
+// guardian holds in Stripe; "You verify once, not every time they get paid"
+// is contradicted by REQUIREMENTS_DUE; and the export comes from Stripe,
+// which holds the payments, not from Veyro. Each is replaced by the nearest
+// true version rather than dropped, because all four answer a question
+// somebody actually has -- the founder's is now about seeing the money,
+// which is the thing Veyro genuinely does.
 const FOUNDER = [
   "Paste one snippet and take your first payment",
   "Your own wallet, products and payout history",
-  "Ask for a payout whenever you like, without asking a person",
+  "See every payment, fee and payout as it happens",
 ] as const;
 
 const PARENT = [
@@ -37,8 +39,9 @@ export function AudienceSplit() {
         <h3 className="aud-k">If you are building something</h3>
         <p className="aud-h">Can I start selling?</p>
         <p className="aud-b">
-          Yes, from 13, once a parent or guardian has been verified as the adult on the
-          account. After that the product is yours to run and nobody signs off your sales.
+          From 13, if the payment provider supports your country and a parent or guardian is
+          verified as the adult on the account. After that the product is yours to run and
+          nobody signs off your sales.
         </p>
         <ul className="ticks" style={{ marginTop: "var(--sp-4)" }}>
           {FOUNDER.map((x) => <li key={x}>{x}</li>)}
@@ -52,8 +55,8 @@ export function AudienceSplit() {
         <h3 className="aud-k">If your child sent you a link</h3>
         <p className="aud-h">Is this legitimate?</p>
         <p className="aud-b">
-          Your name goes on the account, which is the part that makes it lawful. We wrote the
-          whole of what that means, including the parts no lawyer has confirmed yet.
+          Your name goes on the account. We wrote the whole of what that means &mdash; the
+          responsibilities, the limits, and the parts no lawyer has confirmed yet.
         </p>
         <ul className="ticks" style={{ marginTop: "var(--sp-4)" }}>
           {PARENT.map((x) => <li key={x}>{x}</li>)}

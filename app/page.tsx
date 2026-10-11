@@ -141,7 +141,11 @@ export default async function Home() {
                     <dd className="fig fig-sm">13</dd>
                   </div>
                   <div>
-                    <dt className="fig-k">Countries</dt>
+                    {/* "Countries 43" on its own reads as "43 countries can
+                        take payments". It is the number the provider
+                        supports self-serve signup in, which /how-it-works,
+                        /check and /legal all state the same way. */}
+                    <dt className="fig-k">Signup countries</dt>
                     <dd className="fig fig-sm">43</dd>
                   </div>
                   <div>
@@ -150,10 +154,15 @@ export default async function Home() {
                   </div>
                 </dl>
 
+                {/* The "software, not a bank" half of this sentence moved
+                     out: the trust section says it, the footer says it, and
+                     three times on one page is a page arguing with itself.
+                     What stays is the qualifier the figures above need, next
+                     to the figures. */}
                 <p className="hero-foot">
-                  Veyro is software, not a bank. Whether you can take payments depends on where
-                  you live and on the payment provider&rsquo;s own checks &mdash;{" "}
-                  <Link className="linkbtn" href="/check">check yours</Link>.
+                  Whether you can take payments depends on your country and on the payment
+                  provider&rsquo;s own checks, so start by{" "}
+                  <Link className="linkbtn" href="/check">checking yours</Link>.
                 </p>
               </div>
 
@@ -189,10 +198,16 @@ export default async function Home() {
                   answer is to borrow a parent&rsquo;s account and keep your business inside
                   somebody else&rsquo;s payments.
                 </p>
+                {/* This used to restate the hero lead almost word for word
+                     -- products, checkout link, record of every payment. The
+                     hero has said it; what this section owes the reader is
+                     the one thing the hero does not say, which is why
+                     borrowing an account is the wrong answer. */}
                 <p className="body" style={{ marginTop: "var(--sp-5)" }}>
-                  Veyro is the other answer. A parent or guardian is verified as the adult on a
-                  payment account of its own, and from there the business is yours to run:
-                  your products, your checkout link, your record of every payment and fee.
+                  Veyro is the other answer: an account of its own, with the adult named on it
+                  where the provider requires one. Your sales stay separable from your
+                  parent&rsquo;s, which matters the first time either of you needs to prove
+                  whose money is whose.
                 </p>
                 <p className="small" style={{ marginTop: "var(--sp-6)" }}>
                   <Link className="linkbtn" href="/how-it-works">
@@ -223,10 +238,14 @@ export default async function Home() {
                   It never stops here.
                 </h2>
               </div>
+              {/* The third sentence here was "It is never the thing holding
+                   your money", which is word for word what the trust section
+                   below exists to say. Two sections making the same claim is
+                   one of them not having a job. */}
               <p className="moneyband-lead">
                 A customer pays, and the money lands in an account with your name on the products
                 and your guardian&rsquo;s name on the paperwork. Veyro is the checkout at one end
-                and the record at the other. It is never the thing holding your money.
+                and the record at the other.
               </p>
             </div>
 
@@ -248,10 +267,11 @@ export default async function Home() {
                 <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
                   Three steps. One of them is your parent.
                 </h2>
-                <p className="body" style={{ marginTop: "var(--sp-4)" }}>
-                  The whole of it, from nothing to money in an account with your name on the
-                  products.
-                </p>
+                {/* The lead here said "from nothing to money in an account
+                     with your name on the products", which the heading above
+                     and the band above that had both already said. The three
+                     steps are the content; a sentence introducing them was
+                     the third telling. */}
                 <p className="small" style={{ marginTop: "var(--sp-5)" }}>
                   <Link className="linkbtn" href="/how-it-works">
                     What Veyro does, and what it sits on
@@ -317,12 +337,37 @@ export default async function Home() {
             <h2 className="lp-h2 lp-h2-tight">Find out if you can start.</h2>
             <p className="body" style={{ marginTop: 14, marginLeft: "auto", marginRight: "auto" }}>
               Two questions &mdash; where you live and how old you are &mdash; and you will know.
-              Free under $100 a month, 3% on whatever you earn above it, and no plan or
-              subscription either way.
             </p>
-            <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
+
+            {/* Pricing, as three figures rather than a sentence.
+                It was a clause in the paragraph above, which is the worst
+                place for the second question every visitor has. Same
+                .hero-facts cells the hero uses, so it is the page's own
+                shape rather than a new one. */}
+            <dl className="hero-facts ctafacts">
+              <div>
+                <dt className="fig-k">Free every month</dt>
+                <dd className="fig fig-sm">$100</dd>
+              </div>
+              <div>
+                <dt className="fig-k">Above that</dt>
+                <dd className="fig fig-sm">3%</dd>
+              </div>
+              <div>
+                <dt className="fig-k">Plan or subscription</dt>
+                <dd className="fig fig-sm">None</dd>
+              </div>
+            </dl>
+            {/* Two actions on a desktop, one on a phone.
+                The sticky bar is phone-only and already carries "Get
+                started" at the foot of the page, so on a phone this row put
+                two identical buttons about forty pixels apart. The CSS
+                drops the secondary at the same breakpoint the bar appears
+                at, which keeps the decision in one place and needs no
+                JavaScript to work out where the reader is. */}
+            <div className="row ctarow" style={{ marginTop: 24, gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
               <Link className="btn btn-lg btn-xl" href="/check">Check eligibility</Link>
-              <Link className="btn btn-2 btn-lg" href="/get-started">Get started</Link>
+              <Link className="btn btn-2 btn-lg ctarow-2" href="/get-started">Get started</Link>
             </div>
             <p className="tiny" style={{ marginTop: 16 }}>
               <Link className="linkbtn" href="/pricing">What the 3% buys</Link>

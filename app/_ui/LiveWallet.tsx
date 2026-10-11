@@ -23,11 +23,25 @@
 // was the problem, not the state change, so the button works now and nothing
 // moves on its own.
 //
-// WHAT THE PAYOUT STATE DELIBERATELY DOES NOT DO: imply a duration. There is
-// no progress bar, no countdown, no "arriving in 2 days". On a Standard
-// connected account the payout runs on the provider's schedule and Veyro
-// cannot predict it, so the state says what is true -- it has been asked for
-// -- and says who decides when.
+// THE PAYOUT CONTROL IS A LINK NOW, NOT A BUTTON, and that is the most
+// important thing in this file.
+//
+// It used to say "Request a payout" and flip to "Payout requested". Both
+// halves were wrong in the same direction: on a Standard connected account
+// the payouts belong to the account holder, who is the guardian, and they
+// are scheduled in Stripe. Veyro can show the position; it cannot move the
+// money, and it has no payout object to report a status for -- payout.*
+// webhooks are deliberately not ingested. A founder reading the old button
+// would have concluded they could take their money out from here.
+//
+// So it is "View in Stripe", it goes to the real dashboard destination, and
+// the line underneath names who schedules the payout. No interactivity is
+// lost: the figures are still interrogable, which is where the interactivity
+// was doing honest work.
+//
+// WHAT IT STILL DELIBERATELY DOES NOT DO: imply a duration. No progress bar,
+// no countdown, no "arriving in 2 days". The provider's schedule is not ours
+// to predict.
 //
 // ACCESSIBILITY: this used to be role="img" with aria-hidden on the body,
 // which was right when it was a picture. It is not a picture any more, and
@@ -40,6 +54,7 @@ import { Fragment, useEffect, useReducer, useRef, useState } from "react";
 import { formatMinor } from "@/lib/money";
 import { feeMinor, FREE_FLOOR_MINOR } from "@/lib/pricing";
 import { CountUp } from "@/app/_ui/CountUp";
+import { PAYOUTS_URL } from "@/lib/stripe-urls";
 
 // The arithmetic has to survive a sceptical parent adding it up.
 const SALE_GROSS_MINOR = 2400;
@@ -93,7 +108,11 @@ const TERMS: { k: TermKey; label: string; amount: number; op?: string; note: str
   },
   {
     k: "available", label: "Available", amount: BALANCE_MINOR, op: "=",
-    note: "Yours to request, whenever you like. Nobody has to approve it.",
+    // Not "yours to request, nobody has to approve it", which was the old
+    // note and was false twice over: the payout is scheduled in Stripe, and
+    // it is scheduled by the account holder rather than by the founder.
+    note: "Cleared, and ready to be paid out. Your guardian schedules payouts in Stripe, "
+      + "as the account holder.",
   },
 ];
 
@@ -122,7 +141,6 @@ export function LiveWallet({ bare = false, rows = PRIOR.length }: {
   const [phase, setPhase] = useReducer((_: Phase, n: Phase) => n, 0 as Phase);
   /** Which term the pointer or keyboard is on. Null means none. */
   const [term, setTerm] = useState<TermKey | null>(null);
-  const [requested, setRequested] = useState(false);
   const node = useRef<HTMLDivElement>(null);
   const ran = useRef(false);
 
@@ -151,7 +169,10 @@ export function LiveWallet({ bare = false, rows = PRIOR.length }: {
   }, []);
 
   const saleVisible = phase >= 1;
-  const saleState = phase >= 3 ? "available" : phase === 2 ? "settling" : "received";
+  // Capitalised like every other chip in the ledger. It was lower case
+  // while the settled rows beside it said "Paid", which read as two kinds of
+  // label in one column.
+  const saleState = phase >= 3 ? "Available" : phase === 2 ? "Settling" : "Received";
   const saleTone = phase >= 3 ? "pine" : phase === 2 ? "amber" : "slate";
   const active = TERMS.find((t) => t.k === term);
 
@@ -163,8 +184,9 @@ export function LiveWallet({ bare = false, rows = PRIOR.length }: {
         An example founder wallet. {formatMinor(COLLECTED_MINOR, "USD")} collected this month,
         less {formatMinor(PROCESSING_MINOR, "USD")} in processing fees,{" "}
         {formatMinor(VEYRO_FEE_MINOR, "USD")} to Veyro and{" "}
-        {formatMinor(SETTLING_MINOR, "USD")} still settling, leaving{" "}
-        {formatMinor(BALANCE_MINOR, "USD")} available to request. Every figure is invented.
+        {formatMinor(SETTLING_MINOR, "USD")} still settling, leaving an available balance of{" "}
+        {formatMinor(BALANCE_MINOR, "USD")}. Payouts are scheduled in Stripe by the guardian,
+        who is the account holder. Every figure is invented.
       </p>
 
       {!bare && (
@@ -178,20 +200,19 @@ export function LiveWallet({ bare = false, rows = PRIOR.length }: {
       <div className="dp-body">
         <div className="dp-head">
           <div>
-            <span className="fig-k">{requested ? "Requested" : "Available to request"}</span>
+            {/* "Available to request" implied the founder does the
+                requesting. It is the available balance, which is the
+                provider's own word for it and is what this figure is. */}
+            <span className="fig-k">Available balance</span>
             <span className="fig fig-xl lw-bal">
               <CountUp amountMinor={BALANCE_MINOR} currency="USD" />
             </span>
           </div>
-          <button
-            type="button"
-            className="dp-cta"
-            data-state={requested ? "done" : undefined}
-            aria-pressed={requested}
-            onClick={() => setRequested((v) => !v)}
-          >
-            {requested ? "Payout requested" : "Request a payout"}
-          </button>
+          {/* A real link to the real destination. The figures beside it are
+              an example and say so; the place you would go is not. */}
+          <a className="dp-cta" href={PAYOUTS_URL} target="_blank" rel="noopener noreferrer">
+            View in Stripe
+          </a>
         </div>
 
         {/* The month's arithmetic, as controls. Hover, focus or tap a term
@@ -225,12 +246,10 @@ export function LiveWallet({ bare = false, rows = PRIOR.length }: {
         {/* One line, and it always holds the height of two so the card
             cannot change size as you move across the terms. */}
         <p className="lw-note" id="lw-note" role="status" aria-live="polite">
-          {requested && !active
-            ? "Asked for. The processor pays out on its own schedule — Veyro cannot speed that "
-              + "up, slow it down, or stop it."
-            : active
-              ? active.note
-              : "Hover any term to see what it is."}
+          {active
+            ? active.note
+            : "Hover any term to see what it is. Payouts are scheduled in Stripe by your "
+              + "guardian, who is the account holder."}
         </p>
 
         <div className="chips lw-chips">
@@ -274,7 +293,10 @@ export function LiveWallet({ bare = false, rows = PRIOR.length }: {
         </div>
 
         <div className="dp-foot" aria-hidden="true">
-          <span className="dp-dot" /> Last payout $49.50, sent to your bank on 20 Sept
+          {/* Not "your bank". The bank account is the one attached to the
+              connected account, which is in the guardian's name -- which is
+              the sentence the rest of the site is at pains to make. */}
+          <span className="dp-dot" /> Last payout $49.50, to the account&rsquo;s bank on 20 Sept
         </div>
       </div>
     </div>

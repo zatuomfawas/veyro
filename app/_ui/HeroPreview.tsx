@@ -36,6 +36,18 @@ export function HeroPreview() {
       {/* Not "a browser window". There is no fake chrome, no traffic lights
           and no URL bar -- just a labelled pane, because the thing worth
           showing is the checkout, not a picture of a browser. */}
+      {/* The example marker, restored.
+          LiveWallet carries its own "Example" chip in its title bar, and
+          bare mode drops that bar -- so the hero was showing invented
+          figures with nothing visible saying so. The screen-reader summary
+          still said "every figure is invented"; sighted readers had lost
+          it. It sits on the frame rather than on one pane, because both
+          panes are the same example. */}
+      <div className="hp-bar">
+        <span className="hp-bar-t">A founder&rsquo;s account</span>
+        <span className="dp-tag">Example figures</span>
+      </div>
+
       <div className="hp-pane">
         <span className="hp-k">What your customer sees</span>
         <div className="hp-pay">
@@ -56,7 +68,8 @@ export function HeroPreview() {
           reaches it in the order it is read. */}
       <p className="hp-join">
         <span className="hp-join-d" aria-hidden="true" />
-        The money lands in an account in your guardian&rsquo;s name. You watch it here.
+        The money lands in an account in your guardian&rsquo;s name. You watch it here; they
+        schedule payouts in Stripe.
       </p>
 
       <div className="hp-pane hp-pane-b">

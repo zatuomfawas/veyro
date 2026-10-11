@@ -574,9 +574,12 @@ export default function HowItWorks() {
             stop actually looks like once it gets there. A page that explains
             a path for four hundred words and never shows the destination is
             asking the reader to take the destination on trust. */}
+        {/* Not "becoming money you can ask for". The wallet directly below
+            says the payout is scheduled in Stripe by the account holder, so
+            this sentence was contradicting the component it introduces. */}
         <p className="body" style={{ marginTop: "var(--sp-7)" }}>
-          And this is the last stop, as you would see it: a sale arriving, settling, and becoming
-          money you can ask for.
+          And this is the last stop, as you would see it: a sale arriving, settling, and
+          clearing into the account&rsquo;s available balance.
         </p>
         <LiveWallet />
 

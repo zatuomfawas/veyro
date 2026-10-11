@@ -33,7 +33,7 @@ const STEPS: Step[] = [
   },
   {
     n: "03", t: "Get paid",
-    d: "Paste a snippet into what you built, or just send the link. The money goes where you tell it, and Veyro keeps the account straight behind you.",
+    d: "Paste a snippet into what you built, or just send the link. Payments land in the account and Veyro keeps the record straight behind you.",
     icon: (<svg viewBox="0 0 24 24" aria-hidden="true"><path {...S} d="M3 8h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8Z" /><path {...S} d="M3 8V6a2 2 0 0 1 2-2h11l2 4" /><circle {...S} cx="16.5" cy="13.5" r="1.5" /></svg>),
   },
 ];

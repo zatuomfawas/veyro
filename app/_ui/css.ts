@@ -3475,12 +3475,14 @@ export const CSS2 = `
   from { opacity:0; transform:translateY(-8px); }
   to { opacity:1; transform:none; }
 }
-.fw .dp-cta { appearance:none; font:inherit; cursor:pointer;
+/* An anchor now, not a button -- it goes to the provider's own dashboard
+   rather than pretending Veyro can move the money. text-decoration has to be
+   cleared explicitly or the link rule underlines it inside the card. */
+.fw .dp-cta { appearance:none; font:inherit; cursor:pointer; text-decoration:none;
   transition:background-color var(--t), border-color var(--t), color var(--t); }
 .fw .dp-cta:hover { background:var(--brand-h); }
 .fw .dp-cta:active { background:var(--brand-a); }
-.fw .dp-cta[data-state="done"] { background:var(--pine-bg); color:var(--pine);
-  border-color:var(--pine-line); }
+
 @media (prefers-reduced-motion: reduce) {
   .fw .lw-new, .fw .lw-new[data-in="1"] { animation:none; transition:none; }
   /* Reduced motion is moved straight to the finished state, so the row is
@@ -4052,6 +4054,15 @@ export const CSS2 = `
    mockups in it is a hero about mockups. */
 .fw .hp { border:1px solid var(--line); background:var(--card); box-shadow:var(--lift);
   overflow:hidden; }
+/* The frame's own bar. It exists for one reason: to say that the figures
+   below are invented, which the wallet used to say in a title bar that bare
+   mode removes. */
+.fw .hp-bar { display:flex; align-items:center; gap:var(--sp-3);
+  padding:10px var(--sp-6); border-bottom:1px solid var(--line);
+  background:var(--surface); }
+.fw .hp-bar-t { font-size:var(--fs-2); font-weight:var(--fw-bold); color:var(--ink-2); }
+.fw .hp-bar .dp-tag { margin-left:auto; }
+
 .fw .hp-pane { padding:var(--sp-5) var(--sp-6); }
 .fw .hp-pane-b { padding:var(--sp-5) 0 0; }
 
@@ -4090,6 +4101,7 @@ export const CSS2 = `
 @media (max-width:980px) {
   /* The preview leads on a phone only after the words have. It stays full
      width and keeps its proportions; nothing here shrinks type to fit. */
+  .fw .hp-bar { padding:9px var(--sp-5); }
   .fw .hp-pane { padding:var(--sp-4) var(--sp-5); }
   .fw .hp-pane-b > .hp-k { padding-inline:var(--sp-5); }
   .fw .dp-bare .dp-body { padding:var(--sp-3) var(--sp-5) var(--sp-5); }
@@ -4141,6 +4153,20 @@ export const CSS2 = `
 /* The closing ask was a 64px headline over three centred lines, which is the
    page shouting its last sentence. One line, and the buttons do the work. */
 .fw .lp-h2-tight { max-width:18ch; margin-inline:auto; }
+
+/* The closing section's price figures. .hero-facts is a left-aligned row on
+   a rule; here it is centred inside a centred section, and the rule reads as
+   a divider above the price rather than as the underline of the sentence
+   before it. */
+.fw .ctafacts { justify-content:center; max-width:34rem; margin-inline:auto;
+  text-align:left; }
+@media (max-width:560px) {
+  .fw .ctafacts { justify-content:flex-start; gap:var(--sp-5) var(--sp-7); }
+}
+/* The sticky bar appears at this width and already says "Get started", so
+   the closing row's second button would be the same action twice within one
+   screen height. 760px is the bar's own breakpoint, kept in step. */
+@media (max-width:760px) { .fw .ctarow-2 { display:none; } }
 /* The closing band was 96px of padding under a three-line headline. The
    headline is one line now, so the same padding left a third of a screen of
    empty black under the last link on the page. */

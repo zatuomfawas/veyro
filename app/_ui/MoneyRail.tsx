@@ -30,12 +30,16 @@ const DEFAULT_STOPS: RailStop[] = [
   { k: "Veyro", t: "Hosted checkout", ours: true },
   { k: "Processor", t: "Takes the payment" },
   { k: "Veyro", t: "Your wallet", ours: true },
-  { k: "You", t: "Your bank account" },
+  // Not "You / Your bank account". The payout goes to the bank account
+  // attached to the connected account, and that account is in the
+  // guardian's name -- which is the sentence every page carrying this rail
+  // makes in the paragraph directly above it.
+  { k: "The account", t: "Its bank account" },
 ];
 
 export function MoneyRail({
   stops = DEFAULT_STOPS,
-  label = "How a payment travels: customer, Veyro checkout, payment processor, your wallet, your bank account",
+  label = "How a payment travels: customer, Veyro checkout, payment processor, your wallet, the account\u2019s bank account",
 }: {
   stops?: RailStop[];
   label?: string;
