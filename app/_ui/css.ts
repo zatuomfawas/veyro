@@ -4075,20 +4075,47 @@ export const CSS2 = `
 /* Sentence case, and quiet. An all-caps label on the most important
    number in the hero was the tell this section exists to remove. */
 .fw .hw-k { display:block; font-size:var(--fs-3); color:var(--ink-3); }
+/* The one place green does any work.
+   --pine is the money-state colour and this is the money. It is not used
+   on the headline, the call to action, a border, a background or any of
+   the wallet's rules -- a colour that marks one thing is a colour that
+   means something, and this design system has spent its green on exactly
+   that everywhere else. Dark mode lifts --pine to #5fb48f for contrast;
+   that is the token doing its job, not a second green.
+
+   The currency symbol is deliberately NOT set smaller and raised, which
+   is the fashionable treatment and would cost more than it buys here:
+   every left edge in this surface -- the rule, the label, the digits, the
+   breakdown beneath -- currently lands on exactly 96px, and shrinking the
+   $ would push the digits off it for a flourish. Measured, not assumed. */
 .fw .hw-bal { display:block; margin-top:var(--sp-2);
   font-size:clamp(46px, 6.2vw, 92px); line-height:1; letter-spacing:-0.045em;
-  font-weight:var(--fw-bold); color:var(--ink);
+  font-weight:var(--fw-bold); color:var(--pine);
   font-variant-numeric:tabular-nums lining-nums; font-feature-settings:"tnum" 1; }
 
 /* The month, named figure by figure so each one can be checked alone. It
    was a single "$11.85 fees", which folds the card processor's $8.55 into
    Veyro's $3.30 and leaves neither verifiable against a published 3%. */
-.fw .hw-break { display:flex; flex-wrap:wrap; gap:var(--sp-5) var(--sp-7);
-  margin:var(--sp-7) 0 0; }
+/* A grid, not a wrapping flex row. The labels carry their own
+   explanations now -- "Veyro fee (3% over $100)" -- so they are no longer
+   all one width, and a flex row wrapped them into a ragged second line.
+   auto-fit columns keep them in tidy columns at every width. */
+/* Two by two, not auto-fit.
+   auto-fit put three across and dropped Settling onto a second row by
+   itself, with a hole where the fourth column would have been -- the
+   worst of both arrangements. The labels are no longer all one width
+   now that two of them carry their own explanation, so an explicit even
+   grid beats letting the track count fall out of the longest label. */
+.fw .hw-break { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:var(--sp-5) var(--sp-6); margin:var(--sp-7) 0 0; max-width:30rem; }
 .fw .hw-break > div { min-width:0; }
-.fw .hw-break dt { font-size:var(--fs-2); color:var(--ink-3); }
-.fw .hw-break dd { margin:3px 0 0; font-size:var(--fs-4); font-weight:var(--fw-bold);
+.fw .hw-break dt { font-size:var(--fs-2); line-height:1.4; color:var(--ink-3); }
+.fw .hw-break dd { margin:4px 0 0; font-size:var(--fs-4); font-weight:var(--fw-bold);
   color:var(--ink); font-variant-numeric:tabular-nums; }
+/* Settling is money that will be the founder's, so it takes the money
+   colour. Collected is the gross before anything is taken out and the two
+   fees are what leaves, so they stay ink. */
+.fw .hw-break dd[data-money="1"] { color:var(--pine); }
 
 /* The ledger sits in the second zone rather than under the balance, so a
    1240px surface does not strand a product name and its amount at
@@ -4104,9 +4131,23 @@ export const CSS2 = `
   padding:var(--sp-4) 0; border-bottom:1px solid var(--line-soft); }
 .fw .hw-led > li:first-child { padding-top:0; }
 .fw .hw-n { min-width:0; flex:1 1 auto; font-size:var(--fs-3); color:var(--ink); }
-.fw .hw-w { flex:none; font-size:var(--fs-2); color:var(--ink-3); }
-.fw .hw-a { flex:none; font-variant-numeric:tabular-nums; font-size:var(--fs-3);
+/* A fixed rail, not wherever the amount leaves room. Measured ragged at
+   1204 and 1234 -- thirty pixels apart, which is exactly the kind of thing
+   that reads as "not quite built" without anybody being able to say why.
+   Every real ledger puts its meta column on a rail. */
+.fw .hw-w { flex:none; width:5.5rem; text-align:right; font-size:var(--fs-2);
+  color:var(--ink-3); }
+@media (max-width:420px) { .fw .hw-w { width:auto; } }
+/* The amount column is a rail too, and it has to be, or the meta rail
+   above is pointless: fixing only the meta width still left it at 1171
+   and 1179 because "+$23.14" is wider than "$43.39" and the meta floats
+   off whatever the amount happens to need. Both columns fixed, both
+   right-aligned, tabular figures -- the decimal points line up and so
+   does everything to the left of them. */
+.fw .hw-a { flex:none; min-width:6rem; text-align:right;
+  font-variant-numeric:tabular-nums; font-size:var(--fs-3);
   font-weight:var(--fw-bold); color:var(--ink); }
+@media (max-width:420px) { .fw .hw-a { min-width:0; } }
 /* margin-top:auto, so the payout line falls to the foot of its zone.
    The ledger is two rows and the money column is four figures deep, so
    left to itself the right-hand zone stopped ninety pixels short and left

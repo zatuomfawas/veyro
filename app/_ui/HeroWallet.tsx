@@ -39,15 +39,35 @@ import { CountUp } from "@/app/_ui/CountUp";
 // EVERY FIGURE RECONCILES. feeMinor() computes the $3.30 from the same
 // function that charges a real founder, and 210.00 - 8.55 - 3.30 - 3.15 is
 // 195.00 exactly. /how-it-works renders the same constants.
+//
+// GREEN MARKS THE MONEY THAT IS THE FOUNDER'S, and nothing else. The
+// available balance and the amount still settling are set in --pine;
+// collected is the gross before anything is taken and the two fees are
+// what leaves, so they stay ink. The headline, the call to action and
+// every rule and border on this surface are untouched -- the colour is
+// carrying one meaning, which is the only way it keeps meaning anything.
 
 const NET_MINOR = SALE_GROSS_MINOR - SALE_FEE_MINOR;
 
-/** The month, named so each figure can be checked on its own. */
+/**
+ * The month, named so each figure can be checked on its own.
+ *
+ * The two labels in brackets are the point. "Veyro fee" alone is a number
+ * you have to take on trust; "Veyro fee (3% over $100)" is one you can do
+ * in your head against the pricing page -- 3% of the $110 above the floor
+ * is the $3.30 shown. And "Settling" is our word, not a word: it means
+ * paid but not yet cleared, which is worth four more words in the one
+ * place a reader meets it first.
+ *
+ * `money` marks the figures that are the founder's own, which is what the
+ * green is for. Collected and the two fees are ink: one is the gross
+ * before anything is taken, the others are what leaves.
+ */
 const BREAKDOWN = [
   { k: "Collected", v: COLLECTED_MINOR },
   { k: "Card fees", v: PROCESSING_MINOR },
-  { k: "Veyro fee", v: VEYRO_FEE_MINOR },
-  { k: "Settling", v: SETTLING_MINOR },
+  { k: "Veyro fee (3% over $100)", v: VEYRO_FEE_MINOR },
+  { k: "Settling (not cleared yet)", v: SETTLING_MINOR, money: true },
 ] as const;
 
 export function HeroWallet() {
@@ -77,7 +97,9 @@ export function HeroWallet() {
             {BREAKDOWN.map((f) => (
               <div key={f.k}>
                 <dt>{f.k}</dt>
-                <dd>{formatMinor(f.v, "USD")}</dd>
+                <dd data-money={"money" in f && f.money ? "1" : undefined}>
+                  {formatMinor(f.v, "USD")}
+                </dd>
               </div>
             ))}
           </dl>
@@ -88,9 +110,16 @@ export function HeroWallet() {
             <li className="hw-new">
               <span className="hw-n">{SALE_NAME}</span>
               <span className="hw-w">Just now</span>
-              <span className="hw-a fig-pos">+{formatMinor(NET_MINOR, "USD")}</span>
+              {/* No .fig-pos. The class sets var(--pine), and .hw-a
+                  overrides it at equal specificity from later in the
+                  stylesheet -- so it was on the element claiming a colour
+                  it never applied. Green here is reserved for the two
+                  money-state figures on the left, and an inert class that
+                  says otherwise is the kind of thing somebody later
+                  "fixes" into a third green. */}
+              <span className="hw-a">+{formatMinor(NET_MINOR, "USD")}</span>
             </li>
-            {PRIOR.slice(0, 1).map((r) => (
+            {PRIOR.map((r) => (
               <li key={r.name}>
                 <span className="hw-n">{r.name}</span>
                 <span className="hw-w">{r.when}</span>
