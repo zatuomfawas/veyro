@@ -1,44 +1,54 @@
 import { formatMinor } from "@/lib/money";
 import { PAYOUTS_URL } from "@/lib/stripe-urls";
+import { CountUp } from "@/app/_ui/CountUp";
 import {
-  BALANCE_MINOR, SETTLING_MINOR, SALE_GROSS_MINOR, SALE_FEE_MINOR, SALE_NAME, PRIOR,
+  BALANCE_MINOR, COLLECTED_MINOR, PROCESSING_MINOR, VEYRO_FEE_MINOR, SETTLING_MINOR,
+  SALE_GROSS_MINOR, SALE_FEE_MINOR, SALE_NAME, PRIOR,
 } from "@/app/_ui/wallet-example";
 
-// The hero's product visual: a money position, and the last two things that
-// happened. Nothing else.
+// The hero's product visual: one money position, and a sale arriving.
 //
-// WHAT IT REPLACED. The hero carried a composite -- a checkout pane, a
-// labelled join, and a cut-down LiveWallet -- which between them put a
-// frame bar, two pane labels, a product row, a Pay button, a note, a joining
-// sentence, a balance, a payout control, five interrogable fee terms, a live
-// region, three status chips, two ledger rows and a payout footer on the
-// screen. Fourteen things, next to a headline that wanted to be the only
-// thing. Every one of them was defensible on its own and the total was
-// noise.
+// WHAT IT IS NOT, STILL. Not a checkout pane bolted to a wallet, not five
+// interrogable fee terms, not three status chips, not a live region. Those
+// came out for good reasons and they stay out. What came back is motion,
+// and one line of arithmetic that earns its place.
 //
-// WHAT IS LEFT, AND WHY EACH SURVIVED.
+// THE TWO MOVEMENTS, AND WHY EACH ONE IS TRUE.
 //
-//   Available       the number a founder opens the page for
-//   Settling        so the available figure means something; one implies
-//                   the other, and a wallet with a single number looks
-//                   like a bank balance rather than a payments position
-//   View in Stripe  where payouts actually happen, named honestly
-//   Two rows        proof that it is a ledger and not a statistic
-//   Example         because every figure on it is invented
+// The balance counts from zero. See CountUp: it counts from nothing to the
+// real figure, never between two real balances. An earlier version stepped
+// $171.86 up to $195.00 as the sale settled, which was accurate and read as
+// a glitch -- the smaller number on screen first, in the one place the page
+// wants you to look. Counting from zero is a flourish; counting from
+// another balance is a change, and a change needs a cause the viewer saw.
 //
-// The fee arithmetic went to /how-it-works, where a reader has asked for it.
-// The checkout went to the sections below, which already show it. Status
-// chips went entirely: the two balances above already say what state money
-// is in, so a badge on each row was the same fact a third and fourth time.
+// The newest row arrives. That IS a cause the viewer sees, and it is the
+// product's whole emotional point: somebody bought the thing you made. It
+// slides in once, holds a pine tint for a beat, and settles. The row's box
+// is reserved from the first paint, so nothing below it moves.
 //
-// A SERVER COMPONENT, WITH NO JAVASCRIPT. The old one counted up, observed
-// its own intersection and walked a sale through three states on a timer.
-// It was good work and it was the wrong thing above the fold: a hero that
-// animates while you are reading its headline is competing with itself. The
-// section's existing CSS entrance is motion enough, and it already honours
-// prefers-reduced-motion. This file ships no runtime at all.
+// They are two beats, in order: the balance settles at 850ms, the sale
+// lands at 950ms, and everything is still by 1.9s. Overlapped, they read as
+// one busy moment; sequenced, the card looks like it is working. The old
+// hero sequence ran 3.3s and was still rearranging itself while you read
+// the headline.
+//
+// THE ARITHMETIC LINE replaced a second figure block. "Available $195.00"
+// beside "Settling $3.15" left a 145px hole between the figures and the
+// action, and it invited the question it did not answer: where did the
+// other fifteen dollars go. Collected, fees, settling -- one line, computed
+// from the same constants, and the difference is the balance above it.
+//
+// NOTHING IS EVER A ZERO WAITING TO BE FILLED IN. The server renders the
+// final state: full balance, both rows present. The arrival is a CSS
+// animation with fill-mode both, so the only thing that hides the row is a
+// declarative rule that prefers-reduced-motion switches off -- there is no
+// state, no effect and no moment where a failed hydration could leave the
+// card empty. CountUp is the one client island in the hero, and it starts
+// from the real figure too.
 
 const NET_MINOR = SALE_GROSS_MINOR - SALE_FEE_MINOR;
+const FEES_MINOR = PROCESSING_MINOR + VEYRO_FEE_MINOR;
 
 export function HeroWallet() {
   return (
@@ -53,22 +63,35 @@ export function HeroWallet() {
 
       <div className="hw-body">
         <p className="sr-only">
-          An example founder wallet. {formatMinor(BALANCE_MINOR, "USD")} available and{" "}
-          {formatMinor(SETTLING_MINOR, "USD")} still settling, with the two most recent
-          payments listed. Payouts are scheduled in Stripe by the guardian, who is the
-          account holder. Every figure is invented.
+          An example founder wallet. {formatMinor(COLLECTED_MINOR, "USD")} collected this month,
+          less {formatMinor(FEES_MINOR, "USD")} in fees and{" "}
+          {formatMinor(SETTLING_MINOR, "USD")} still settling, leaving an available balance of{" "}
+          {formatMinor(BALANCE_MINOR, "USD")}. The two most recent payments are listed. Payouts
+          are scheduled in Stripe by the guardian, who is the account holder. Every figure is
+          invented.
         </p>
 
         <div className="hw-top" aria-hidden="true">
           <div className="hw-figs">
-            <div>
-              <span className="fig-k">Available</span>
-              <span className="fig fig-xl hw-bal">{formatMinor(BALANCE_MINOR, "USD")}</span>
-            </div>
-            <div className="hw-pending">
-              <span className="fig-k">Settling</span>
-              <span className="fig fig-sm">{formatMinor(SETTLING_MINOR, "USD")}</span>
-            </div>
+            <span className="fig-k">Available</span>
+            <span className="fig fig-xl hw-bal">
+              {/* 850ms rather than the default 1100, so the balance has
+                  settled before the sale lands on top of it. Two beats,
+                  not one blur. */}
+              <CountUp amountMinor={BALANCE_MINOR} currency="USD" durationMs={850} />
+            </span>
+            {/* Where the balance came from, computed rather than typed.
+                Inside the figure block rather than beside it: when the
+                card narrows and the action wraps onto its own line, a
+                sibling here would have put the button between the balance
+                and the sentence explaining it. */}
+            <p className="hw-sum">
+              <span>{formatMinor(COLLECTED_MINOR, "USD")} collected</span>
+              <span className="hw-dot" aria-hidden="true" />
+              <span>{formatMinor(FEES_MINOR, "USD")} fees</span>
+              <span className="hw-dot" aria-hidden="true" />
+              <span>{formatMinor(SETTLING_MINOR, "USD")} settling</span>
+            </p>
           </div>
           {/* A real link to the real place. The balance beside it is an
               example; the destination is not. */}
@@ -78,9 +101,9 @@ export function HeroWallet() {
         </div>
 
         <ul className="hw-led" aria-hidden="true">
-          <li>
+          <li className="hw-new">
             <span className="hw-n">{SALE_NAME}</span>
-            <span className="hw-w">Today</span>
+            <span className="hw-w">Just now</span>
             <span className="hw-a fig-pos">+{formatMinor(NET_MINOR, "USD")}</span>
           </li>
           {PRIOR.slice(0, 1).map((r) => (

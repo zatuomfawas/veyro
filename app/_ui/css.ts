@@ -4053,6 +4053,9 @@ export const CSS2 = `
    it takes the size it was always worth. Two lines at every width the grid
    holds, which is what the full stop in the middle is for. */
 .fw .hero-h1 { margin-top:0; font-size:clamp(34px, 4.1vw, 58px); max-width:14ch; }
+/* The payoff half, in the money colour. The only use of pine at this size
+   anywhere on the site, which is what keeps it meaning something. */
+.fw .hero-h1-pay { color:var(--pine); }
 .fw .hero-lead { max-width:42ch; }
 .fw .hero-cta { align-items:center; gap:var(--sp-6); margin-top:var(--sp-8); }
 @media (max-width:560px) {
@@ -4106,9 +4109,20 @@ export const CSS2 = `
    belonging to it. */
 .fw .hw-top { display:flex; align-items:flex-end; justify-content:space-between;
   gap:var(--sp-5); flex-wrap:wrap; }
-.fw .hw-figs { display:flex; align-items:flex-start; gap:var(--sp-8); min-width:0; }
-.fw .hw-bal { display:block; margin-top:2px; letter-spacing:-0.035em; }
-.fw .hw-pending .fig { display:block; margin-top:6px; color:var(--ink-2); }
+.fw .hw-figs { min-width:0; flex:1 1 auto; }
+.fw .hw-bal { display:block; margin-top:2px; letter-spacing:-0.038em; }
+
+/* Where the balance came from.
+   Two figures side by side left a 145px hole between them and the button,
+   and the card read as half empty while quietly raising the question it did
+   not answer: where did the other fifteen dollars go. One tabular line,
+   computed from the same constants, and the difference is the figure above
+   it. */
+.fw .hw-sum { display:flex; align-items:center; flex-wrap:wrap; gap:0 var(--sp-3);
+  margin:var(--sp-3) 0 0; font-size:var(--fs-2); color:var(--ink-3);
+  font-variant-numeric:tabular-nums; }
+.fw .hw-dot { width:3px; height:3px; border-radius:50%; background:var(--control-line);
+  flex:none; }
 
 /* Outline, not filled. A filled control here would be the second solid
    rectangle in the hero and would argue with "Check eligibility" twenty
@@ -4122,8 +4136,39 @@ export const CSS2 = `
 
 /* Two rows, on one rule. They are a ledger, so they are a list, and the
    amounts are tabular so the two line up on the decimal. */
-.fw .hw-led { list-style:none; margin:var(--sp-6) 0 0; padding:var(--sp-5) 0 0;
+.fw .hw-led { list-style:none; margin:var(--sp-5) 0 0; padding:var(--sp-5) 0 0;
   border-top:1px solid var(--line); }
+
+/* The sale arriving.
+   ---------------------------------------------------------------------
+   The product's whole emotional point: somebody bought the thing you made.
+   It is the one movement in the hero that is a cause rather than a
+   flourish, which is why the balance above it is allowed to count.
+
+   Declarative, with no state behind it. fill-mode both holds the from-state
+   through the delay, so the row is hidden by a rule that reduced motion
+   switches off -- there is no effect to run, nothing to hydrate, and no
+   arrangement in which a reader ends up looking at an empty card. The row's
+   box is reserved from the first paint and only its contents move, so
+   nothing below it shifts. */
+@keyframes veyro-hw-in {
+  from { opacity:0; transform:translateY(-7px); }
+  to { opacity:1; transform:none; }
+}
+/* The beat that says "this one is new". A wash, not a border: a border
+   would change the row's shape and the two rows would stop lining up. */
+@keyframes veyro-hw-flash {
+  from { opacity:0.11; }
+  to { opacity:0; }
+}
+.fw .hw-new { position:relative; }
+.fw .hw-new > * { animation:veyro-hw-in var(--t-3) var(--ease-out) 950ms both; }
+.fw .hw-new::before { content:""; position:absolute; inset:-1px -12px; background:var(--pine);
+  opacity:0; pointer-events:none;
+  animation:veyro-hw-flash 900ms var(--ease-out) 950ms 1; }
+@media (prefers-reduced-motion: reduce) {
+  .fw .hw-new > *, .fw .hw-new::before { animation:none; }
+}
 .fw .hw-led > li { display:flex; align-items:baseline; gap:var(--sp-4);
   padding:var(--sp-3) 0; }
 .fw .hw-led > li + li { border-top:1px solid var(--line-soft); }
@@ -4158,15 +4203,14 @@ export const CSS2 = `
   .fw .hw-figs { gap:var(--sp-6); }
 }
 @media (max-width:400px) {
-  /* The two figures stack.
-     At 320px the balance alone is ~195px inside a 248px content box, so
-     SETTLING and its value ran off the right-hand edge -- and because the
-     card is overflow:hidden they were silently clipped rather than pushing
-     the page wide, which is why a page-level overflow check never saw it.
-     Stacked, the pair fits at any width, and the secondary figure sits
-     where a secondary figure belongs. */
-  .fw .hw-figs { flex-direction:column; gap:var(--sp-4); }
+  /* One figure fits where two did not. At 320px the balance alone is
+     ~195px inside a 248px content box, and a second figure beside it ran
+     off the right-hand edge -- clipped silently, because the card is
+     overflow:hidden, which is why a page-level overflow check never saw
+     it. The arithmetic wraps instead, which is what a line of text is
+     for. */
   .fw .hw-bal { font-size:var(--fs-8); }
+  .fw .hw-sum { gap:0 var(--sp-2); }
 }
 
 /* ---------------------------------------------------------------- the problem

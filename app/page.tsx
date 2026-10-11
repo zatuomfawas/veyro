@@ -140,7 +140,16 @@ export default async function Home() {
                 {/* No hard break. At a clamped size the right place to wrap
                     moves with the viewport, and text-wrap:balance picks it
                     better than a <br> frozen at one width ever could. */}
-                <h1 className="hero-h1">Build your business. Start getting paid.</h1>
+                {/* Two sentences, two weights of ink. The first is what
+                    you do; the second is what you get, and it is set in
+                    pine -- the colour this design system reserves for
+                    money. It is the one place on the page where the brand
+                    colour and the brand promise are the same words, and it
+                    costs no extra element to say it. */}
+                <h1 className="hero-h1">
+                  Build your business.{" "}
+                  <span className="hero-h1-pay">Start getting paid.</span>
+                </h1>
 
                 <p className="hero-lead">
                   Veyro helps founders aged 13 to 17 take online payments, with a parent or
