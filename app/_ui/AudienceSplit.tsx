@@ -2,6 +2,13 @@ import Link from "next/link";
 
 // Two people read this site and they want opposite things from it.
 //
+// The founder's answer REFERENCES the three steps above rather than
+// restating them. It used to re-explain the whole arrangement -- country,
+// guardian, verification, who runs it afterwards -- which made this the
+// third telling on one page after the hero and the Journey. The Journey is
+// the diagram and the diagram carries the concept; this panel's job is to
+// answer "can I", not to teach the model again.
+//
 // A founder is asking "can I start, and what do I have to do". A parent is
 // asking "is this legitimate, and what am I on the hook for". Written as one
 // column of prose, every paragraph is half-addressed to someone else and both
@@ -39,9 +46,9 @@ export function AudienceSplit() {
         <h3 className="aud-k">If you are building something</h3>
         <p className="aud-h">Can I start selling?</p>
         <p className="aud-b">
-          From 13, if the payment provider supports your country and a parent or guardian is
-          verified as the adult on the account. After that the product is yours to run and
-          nobody signs off your sales.
+          Yes, if the payment provider supports your country &mdash; the three steps above are
+          the whole of it. After that the product is yours to run and nobody signs off your
+          sales.
         </p>
         <ul className="ticks" style={{ marginTop: "var(--sp-4)" }}>
           {FOUNDER.map((x) => <li key={x}>{x}</li>)}

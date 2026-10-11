@@ -1,5 +1,4 @@
 import { formatMinor } from "@/lib/money";
-import { PAYOUTS_URL } from "@/lib/stripe-urls";
 import { CountUp } from "@/app/_ui/CountUp";
 import {
   BALANCE_MINOR, COLLECTED_MINOR, PROCESSING_MINOR, VEYRO_FEE_MINOR, SETTLING_MINOR,
@@ -12,6 +11,22 @@ import {
 // interrogable fee terms, not three status chips, not a live region. Those
 // came out for good reasons and they stay out. What came back is motion,
 // and one line of arithmetic that earns its place.
+//
+// AND NOT A WAY OUT OF THE FUNNEL. It carried a "View in Stripe" link to
+// dashboard.stripe.com, which was accurate -- that genuinely is where
+// payouts are scheduled -- and wrong for the hero. A visitor here has no
+// Veyro account and no context; the link dropped them into somebody else's
+// onboarding, and it put the processor's name on a button at the exact
+// moment a reader is deciding whether they could skip us and go straight
+// there. That objection is the one the whole site is built to answer (see
+// the note in GuardianPermissions on why the processor is not named in the
+// six lines it renders), and the hero is the worst possible place to raise
+// it. The card is an example; it has no controls at all now, and the one
+// action in the hero is the one CTA beside it.
+//
+// The payout fact stays, as prose. It is load-bearing: it is the
+// correction to a claim this site shipped saying nobody could block a
+// payout, when the guardian owns the connected account.
 //
 // THE TWO MOVEMENTS, AND WHY EACH ONE IS TRUE.
 //
@@ -93,11 +108,6 @@ export function HeroWallet() {
               <span>{formatMinor(SETTLING_MINOR, "USD")} settling</span>
             </p>
           </div>
-          {/* A real link to the real place. The balance beside it is an
-              example; the destination is not. */}
-          <a className="hw-cta" href={PAYOUTS_URL} target="_blank" rel="noopener noreferrer">
-            View in Stripe
-          </a>
         </div>
 
         <ul className="hw-led" aria-hidden="true">

@@ -4100,15 +4100,14 @@ export const CSS2 = `
 .fw .hw-bar .dp-tag { margin-left:auto; }
 .fw .hw-body { padding:var(--sp-6); }
 
-/* The money position. The two figures are a pair and sit as one group, so
-   the action can be the only thing on the other side of the row -- which is
-   what makes it findable without being loud. */
-/* flex-end, not flex-start. Top-aligned, the action sat level with the
-   AVAILABLE label and floated well above the figure that is the card's
-   actual centre of gravity; on the baseline of the balance it reads as
-   belonging to it. */
-.fw .hw-top { display:flex; align-items:flex-end; justify-content:space-between;
-  gap:var(--sp-5); flex-wrap:wrap; }
+/* The money position.
+   There was an action on the right of this row -- "View in Stripe" -- and
+   it is gone, because a hero has no business sending a visitor who has
+   never heard of us into somebody else's dashboard. See HeroWallet for the
+   funnel reasoning. With nothing opposite it, the figure block takes the
+   row; the two stacked comments that used to be here were both about
+   aligning against that button. */
+.fw .hw-top { display:flex; align-items:flex-end; gap:var(--sp-5); flex-wrap:wrap; }
 .fw .hw-figs { min-width:0; flex:1 1 auto; }
 .fw .hw-bal { display:block; margin-top:2px; letter-spacing:-0.038em; }
 
@@ -4123,16 +4122,6 @@ export const CSS2 = `
   font-variant-numeric:tabular-nums; }
 .fw .hw-dot { width:3px; height:3px; border-radius:50%; background:var(--control-line);
   flex:none; }
-
-/* Outline, not filled. A filled control here would be the second solid
-   rectangle in the hero and would argue with "Check eligibility" twenty
-   pixels to its left. */
-.fw .hw-cta { display:inline-flex; align-items:center; height:var(--h-md);
-  padding:0 var(--sp-5); border:1px solid var(--control-line); background:var(--paper);
-  color:var(--ink); font-size:var(--fs-2); font-weight:var(--fw-bold);
-  text-decoration:none; white-space:nowrap; }
-.fw .hw-cta:hover { border-color:var(--brand); }
-.fw .hw-cta:focus-visible { outline:2px solid var(--pine); outline-offset:2px; }
 
 /* Two rows, on one rule. They are a ledger, so they are a list, and the
    amounts are tabular so the two line up on the decimal. */
@@ -4195,12 +4184,6 @@ export const CSS2 = `
   .fw .hw-led > li { align-items:baseline; }
   .fw .hw-n { white-space:normal; overflow:visible; }
   .fw .hw-w { width:auto; }
-}
-@media (max-width:420px) {
-  /* The action takes its own line rather than squeezing the balance. */
-  .fw .hw-top { gap:var(--sp-5); }
-  .fw .hw-cta { width:100%; justify-content:center; }
-  .fw .hw-figs { gap:var(--sp-6); }
 }
 @media (max-width:400px) {
   /* One figure fits where two did not. At 320px the balance alone is
