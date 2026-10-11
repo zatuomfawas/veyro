@@ -13,6 +13,10 @@ import { db } from "@/lib/db";
 import { sendDisputeNotification } from "@/lib/email";
 import { formatMinor } from "@/lib/money";
 import { disputeUrl, guidanceFor, DISPUTE_DISCLAIMER } from "@/lib/disputes";
+import {
+  disputeMailForFounder, disputeMailForGuardian,
+  disputeSubjectForFounder, disputeSubjectForGuardian,
+} from "@/lib/email-bodies";
 
 /** The guardian of record for a founder, if one has consented. */
 async function guardianFor(founderId: string) {
@@ -29,50 +33,31 @@ export async function notifyDispute(founderId: string, dispute: Stripe.Dispute):
   if (!founder) return;
   const guardian = await guardianFor(founderId);
 
-  const amount = formatMinor(dispute.amount, (dispute.currency ?? "usd").toUpperCase());
-  const due = dispute.evidence_details?.due_by
-    ? new Date(dispute.evidence_details.due_by * 1000).toUTCString()
-    : null;
-  const g = guidanceFor(dispute.reason ?? "");
-  const url = disputeUrl(dispute.id);
-
-  const body = [
-    `A customer has disputed a payment of ${amount}.`,
-    "",
-    g.label,
-    "",
-    due
-      ? `Stripe needs a response by ${due}. If nothing is sent by then, the dispute is lost by default.`
-      : "Stripe has not given a response deadline for this one yet.",
-    "",
-    "The account holder responds in the Stripe dashboard:",
-    url,
-    "",
-    DISPUTE_DISCLAIMER,
-  ].join("\n");
+  const args = {
+    founderName: founder.name,
+    guardianName: guardian?.name ?? null,
+    amount: formatMinor(dispute.amount, (dispute.currency ?? "usd").toUpperCase()),
+    reason: guidanceFor(dispute.reason ?? "").label,
+    // Stripe's own deadline, formatted and not interpreted. Null when Stripe
+    // has not set one, which the body turns into "go and look" rather than a
+    // number of days.
+    due: dispute.evidence_details?.due_by
+      ? new Date(dispute.evidence_details.due_by * 1000).toUTCString()
+      : null,
+    opened: dispute.created ? new Date(dispute.created * 1000).toUTCString() : null,
+    disputeId: dispute.id,
+    url: disputeUrl(dispute.id),
+    disclaimer: DISPUTE_DISCLAIMER,
+  };
 
   await sendDisputeNotification(
-    founder.email, `A payment of ${amount} has been disputed`, body,
+    founder.email, disputeSubjectForFounder(args.amount), disputeMailForFounder(args),
     { founderId, disputeId: dispute.id, audience: "founder" },
   );
 
   if (guardian) {
     await sendDisputeNotification(
-      guardian.email,
-      `A payment on ${founder.name}'s account has been disputed`,
-      [
-        `A customer has disputed a payment of ${amount} on the account you are the verified adult on.`,
-        "",
-        g.label,
-        "",
-        due
-          ? `Stripe needs a response by ${due}. Responding is done in your Stripe dashboard.`
-          : "Stripe has not given a response deadline for this one yet.",
-        "",
-        url,
-        "",
-        DISPUTE_DISCLAIMER,
-      ].join("\n"),
+      guardian.email, disputeSubjectForGuardian(founder.name), disputeMailForGuardian(args),
       { founderId, disputeId: dispute.id, audience: "guardian" },
     );
   }
@@ -81,8 +66,9 @@ export async function notifyDispute(founderId: string, dispute: Stripe.Dispute):
   await db.notification.create({
     data: {
       userId: founderId,
-      title: "A payment was disputed",
-      body: `${amount} is being disputed.${due ? ` A response is due by ${due}.` : ""}`,
+      title: "A customer disputed a charge",
+      body: `${args.amount} is being disputed.`
+        + (args.due ? ` A response is due by ${args.due}.` : ""),
     },
   });
 }

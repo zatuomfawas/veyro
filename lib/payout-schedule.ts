@@ -22,8 +22,10 @@ export type PayoutSchedule = {
   payoutsEnabled: boolean;
 };
 
-/** Where the account holder changes it. Their dashboard, not ours. */
-export const PAYOUT_SETTINGS_URL = "https://dashboard.stripe.com/settings/payouts";
+// The dashboard destinations live in lib/stripe-urls.ts, which has no
+// imports, so a module that only wants a link does not pull the SDK in to get
+// one. Re-exported here because this is the import callers reach for.
+export { PAYOUT_SETTINGS_URL, PAYOUTS_URL } from "./stripe-urls";
 
 export async function readPayoutSchedule(
   connectedAccountId: string,

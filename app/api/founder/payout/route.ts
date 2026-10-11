@@ -11,6 +11,7 @@ import { audit } from "@/lib/auth";
 import { foldWallet, walletFor } from "@/lib/ledger";
 import { resolveScope, isResponse, readJson, cap } from "../_scope";
 import { sendPayoutNotification } from "@/lib/email";
+import { readPayoutSchedule, describeSchedule } from "@/lib/payout-schedule";
 import { formatMinor } from "@/lib/money";
 
 export const runtime = "nodejs";
@@ -74,9 +75,12 @@ export async function POST(req: Request) {
     amountMinor, currency,
   });
 
-  // The guardian is told, every time. On a Standard account they cannot stop a
-  // payout — they get visibility and a permanent record, which is what Veyro
-  // can honestly promise.
+  // The guardian is told, every time. Veyro gives them visibility and a
+  // permanent record; the account controls are Stripe's and belong to them as
+  // the account holder, which is a different and larger thing. The older
+  // wording here said they "cannot stop a payout", which was wrong -- they
+  // own the connected account and can set payouts to manual, change the
+  // schedule or close it, none of which passes through us.
   const consent = await db.guardianConsent.findUnique({ where: { founderId: scope.founderId } });
   if (consent?.guardianId) {
     await db.notification.create({
@@ -84,8 +88,8 @@ export async function POST(req: Request) {
         userId: consent.guardianId,
         title: `${scope.user.name} requested a payout`,
         body:
-          `${formatMinor(amountMinor, currency)} has been requested. This is a notice, `
-          + "not a request to approve — on this account type payouts run on Stripe's schedule.",
+          `${formatMinor(amountMinor, currency)} has been requested. Veyro records the `
+          + "request and tells you; the payout settings on the account are yours, in Stripe.",
         routeName: "founder.payouts",
         routeId: scope.founderId,
       },
@@ -96,8 +100,29 @@ export async function POST(req: Request) {
     // non-fatal, because the payout request itself has already been written.
     const guardian = await db.user.findUnique({ where: { id: consent.guardianId } });
     if (guardian) {
+      // What the email is allowed to say about scheduling depends entirely on
+      // what Stripe is actually configured to do, so it is read here rather
+      // than assumed. A null means the account could not be read just now,
+      // and the email then says nothing about the schedule -- the one thing
+      // it must never do is tell the account holder to go and schedule a
+      // payout that is already running automatically.
+      const sched = account.providerAccountId
+        ? await readPayoutSchedule(account.providerAccountId)
+        : null;
+
       await sendPayoutNotification(
-        guardian.email, scope.user.name, amountMinor, currency, scope.founderId,
+        guardian.email,
+        {
+          founderName: scope.user.name,
+          guardianName: guardian.name,
+          amountMinor,
+          currency,
+          payouts: sched
+            ? { interval: sched.interval, description: describeSchedule(sched),
+                payoutsEnabled: sched.payoutsEnabled }
+            : null,
+        },
+        scope.founderId,
       );
     }
   }

@@ -39,9 +39,8 @@ export function mapDisputeState(status: string): DisputeState {
 }
 
 /** Where the account holder actually responds. Their dashboard, not ours. */
-export function disputeUrl(stripeDisputeId: string): string {
-  return `https://dashboard.stripe.com/disputes/${stripeDisputeId}`;
-}
+// One source for every Stripe dashboard destination. See lib/stripe-urls.ts.
+export { disputeUrl } from "./stripe-urls";
 
 /**
  * Plain-English reason text, and what evidence tends to matter.

@@ -24,7 +24,11 @@ import { formatMinor } from "./money";
 // From pricing rather than fees: lib/fees.ts reaches for the database client,
 // and this module has to stay loadable without one.
 import { FREE_FLOOR_MINOR as FREE_LIMIT_MINOR, FEES_EFFECTIVE_LABEL } from "./pricing";
-import { textToHtml } from "./email-html";
+import { renderText, renderHtml, type MailInput } from "./email-html";
+// The two bodies whose wording is a claim rather than prose live in their own
+// module, with no database import, so the tests can build them and read what
+// they actually say for a given account.
+import { payoutMail, payoutSubject, type PayoutMailArgs } from "./email-bodies";
 
 // One address, sending and receiving.
 //
@@ -63,7 +67,7 @@ type SendResult = { sent: boolean; reason?: string };
 async function send(
   to: string,
   subject: string,
-  text: string,
+  mail: MailInput,
   context: { action: string; founderId?: string; meta?: Record<string, unknown> },
   /** Optional files. Only the annual summary uses this. */
   attachments?: { filename: string; content: Buffer }[],
@@ -79,8 +83,8 @@ async function send(
       to,
       subject,
       replyTo: REPLY_TO,
-      text,
-      html: textToHtml(text),
+      text: renderText(mail),
+      html: renderHtml(mail),
       ...(attachments?.length ? { attachments } : {}),
     });
 
@@ -106,8 +110,10 @@ async function send(
   }
 }
 
-/** Every email closes the same way, so the reply path is never a dead end. */
-const SIGNOFF = "\n\n—\nVeyro\nReply to this email and a person will answer.";
+// The sign-off used to be appended here, as a string, to the text half only.
+// It is the footer now -- brand line, Dashboard, Terms, Privacy and the
+// address -- and lib/email-html renders it into both halves, so the HTML can
+// no longer end without a reply path while the text ends with one.
 
 /* ---------------- verification ---------------- */
 
@@ -126,8 +132,7 @@ export function sendVerificationEmail(email: string, token: string) {
       + "The link works for 24 hours. If it expires you can request a new one from the sign-in "
       + "page.\n\n"
       + "If you did not create a Veyro account, ignore this email. Nothing was set up and no one "
-      + "can use the address without this link."
-      + SIGNOFF,
+      + "can use the address without this link.",
     { action: "email.verification_sent" },
   );
 }
@@ -153,8 +158,7 @@ export function sendPasswordResetEmail(email: string, token: string) {
       + "The link works for one hour and can be used once. Using it signs out every device "
       + "that was signed in, which is what you want if someone else had got in.\n\n"
       + "If this was not you, you can ignore this email. Your password has not changed and "
-      + "nobody can change it without this link."
-      + SIGNOFF,
+      + "nobody can change it without this link.",
     { action: "email.password_reset_sent" },
   );
 }
@@ -174,8 +178,7 @@ export function sendPasswordChangedEmail(email: string) {
       + "signed in has been signed out.\n\n"
       + "If that was you, there is nothing to do.\n\n"
       + "If it was not, reply to this email straight away. Whoever changed it had access to "
-      + `this inbox, so securing your email account is the first step: ${REPLY_TO}`
-      + SIGNOFF,
+      + `this inbox, so securing your email account is the first step: ${REPLY_TO}`,
     { action: "email.password_changed_sent" },
   );
 }
@@ -189,16 +192,18 @@ export function sendInviteNotification(
   return send(
     guardianEmail,
     `${founderName} has asked you to be their guardian on Veyro`,
-    `${founderName} invited you to help manage their business payments.\n\n`
-      + "Veyro is software that helps young founders take payments legitimately. Because they are "
-      + "under 18, an adult has to be the verified person on the payment account. That is what you "
-      + "are being asked to do.\n\n"
-      + "Review what it involves and accept or decline here:\n\n"
-      + `${link}\n\n`
-      + "You will be asked to sign in with this email address first, which is what ties the "
-      + "agreement to you. The link works for 14 days.\n\n"
-      + "Declining is a normal answer and the page offers it as plainly as accepting."
-      + SIGNOFF,
+    {
+      intro: `${founderName} invited you to help manage their business payments.\n\n`
+        + "Veyro is software that helps young founders take payments legitimately. Because they "
+        + "are under 18, an adult has to be the verified person on the payment account. That is "
+        + "what you are being asked to do.",
+      cta: { label: "Review the invitation", href: link },
+      outro:
+        "You will be asked to sign in with this email address first, which is what ties the "
+        + "agreement to you. The link works for 14 days.\n\n"
+        + "Declining is a normal answer and the page offers it as plainly as accepting.",
+      dashboard: "/dashboard/guardian",
+    },
     { action: "email.invite_sent", founderId, meta: { guardianEmail } },
   );
 }
@@ -224,8 +229,7 @@ export function sendNewLinkRequest(
       + "link.\n\n"
       + `Send it from your dashboard: ${SITE}/dashboard/founder#guardian\n\n`
       + "Nothing is wrong with your account. An invite expiring is normal and this is the "
-      + "ordinary way to fix it."
-      + SIGNOFF,
+      + "ordinary way to fix it.",
     { action: "email.new_link_requested_sent", founderId, meta: { guardianEmail } },
   );
 }
@@ -238,11 +242,15 @@ export function sendGuardianAcceptedNotification(
   return send(
     founderEmail,
     `${guardianName} accepted`,
-    `${guardianName} agreed to be your guardian.\n\n`
-      + "They are now the adult on your payment account. The next step is theirs: they complete "
-      + "the payment provider's identity form, and you will be able to sell once that is done.\n\n"
-      + `Your dashboard: ${SITE}/dashboard/founder`
-      + SIGNOFF,
+    {
+      intro: `${guardianName} agreed to be your guardian.\n\n`
+        + "They are now the adult on your payment account. The next step is theirs: they "
+        + "complete the payment provider's identity form, and you will be able to sell once "
+        + "that is done.\n\n"
+        + "The provider can also come back to them for more information later. That is normal, "
+        + "and your dashboard says so when it happens.",
+      cta: { label: "Open your dashboard", href: `${SITE}/dashboard/founder` },
+    },
     { action: "email.guardian_accepted_sent", founderId },
   );
 }
@@ -256,12 +264,14 @@ export function sendPaymentNotification(
   return send(
     founderEmail,
     `Payment received: ${amount}`,
-    `Someone paid ${amount}.\n\n`
-      + "It is on your record and in your wallet. The payment provider takes its processing fee "
-      + "before the money reaches your balance, so what you keep is a little less than the figure "
-      + "above; your wallet shows both.\n\n"
-      + `Your wallet: ${SITE}/dashboard/founder`
-      + SIGNOFF,
+    {
+      intro: `Someone paid ${amount}. It is on your record and in your wallet.`,
+      facts: [{ k: "Amount paid", v: amount }],
+      cta: { label: "Open your wallet", href: `${SITE}/dashboard/founder` },
+      outro:
+        "The payment provider takes its processing fee before the money reaches your balance, "
+        + "so what you keep is a little less than the figure above. Your wallet shows both.",
+    },
     { action: "email.payment_sent", founderId, meta: { amountMinor, currency } },
   );
 }
@@ -311,17 +321,28 @@ export function sendThresholdEmail(
       + `that would be ${fee}.\n\n`
       + `The first ${limit} of a month is always free.`;
 
+  // The figures come from the same ledger decision that charges the money:
+  // qmeMinor and feeMinor are handed in by lib/fees.ts under the row lock, so
+  // the email cannot quote a number the ledger disagrees with.
+  const facts = [
+    { k: "Earnings this month", v: qme },
+    { k: `Free every month`, v: limit },
+    { k: args.collecting ? "Veyro fee so far" : `Veyro fee from ${FEES_EFFECTIVE_LABEL}`, v: fee },
+  ];
+
   return send(
     founderEmail,
     `You've passed ${limit} this month`,
-    `Your earnings this month have reached ${qme}.\n\n`
-      + money
-      + "\n\n"
-      + "Payout support and priority support apply for the rest of the month. There is nothing "
-      + "to accept \u2014 they apply in any month you are over the line.\n\n"
-      + `Your dashboard: ${SITE}/dashboard/founder\n`
-      + `What this costs: ${SITE}/pricing`
-      + SIGNOFF,
+    {
+      intro: `Your earnings this month have reached ${qme}.`,
+      facts,
+      cta: { label: "Open your dashboard", href: `${SITE}/dashboard/founder` },
+      outro: money
+        + "\n\n"
+        + "Payout support and priority support apply for the rest of the month. There is "
+        + "nothing to accept \u2014 they apply in any month you are over the line.\n\n"
+        + `What this costs: ${SITE}/pricing`,
+    },
     {
       action: "email.threshold_sent",
       founderId,
@@ -345,11 +366,13 @@ export function sendAnnualSummary(to: string, year: number, pdf: Buffer) {
   return send(
     to,
     `Your ${year} earnings and payout summary`,
-    `Attached is a record of what you earned and what was paid out in ${year}.\n\n`
-      + "It is for your records. It is not a tax form and it is not tax advice \u2014 if you need "
-      + "to file something, this is a document to give an accountant, not one to file.\n\n"
-      + `Your dashboard: ${SITE}/dashboard/founder`
-      + SIGNOFF,
+    {
+      intro: `Attached is a record of what you earned and what was paid out in ${year}.`,
+      cta: { label: "Open your dashboard", href: `${SITE}/dashboard/founder` },
+      outro:
+        "It is for your records. It is not a tax form and it is not tax advice \u2014 if you "
+        + "need to file something, this is a document to give an accountant, not one to file.",
+    },
     { action: "email.annual_summary", meta: { year } },
     [{ filename: `veyro-annual-summary-${year}.pdf`, content: pdf }],
   );
@@ -366,33 +389,41 @@ export function sendAnnualSummary(to: string, year: number, pdf: Buffer) {
  * expects to answer. Neither is told what the outcome will be.
  */
 export function sendDisputeNotification(
-  to: string, subject: string, body: string,
+  to: string, subject: string, mail: MailInput,
   context: { founderId: string; disputeId: string; audience: "founder" | "guardian" },
 ) {
-  return send(to, subject, body + SIGNOFF, {
+  return send(to, subject, mail, {
     action: `email.dispute_${context.audience}`,
     founderId: context.founderId,
     meta: { disputeId: context.disputeId },
   });
 }
 
-/* ---------------- payout requested ---------------- */
+/* ---------------- a payout was requested ---------------- */
 
+/**
+ * The guardian is told that the founder asked for money to be sent.
+ *
+ * The body is built in lib/email-bodies.ts, where a test can reach it. The
+ * wording of this one is a claim about who controls money, and it has been
+ * wrong before; see the note on payoutMail for the three claims that were
+ * taken out of it and why each was false.
+ */
 export function sendPayoutNotification(
-  guardianEmail: string, founderName: string, amountMinor: number, currency: string,
-  founderId: string,
+  guardianEmail: string, args: PayoutMailArgs, founderId: string,
 ) {
-  const amount = formatMinor(amountMinor, currency);
   return send(
     guardianEmail,
-    `${founderName} requested a payout of ${amount}`,
-    `${founderName} asked for ${amount} to be paid out to the bank account on their payment `
-      + "account.\n\n"
-      + "This is a notice, not a request to approve. On this account type payouts run on the "
-      + "provider's own schedule and nobody, including you, can block one. You get told every "
-      + "time and the request is on the permanent record.\n\n"
-      + `Your dashboard: ${SITE}/dashboard/guardian`
-      + SIGNOFF,
-    { action: "email.payout_sent", founderId, meta: { amountMinor, currency } },
+    payoutSubject(args.founderName, args.amountMinor, args.currency),
+    payoutMail(args),
+    {
+      action: "email.payout_sent",
+      founderId,
+      meta: {
+        amountMinor: args.amountMinor, currency: args.currency,
+        interval: args.payouts?.interval ?? null,
+        payoutsEnabled: args.payouts?.payoutsEnabled ?? null,
+      },
+    },
   );
 }
