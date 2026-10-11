@@ -30,6 +30,7 @@ import { SiteFooter } from "@/app/_ui/SiteFooter";
 import ConsentActions from "./ConsentActions";
 import RequestNewLink from "./RequestNewLink";
 import SetUpPayments from "@/app/_ui/SetUpPayments";
+import { SUPPORT_EMAIL } from "@/lib/support";
 
 export const viewport = buildViewport();
 export const dynamic = "force-dynamic";
@@ -39,7 +40,6 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-const SUPPORT_EMAIL = "hello@withveyro.com";
 
 const fmtDate = (d: Date | string) =>
   new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });

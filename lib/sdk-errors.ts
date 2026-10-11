@@ -9,6 +9,8 @@
 // useful to a person first and a model second, because a prompt that only a
 // model can act on is a dead end for anyone reading it themselves.
 
+import { SUPPORT_EMAIL } from "./support";
+
 export type SdkErrorCode =
   | "product_not_found"
   | "product_not_live"
@@ -68,13 +70,13 @@ const ERRORS: Record<SdkErrorCode, Entry> = {
   },
   not_configured: {
     error: "Payments are not configured on this server.",
-    fixPrompt: "This one is ours, not yours. Email hello@withveyro.com and we will look.",
+    fixPrompt: `This one is ours, not yours. Email ${SUPPORT_EMAIL} and we will look.`,
   },
   stripe_unavailable: {
     error: "We could not reach the payment provider. Nothing has been charged.",
     fixPrompt:
       "A temporary problem between Veyro and Stripe. Try again in a moment; if it keeps "
-      + "happening, email hello@withveyro.com.",
+      + `happening, email ${SUPPORT_EMAIL}.`,
   },
 };
 

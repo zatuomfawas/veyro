@@ -46,6 +46,8 @@
  * right-aligned bold, because a three-line sentence ragged off the right
  * margin in bold is the worst way to read anything.
  */
+import { SUPPORT_EMAIL } from "./support.ts";
+
 export type Fact = { k: string; v: string; prose?: boolean };
 
 /** The one action a message asks for, if it asks for one. */
@@ -71,7 +73,10 @@ export type MailBody = {
 export type MailInput = string | MailBody;
 
 const SITE = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://withveyro.com").replace(/\/$/, "");
-const SUPPORT = "hello@withveyro.com";
+// The one import this module allows itself. lib/support.ts has no imports of
+// its own, so the reason this file stays directly testable -- nothing in its
+// graph reaches a database -- still holds.
+const SUPPORT = SUPPORT_EMAIL;
 const TAGLINE = "Veyro — Payments for creators under 18";
 
 /* ---------------- the palette ----------------

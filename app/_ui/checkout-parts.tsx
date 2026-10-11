@@ -12,6 +12,7 @@
 
 import Link from "next/link";
 import { formatMinor } from "@/lib/money";
+import { SUPPORT_EMAIL } from "@/lib/support";
 
 /** Product name, and who is selling it. */
 export function CheckoutHeading({
@@ -94,7 +95,7 @@ export function CheckoutAssurance({ underAgeNote = true }: { underAgeNote?: bool
         <p className="tiny" style={{ marginTop: 16, maxWidth: "var(--m-body)" }}>
           This seller is under 18 and has a parent or guardian named on the payment account, as
           the provider requires. Questions about a payment? Email{" "}
-          <a className="linkbtn" href="mailto:hello@withveyro.com">hello@withveyro.com</a>.
+          <a className="linkbtn" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
         </p>
       )}
     </>

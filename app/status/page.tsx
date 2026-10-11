@@ -6,6 +6,7 @@ import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { PageNext } from "@/app/_ui/PageNext";
+import { SUPPORT_EMAIL as EMAIL } from "@/lib/support";
 
 export const viewport = buildViewport();
 export const dynamic = "force-dynamic";
@@ -17,7 +18,6 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const EMAIL = "hello@withveyro.com";
 
 // A status page that reports green without measuring anything is worse than no
 // status page: it is a claim, and the first outage proves it was never checked.

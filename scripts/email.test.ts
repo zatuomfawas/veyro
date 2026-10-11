@@ -10,19 +10,45 @@ import {
   payoutMail, disputeMailForFounder, disputeMailForGuardian,
 } from "../lib/email-bodies.ts";
 import { crossedFreeLimit, FEES_EFFECTIVE_AT, FEES_EFFECTIVE_LABEL } from "../lib/pricing.ts";
+import { SUPPORT_EMAIL } from "../lib/support.ts";
 
 /* ---------------- the sender ---------------- */
 
-test("mail is sent from the inbox a person can reply to", () => {
+test("mail is sent from a domain the provider can actually verify", () => {
   const src = readFileSync(new URL("../lib/email.ts", import.meta.url), "utf8");
-  // Pinned because it is a one-word change that nothing else would catch:
-  // noreply@ sends perfectly well, and the only symptom is replies falling
-  // into a void that the footer of every message invites people to use.
-  assert.match(src, /const SUPPORT_INBOX = "hello@withveyro\.com";/);
-  assert.match(src, /const FROM = `Veyro <\$\{SUPPORT_INBOX\}>`;/);
-  assert.match(src, /const REPLY_TO = SUPPORT_INBOX;/);
+
+  // This is the test that would have caught the obvious change. When the
+  // support inbox moved to withveyro@gmail.com, sending from it looked like
+  // a one-line edit. Probed against the live Resend API:
+  //
+  //   Veyro <withveyro@gmail.com>   403  "The gmail.com domain is not verified"
+  //   Veyro <hello@withveyro.com>   200
+  //
+  // Nobody can verify gmail.com, so a From on free mail stops every
+  // transactional email on the platform at once -- and it fails in the one
+  // place nothing watches, because send() is non-fatal by design.
+  const sender = /const SENDING_ADDRESS = "([^"]+)";/.exec(src);
+  assert.ok(sender, "the sending address has to be its own constant");
+  assert.match(sender[1], /@withveyro\.com$/,
+    "From must stay on the domain verified with the mail provider");
+  for (const free of ["gmail", "googlemail", "outlook", "hotmail", "yahoo", "icloud", "proton"]) {
+    assert.ok(!sender[1].includes(free),
+      `${free} cannot be verified as a sending domain, so From cannot use it`);
+  }
+
+  assert.match(src, /const FROM = `Veyro <\$\{SENDING_ADDRESS\}>`;/);
+  // Replies go to the inbox a person actually reads, which is the half that
+  // is allowed to be anywhere.
+  assert.match(src, /const REPLY_TO = SUPPORT_EMAIL;/);
   assert.ok(!/noreply@/.test(src.replace(/^\/\/.*$/gm, "")),
     "noreply@ should survive only in the comment explaining why it went");
+});
+
+test("one file owns the support address", () => {
+  // Eleven files used to declare it independently, so changing it meant
+  // finding all eleven. The eleventh was always the one that got missed.
+  const src = readFileSync(new URL("../lib/support.ts", import.meta.url), "utf8");
+  assert.match(src, /const SUPPORT_EMAIL = "withveyro@gmail\.com";/);
 });
 
 test("every send carries both a text and an HTML part", () => {
@@ -143,7 +169,7 @@ test("both halves close with the same footer", () => {
   for (const render of [renderText, renderHtml]) {
     const out = render("Hello.");
     assert.ok(out.includes("Payments for creators under 18"));
-    assert.ok(out.includes("hello@withveyro.com"));
+    assert.ok(out.includes(SUPPORT_EMAIL), "the footer carries the support address");
     for (const path of ["/dashboard/founder", "/terms", "/privacy"]) {
       assert.ok(out.includes(path), `the footer needs a ${path} link`);
     }

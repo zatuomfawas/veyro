@@ -8,6 +8,7 @@ import { MoneyRail } from "@/app/_ui/MoneyRail";
 import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
+import { SUPPORT_EMAIL } from "@/lib/support";
 
 export const viewport = buildViewport();
 
@@ -27,7 +28,6 @@ export const metadata: Metadata = {
   },
 };
 
-const SUPPORT_EMAIL = "hello@withveyro.com";
 
 // The commitments are every one of them checkable in this repository today,
 // which is the only reason they are worth printing. Each names the file or the

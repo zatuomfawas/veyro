@@ -7,8 +7,11 @@ import { ScrollProgress } from "@/app/_ui/ScrollProgress";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { PageNext } from "@/app/_ui/PageNext";
+import { SUPPORT_EMAIL } from "@/lib/support";
 
-export const SUPPORT_EMAIL = "hello@withveyro.com";
+// Imported and re-exported, not redeclared: this file uses it and four
+// legal pages import it from here.
+export { SUPPORT_EMAIL };
 
 // The jurisdiction these documents are governed by is not settled, because the
 // company is not incorporated yet. Naming a country we have not registered in

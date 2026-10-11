@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Wordmark } from "@/app/_ui/marks";
+import { SUPPORT_EMAIL } from "@/lib/support";
 
-const SUPPORT_EMAIL = "hello@withveyro.com";
 
 // Three columns, and nothing in them that is not a real page.
 //

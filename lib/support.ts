@@ -7,7 +7,16 @@
 //
 // "Target", never "guaranteed". A 24-hour target is a commitment we intend to
 // keep and cannot promise, and the Terms say exactly that.
-const SUPPORT_EMAIL = "hello@withveyro.com";
+// THE address. Eleven files used to declare this independently -- four pages,
+// four shared components, two lib modules and this one -- so changing it meant
+// finding all eleven and the eleventh was always the one that got missed. They
+// all import it from here now.
+//
+// NOT the address mail is SENT from. See lib/email.ts: Resend will only send
+// from a domain verified in the account, and nobody can verify gmail.com, so
+// the sending address stays on withveyro.com and this is what Reply-To is set
+// to.
+const SUPPORT_EMAIL = "withveyro@gmail.com";
 
 export type SupportAudience = "founder" | "guardian";
 

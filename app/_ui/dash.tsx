@@ -12,7 +12,8 @@ import SignOut from "@/app/_ui/SignOut";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { MobileNav } from "@/app/_ui/MobileNav";
 
-export const SUPPORT_EMAIL = "hello@withveyro.com";
+// Re-exported, not redeclared. Four dashboard pages import it from here.
+export { SUPPORT_EMAIL } from "@/lib/support";
 
 /** One date format across every signed-in surface. */
 export const fmtDate = (d: Date | string) =>

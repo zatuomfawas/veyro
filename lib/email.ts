@@ -29,20 +29,32 @@ import { renderText, renderHtml, type MailInput } from "./email-html";
 // module, with no database import, so the tests can build them and read what
 // they actually say for a given account.
 import { payoutMail, payoutSubject, type PayoutMailArgs } from "./email-bodies";
+import { SUPPORT_EMAIL } from "./support";
 
-// One address, sending and receiving.
+// Two addresses, and they have to be different.
 //
-// It used to send as noreply@ and set Reply-To to hello@. That worked, but it
-// asks the reader to trust a header their mail client may not show: the name
-// on the message said "do not reply" while the footer invited a reply. Sending
-// as the inbox a person actually reads makes the invitation true at a glance,
-// and removes the commonest reason transactional mail gets filtered -- a
-// From address that accepts no mail.
+// The support inbox moved to withveyro@gmail.com, and the obvious change --
+// send from it -- does not work. Resend will only send from a domain
+// verified in the account, and nobody can verify gmail.com. Probed against
+// the live API before writing this:
 //
-// Both halves are the same constant so they cannot drift apart.
-const SUPPORT_INBOX = "hello@withveyro.com";
-const FROM = `Veyro <${SUPPORT_INBOX}>`;
-const REPLY_TO = SUPPORT_INBOX;
+//   Veyro <withveyro@gmail.com>   403  "The gmail.com domain is not verified"
+//   Veyro <hello@withveyro.com>   200  accepted
+//
+// So the sending address stays on the domain. Had it followed the support
+// inbox, every transactional email on the platform would have stopped at
+// once: verification, password reset, guardian invite, the threshold notice,
+// disputes and payouts.
+//
+// The note that used to be here argued the two should be one constant,
+// because a From address that accepts no mail is the commonest reason
+// transactional mail gets filtered. That argument still stands and this does
+// not answer it with a header: hello@withveyro.com has to keep accepting
+// mail and forwarding it to the support inbox. Flagged at the point of
+// change rather than assumed.
+const SENDING_ADDRESS = "hello@withveyro.com";
+const FROM = `Veyro <${SENDING_ADDRESS}>`;
+const REPLY_TO = SUPPORT_EMAIL;
 
 /**
  * The public origin, for links inside emails.
