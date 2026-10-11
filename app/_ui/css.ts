@@ -4206,9 +4206,16 @@ export const CSS2 = `
    remove. Centring the block makes the whitespace symmetric, so it reads as
    a pause between the hero and the dark band rather than as a layout that
    ran out. The type stays left-aligned; it is the block that is centred. */
-.fw .stmt { max-width:780px; margin-inline:auto; }
-.fw .stmt-q { margin:var(--sp-4) 0 0; font-size:clamp(25px, 2.9vw, 38px); line-height:1.16;
-  letter-spacing:-0.025em; font-weight:var(--fw-bold); color:var(--ink);
+/* 860, not 780, and a bigger statement inside it.
+   The line this holds got shorter -- "You built it. Getting paid for it is
+   the hard part." against the paragraph-length one before it -- and at 38px
+   it came out 777px inside a 780px box. Three pixels of slack is not a
+   layout, it is a coin toss: any font-metric variation wraps it and leaves
+   "part." alone on a second line. The measure is wider than the type needs
+   and the type is bigger, which is what a shorter sentence buys. */
+.fw .stmt { max-width:860px; margin-inline:auto; }
+.fw .stmt-q { margin:var(--sp-4) 0 0; font-size:clamp(26px, 3.4vw, 40px); line-height:1.14;
+  letter-spacing:-0.028em; font-weight:var(--fw-bold); color:var(--ink);
   text-wrap:balance; }
 .fw .stmt-a { margin:var(--sp-7) 0 0; padding-left:var(--sp-6);
   border-left:2px solid var(--line); max-width:var(--m-body); }

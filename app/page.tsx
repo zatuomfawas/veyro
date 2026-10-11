@@ -191,32 +191,54 @@ export default async function Home() {
           <div className="wrap-lp">
             <div className="stmt">
               <span className="lp-eyebrow">The problem</span>
+              {/* Recognition, not explanation.
+                  ----------------------------------------------------------
+                  This block used to open "You can build something worth
+                  selling long before you can open the account that would
+                  let you sell it", and then explain account structures for
+                  two paragraphs. Five things were wrong with it and they
+                  compounded.
+
+                  It was written in the register of a terms page -- "the
+                  person behind an account", "where the provider requires
+                  one" -- to a fifteen-year-old who has just finished
+                  something and wants to sell it.
+
+                  Its one concrete image, "keep your business inside
+                  somebody else's payments", is not an image at all. Nobody
+                  can picture it.
+
+                  It taught the mechanics before it earned the right to:
+                  account holders, providers, separability, all before the
+                  reader had been told the page understood their problem.
+
+                  And it had the wrong feeling. It ended on proving whose
+                  money is whose, which is a parent's worry and belongs on
+                  the parent's page. The founder's worry is that they are
+                  ready and the money is not.
+
+                  Ninety-six words down to seventy-one, and the first line
+                  is now something a reader recognises rather than
+                  something they have to parse. */}
               <p className="stmt-q">
-                You can build something worth selling long before you can open the account
-                that would let you sell it.
+                You built it. Getting paid for it is the hard part.
               </p>
               <div className="stmt-a">
                 <p className="body">
-                  Payment providers require the person behind an account to be an adult. That
-                  rule is not aimed at you, but it stops you the same way &mdash; so the usual
-                  answer is to borrow a parent&rsquo;s account and keep your business inside
-                  somebody else&rsquo;s payments.
+                  Payment services want an adult on the account, so under 18 that is usually
+                  where it stops. The workaround is to use a parent&rsquo;s &mdash; and watch
+                  your first sales land in the middle of their grocery shopping.
                 </p>
-                {/* This used to restate the hero lead almost word for word
-                     -- products, checkout link, record of every payment. The
-                     hero has said it; what this section owes the reader is
-                     the one thing the hero does not say, which is why
-                     borrowing an account is the wrong answer. */}
                 <p className="body" style={{ marginTop: "var(--sp-5)" }}>
-                  Veyro is the other answer: an account of its own, with the adult named on it
-                  where the provider requires one. Your sales stay separable from your
-                  parent&rsquo;s, which matters the first time either of you needs to prove
-                  whose money is whose.
+                  Veyro is the other way. A parent or guardian is the verified adult on the
+                  account; the business on it is yours.
                 </p>
+                {/* "What the provider's own policy says, in full" was the
+                    same terms-page register as the paragraphs above it.
+                    Four plain words, and it is the question a sceptical
+                    reader actually has. */}
                 <p className="small" style={{ marginTop: "var(--sp-6)" }}>
-                  <Link className="linkbtn" href="/how-it-works">
-                    What the provider&rsquo;s own policy says, in full
-                  </Link>
+                  <Link className="linkbtn" href="/how-it-works">How this is allowed</Link>
                 </p>
               </div>
             </div>
