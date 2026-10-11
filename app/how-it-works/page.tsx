@@ -81,7 +81,7 @@ export default function HowItWorks() {
             <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
             <div className="lp-links">
               <Link className="btn btn-q btn-sm hide-s" href="/for-parents">For parents</Link>
-              <Link className="btn btn-2 btn-sm" href="/check">Check what applies to you</Link>
+              <Link className="btn btn-2 btn-sm" href="/check">Check eligibility</Link>
               <ThemeToggle />
             </div>
           </nav>

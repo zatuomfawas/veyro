@@ -11,8 +11,15 @@
 // and it is the wrong frame twice over: it alarms the parent reading it, and it
 // overstates the position. The guardian owns the account and can close or
 // freeze it whenever they like. What they do not do is approve each payout.
-// Approve once, then stay out of the way -- which is accurate, and is also the
-// thing a teenager actually wants.
+// Approve the arrangement once, then stay out of the way -- which is accurate,
+// and is also the thing a teenager actually wants.
+//
+// And it no longer says the identity check happens "once, then never again".
+// That was false: a connected account can be put back into REQUIREMENTS_DUE at
+// any time, the schema models exactly that, and the guardian dashboard renders
+// the outstanding list with a link to resume. The APPROVAL is once; the
+// VERIFICATION is not guaranteed to be, and a parent finding that out from
+// Stripe rather than from us is the version that costs trust.
 //
 // And it does not say "verifies your identity". The guardian does not verify
 // the founder; it is the GUARDIAN who gets verified, with the guardian's own
@@ -27,23 +34,56 @@
 // whole site is built to answer. /how-it-works names them in its own
 // architecture section, which is where that belongs.
 
-const DOES = [
-  ["Does the identity check", "With their own ID, on a secure form Veyro never sees. Once, then never again."],
-  ["Owns the account", "The payment account is in their name. That is the part that makes this lawful."],
-  ["Can close or freeze it", "At any time, and not through us. Nothing in Veyro prevents it."],
-] as const;
+// Two voices, same six facts.
+//
+// The list renders on /how-it-works, where the reader is the founder and the
+// guardian is somebody else, and on /for-parents, where the reader IS the
+// guardian. One set of strings cannot serve both: "they verify once, after
+// that you move your own money" is correct for a founder and, read by a
+// parent, says the parent moves the money. The pairs are kept adjacent so the
+// two versions cannot drift apart in substance.
+const VOICE = {
+  founder: {
+    does: "Your guardian does",
+    doesNot: "Your guardian does not",
+    yes: [
+      ["Does the identity check", "With their own ID, on a secure form Veyro never sees. Once at setup, and the provider can ask again later."],
+      ["Owns the account", "The payment account is in their name. That is the part that makes this lawful."],
+      ["Can close or freeze it", "At any time, and not through us. Nothing in Veyro prevents it."],
+    ],
+    no: [
+      ["Own your business", "Not your products, not your customers, not your ideas."],
+      ["Approve each sale", "Nobody signs anything off. A sale is a sale."],
+      ["Approve each payout", "They approve the arrangement once. After that you move your own money without asking."],
+    ],
+  },
+  guardian: {
+    does: "You do",
+    doesNot: "You do not",
+    yes: [
+      ["The identity check", "With your own ID, on the provider's own form, which Veyro never sees. Once at setup, and they can ask again later."],
+      ["Own the account", "The payment account is in your name. That is the part that makes this lawful."],
+      ["Close or freeze it", "At any time, and not through us. Nothing in Veyro prevents it."],
+    ],
+    no: [
+      ["Own their business", "Not their products, not their customers, not their ideas."],
+      ["Approve each sale", "Nobody signs anything off. A sale is a sale."],
+      ["Approve each payout", "You approve the arrangement once. After that they move their own money without asking you."],
+    ],
+  },
+} as const;
 
-const DOES_NOT = [
-  ["Own your business", "Not your products, not your customers, not your ideas."],
-  ["Approve each sale", "Nobody signs anything off. A sale is a sale."],
-  ["Approve each payout", "They verify once at setup. After that you move your own money without asking."],
-] as const;
-
-export function GuardianPermissions({ compact = false }: { compact?: boolean }) {
+export function GuardianPermissions(
+  { compact = false, audience = "founder" }:
+  { compact?: boolean; audience?: "founder" | "guardian" },
+) {
+  const v = VOICE[audience];
+  const DOES = v.yes;
+  const DOES_NOT = v.no;
   return (
     <div className={"gperm" + (compact ? " gperm-c" : "")}>
       <div className="gperm-col">
-        <h3 className="gperm-h">Your guardian does</h3>
+        <h3 className="gperm-h">{v.does}</h3>
         <ul className="gperm-l">
           {DOES.map(([t, d]) => (
             <li key={t}>
@@ -57,7 +97,7 @@ export function GuardianPermissions({ compact = false }: { compact?: boolean }) 
         </ul>
       </div>
       <div className="gperm-col">
-        <h3 className="gperm-h">Your guardian does not</h3>
+        <h3 className="gperm-h">{v.doesNot}</h3>
         <ul className="gperm-l">
           {DOES_NOT.map(([t, d]) => (
             <li key={t}>

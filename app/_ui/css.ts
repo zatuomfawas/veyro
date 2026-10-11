@@ -3980,4 +3980,40 @@ export const CSS2 = `
   .fw { --lp-pad:32px; }
   .fw section.lp { padding:var(--lp-pad) 0; }
 }
+
+/* The sticky bar on a phone, measured rather than eyeballed.
+   ---------------------------------------------------------------------
+   .lp-nav is a fixed 62px row with align-items:center, so a .lp-links that
+   wraps does not make the bar taller -- it centres two rows against 62px
+   and pushes the first one to y=-15, half outside the bar. That is the
+   clipped header: wordmark and primary action sliced along the top edge.
+
+   At 375px the row has 343px, the wordmark takes 98 and the switch and the
+   Menu button take 128 between them, which leaves 109px for the call to
+   action. "Check eligibility" needs 117 and was wrapping on six pages.
+   Rather than shorten labels that match the pages they lead to, the three
+   controls give up the padding they do not need at this width: the switch
+   loses six points of track (and the thumb's travel is corrected to match,
+   or it would run off the end), the buttons lose three points of padding
+   each side, and the gap drops to two. That is 26px recovered, which clears
+   every label on the site down to 360px. */
+@media (max-width:430px) {
+  .fw .lp-links { gap:2px; }
+  .fw .lp-links > .btn-sm { padding:0 9px; }
+  .fw .lp-links .themeswitch { padding:6px 2px; }
+  .fw .lp-links .themeswitch-track { width:40px; }
+  .fw .lp-links .themeswitch[aria-checked="true"] .themeswitch-thumb { transform:translateX(16px); }
+  .fw .lp-links button.mobmenu { padding:7px 7px; }
+}
+
+/* Below 360 the three cannot share the row at any padding, so the inline
+   call to action stands down rather than clipping the bar again. .btn-q is
+   how the two quiet nav links are marked; the call to action is the one
+   without. The :has() is load-bearing -- it limits this to bars that have a
+   Menu button, because the drawer is where the link goes instead. On a page
+   with no drawer (/how-it-works has none) hiding it would leave the bar with
+   nothing in it but the theme switch. */
+@media (max-width:359px) {
+  .fw .lp-links:has(button.mobmenu) > a.btn-sm:not(.btn-q) { display:none; }
+}
 `;
