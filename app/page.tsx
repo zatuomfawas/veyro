@@ -108,6 +108,10 @@ export default async function Home() {
             break the only alignment spine the page has -- every section
             below starts at the same left edge this does.
 
+            The caption that used to sit under the surface is inside the
+            card now, in its footer, so nothing wallet-related is left
+            loose on the page ground.
+
             THE HEADLINE IS THE OLD ONE. "Build your business. Start
             getting paid." could run on Stripe, Gumroad, Shopify or Paddle
             unchanged, which is the test it fails. This one cannot be said
@@ -124,15 +128,6 @@ export default async function Home() {
               </h1>
 
               <HeroWallet />
-
-              {/* One line, three jobs: it says the figures are invented, it
-                  says what has to be true before they are yours, and it
-                  names the guardian. The badge it replaces said only the
-                  first, in capitals, on top of the product. */}
-              <p className="hero-note">
-                An example wallet. Yours once your country is supported and a parent or
-                guardian is verified on the account.
-              </p>
 
               <div className="hero-cta">
                 <Link className="btn btn-lg btn-xl" href="/check">Check eligibility</Link>

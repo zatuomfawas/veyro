@@ -4020,14 +4020,15 @@ export const CSS2 = `
    The old headline coloured its second sentence pine. Accenting half a
    sentence in another colour is the most reliable tell of a page nobody
    composed; the weight comes from scale and tracking instead. */
-.fw .hero-h1 { margin:0; font-size:clamp(36px, 5.1vw, 74px); line-height:1.02;
-  letter-spacing:-0.04em; font-weight:var(--fw-bold); color:var(--ink);
+/* Sized to sit on one line across the measure.
+   At 74px it took two, and the first ran out around 850px of a 1240px
+   column -- which is the gap beside the headline. One line fills the
+   column instead, so the statement and the card below it share a left
+   edge AND a right edge and read as one object. No element was added to
+   fill it; the type was sized to the column it already had. */
+.fw .hero-h1 { margin:0; font-size:clamp(34px, 4.1vw, 59px); line-height:1.04;
+  letter-spacing:-0.035em; font-weight:var(--fw-bold); color:var(--ink);
   max-width:none; text-wrap:balance; }
-
-/* The line that closes the surface. It is the caption, the condition and
-   the honest-demo note in one, so it sits tight under the lower rule. */
-.fw .hero-note { margin:var(--sp-4) 0 0; font-size:var(--fs-3); line-height:1.55;
-  color:var(--ink-3); max-width:58ch; }
 
 .fw .hero-cta { display:flex; align-items:center; flex-wrap:wrap;
   gap:var(--sp-6); margin-top:var(--sp-7); }
@@ -4055,138 +4056,87 @@ export const CSS2 = `
 .fw .hero-alt:focus-visible { outline:2px solid var(--pine); outline-offset:3px; }
 
 /* ---------------------------------------------------------- the surface
-   Two hairlines, and no other chrome.
+   One card: one ground, one border, one padding, one internal rule.
    ---------------------------------------------------------------------
-   A border, a grey header strip and an all-caps EXAMPLE chip all came
-   off. Taking the last rule off as well was the obvious next move and it
-   is half wrong: unbounded, invented figures stop reading as an example
-   of somebody's wallet and start reading as this visitor's own. The rules
-   bound the surface in the page's own language and give the honest line
-   below something to be a caption to. */
-.fw .hw { margin-top:var(--sp-8); padding:var(--sp-9) 0;
-  border-block:1px solid var(--line); }
-/* No align-items:start. The zones have to stretch to the row, or the
-   payout line's margin-top:auto has nothing to push against and the
-   right-hand zone stops ninety pixels above the lower rule. */
-.fw .hw-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-  gap:var(--sp-9); align-items:stretch; }
+   It was two hairlines bounding figures that sat on the page ground, with
+   a transaction ledger in a second zone beside them -- four rules, two
+   columns, and a caption outside the thing it captioned. It read as parts
+   arranged on a background rather than as one object.
+
+   Square, because the design system is square. .card sets a background
+   and a border and no radius, and every button sets border-radius:0
+   explicitly; a rounded corner here would be a new corner style on a page
+   that has none. */
+.fw .hw { margin-top:var(--sp-8); background:var(--card);
+  border:1px solid var(--line); }
+/* Balance left, the month's four figures right.
+   Stacked, the balance sat alone with roughly 840x110 of empty card to
+   its right -- the hole the ledger used to fill, and a worse one, because
+   a card with content only in its top-left corner reads as unfinished
+   rather than as spacious. Side by side, the card's top is used edge to
+   edge and the figures get a measure wide enough for their labels. */
+.fw .hw-body { display:grid; grid-template-columns:auto minmax(0, 1fr);
+  gap:var(--sp-9); align-items:end;
+  padding:var(--sp-8) var(--sp-8) var(--sp-7); }
 .fw .hw-money { min-width:0; }
 
 /* Sentence case, and quiet. An all-caps label on the most important
-   number in the hero was the tell this section exists to remove. */
+   number in the hero was a tell worth removing. */
 .fw .hw-k { display:block; font-size:var(--fs-3); color:var(--ink-3); }
-/* The one place green does any work.
-   --pine is the money-state colour and this is the money. It is not used
-   on the headline, the call to action, a border, a background or any of
-   the wallet's rules -- a colour that marks one thing is a colour that
-   means something, and this design system has spent its green on exactly
-   that everywhere else. Dark mode lifts --pine to #5fb48f for contrast;
-   that is the token doing its job, not a second green.
 
-   The currency symbol is deliberately NOT set smaller and raised, which
-   is the fashionable treatment and would cost more than it buys here:
-   every left edge in this surface -- the rule, the label, the digits, the
-   breakdown beneath -- currently lands on exactly 96px, and shrinking the
-   $ would push the digits off it for a flourish. Measured, not assumed. */
+/* The one place green does any work.
+   --pine is the money-state colour and this is the money. Not the
+   headline, not the call to action, not a border, a background or any
+   rule on this card. Dark mode lifts --pine to #5fb48f because #12513a
+   measures 2.0:1 on that ground; that is the token doing its job, not a
+   second green.
+
+   The currency symbol is deliberately not set smaller and raised, which
+   is the fashionable treatment: every left edge inside this card lands on
+   one line, and shrinking the $ pushes the digits off it for a flourish.
+   Measured, not assumed. */
 .fw .hw-bal { display:block; margin-top:var(--sp-2);
   font-size:clamp(46px, 6.2vw, 92px); line-height:1; letter-spacing:-0.045em;
   font-weight:var(--fw-bold); color:var(--pine);
   font-variant-numeric:tabular-nums lining-nums; font-feature-settings:"tnum" 1; }
 
-/* The month, named figure by figure so each one can be checked alone. It
-   was a single "$11.85 fees", which folds the card processor's $8.55 into
-   Veyro's $3.30 and leaves neither verifiable against a published 3%. */
-/* A grid, not a wrapping flex row. The labels carry their own
-   explanations now -- "Veyro fee (3% over $100)" -- so they are no longer
-   all one width, and a flex row wrapped them into a ragged second line.
-   auto-fit columns keep them in tidy columns at every width. */
-/* Two by two, not auto-fit.
-   auto-fit put three across and dropped Settling onto a second row by
-   itself, with a hole where the fourth column would have been -- the
-   worst of both arrangements. The labels are no longer all one width
-   now that two of them carry their own explanation, so an explicit even
-   grid beats letting the track count fall out of the longest label. */
+/* Four across, not two by two. They were paired because the ledger had
+   the other half of the surface; with the card to themselves they use its
+   width, which is also what stops a 1240px card from being a wide band
+   with everything bunched at the left. */
 .fw .hw-break { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr));
-  gap:var(--sp-5) var(--sp-6); margin:var(--sp-7) 0 0; max-width:30rem; }
+  gap:var(--sp-5) var(--sp-7); margin:0; }
 .fw .hw-break > div { min-width:0; }
 .fw .hw-break dt { font-size:var(--fs-2); line-height:1.4; color:var(--ink-3); }
 .fw .hw-break dd { margin:4px 0 0; font-size:var(--fs-4); font-weight:var(--fw-bold);
   color:var(--ink); font-variant-numeric:tabular-nums; }
 /* Settling is money that will be the founder's, so it takes the money
-   colour. Collected is the gross before anything is taken out and the two
+   colour. Collected is the gross before anything is taken and the two
    fees are what leaves, so they stay ink. */
 .fw .hw-break dd[data-money="1"] { color:var(--pine); }
 
-/* The ledger sits in the second zone rather than under the balance, so a
-   1240px surface does not strand a product name and its amount at
-   opposite ends of the screen. */
-/* The ledger is the shorter of the two zones, so it hangs from the top of
-   the balance rather than the top of the row -- the two zones then read as
-   one surface instead of two stacks of different heights. */
-.fw .hw-side { min-width:0; display:flex; flex-direction:column;
-  padding-top:var(--sp-7); }
-@media (max-width:860px) { .fw .hw-side { padding-top:var(--sp-6); } }
-.fw .hw-led { list-style:none; margin:0; padding:0; }
-.fw .hw-led > li { display:flex; align-items:baseline; gap:var(--sp-4);
-  padding:var(--sp-4) 0; border-bottom:1px solid var(--line-soft); }
-.fw .hw-led > li:first-child { padding-top:0; }
-.fw .hw-n { min-width:0; flex:1 1 auto; font-size:var(--fs-3); color:var(--ink); }
-/* A fixed rail, not wherever the amount leaves room. Measured ragged at
-   1204 and 1234 -- thirty pixels apart, which is exactly the kind of thing
-   that reads as "not quite built" without anybody being able to say why.
-   Every real ledger puts its meta column on a rail. */
-.fw .hw-w { flex:none; width:5.5rem; text-align:right; font-size:var(--fs-2);
-  color:var(--ink-3); }
-@media (max-width:420px) { .fw .hw-w { width:auto; } }
-/* The amount column is a rail too, and it has to be, or the meta rail
-   above is pointless: fixing only the meta width still left it at 1171
-   and 1179 because "+$23.14" is wider than "$43.39" and the meta floats
-   off whatever the amount happens to need. Both columns fixed, both
-   right-aligned, tabular figures -- the decimal points line up and so
-   does everything to the left of them. */
-.fw .hw-a { flex:none; min-width:6rem; text-align:right;
-  font-variant-numeric:tabular-nums; font-size:var(--fs-3);
-  font-weight:var(--fw-bold); color:var(--ink); }
-@media (max-width:420px) { .fw .hw-a { min-width:0; } }
-/* margin-top:auto, so the payout line falls to the foot of its zone.
-   The ledger is two rows and the money column is four figures deep, so
-   left to itself the right-hand zone stopped ninety pixels short and left
-   a void above the lower rule. Pinned, the two zones close together. */
-.fw .hw-foot { margin:var(--sp-6) 0 0; font-size:var(--fs-2); color:var(--ink-3); }
-@media (min-width:861px) { .fw .hw-foot { margin-top:auto; padding-top:var(--sp-6); } }
-
-/* The one movement, and it is the product doing something: a sale lands.
-   Declarative, with fill-mode both, so what hides the row is a rule that
-   prefers-reduced-motion switches off -- no state, nothing to hydrate,
-   and no arrangement where a reader meets an empty ledger. The row's box
-   is reserved from the first paint, so nothing below it shifts. */
-@keyframes veyro-hw-in {
-  from { opacity:0; transform:translateY(-7px); }
-  to { opacity:1; transform:none; }
-}
-@keyframes veyro-hw-flash {
-  from { opacity:0.11; }
-  to { opacity:0; }
-}
-.fw .hw-new { position:relative; }
-.fw .hw-new > * { animation:veyro-hw-in var(--t-3) var(--ease-out) 950ms both; }
-.fw .hw-new::before { content:""; position:absolute; inset:-1px -12px; background:var(--pine);
-  opacity:0; pointer-events:none;
-  animation:veyro-hw-flash 900ms var(--ease-out) 950ms 1; }
-@media (prefers-reduced-motion: reduce) {
-  .fw .hw-new > *, .fw .hw-new::before { animation:none; }
-}
+/* The footer: the two things said about the card rather than about the
+   money, on the card's own ground, under the only rule inside it. */
+.fw .hw-foot { display:flex; flex-wrap:wrap; gap:var(--sp-3) var(--sp-7);
+  justify-content:space-between; align-items:baseline;
+  padding:var(--sp-5) var(--sp-8); border-top:1px solid var(--line);
+  background:var(--surface); }
+.fw .hw-foot p { margin:0; font-size:var(--fs-2); line-height:1.55; color:var(--ink-3); }
+.fw .hw-foot p:first-child { max-width:62ch; }
 
 @media (max-width:860px) {
-  /* The ledger goes under the money rather than beside it, with a rule
-     between the two zones so they stay distinguishable. */
-  .fw .hw-grid { grid-template-columns:minmax(0,1fr); gap:var(--sp-6); }
-  .fw .hw-side { padding-top:var(--sp-6); border-top:1px solid var(--line-soft); }
-  .fw .hw { padding:var(--sp-6) 0; margin-top:var(--sp-7); }
+  /* The figures go under the balance rather than beside it. */
+  .fw .hw-body { grid-template-columns:minmax(0, 1fr); gap:var(--sp-7);
+    align-items:start; padding:var(--sp-6); }
+  .fw .hw-foot { padding:var(--sp-5) var(--sp-6); }
 }
 @media (max-width:420px) {
-  .fw .hw-break { gap:var(--sp-4) var(--sp-6); }
-  .fw .hw-n { white-space:normal; }
+  /* No margin-top. It was left over from when the figures stacked under
+     the balance with a margin rather than a grid gap, and it added 32px
+     on top of the 32px gap -- measured 64px at 375 against 32 at 768,
+     which is the sort of thing that reads as a hole and never gets
+     explained. The grid owns the spacing now. */
+  .fw .hw-break { gap:var(--sp-4) var(--sp-5); }
 }
 
 /* ---------------------------------------------------------------- the problem
