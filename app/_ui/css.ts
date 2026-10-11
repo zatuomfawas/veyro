@@ -129,6 +129,11 @@ export const CSS = `
   /* Landing only. The application keeps the smaller dashboard scale. */
   --lp-1:64px; --lp-2:44px; --lp-3:26px; --lp-lead:19px;
   --lp-gut:32px; --lp-max:1600px;
+  /* The homepage's own measure. .wrap-lp is 1600, which is right for a
+     chaptered reference page and far too wide for a landing page: at 1440
+     it put the hero's two columns at opposite edges and left the section
+     headings 52px out of line with the grids beneath them. */
+  --home-max:1240px;
   /* Section rhythm and the tail a page leaves under itself, as tokens so a
      full-bleed closing band can cancel the tail exactly rather than
      guessing at it.
@@ -3386,7 +3391,13 @@ export const CSS2 = `
   .fw .mrail-node { flex-direction:row; align-items:baseline; text-align:left;
     gap:var(--sp-3); }
   .fw .mrail-dot { margin-top:0; align-self:center; }
-  .fw .mrail-k { flex:none; width:7ch; }
+  /* 7ch could not hold PROCESSOR (9) or CUSTOMER (8) once the 0.05em
+     tracking is counted, so the uppercase labels were breaking mid-word --
+     "CUSTOM / ER" down the left of the darkest section on the page. The
+     column is sized to the longest label and told not to break; at 320px
+     that still leaves ~190px for the stop itself, which is more than
+     "Takes the payment" needs. */
+  .fw .mrail-k { flex:none; width:10ch; white-space:nowrap; }
 }
 @media (prefers-reduced-motion: reduce) {
   .fw .mrail-spark { animation:none; opacity:.5; width:100%;
@@ -3973,6 +3984,178 @@ export const CSS2 = `
    and body's overflow-x:clip cut the hero off instead of scrolling. The !important
    here was overriding the minmax(0,...) that .split-lead sets for exactly this. */
 @media (max-width:940px) { .fw .hero-grid { grid-template-columns:minmax(0,1fr) !important; gap:32px !important; } }
+
+/* ============================================================ HOMEPAGE
+   The hero's own measure.
+   ---------------------------------------------------------------------
+   .wrap-lp is --lp-max, 1600px, which is right for a chaptered page of
+   sections and wrong for a hero. At 1440 it gave the two columns 1344px to
+   share, so the copy sat against the left edge, the preview against the
+   right, and roughly 90px of nothing opened between them -- and the copy
+   column came out at 477px against an 810px preview, which is the wrong way
+   round for a hero whose job is the sentence.
+
+   1240px, centred inside the page's own padding. The columns are near enough
+   even now, the gap is a gap rather than a canyon, and the whole composition
+   reads as one object in the middle of the page instead of two things pushed
+   to the edges. */
+/* Named blocks, not every child.
+   ---------------------------------------------------------------------
+   A blanket .home .wrap-lp > * was three classes deep and so beat every
+   measure set on the type beneath it: inside the centred closing section
+   it stretched a paragraph to 1170px of centred type. The layout blocks are
+   listed instead, so a measure set on the type stays the type's own. */
+.fw .home .wrap-lp > .hero-grid,
+.fw .home .wrap-lp > .aside-grid,
+.fw .home .wrap-lp > .secth,
+.fw .home .wrap-lp > .secth-body,
+.fw .home .wrap-lp > .moneyband-h,
+.fw .home .wrap-lp > .moneyband-rail { max-width:var(--home-max); margin-inline:auto; }
+/* The centred section constrains its container rather than its children,
+   for the same reason. */
+.fw .home .wrap-lp.lp-center { max-width:calc(var(--home-max) + var(--gut) * 2); }
+.fw .hero-grid { display:grid; grid-template-columns:minmax(0,0.92fr) minmax(0,1fr);
+  gap:clamp(32px, 4vw, 64px); align-items:center; }
+@media (max-width:980px) {
+  .fw .hero-grid { grid-template-columns:minmax(0,1fr); gap:var(--sp-8); }
+}
+
+/* The buttons only stretch when stretching is the point.
+   ---------------------------------------------------------------------
+   The 900px rule gives .hero-cta > .btn flex:1 1 auto, which is right on a
+   phone -- a full-width target is easier to hit and the column is narrow
+   enough that it still reads as a button. In the folded-but-wide band it is
+   not: at 820px the hero is one column of 788px, so the two buttons came out
+   400px and 345px wide and read as two template slabs rather than a primary
+   action and a quiet second one. Between the fold and the phone they keep
+   their own width, which also keeps the hierarchy the hero was built on. */
+@media (min-width:561px) and (max-width:980px) {
+  .fw .hero-cta > .btn { flex:0 0 auto; }
+}
+
+/* Tops-aligned was right when the right-hand column was a single card whose
+   first line was a balance. The preview is two panes now and taller than the
+   copy, so centring is what puts the headline against the middle of it
+   rather than leaving the copy to trail off halfway up. */
+.fw .hero-h1 { font-size:clamp(33px, 3.9vw, 54px); max-width:15ch; }
+.fw .hero-lead { max-width:44ch; }
+
+/* The one disclosure that belongs in a hero: software, not a bank, and
+   eligibility is not ours to promise. Small, under the figures, where it
+   qualifies the "43 countries" directly above it rather than arguing. */
+.fw .hero-foot { margin:var(--sp-5) 0 0; font-size:var(--fs-2); line-height:1.55;
+  color:var(--ink-3); max-width:52ch; }
+
+/* ---------------------------------------------------------------- the preview
+   One surface, two panes, and a line between them that says what the two
+   panes have to do with each other. Not two cards: a hero with two floating
+   mockups in it is a hero about mockups. */
+.fw .hp { border:1px solid var(--line); background:var(--card); box-shadow:var(--lift);
+  overflow:hidden; }
+.fw .hp-pane { padding:var(--sp-5) var(--sp-6); }
+.fw .hp-pane-b { padding:var(--sp-5) 0 0; }
+
+/* The pane labels. These are the only text in the preview that is about the
+   preview rather than in it, so they are the quietest thing in it. */
+.fw .hp-k { display:block; font-size:var(--fs-1); letter-spacing:0.07em;
+  text-transform:uppercase; font-weight:var(--fw-bold); color:var(--ink-3); }
+.fw .hp-pane-b > .hp-k { padding-inline:var(--sp-6); }
+
+.fw .hp-pay { display:flex; align-items:center; gap:var(--sp-4); margin-top:var(--sp-3); }
+.fw .hp-pay-n { min-width:0; font-size:var(--fs-4); font-weight:var(--fw-med); color:var(--ink);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.fw .hp-pay-v { margin-left:auto; font-variant-numeric:tabular-nums;
+  font-size:var(--fs-4); font-weight:var(--fw-bold); color:var(--ink); }
+/* A span, not a button. A disabled button reads as broken and a live one
+   would be a control that does nothing; the pane's label already says this
+   is the customer's screen, so it is a picture of a button. */
+.fw .hp-pay-b { flex:none; display:inline-flex; align-items:center; height:var(--h-sm);
+  padding:0 var(--sp-4); background:var(--brand); color:var(--reverse);
+  font-size:var(--fs-2); font-weight:var(--fw-bold); }
+.fw .hp-note { margin:var(--sp-3) 0 0; font-size:var(--fs-2); color:var(--ink-3); }
+
+/* The join. A rule with a sentence on it, which is the arrow between two
+   cards done in a way that survives being read aloud. */
+.fw .hp-join { display:flex; align-items:center; gap:var(--sp-3); margin:0;
+  padding:var(--sp-4) var(--sp-6); border-block:1px solid var(--line);
+  background:var(--surface); font-size:var(--fs-2); line-height:1.5; color:var(--ink-2); }
+.fw .hp-join-d { flex:none; width:var(--marker); height:var(--marker); background:var(--pine); }
+
+/* Nested: the wallet gives up its frame and its title bar, because .hp is
+   already both. Without this it is a card inside a card with two title bars
+   three rows apart. */
+.fw .dp-bare { border:0; box-shadow:none; background:transparent; overflow:visible; }
+.fw .dp-bare .dp-body { padding:var(--sp-4) var(--sp-6) var(--sp-6); }
+
+@media (max-width:980px) {
+  /* The preview leads on a phone only after the words have. It stays full
+     width and keeps its proportions; nothing here shrinks type to fit. */
+  .fw .hp-pane { padding:var(--sp-4) var(--sp-5); }
+  .fw .hp-pane-b > .hp-k { padding-inline:var(--sp-5); }
+  .fw .dp-bare .dp-body { padding:var(--sp-3) var(--sp-5) var(--sp-5); }
+  .fw .hp-join { padding:var(--sp-4) var(--sp-5); }
+}
+@media (max-width:420px) {
+  /* Three things on one row stop fitting: the name gives up the row rather
+     than the price and the button, because those two are the point. */
+  .fw .hp-pay { flex-wrap:wrap; gap:var(--sp-2) var(--sp-4); }
+  .fw .hp-pay-n { flex:1 0 100%; white-space:normal; }
+  .fw .hp-pay-v { margin-left:0; }
+  .fw .hp-pay-b { margin-left:auto; }
+}
+
+/* ---------------------------------------------------------------- the problem
+   One measure of type, no grid. The question is set large and the answer is
+   indented under it, which is the one place on the page that shape appears
+   and is why the section reads as a pause rather than another block. */
+/* Centred and narrow, not left-railed. Set against the 1240px measure the
+   rest of the page uses, a 24ch question left 700px of white beside it --
+   which is the "narrow column floating on the left" this redesign exists to
+   remove. Centring the block makes the whitespace symmetric, so it reads as
+   a pause between the hero and the dark band rather than as a layout that
+   ran out. The type stays left-aligned; it is the block that is centred. */
+.fw .stmt { max-width:780px; margin-inline:auto; }
+.fw .stmt-q { margin:var(--sp-4) 0 0; font-size:clamp(25px, 2.9vw, 38px); line-height:1.16;
+  letter-spacing:-0.025em; font-weight:var(--fw-bold); color:var(--ink);
+  text-wrap:balance; }
+.fw .stmt-a { margin:var(--sp-7) 0 0; padding-left:var(--sp-6);
+  border-left:2px solid var(--line); max-width:var(--m-body); }
+@media (max-width:760px) {
+  .fw .stmt-a { padding-left:var(--sp-5); margin-top:var(--sp-6); }
+}
+
+/* ------------------------------------------------------------ section header
+   A heading and its qualifier on one row, full width. Used where the
+   .aside-grid pattern would have left a two-line heading sitting beside
+   something four times its height. */
+.fw .secth { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:var(--sp-8); align-items:end; }
+.fw .secth .lp-h2 { max-width:18ch; }
+.fw .secth-body { margin-top:var(--sp-8); }
+.fw .secth-l { margin:0; font-size:var(--fs-3); line-height:1.6; color:var(--ink-2);
+  max-width:var(--m-body); }
+@media (max-width:900px) {
+  .fw .secth { grid-template-columns:minmax(0,1fr); gap:var(--sp-5); align-items:start; }
+}
+
+/* The closing ask was a 64px headline over three centred lines, which is the
+   page shouting its last sentence. One line, and the buttons do the work. */
+.fw .lp-h2-tight { max-width:18ch; margin-inline:auto; }
+/* The closing band was 96px of padding under a three-line headline. The
+   headline is one line now, so the same padding left a third of a screen of
+   empty black under the last link on the page. */
+.fw main > section.lp-dark.ch-9:last-child { padding-block:var(--sp-10); }
+@media (max-width:760px) {
+  .fw main > section.lp-dark.ch-9:last-child {
+    padding-block:var(--sp-9) calc(var(--sp-9) + var(--tail)); }
+}
+
+/* The dark band held one rail of five nodes inside 300px of black. The rail
+   is the content; the padding was the section's default and far too much for
+   a single row. */
+.fw .moneyband { padding-block:var(--sp-9); }
+.fw .moneyband-rail { margin-top:var(--sp-7); }
+
 @media (max-width:760px) {
   .fw .wordmark-hero { font-size:var(--wm-md); font-stretch:114%; }
   .fw .tagline { font-size:var(--fs-6); }

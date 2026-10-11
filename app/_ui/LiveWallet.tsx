@@ -97,7 +97,28 @@ const TERMS: { k: TermKey; label: string; amount: number; op?: string; note: str
   },
 ];
 
-export function LiveWallet() {
+export function LiveWallet({ bare = false, rows = PRIOR.length }: {
+  /**
+   * Drop the frame and the title bar, because something outside is already
+   * providing them.
+   *
+   * The hero shows a checkout and this wallet as two panes of one surface --
+   * a payment arriving, and the money it becomes. Rendered whole, that is a
+   * card inside a card with two title bars three rows apart, which is the
+   * stacked-mockup look rather than a product. Bare, it is the lower half of
+   * one object.
+   */
+  bare?: boolean;
+  /**
+   * How many settled rows to list under the new sale.
+   *
+   * The hero shows one. Three made the preview 778px tall against a 440px
+   * column of copy, so the sentence the hero exists for floated in the
+   * middle of a much taller picture -- and the third row says nothing the
+   * second did not.
+   */
+  rows?: number;
+} = {}) {
   const [phase, setPhase] = useReducer((_: Phase, n: Phase) => n, 0 as Phase);
   /** Which term the pointer or keyboard is on. Null means none. */
   const [term, setTerm] = useState<TermKey | null>(null);
@@ -135,7 +156,7 @@ export function LiveWallet() {
   const active = TERMS.find((t) => t.k === term);
 
   return (
-    <div className="dp" ref={node} data-dim={term ? "1" : undefined}>
+    <div className={"dp" + (bare ? " dp-bare" : "")} ref={node} data-dim={term ? "1" : undefined}>
       {/* The whole thing in words, for anyone not seeing it. The controls
           below are real and reachable; this is the summary they sit in. */}
       <p className="sr-only">
@@ -146,11 +167,13 @@ export function LiveWallet() {
         {formatMinor(BALANCE_MINOR, "USD")} available to request. Every figure is invented.
       </p>
 
-      <div className="dp-bar" aria-hidden="true">
-        <span className="dp-dots"><i /><i /><i /></span>
-        <span className="dp-title">Your wallet</span>
-        <span className="dp-tag">Example</span>
-      </div>
+      {!bare && (
+        <div className="dp-bar" aria-hidden="true">
+          <span className="dp-dots"><i /><i /><i /></span>
+          <span className="dp-title">Your wallet</span>
+          <span className="dp-tag">Example</span>
+        </div>
+      )}
 
       <div className="dp-body">
         <div className="dp-head">
@@ -238,7 +261,7 @@ export function LiveWallet() {
             </span>
           </div>
 
-          {PRIOR.map((r) => (
+          {PRIOR.slice(0, rows).map((r) => (
             <div className="led-row" key={r.name}>
               <span className="led-n">
                 {r.name}

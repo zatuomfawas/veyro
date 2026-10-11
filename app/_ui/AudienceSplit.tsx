@@ -11,16 +11,23 @@ import Link from "next/link";
 // The two panels differ in ground as well as in heading because a reader
 // looking for "the bit that is for me" is reading shape before words.
 
+// Three of these six were overstated, and all three were about control of
+// money. "You decide when the money moves" is the founder's line and it is
+// the guardian who holds the payout settings; "You verify once, not every
+// time they get paid" is contradicted by REQUIREMENTS_DUE; and the export
+// comes from Stripe, which holds the payments, not from Veyro. Each is
+// replaced by the nearest true version rather than dropped, because all
+// three are answering a question somebody actually has.
 const FOUNDER = [
   "Paste one snippet and take your first payment",
   "Your own wallet, products and payout history",
-  "You decide when the money moves",
+  "Ask for a payout whenever you like, without asking a person",
 ] as const;
 
 const PARENT = [
-  "You verify once, not every time they get paid",
-  "You own the account and can close it whenever",
-  "Every payment and fee on the record, exportable",
+  "You are not asked to approve individual sales",
+  "You own the account and can close or freeze it whenever",
+  "Every payment and fee on the record, and on your dashboard",
 ] as const;
 
 export function AudienceSplit() {
@@ -30,8 +37,8 @@ export function AudienceSplit() {
         <h3 className="aud-k">If you are building something</h3>
         <p className="aud-h">Can I start selling?</p>
         <p className="aud-b">
-          Yes, from 13, once a parent has verified themselves once. After that the product is
-          yours to run and nobody is standing between you and your money.
+          Yes, from 13, once a parent or guardian has been verified as the adult on the
+          account. After that the product is yours to run and nobody signs off your sales.
         </p>
         <ul className="ticks" style={{ marginTop: "var(--sp-4)" }}>
           {FOUNDER.map((x) => <li key={x}>{x}</li>)}

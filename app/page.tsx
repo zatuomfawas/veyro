@@ -4,7 +4,7 @@ import { currentUser } from "@/lib/auth";
 import { defaultLandingFor } from "@/lib/next-path";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
-import { LiveWallet } from "@/app/_ui/LiveWallet";
+import { HeroPreview } from "@/app/_ui/HeroPreview";
 import { MoneyRail } from "@/app/_ui/MoneyRail";
 import { Reveal } from "@/app/_ui/Reveal";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
@@ -86,19 +86,30 @@ export default async function Home() {
         </div>
       </div>
 
-      <main id="main" className="has-sticky">
+      <main id="main" className="has-sticky home">
+        {/* ---- the hero ----
+            Three things were wrong with the one this replaces.
+
+            The headline was a permission ("You can take payments before
+            you're 18"), which is the objection answered rather than the
+            product described. A visitor who has not met us does not yet know
+            there is a rule to be let through; they know they built something
+            and want to sell it. So the headline is the two things they want,
+            in their order, and the permission moves into the line below
+            where it belongs as a qualifier.
+
+            The composition was flung apart. .wrap-lp is 1600px, so at 1440
+            the two columns sat at the extreme edges with a canyon between
+            them and the copy column squeezed to 477px against an 810px
+            wallet -- the preview was the protagonist and the sentence was
+            the caption. The hero now has its own measure, narrower than the
+            page, and the pair sits centred inside it.
+
+            And the preview only showed half the product. See HeroPreview. */}
         <div className="hero-band">
           <div className="wrap-lp hero">
-            <div className="split-lead hero-grid">
+            <div className="hero-grid">
               <div className="hero-left">
-                {/* The wordmark is no longer the h1.
-                    ------------------------------------------------------
-                    It was, at 56px, with the actual proposition underneath
-                    it at a third the size -- so the largest thing on the
-                    page was a word that means nothing to anybody who has
-                    not heard of us, and the sentence that does the work
-                    read as its subtitle. The logo is in the nav, two inches
-                    above, and does not need saying twice. */}
                 <p className="hero-kicker">
                   <span className="hero-kicker-dot" aria-hidden="true" />
                   For builders aged 13 to 17
@@ -107,32 +118,23 @@ export default async function Home() {
                 {/* No hard break. At a clamped size the right place to wrap
                     moves with the viewport, and text-wrap:balance picks it
                     better than a <br> frozen at one width ever could. */}
-                {/* No hard break. At a clamped size the right place to wrap
-                    moves with the viewport, and text-wrap:balance picks it
-                    better than a <br> frozen at one width ever could. */}
-                <h1 className="hero-h1">You can take payments before you&rsquo;re 18.</h1>
+                <h1 className="hero-h1">Build your business. Start getting paid.</h1>
 
-                {/* Two sentences, down from four lines of them. The clause
-                    that went -- "not with a workaround, and not in your
-                    parent's name" -- was the opening move of the
-                    free-workaround argument, and that argument now lives in
-                    full on /how-it-works rather than half-stated here. On a
-                    phone it was five lines of lead pushing the product
-                    surface off the first screen. */}
                 <p className="hero-lead">
-                  Your own products, your own checkout, your own money &mdash; with a parent
-                  verified once on the account. That once is what makes it lawful.
+                  Veyro sets you up to take online payments with a parent or guardian as the
+                  verified adult, gives you a checkout link for what you make, and keeps every
+                  payment, fee and payout in one place.
                 </p>
 
                 <div className="hero-cta">
-                  <Link className="btn btn-lg btn-xl" href="/get-started">Start &mdash; it&rsquo;s free</Link>
-                  <Link className="btn btn-2 btn-lg" href="/check">Check where you live</Link>
+                  <Link className="btn btn-lg btn-xl" href="/check">Check eligibility</Link>
+                  <Link className="btn btn-2 btn-lg" href="/how-it-works">How it works</Link>
                 </div>
 
-                {/* Three facts, as figures. They answer the three things a
-                    reader is actually weighing -- can I, where, and what
-                    does it cost -- without a paragraph each, and they fill
-                    the bottom of a column that was ending in white space. */}
+                {/* Three figures that close the column. They sit on a rule
+                    rather than in cards: three more bordered boxes directly
+                    under two buttons would read as a second row of
+                    controls. */}
                 <dl className="hero-facts">
                   <div>
                     <dt className="fig-k">From age</dt>
@@ -147,14 +149,60 @@ export default async function Home() {
                     <dd className="fig fig-sm fig-pos">Free</dd>
                   </div>
                 </dl>
+
+                <p className="hero-foot">
+                  Veyro is software, not a bank. Whether you can take payments depends on where
+                  you live and on the payment provider&rsquo;s own checks &mdash;{" "}
+                  <Link className="linkbtn" href="/check">check yours</Link>.
+                </p>
               </div>
 
               <div className="hero-right">
-                <LiveWallet />
+                <HeroPreview />
               </div>
             </div>
           </div>
         </div>
+
+        {/* ---- A + B. the problem, then the answer ----
+            The page had no opening statement at all: it went from the hero
+            straight to a diagram of where money travels, which is an answer
+            to a question the reader has not asked yet.
+
+            Deliberately not a grid. Every other section below is two columns
+            or a rail, and a page whose every block is a grid has one texture
+            the whole way down. This one is a single measure of type with the
+            answer indented under it, which is the only place on the page
+            that shape appears. */}
+        <section className="lp ch">
+          <div className="wrap-lp">
+            <div className="stmt">
+              <span className="lp-eyebrow">The problem</span>
+              <p className="stmt-q">
+                You can build something worth selling long before you can open the account
+                that would let you sell it.
+              </p>
+              <div className="stmt-a">
+                <p className="body">
+                  Payment providers require the person behind an account to be an adult. That
+                  rule is not aimed at you, but it stops you the same way &mdash; so the usual
+                  answer is to borrow a parent&rsquo;s account and keep your business inside
+                  somebody else&rsquo;s payments.
+                </p>
+                <p className="body" style={{ marginTop: "var(--sp-5)" }}>
+                  Veyro is the other answer. A parent or guardian is verified as the adult on a
+                  payment account of its own, and from there the business is yours to run:
+                  your products, your checkout link, your record of every payment and fee.
+                </p>
+                <p className="small" style={{ marginTop: "var(--sp-6)" }}>
+                  <Link className="linkbtn" href="/how-it-works">
+                    What the provider&rsquo;s own policy says, in full
+                  </Link>
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* ---- the money, on a dark band ----
             Five sections in a row used the same shape: a centred eyebrow, a
@@ -217,19 +265,29 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ---- whichever of the two readers you are ---- */}
+        {/* ---- E. whichever of the two readers you are ----
+            This was a third consecutive .aside-grid, and its left column was
+            a two-line heading against two tall panels: 250px of nothing,
+            directly below a section with the same shape and the same void.
+            The heading runs full width now, which both removes the hole and
+            stops the page reading as one layout repeated. */}
         <section className="lp ch">
           <div className="wrap-lp">
-            <div className="aside-grid">
-              <div className="aside-head">
+            <div className="secth">
+              <div>
                 <span className="lp-eyebrow">Two people have to say yes</span>
                 <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
                   One of them is reading over your shoulder.
                 </h2>
               </div>
-              <div className="aside-body">
-                <AudienceSplit />
-              </div>
+              <p className="secth-l">
+                Veyro is software, not a bank, and it never holds your money. The payment
+                provider holds it and your guardian owns the account it sits in.{" "}
+                <Link className="linkbtn" href="/legal">What is not settled yet</Link>.
+              </p>
+            </div>
+            <div className="secth-body">
+              <AudienceSplit />
             </div>
           </div>
         </section>
@@ -250,14 +308,21 @@ export default async function Home() {
         {/* ---- 4. what it costs, then the ask ---- */}
         <section className="lp ch ch-9 lp-dark">
           <div className="wrap-lp lp-center">
-            <h2 className="lp-h2">Your parent approves once. Then it&rsquo;s yours to run.</h2>
+            {/* "Your parent approves once" was the headline here. It is not
+                true in the sense a reader takes it: a connected account can
+                be put back into REQUIREMENTS_DUE at any time, which the
+                schema models and the guardian dashboard renders. The
+                approval is once; the verification is not guaranteed to be,
+                and the first place a parent should learn that is not Stripe. */}
+            <h2 className="lp-h2 lp-h2-tight">Find out if you can start.</h2>
             <p className="body" style={{ marginTop: 14, marginLeft: "auto", marginRight: "auto" }}>
-              Free under $100 a month. 3% on whatever you earn above that. No plan, no
-              subscription: the core product is the same whether you are paying us or not, and
-              some extra services switch on in the months you earn above $100.
+              Two questions &mdash; where you live and how old you are &mdash; and you will know.
+              Free under $100 a month, 3% on whatever you earn above it, and no plan or
+              subscription either way.
             </p>
             <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
-              <Link className="btn btn-lg btn-xl" href="/get-started">Start &mdash; it&rsquo;s free</Link>
+              <Link className="btn btn-lg btn-xl" href="/check">Check eligibility</Link>
+              <Link className="btn btn-2 btn-lg" href="/get-started">Get started</Link>
             </div>
             <p className="tiny" style={{ marginTop: 16 }}>
               <Link className="linkbtn" href="/pricing">What the 3% buys</Link>
@@ -282,14 +347,14 @@ export default async function Home() {
       />
 
       <ScrollTop />
-      {/* The checker, not "Get started". The navbar is sticky on a phone and
-          already carries "Get started" at every scroll position, so a second
-          fixed bar saying the same thing was duplication the whole way down
-          the page — and at the foot it put four identical buttons on one
-          screen: navbar, the closing CTA, the footer link and this. The bar
-          is worth keeping for the action the page keeps offering as the
-          lower-commitment one. */}
-      <StickyCta note="Free under $100 a month. No card." />
+      {/* The bar carries whichever action the hero is NOT leading with.
+          It used to be the checker, because the hero led with "Start"; the
+          hero leads with the checker now, so a bar repeating it sat six
+          inches below an identical button on the very first screen. Signing
+          up is the other half of the same decision and the navbar's own
+          "Get started" scrolls away behind the drawer on a phone. */}
+      <StickyCta href="/get-started" label="Get started"
+        note="Free under $100 a month. No card." />
       <SiteFooter />
     </div>
   );

@@ -4,6 +4,15 @@
 // cards, which made the parent step the third of four and buried it. The parent
 // step is the one a builder is nervous about and the one a parent is deciding
 // on, so it gets the middle of three where it cannot be skimmed past.
+//
+// Step two used to end "After it, they are not in the loop on your payouts."
+// Two things make that false. A connected account can be put back into
+// REQUIREMENTS_DUE at any time, which the schema models and the guardian
+// dashboard renders; and the guardian is emailed on every payout request and
+// owns the payout settings in Stripe, which lib/email-bodies.ts now says in
+// as many words. Promising a parent they are out of the loop, to a reader
+// who is about to ask that parent for a signature, is the worst place on the
+// site to be wrong.
 
 type Step = { n: string; t: string; d: string; who?: string; icon: React.ReactNode };
 
@@ -18,7 +27,7 @@ const STEPS: Step[] = [
   },
   {
     n: "02", t: "Your parent approves, once",
-    d: "They verify themselves once, on a secure form Veyro never sees. That is their whole job. After it, they are not in the loop on your payouts.",
+    d: "They verify themselves on a secure form Veyro never sees, and the account is opened in their name. After that you run the day to day.",
     who: "Them, not you",
     icon: (<svg viewBox="0 0 24 24" aria-hidden="true"><path {...S} d="M12 3 4 6v6c0 4.4 3.4 8.2 8 9 4.6-.8 8-4.6 8-9V6l-8-3Z" /><path {...S} d="m9 12 2 2 4-4" /></svg>),
   },
