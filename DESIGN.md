@@ -179,19 +179,24 @@ Two of those are **visible focus indicators**. Removing them to satisfy a
 "no box-shadow" rule read literally would be an accessibility regression. The
 rule is *no drop shadows*, not *no use of the property*.
 
-**One thing moves at a time, and it moves for a reason.** The hero wallet is
-the only place on the site where a figure animates: the available balance
-counts once, over 760ms, and then nothing moves again. The restraint is the
+**One thing moves at a time, and it moves for a reason.** The hero card is the
+only place on the site where a figure animates: the example product's earnings
+count once, over 760ms, and then nothing moves again. The restraint is the
 rule, not the animation. A page where every number counts is a page of slot
 machines, and it undoes the thing this palette is for, which is money you can
 read at a glance.
 
-The card briefly carried two ledger rows that staggered in before the count,
-so the surface assembled in the order the money did. They are gone, and the
-reason is worth keeping: the rows showed $23.14 and $43.39 against a balance
-of $195.00, and nothing on screen explained the gap. A hero figure that
-invites a sum it does not satisfy is worse than no rows at all. The month
-reconciles in a sentence now.
+The card has shown the month's available balance three different ways and all
+three failed the same test: $195.00 is a number a reader cannot relate to, and
+dressing it in a fee table, in ledger rows that did not add up to it, or in a
+sentence that did, never fixed that. It shows one product now, at a price and
+a volume somebody can picture, and what Veyro takes out of it. Both figures
+are computed, the fee by the same function that charges a real founder.
+
+**The hero's vertical rhythm is two numbers**, 16 and 32: 16 between things
+that belong together, 32 between groups, in both columns. It was six different
+gaps, all on the spacing scale and none of them agreeing about what a gap
+meant.
 
 `CountUp` renders the true figure on the server, so with no JavaScript, with
 reduced motion, or before hydration the real number is already in the HTML. A

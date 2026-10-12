@@ -4151,6 +4151,13 @@ export const CSS2 = `
   letter-spacing:-0.028em; font-weight:var(--fw-bold); color:var(--ink);
   max-width:none; text-wrap:balance; }
 
+/* THE HERO'S VERTICAL RHYTHM IS TWO NUMBERS. 16 between things that belong
+   together, 32 between groups, in both columns and nowhere else a third
+   value. It was six ad-hoc gaps -- 20, 32, 16 down the left and 8, 20, 16
+   inside the card -- every one of them on the spacing scale and no two of
+   them agreeing about what a gap means. The groups are: headline with its
+   lead, action with its note, product name with its terms, figure with its
+   fee line. */
 .fw .hero-cta { display:flex; align-items:center; flex-wrap:wrap;
   gap:var(--sp-7); margin-top:var(--sp-7); }
 /* Under the action, not beside it: it qualifies the commitment the button
@@ -4226,7 +4233,16 @@ export const CSS2 = `
      top edge with the headline gives the two columns one line to start
      from, which is the same spine every section below the hero uses. */
   .fw .hero-stack > .hw        { grid-column:2; grid-row:1 / span 4;
-    align-self:start; margin-top:0; max-width:none; }
+    align-self:start; max-width:none;
+    /* Aligned to the headline's ink, not to its box. The h1 line box is
+       1.1 of a 44-62px type, and Archivo's cap height is about 0.72em, so
+       the first capital starts roughly (lineHeight - capHeight) / 2 below
+       the top of the element -- 8px at the small end of the clamp and 12px
+       at the large one. Matching the box tops put the card's border that
+       far above the H of "Get", which is the same class of error the $ in
+       this card carries a 0.045em correction for: a box edge is not what
+       anyone looks at. */
+    margin-top:clamp(8px, 0.85vw, 12px); }
   .fw .hero-h1 { font-size:clamp(44px, 4.3vw, 62px); }
   /* No balancing in this column.
      text-wrap:balance evens the lines by length, and at this width that
@@ -4250,7 +4266,7 @@ export const CSS2 = `
    straight into a fee breakdown. Measured at --m-lead so it breaks over
    two lines at the top of the column rather than running the full 1240
    the headline needs. */
-.fw .hero-lead { margin:var(--sp-5) 0 0; font-size:var(--fs-5); line-height:1.5;
+.fw .hero-lead { margin:var(--sp-4) 0 0; font-size:var(--fs-5); line-height:1.5;
   color:var(--ink-2); max-width:62ch; }
 @media (max-width:760px) { .fw .hero-lead { font-size:var(--fs-4); } }
 /* The link does not break across lines. It wrapped as "A" at the end of
@@ -4259,7 +4275,10 @@ export const CSS2 = `
    as a link. The phrase is 155px, so it moves whole. */
 .fw .hero-lead .linkbtn { white-space:nowrap; }
 @media (max-width:560px) {
-  .fw .hero-cta { gap:var(--sp-2); margin-top:var(--sp-6); }
+  /* The group gap stays 32 here too. It was 24, to save a phone eight
+     pixels, which bought nothing the fold needed and broke the one rule
+     this hero's spacing follows. */
+  .fw .hero-cta { gap:var(--sp-2); margin-top:var(--sp-7); }
   .fw .hero-alt { align-self:flex-start; }
 }
 /* The buttons only stretch where stretching is the point.
@@ -4337,7 +4356,10 @@ export const CSS2 = `
    number in the hero was a tell worth removing. */
 .fw .hw-head { display:flex; align-items:baseline; justify-content:space-between;
   gap:var(--sp-5); }
-.fw .hw-k { display:block; margin:0; font-size:var(--fs-3); color:var(--ink-3); }
+.fw .hw-k { margin:0; font-size:var(--fs-4); font-weight:var(--fw-med); color:var(--ink); }
+/* The two facts the reader brings from their own life: a price they might
+   charge and a number of sales they can picture. */
+.fw .hw-terms { margin:var(--sp-4) 0 0; font-size:var(--fs-3); color:var(--ink-3); }
 /* The subtraction, in words. 210.00 less 15.00 is 195.00, which a reader can
    check without a table and without being handed four figures to add up. */
 .fw .hw-sum { margin:var(--sp-4) 0 0; font-size:var(--fs-3); line-height:1.5;
@@ -4378,7 +4400,7 @@ export const CSS2 = `
    size, as a side bearing has to be, so the correction is in em and
    holds across the clamp. text-indent and not margin, because the box is
    in the right place already; it is the ink that needs moving. */
-.fw .hw-bal { display:block; margin-top:var(--sp-2); text-indent:-0.045em;
+.fw .hw-bal { display:block; margin:var(--sp-7) 0 0; text-indent:-0.045em;
   font-size:clamp(24px, 2.2vw, 32px); line-height:1; letter-spacing:-0.03em;
   font-weight:var(--fw-bold); color:var(--pine);
   font-variant-numeric:tabular-nums lining-nums; font-feature-settings:"tnum" 1; }
@@ -4392,7 +4414,7 @@ export const CSS2 = `
 /* One row, not two columns of disclosure. The footer carried four facts
    over two paragraphs -- 173px of grey text inside a phone's first screen,
    more than the headline. One sentence and a three-word example tag. */
-.fw .hw-foot { padding:var(--sp-5) var(--sp-8); border-top:1px solid var(--line);
+.fw .hw-foot { padding:var(--sp-6) var(--sp-8); border-top:1px solid var(--line);
   background:var(--surface); }
 /* Body size and --ink-2, not 11.5px in the quietest ink available. This
    sentence carries the mechanism the whole product rests on; it was the

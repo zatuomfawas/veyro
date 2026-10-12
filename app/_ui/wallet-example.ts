@@ -33,6 +33,30 @@ export const VEYRO_FEE_MINOR = feeMinor(COLLECTED_MINOR);
 export const BALANCE_MINOR =
   COLLECTED_MINOR - PROCESSING_MINOR - VEYRO_FEE_MINOR - SETTLING_MINOR;
 
+/**
+ * One product, for the hero.
+ *
+ * The hero used to show the month's available balance, which is an abstract
+ * figure a visitor has no way to relate to: $195.00 arrives from nowhere and
+ * the only thing it teaches is that the product has a wallet screen. A
+ * fifteen-year-old reading it learns nothing they can act on.
+ *
+ * A single product does teach something. A price they might charge, a number
+ * of sales they can picture, the total that produces, and what Veyro takes
+ * out of it -- which on this example is $1.32, because the first $100 each
+ * month is free. That is the arithmetic somebody actually does in their head
+ * before deciding whether to bother.
+ *
+ * Earned and fee are both computed. 12 x $12.00 is $144.00, and feeMinor()
+ * is the same function that charges a real founder, so neither figure can
+ * drift from the rule it demonstrates.
+ */
+export const PRODUCT_NAME = "Notion Second Brain template";
+export const PRODUCT_PRICE_MINOR = 1200;
+export const PRODUCT_SALES = 12;
+export const PRODUCT_EARNED_MINOR = PRODUCT_PRICE_MINOR * PRODUCT_SALES;
+export const PRODUCT_FEE_MINOR = feeMinor(PRODUCT_EARNED_MINOR);
+
 /** The sale LiveWallet animates into the ledger. */
 export const SALE_GROSS_MINOR = 2400;
 export const SALE_FEE_MINOR = 86;
