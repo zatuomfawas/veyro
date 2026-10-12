@@ -68,11 +68,13 @@ const CSP_DEVELOPMENT = [
   // va.vercel-scripts.com is the @vercel/analytics DEBUG script, loaded only
   // when NODE_ENV is development. Production serves the real one from
   // /_vercel/insights on our own origin, so CSP_PRODUCTION needs no entry.
-  "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://js.stripe.com https://va.vercel-scripts.com",
+  // http://localhost:8400 is the impeccable live-mode picker. It sits in the
+  // development policy only, so it is never served in production.
+  "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://js.stripe.com https://va.vercel-scripts.com http://localhost:8400",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: https://*.stripe.com",
   "font-src 'self' data:",
-  "connect-src 'self' ws: wss: https://api.stripe.com",
+  "connect-src 'self' ws: wss: https://api.stripe.com http://localhost:8400",
   "frame-src https://js.stripe.com https://hooks.stripe.com https://m.stripe.network",
 ].join("; ");
 

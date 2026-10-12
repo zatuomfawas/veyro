@@ -54,3 +54,8 @@ next-env.d.ts
 # built SDK artefacts — produced by `npm run build` in packages/sdk
 packages/sdk/dist/
 packages/sdk/*.tgz
+
+# Impeccable skill install: 18MB, and scripts/bin holds a compiled binary for
+# one platform. The skill reinstalls on demand, so it is tooling rather than
+# source. The agent definitions in .claude/agents are plain text and stay.
+/.claude/skills/impeccable/
