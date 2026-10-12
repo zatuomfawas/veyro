@@ -141,6 +141,30 @@ export default async function Home() {
                 Get paid for what you make, before you&rsquo;re 18.
               </h1>
 
+              {/* One sentence, because the hero had none.
+                  It went from the headline straight into a fee breakdown,
+                  so a visitor met the accounting before they knew what
+                  the product was -- two separate reviews landed on this
+                  independently, which is usually the signal to stop
+                  defending the omission.
+
+                  Named use cases rather than "products": apps, templates
+                  and commissions are the things this audience actually
+                  sells, and a reader recognises one of them faster than
+                  they parse a category.
+
+                  The guardian clause moved up here from the card footer
+                  rather than being added, so a parent meets it in the
+                  first thing they read instead of three hundred pixels
+                  down. The footer below keeps who holds the account, who
+                  schedules payouts and who never touches the money. */}
+              <p className="hero-lead">
+                Sell the apps, templates and commissions you build, with your own checkout
+                link.{" "}
+                <Link className="linkbtn" href="/for-parents">A parent or guardian</Link>{" "}
+                completes the account verification.
+              </p>
+
               <HeroWallet />
 
               <div className="hero-cta">

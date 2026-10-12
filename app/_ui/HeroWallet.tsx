@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { formatMinor } from "@/lib/money";
 import {
   BALANCE_MINOR, COLLECTED_MINOR, PROCESSING_MINOR, VEYRO_FEE_MINOR, SETTLING_MINOR,
@@ -59,9 +58,9 @@ import { CountUp } from "@/app/_ui/CountUp";
  */
 const BREAKDOWN = [
   { k: "Collected", v: COLLECTED_MINOR },
-  { k: "Card fees", v: PROCESSING_MINOR },
-  { k: "Veyro fee (3% over $100)", v: VEYRO_FEE_MINOR },
-  { k: "Settling (not cleared yet)", v: SETTLING_MINOR, money: true },
+  { k: "Card fees", v: PROCESSING_MINOR, sub: true },
+  { k: "Veyro fee (3% over $100)", v: VEYRO_FEE_MINOR, sub: true },
+  { k: "Settling (not cleared yet)", v: SETTLING_MINOR, sub: true, money: true },
 ] as const;
 
 export function HeroWallet() {
@@ -88,8 +87,15 @@ export function HeroWallet() {
           {BREAKDOWN.map((f) => (
             <div key={f.k}>
               <dt>{f.k}</dt>
+              {/* A minus on the three that come off. Bare, the four
+                  figures are a list and the reader has to work out which
+                  direction each one goes; signed, 210.00 less 8.55 less
+                  3.30 less 3.15 is visibly the 195.00 above them. The
+                  settling figure is signed too -- it is subtracted from
+                  what is available even though the money is still the
+                  founder's, which is why it keeps the money colour. */}
               <dd data-money={"money" in f && f.money ? "1" : undefined}>
-                {formatMinor(f.v, "USD")}
+                {"sub" in f && f.sub ? "\u2212" : ""}{formatMinor(f.v, "USD")}
               </dd>
             </div>
           ))}
@@ -111,6 +117,11 @@ export function HeroWallet() {
           from the hero entirely -- it lived only in the section below and
           the site footer.
 
+          The verification clause moved up to the hero's own sentence, so
+          a parent meets it in the first thing they read rather than three
+          hundred pixels down; what stays here is who holds the account,
+          who schedules payouts and who never touches the money.
+
           The payout fact is folded into the first sentence rather than
           dropped. An earlier pass marked "Payouts are scheduled in
           Stripe, by your guardian" as not to be regressed: it is the
@@ -126,9 +137,8 @@ export function HeroWallet() {
           describes them. */}
       <div className="hw-foot">
         <p>
-          <Link className="linkbtn" href="/for-parents">A parent or guardian</Link> is the
-          verified adult on the account, and schedules payouts in Stripe. Payments are
-          processed and held there too, never by Veyro.
+          The account is in the guardian&rsquo;s name, and they schedule payouts in Stripe,
+          which processes and holds the money. Veyro never does.
         </p>
         <p>
           Example figures. Whether you can take payments depends on your country and the

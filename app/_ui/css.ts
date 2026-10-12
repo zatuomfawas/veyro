@@ -4044,6 +4044,21 @@ export const CSS2 = `
    asks for, and "check eligibility" sounds like a form that wants your
    details when it wants a country and a birth year. */
 .fw .hero-sub2 { margin:var(--sp-4) 0 0; font-size:var(--fs-2); color:var(--ink-3); }
+
+/* The sentence the hero did not have.
+   It sits between the statement and the surface, which is where two
+   separate reviews said it was missing: the page went from the headline
+   straight into a fee breakdown. Measured at --m-lead so it breaks over
+   two lines at the top of the column rather than running the full 1240
+   the headline needs. */
+.fw .hero-lead { margin:var(--sp-5) 0 0; font-size:var(--fs-5); line-height:1.5;
+  color:var(--ink-2); max-width:62ch; }
+@media (max-width:760px) { .fw .hero-lead { font-size:var(--fs-4); } }
+/* The link does not break across lines. It wrapped as "A" at the end of
+   one line and "parent or guardian" at the start of the next, with the
+   underline split in two -- which reads as a rendering fault rather than
+   as a link. The phrase is 155px, so it moves whole. */
+.fw .hero-lead .linkbtn { white-space:nowrap; }
 @media (max-width:560px) {
   .fw .hero-cta { gap:var(--sp-2); margin-top:var(--sp-6); }
   .fw .hero-alt { align-self:flex-start; }
@@ -4079,7 +4094,7 @@ export const CSS2 = `
    and a border and no radius, and every button sets border-radius:0
    explicitly; a rounded corner here would be a new corner style on a page
    that has none. */
-.fw .hw { margin-top:var(--sp-8); background:var(--card);
+.fw .hw { margin-top:var(--sp-7); background:var(--card);
   border:1px solid var(--line); }
 /* Balance left, the month's four figures right.
    Stacked, the balance sat alone with roughly 840x110 of empty card to
