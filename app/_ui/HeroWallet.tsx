@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { formatMinor } from "@/lib/money";
+import { CountUp } from "@/app/_ui/CountUp";
 import {
   BALANCE_MINOR, SALE_GROSS_MINOR, SALE_FEE_MINOR, SALE_NAME, SALE_WHEN, PRIOR,
 } from "@/app/_ui/wallet-example";
@@ -37,11 +38,28 @@ import {
 // amounts that landed. No green on the card, its border, its rule or its
 // footer.
 //
-// NO COUNT-UP ON THE BALANCE. It animated from zero over 850ms, which meant
-// the single green number in the hero was wrong for most of the first second
-// on a page whose whole argument is that the figures are checkable. The
-// entrance the hero already has is the authored moment; a second one on the
-// number itself was motion for its own sake.
+// THE SURFACE ASSEMBLES IN THE ORDER THE MONEY DID, and that order is the
+// whole reason the motion is here rather than being decoration.
+//
+// Two sales settle into the ledger, and then the balance counts to the figure
+// they add up to. Cause, then effect: it is what the product does, performed
+// once. Running them together would have been two things moving at the same
+// time for no stated reason, which is the version of this that is decoration.
+//
+// The count was removed in an earlier pass for a good reason -- at 1100ms
+// from zero, the one green number in the hero was wrong for most of the first
+// second, on a page whose argument is that its figures are checkable. The
+// reason was right and the removal was the blunt answer to it. What fixes it
+// is the curve and the clock, not the absence: at 760ms on a cubic ease-out
+// the figure is within a few cents of $195.00 by about a third of the way
+// through, so what a reader sees is a number arriving, never a wrong number
+// sitting still.
+//
+// What has not changed is the safety: CountUp renders the true figure on the
+// server, so with no JavaScript, with reduced motion, or if it never
+// hydrates, $195.00 is already in the HTML. A zero is never painted on its
+// own. On a page about money, a balance that could be caught reading nothing
+// would be the worst failure available.
 
 /** The two most recent payments, newest first, from the one invented month. */
 const ROWS = [
@@ -63,7 +81,9 @@ export function HeroWallet() {
       <div className="hw-body" aria-hidden="true">
         <div className="hw-money">
           <span className="hw-k">Available</span>
-          <span className="hw-bal">{formatMinor(BALANCE_MINOR, "USD")}</span>
+          <span className="hw-bal">
+            <CountUp amountMinor={BALANCE_MINOR} currency="USD" durationMs={760} startDelayMs={430} />
+          </span>
         </div>
 
         {/* The real ledger row from the dashboard, not a drawing of one:
@@ -72,9 +92,12 @@ export function HeroWallet() {
             is showing the product rather than an illustration of it. Two
             rows, because a balance with nothing behind it is a statistic and
             a balance with the things that produced it is a wallet. */}
-        <div className="led hw-led">
-          {ROWS.map((r) => (
-            <div className="led-row" key={r.name}>
+        <div className="led hw-led" data-animate="1">
+          {ROWS.map((r, i) => (
+            // --i is what staggers them. The keyframe already reads it; with
+            // it unset every row shared one delay and arrived as a block,
+            // which is a list appearing rather than entries landing.
+            <div className="led-row" key={r.name} style={{ "--i": i } as React.CSSProperties}>
               <span className="led-n">
                 {r.name}
                 <span className="led-sub">Paid {r.when}</span>

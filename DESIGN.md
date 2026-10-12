@@ -179,6 +179,18 @@ Two of those are **visible focus indicators**. Removing them to satisfy a
 "no box-shadow" rule read literally would be an accessibility regression. The
 rule is *no drop shadows*, not *no use of the property*.
 
+**One thing moves at a time, and it moves for a reason.** The hero wallet is
+the only place on the site where a figure animates: two sales settle into the
+ledger, then the balance counts to the figure they add up to. Cause, then
+effect, once, in under 1.2 seconds. The restraint is the rule, not the
+animation. A page where every number counts is a page of slot machines, and it
+undoes the thing this palette is for, which is money you can read at a glance.
+
+`CountUp` renders the true figure on the server, so with no JavaScript, with
+reduced motion, or before hydration the real number is already in the HTML. A
+balance is never caught showing a zero it will fill in later. Any future
+animated figure has to clear the same bar.
+
 **Touch targets are at least 44px** at mobile widths (`--tap`). WCAG 2.2 AA
 asks for 24px; 44px is the size a thumb actually hits.
 

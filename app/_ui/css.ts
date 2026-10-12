@@ -175,6 +175,7 @@ export const CSS = `
    select amounts, account ids and invite links to copy them. */
 .fw ::selection { background:var(--select-bg); color:var(--ink); }
 .fw button, .fw input, .fw select, .fw textarea { font: inherit; color: inherit; }
+.fw input, .fw textarea { caret-color:var(--pine); }
 .fw a { color: inherit; text-decoration: none; }
 /* Focus is pine. On the dark band .lp-dark overrides it back to white a few
    hundred lines below, and must keep doing so: pine on --ink measures 2.01:1,
@@ -464,7 +465,8 @@ export const CSS = `
 .fw .btn-d { background:var(--paper); color:var(--clay); border-color:var(--clay-line); }
 .fw .btn-d:hover { background:var(--clay-bg); border-color:var(--clay-line); }
 .fw .linkbtn { background:none; border:0; padding:0; font:inherit; color:var(--pine); cursor:pointer;
-  text-decoration:underline; text-underline-offset:2px; }
+  text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:3px;
+  text-decoration-skip-ink:auto; }
 .fw .linkbtn:hover { color:var(--pine-h); }
 .fw .btn-lg { height:var(--h-lg); padding:0 var(--sp-5); font-size:var(--fs-4); }
 /* The page's single most important action.
@@ -4137,7 +4139,7 @@ export const CSS2 = `
   max-width:none; text-wrap:balance; }
 
 .fw .hero-cta { display:flex; align-items:center; flex-wrap:wrap;
-  gap:var(--sp-6); margin-top:var(--sp-7); }
+  gap:var(--sp-7); margin-top:var(--sp-7); }
 /* Under the action, not beside it: it qualifies the commitment the button
    asks for, and "check eligibility" sounds like a form that wants your
    details when it wants a country and a birth year. */
@@ -4326,8 +4328,16 @@ export const CSS2 = `
    and its figure stay within one eye movement, and the card still uses
    both its edges: the balance holds the left, the ledger holds the right,
    and the air between them is the gap between a heading and a list. */
-.fw .hw-led { border-top:0; max-width:460px; width:100%; justify-self:end; }
-@media (max-width:860px) { .fw .hw-led { max-width:none; justify-self:stretch; } }
+.fw .hw-led { border-top:0; max-width:460px; width:100%; justify-self:end;
+  border-left:1px solid var(--line); padding-left:var(--sp-7); }
+@media (max-width:860px) {
+  /* Stacked, the rule would run along the top of the list where it reads as
+     a second card edge. The system turns its hairlines at the corner rather
+     than keeping them pointed the same way. */
+  .fw .hw-led { max-width:none; justify-self:stretch;
+    border-left:0; padding-left:0; padding-top:var(--sp-5);
+    border-top:1px solid var(--line); }
+}
 .fw .hw-led .led-row:last-child { border-bottom:0; }
 .fw .hw-led .led-row:first-child { padding-top:0; }
 .fw .hw-led .led-n { font-weight:var(--fw-reg); }
@@ -4348,7 +4358,11 @@ export const CSS2 = `
 .fw .hw-eg { flex:none; }
 .fw .hw-foot p { margin:0; font-size:var(--fs-2); line-height:1.55; color:var(--ink-3); }
 
-.fw .hw-foot .linkbtn { color:var(--ink-2); }
+/* The link does not break across lines. At 390 it wrapped as "What a parent"
+   / "takes on", with the underline split in two, which reads as a rendering
+   fault rather than as a link. Same fix as .hero-lead .linkbtn, for the same
+   reason: the phrase moves whole. */
+.fw .hw-foot .linkbtn { color:var(--ink-2); white-space:nowrap; }
 .fw .hw-foot .linkbtn:hover { color:var(--ink); }
 
 @media (max-width:860px) {
