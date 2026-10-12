@@ -4034,7 +4034,28 @@ export const CSS2 = `
    tightest; the floor came down from 32 to 30 because at 375 the second
    line filled its column exactly, which is the same knife-edge in a
    worse form. */
-.fw .hero-h1 { margin:0; font-size:clamp(34px, 4.0vw, 58px); line-height:1.05;
+/* Sized against what actually works, measured rather than remembered.
+   Rendered five reference heroes at 1440 and compared the headline to
+   the next-largest type in the fold:
+
+     Linear 3.2x   Ramp 3.2x   Mercury 2.7x   Wise 2.6x   Stripe 1.5x*
+     Veyro  1.1x
+
+   (*Stripe's second-largest is a second headline in a two-up layout.)
+
+   At 58px against a 52px balance Veyro had no hierarchy, it had a tie --
+   the fix two passes ago inverted the order and stopped there. 72 over
+   32 is 2.25x, inside the band every one of them occupies. Two lines
+   now, which four of the five also run; the one-line constraint was mine
+   from an earlier pass, not a principle.
+
+   Both floors matter and the first attempt got them wrong twice over: at
+   375 a 34px headline over a 26px balance is 1.31x, which is no more
+   hierarchy than the 1.1x it replaced. The balance floor came down and
+   the headline floor up, so the ratio holds from 375 to 1440 and the
+   balance is still the largest thing inside its own card at every
+   width. */
+.fw .hero-h1 { margin:0; font-size:clamp(36px, 5.0vw, 72px); line-height:1.03;
   letter-spacing:-0.033em; font-weight:var(--fw-bold); color:var(--ink);
   max-width:none; text-wrap:balance; }
 
@@ -4136,7 +4157,7 @@ export const CSS2 = `
    against a 31px headline and the problem came straight back. Measured
    at 375, 390, 768, 1024 and 1440 -- the headline leads at all five. */
 .fw .hw-bal { display:block; margin-top:var(--sp-2);
-  font-size:clamp(28px, 3.6vw, 52px); line-height:1; letter-spacing:-0.04em;
+  font-size:clamp(24px, 2.2vw, 32px); line-height:1; letter-spacing:-0.03em;
   font-weight:var(--fw-bold); color:var(--pine);
   font-variant-numeric:tabular-nums lining-nums; font-feature-settings:"tnum" 1; }
 
