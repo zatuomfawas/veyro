@@ -1445,6 +1445,19 @@ export const CSS = `
    each other on one rule, it reads as the exit. */
 .fw .pnext { margin-top:var(--sp-10); padding-top:var(--sp-7);
   border-top:1px solid var(--ink); }
+/* ...but only once.
+   The 72px margin is right when this block follows prose inside a plain
+   wrapper, which is what /contact, /status, /legal and /terms do -- all
+   four measure 105-133px above the heading, which is the intended
+   rhythm. It is wrong when the container already supplied that rhythm:
+   on /faq the block sits inside a section.ch, which adds 72 of its own
+   on top of the previous section's 72, and on /check it follows a band
+   that closes with 72 of padding. Both measured 269 and 274px of empty
+   page above the heading, more than double everywhere else.
+   The rhythm belongs to whichever element owns it, and here that is the
+   container. */
+.fw section.ch .pnext,
+.fw .ckpage + .wrap-lp .pnext { margin-top:0; }
 .fw .pnext-in { display:flex; flex-wrap:wrap; align-items:center;
   justify-content:space-between; gap:var(--sp-6) var(--sp-8); }
 .fw .pnext-t { min-width:0; flex:1 1 32ch; }
