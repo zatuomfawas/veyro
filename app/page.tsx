@@ -14,6 +14,7 @@ import { StickyCta } from "@/app/_ui/StickyCta";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { Journey } from "@/app/_ui/Journey";
 import { AudienceSplit } from "@/app/_ui/AudienceSplit";
+import { ParentAccount } from "@/app/_ui/ParentAccount";
 
 export const metadata = buildMetadata("landing");
 export const viewport = buildViewport();
@@ -273,6 +274,27 @@ export default async function Home() {
           </div>
         </section>
 
+        {/* ---- the objection, immediately after the problem ----
+            The section above ends on the workaround: "use a parent's, and
+            watch your first sales land in the middle of their grocery
+            shopping". The very next thought a reader has is "...and is that
+            actually bad?", so this is where it gets answered, before the
+            page asks for anything.
+
+            It used to live here, moved to /how-it-works, and is back. The
+            reason it was moved was that it ran long and its heading did not
+            anchor to the page's left edge. Both of those were true of the
+            old five-tick version and neither is true of this one: it is a
+            comparison on the page's own spine, and the argument belongs in
+            front of the reader who is still weighing a free alternative,
+            not on the page they only reach once they have stopped weighing
+            it. It is no longer on /how-it-works, so nothing is said twice. */}
+        <section className="lp ch ch-surface">
+          <div className="wrap-lp">
+            <ParentAccount />
+          </div>
+        </section>
+
         {/* ---- the money, on a dark band ----
             Five sections in a row used the same shape: a centred eyebrow, a
             centred h2 at 44px, a centred lead, then a grid. Read end to end
@@ -357,18 +379,6 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* The five-answer "why not just use your parent's account?" block
-            lived here and now lives on /how-it-works.
-
-            Three reasons, and they were all measurable. It was the longest
-            run of explanatory prose on the page, on a page already 15-25%
-            too long. Its heading was the only one that did not anchor to
-            the page's left edge -- 454px against 48 everywhere else, which
-            is most of why the homepage read as a collection of blocks. And
-            a reader who is still weighing a free workaround has not been
-            convinced by the hero, so the argument belongs on the page they
-            go to when they want the mechanics, not in the middle of the
-            one that is meant to show rather than argue. */}
 
         {/* ---- 4. what it costs, then the ask ---- */}
         <section className="lp ch ch-9 lp-dark">

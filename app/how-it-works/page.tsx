@@ -11,7 +11,6 @@ import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { FlowDiagram } from "@/app/_ui/FlowDiagram";
 import { GuardianPermissions } from "@/app/_ui/GuardianPermissions";
 import { MoneyRail } from "@/app/_ui/MoneyRail";
-import { ParentAccount } from "@/app/_ui/ParentAccount";
 import { LiveWallet } from "@/app/_ui/LiveWallet";
 import { AudienceSplit } from "@/app/_ui/AudienceSplit";
 
@@ -242,17 +241,6 @@ export default function HowItWorks() {
         </p>
 
         {/* ---------------------------------------------------------------- */}
-          </div>
-        </section>
-
-        {/* Moved from the homepage, and this is where the argument was
-            always going. The chapter above ends on "nobody writes about
-            that case because it is unglamorous and involves asking a
-            parent" -- and then changed the subject. This is that case,
-            answered in the reader's own words. */}
-        <section className="lp ch ch-surface">
-          <div className="wrap-lp">
-            <ParentAccount />
           </div>
         </section>
 

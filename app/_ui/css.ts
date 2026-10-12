@@ -1022,30 +1022,64 @@ export const CSS = `
 .fw .tierlist dt { font-size:var(--fs-3); font-weight:var(--fw-bold); }
 .fw .tierlist dd { margin:2px 0 0; font-size:var(--fs-2); color:var(--ink-2); line-height:1.55; }
 
-/* ---- the parent's-account objection ------------------------------------
-   A two-column row per answer: the claim on the left where it can be skimmed,
-   the detail on the right for anyone who stops. The tie row is marked with a
-   dash rather than a tick and takes the muted ink, so scanning only the marks
-   still gives the honest answer. */
-.fw .objlist { margin:var(--sp-7) 0 0; display:grid; gap:0; }
-.fw .objrow { display:grid; grid-template-columns:minmax(0,4fr) minmax(0,7fr);
-  gap:var(--sp-6); padding:var(--sp-5) 0; border-top:1px solid var(--line); }
-.fw .objrow:last-child { border-bottom:1px solid var(--line); }
-.fw .obj-q { display:flex; gap:10px; align-items:flex-start; margin:0;
-  font-size:var(--fs-4); font-weight:var(--fw-bold); letter-spacing:-0.012em; }
-/* 87 characters a line measured on /how-it-works, where this block gets the
-   full page width. The row should span; the answer inside it should not. */
-.fw .obj-a { margin:0; font-size:var(--fs-3); line-height:1.6; color:var(--ink-2);
-  max-width:var(--m-body); }
-.fw .obj-mark { width:20px; height:20px; flex:none; display:flex; align-items:center;
-  justify-content:center; margin-top:2px; color:var(--pine);
-  background:var(--pine-bg); border:1px solid var(--pine-line); }
-.fw .obj-mark svg { width:14px; height:14px; }
-.fw .objrow[data-tie="1"] .obj-mark { color:var(--ink-3); background:var(--surface-2);
-  border-color:var(--line); }
-.fw .objrow[data-tie="1"] .obj-q { color:var(--ink-2); }
-@media (max-width:760px) {
-  .fw .objrow { grid-template-columns:minmax(0,1fr); gap:var(--sp-3); }
+/* ---- why not just use your parent's account ----------------------------
+   The trade, drawn as a trade.
+   ----------------------------------------------------------------------
+   This was five claims with a tick beside each, which DESIGN.md names as a
+   forbidden pattern and which is also the wrong shape for the argument: a
+   row of ticks asks to be believed, a comparison asks to be read. Three
+   columns -- what the row is about, what happens on a parent's account,
+   what happens on your own -- with the hairline idiom the rest of the site
+   uses for money, and one vertical rule down the middle so the two halves
+   are visibly two halves.
+
+   The rule is drawn at half the gutter rather than at its edge, so the two
+   columns sit the same distance from it. Shifted by the whole gap, as it was
+   first written, the line lands flush against the left-hand track and the
+   trade looks lopsided at the one place it is meant to be even.
+
+   The weight does the arguing. The left column takes the secondary ink and
+   the right takes full ink, so a reader skimming only the right-hand side
+   still gets the case. The tie row gives both columns the same ink, which
+   states the honest answer without a word: at 18 there is no difference
+   yet. */
+.fw .trade { margin:var(--sp-8) 0 0; }
+.fw .trade-head, .fw .trade-r { display:grid;
+  grid-template-columns:minmax(0,0.72fr) minmax(0,1fr) minmax(0,1fr);
+  column-gap:var(--sp-7); }
+.fw .trade-head { padding-bottom:var(--sp-3); font-size:var(--fs-2); }
+.fw .trade-hl { color:var(--ink-3); }
+.fw .trade-hr { color:var(--ink); font-weight:var(--fw-med); }
+.fw .trade-r { padding:var(--sp-6) 0; border-top:1px solid var(--line); }
+.fw .trade-r:last-child { border-bottom:1px solid var(--line); }
+.fw .trade-t { margin:0; font-size:var(--fs-4); font-weight:var(--fw-bold);
+  letter-spacing:-0.012em; }
+.fw .trade-a, .fw .trade-b { margin:0; font-size:var(--fs-3); line-height:1.6; }
+.fw .trade-a { color:var(--ink-3); }
+/* The one vertical rule, drawn on the cell that starts the second half. It
+   runs row by row rather than as one element, so it breaks where the rows
+   break and never outlives the last one. */
+.fw .trade-b { color:var(--ink); border-left:1px solid var(--line);
+  padding-left:calc(var(--sp-7) / 2); margin-left:calc(var(--sp-7) / -2); }
+.fw .trade-head > span:last-child { border-left:1px solid transparent;
+  padding-left:calc(var(--sp-7) / 2); margin-left:calc(var(--sp-7) / -2); }
+/* The tie: same ink both sides, because that is the honest answer and the
+   layout can say it faster than a sentence can. */
+.fw .trade-r[data-tie="1"] .trade-b { color:var(--ink-3); }
+.fw .trade-r[data-tie="1"] .trade-t { color:var(--ink-2); }
+/* The per-cell labels exist for the stacked layout. Above it the column
+   headers carry the same words once, so these would be five repetitions of
+   each. */
+.fw .trade-l { display:none; }
+@media (max-width:860px) {
+  .fw .trade-head { display:none; }
+  .fw .trade-head, .fw .trade-r { grid-template-columns:minmax(0,1fr); }
+  .fw .trade-r { padding:var(--sp-6) 0; row-gap:var(--sp-4); }
+  .fw .trade-b { border-left:0; padding-left:0; margin-left:0; }
+  .fw .trade-l { display:block; margin-bottom:var(--sp-1);
+    font-size:var(--fs-2); color:var(--ink-3); }
+  .fw .trade-r[data-tie="1"] .trade-b .trade-l,
+  .fw .trade-b .trade-l { color:var(--ink-3); }
 }
 
 /* ---- guardian permissions ----------------------------------------------

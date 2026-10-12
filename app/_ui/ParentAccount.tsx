@@ -2,110 +2,106 @@ import Link from "next/link";
 
 // "Why not just use your parent's account?"
 //
-// This is the only objection that matters, because it is free, it mostly works,
-// and it is what the visitor is already doing. It is answered in those words,
-// on the page, rather than implied by a feature list.
+// The only objection that matters, because it is free, it mostly works, and it
+// is what the visitor was about to do. It is answered in those words rather
+// than implied by a feature list.
 //
-// The processor is not named anywhere in these five. This section exists to
-// close the free-workaround objection, and naming the rails inside the answer
-// re-opens it: a reader told which company permits this can go and arrange it
-// themselves. What is being compared is two accounts, and that comparison is
-// true whoever is underneath. The rails are named on /how-it-works and on
-// /legal, where a reader has already decided they want this.
+// WHY IT IS A COMPARISON NOW. It was five claims with a tick drawn beside each
+// one, which is the pattern DESIGN.md names as forbidden and, worse, the wrong
+// rhetorical shape: a row of ticks asks to be believed, where a trade asks to
+// be read. The lead has always said "here is what you are trading for it", so
+// the section is now the trade itself, in two columns, with the same hairline
+// idiom the rest of the site uses for money.
 //
-// Four of these are wins. The fifth is not, and it says so: there is no
-// handover at 18 yet, so on that point a Veyro account and a parent's account
-// are currently the same. Writing it as a win would be the one claim on this
-// page that does not survive someone checking it, and /legal says the opposite
-// in as many words.
+// The last row is a tie and the layout says so without a word: both columns
+// carry the same weight and the same ink, because there is no handover at 18
+// yet and writing that as a win would be the one claim here that does not
+// survive somebody checking it. /legal says the same thing in as many words.
+//
+// THE PROCESSOR IS NOT NAMED. This section exists to close the free-workaround
+// objection, and naming the rails inside the answer re-opens it: a reader told
+// which company permits this can go and arrange it themselves. What is being
+// compared is two accounts, and that comparison holds whoever is underneath.
+// The rails are named on /how-it-works and /legal, where a reader has already
+// decided they want this.
+//
+// EVERY CLAIM IS ONE THE SITE ALREADY STANDS BEHIND. The three costs come from
+// the checker's own "What you can still do" panel, which it shows to the people
+// it has just turned away: the business is legally theirs, at 18 you transfer
+// rather than take over, and signing in with their password breaches the
+// provider's terms. Nothing here is argued that is not already said to
+// somebody we are sending away.
 
-type Answer = { q: string; a: React.ReactNode; tie?: boolean };
+type Row = { t: string; theirs: React.ReactNode; yours: React.ReactNode; tie?: boolean };
 
-const ANSWERS: Answer[] = [
+const ROWS: Row[] = [
   {
-    q: "Your parent ends up running a business they did not start",
-    a: (
-      <>
-        On their account, every refund, chargeback and dispute is theirs. It arrives in their
-        dashboard, under their name, and they deal with it. On yours, it is yours.
-      </>
-    ),
+    t: "Whose business it is",
+    theirs: <>Legally it is theirs. You are building something that belongs to an adult, and
+      every record of it says so.</>,
+    yours: <>An adult still has to be the enforceable party, so the account is in your
+      guardian&rsquo;s name. The products on it, and the earnings, are yours.</>,
   },
   {
-    q: "They approve once here, not every time",
-    a: (
-      <>
-        Your parent verifies themselves once, when the account is opened. That is the approval.
-        They are not asked again each time you get paid, and they are not a bottleneck between
-        you and your money. They can still close or freeze the account &mdash; they own it
-        &mdash; but they are not in the middle of it.
-      </>
-    ),
+    t: "Using it day to day",
+    theirs: <>You are a guest in an adult&rsquo;s account, reading somebody else&rsquo;s numbers
+      to find yours among them.</>,
+    yours: <>Your own dashboard, your own products, your own payout history, in your own
+      login.</>,
   },
   {
-    q: "The earnings are yours",
-    a: (
-      <>
-        Your parent is the account owner on paper. That is the part that makes this legal: an
-        adult has to be the enforceable party. But you control where the money goes and the
-        earnings are yours, not theirs.{" "}
-        <Link className="linkbtn" href="/for-parents">What that means at tax time</Link>.
-      </>
-    ),
+    t: "Signing in",
+    theirs: <>If you use their password you are breaching the provider&rsquo;s terms, and the
+      account can be closed with the money still in it.</>,
+    yours: <>You sign in as yourself and your guardian signs in as themselves. Nobody is
+      pretending to be anybody.</>,
   },
   {
-    q: "You get tools built for you",
-    a: (
-      <>
-        Your own dashboard, your own products, your own payout history &mdash; instead of being
-        a guest in an adult&rsquo;s account, reading someone else&rsquo;s numbers to find yours.
-      </>
-    ),
-  },
-  {
-    q: "At 18, this one is a tie",
+    t: "At 18",
     tie: true,
-    a: (
-      <>
-        A parent&rsquo;s account never becomes yours: you start over and lose your payment
-        history. Right now Veyro is the same &mdash; there is no handover yet. We are building
-        the transfer so you keep your history, and until it exists we are not going to pretend it
-        does.{" "}
-        <Link className="linkbtn" href="/legal">What else is unfinished</Link>.
-      </>
-    ),
+    theirs: <>The account never becomes yours. You transfer it or you start again, and the
+      payment history does not come with you.</>,
+    yours: <>The same, today. There is no handover yet, we are building it, and we are not
+      going to pretend it exists.{" "}
+      <Link className="linkbtn" href="/legal">What else is unfinished</Link>.</>,
   },
 ];
 
 export function ParentAccount() {
   return (
     <div className="objection">
-      <div className="headc">
-        <h2 className="lp-h2">
-          Why not just use your parent&rsquo;s account?
-        </h2>
-        <p className="lp-lead" style={{ marginTop: 16 }}>
+      <div className="secth">
+        <div>
+          <h2 className="lp-h2">Why not just use your parent&rsquo;s account?</h2>
+        </div>
+        <p className="secth-l">
           Most people do. It is free, it mostly works, and it is probably what you were about to
           do. Here is what you are trading for it.
         </p>
       </div>
 
-      <dl className="objlist">
-        {ANSWERS.map((x) => (
-          <div className="objrow" key={x.q} data-tie={x.tie ? "1" : undefined}>
-            <dt className="obj-q">
-              <span className="obj-mark" aria-hidden="true">
-                {x.tie ? (
-                  <svg viewBox="0 0 16 16"><path d="M3 8h10" fill="none" stroke="currentColor"
-                    strokeWidth="2" strokeLinecap="round" /></svg>
-                ) : (
-                  <svg viewBox="0 0 16 16"><path d="m3.5 8.5 3 3 6-7" fill="none" stroke="currentColor"
-                    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                )}
-              </span>
-              {x.q}
-            </dt>
-            <dd className="obj-a">{x.a}</dd>
+      <dl className="trade">
+        {/* The column headers are the comparison's own labels and exist once,
+            at the top, on a width that can hold them. Below 760 each cell
+            carries its own label instead, because a stacked row with no label
+            is two paragraphs nobody can tell apart. */}
+        <div className="trade-head" aria-hidden="true">
+          <span />
+          <span className="trade-hl">On your parent&rsquo;s account</span>
+          <span className="trade-hr">On your own</span>
+        </div>
+
+        {ROWS.map((r) => (
+          <div className="trade-r" key={r.t} data-tie={r.tie ? "1" : undefined}>
+            <dt className="trade-t">{r.t}</dt>
+            <dd className="trade-a">
+              <span className="trade-l">On your parent&rsquo;s account</span>
+              {r.theirs}
+            </dd>
+            <dd className="trade-b">
+              <span className="trade-l">On your own</span>
+              {r.yours}
+            </dd>
           </div>
         ))}
       </dl>
