@@ -1022,6 +1022,57 @@ export const CSS = `
 .fw .tierlist dt { font-size:var(--fs-3); font-weight:var(--fw-bold); }
 .fw .tierlist dd { margin:2px 0 0; font-size:var(--fs-2); color:var(--ink-2); line-height:1.55; }
 
+/* ---- the written permission --------------------------------------------
+   Evidence set as a document, not as a testimonial.
+   ----------------------------------------------------------------------
+   The quote is the largest text in the section and the heading is smaller
+   than it, which inverts the usual order on purpose: the heading promises
+   a sentence and the sentence is the thing worth reading. Nothing frames
+   it but a rule above and the dateline below, because a quotation inside a
+   tinted box with a big curly mark is a pull quote, and a pull quote reads
+   as decoration. This has to read as a document.
+
+   Onest, not the display face. Archivo is the wordmark and nothing else,
+   and setting somebody else's words in the brand's own voice would be the
+   wrong kind of ownership of them. */
+.fw .permit-h { max-width:24ch; }
+.fw .permit-fig { margin:var(--sp-8) 0 0; padding-top:var(--sp-6);
+  border-top:1px solid var(--ink); }
+.fw .permit-q { margin:0; font-size:clamp(20px, 1.9vw, 27px); line-height:1.4;
+  letter-spacing:-0.016em; color:var(--ink); max-width:38ch; }
+/* Hanging quotation marks, so the first letter of the sentence lands on the
+   same left edge as everything else in the section rather than a quarter of
+   an em inside it. The marks are punctuation, not ornament: at this size an
+   unmarked block could be read as the site's own voice, which is the one
+   thing it must not be mistaken for. */
+.fw .permit-q::before { content:"“"; margin-left:-0.42em; }
+.fw .permit-q::after { content:"”"; }
+.fw .permit-c { margin:var(--sp-5) 0 0; font-size:var(--fs-2); color:var(--ink-3);
+  max-width:var(--m-body); }
+.fw .permit-lim { margin:var(--sp-7) 0 0; font-size:var(--fs-3); line-height:1.6;
+  color:var(--ink-2); max-width:var(--m-body); }
+/* The claim and its boundary, side by side.
+   Stacked, the quote sat at a 38ch measure inside a 1240px section and left
+   most of the right-hand half empty, which is the same hole the hero had.
+   Set beside each other they fill the band and the composition says the
+   thing the section is for: here is what the provider permitted, and here,
+   at the same moment and the same size, is what it does not cover. The
+   limit is not a footnote arriving after the good news. */
+@media (min-width:940px) {
+  .fw .permit-body { display:grid; align-items:start;
+    grid-template-columns:minmax(0, 1.12fr) minmax(0, 0.88fr);
+    column-gap:var(--sp-10); }
+  .fw .permit-fig { margin-top:0; }
+  /* Aligned to the rule above the quote, not to the quote's own first line,
+     so the two columns start together. */
+  .fw .permit-lim { margin:0; padding-top:var(--sp-6);
+    border-top:1px solid var(--line); }
+}
+@media (max-width:760px) {
+  .fw .permit-h { max-width:none; }
+  .fw .permit-q { max-width:none; }
+}
+
 /* ---- why not just use your parent's account ----------------------------
    The trade, drawn as a trade.
    ----------------------------------------------------------------------

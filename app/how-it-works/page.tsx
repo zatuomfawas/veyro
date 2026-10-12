@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { buildMetadata, buildViewport } from "@/lib/seo";
+import {
+  REPLY_DATE, Q_CORE, Q_TYPES, Q_COUNTRIES, Q_ONBOARDING, Q_ARCHITECTURE, HELP_AGE, HELP_VERIFY,
+} from "@/app/_ui/provider-reply";
 import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
@@ -22,39 +25,10 @@ export const viewport = buildViewport();
 // there is no "use client" here and no interactivity beyond links.
 
 const UPDATED = "13 September 2026";
-const REPLY_DATE = "8 September 2026";
+// The quoted reply and its links now live in app/_ui/provider-reply.ts, so
+// the homepage and this page quote one copy of somebody else's words rather
+// than two that can drift apart.
 
-const HELP_AGE = "https://support.stripe.com/questions/age-requirement-to-create-a-stripe-account";
-const HELP_VERIFY =
-  "https://support.stripe.com/questions/us-verification-requirements-for-platforms-with-custom-accounts-faq";
-
-// Quoted material, kept in one place and verbatim, so it can be checked against
-// the original at a glance rather than hunted through JSX.
-const Q_CORE =
-  "A user who is at least 13 years old can create a Connect account, and where the user is " +
-  "under 18, the required parent or legal guardian involvement must be completed through " +
-  "Stripe's onboarding process before the account can accept charges or receive payouts.";
-
-const Q_TYPES =
-  "The current guidance is that Standard, Express, and Custom Connect accounts can support " +
-  "users aged 13–17 with legal guardian involvement, subject to country availability. If you " +
-  "have come across older information indicating an 18+ minimum for Express or Custom accounts, " +
-  "please follow the current Help Center guidance.";
-
-const Q_COUNTRIES =
-  "For your planned launch countries, the US is supported under this process. Country-specific " +
-  "requirements may apply, and availability for certain minor onboarding flows can vary by " +
-  "country. Brazil remains an exception where users must be at least 18 years old.";
-
-const Q_ONBOARDING =
-  "We recommend using Stripe-hosted onboarding or embedded onboarding components so that Stripe " +
-  "can collect and verify the required information directly. These onboarding flows automatically " +
-  "reflect current verification and compliance requirements.";
-
-const Q_ARCHITECTURE =
-  "From the architecture you've outlined, using Stripe-hosted onboarding for identity " +
-  "verification while not handling identity documents, banking credentials, or funds directly is " +
-  "the recommended approach.";
 
 /**
  * A quotation from the provider's reply.

@@ -15,6 +15,7 @@ import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { Journey } from "@/app/_ui/Journey";
 import { AudienceSplit } from "@/app/_ui/AudienceSplit";
 import { ParentAccount } from "@/app/_ui/ParentAccount";
+import { Permission } from "@/app/_ui/Permission";
 
 export const metadata = buildMetadata("landing");
 export const viewport = buildViewport();
@@ -292,6 +293,28 @@ export default async function Home() {
         <section className="lp ch ch-surface">
           <div className="wrap-lp">
             <ParentAccount />
+          </div>
+        </section>
+
+        {/* ---- the permission, in their words ----
+            The reader has just been shown what the free workaround costs,
+            and the next thing they think is "fine, but how is this even
+            allowed?". It is allowed because the payment provider wrote it
+            down, so that is what this section shows: the sentence, who
+            said it, and when.
+
+            It is the only thing on this page a competitor cannot copy. The
+            dashboard, the fee and the headlines are all reproducible in a
+            month; a dated written answer from the provider is not, because
+            getting one meant asking. Until now it was reachable from a
+            small link reading "How this is allowed", which is the quietest
+            possible treatment of the strongest thing the company owns.
+
+            White, between two tinted sections, so the evidence sits on the
+            page's plainest ground. */}
+        <section className="lp ch">
+          <div className="wrap-lp">
+            <Permission />
           </div>
         </section>
 
