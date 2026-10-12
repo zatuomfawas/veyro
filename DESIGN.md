@@ -180,11 +180,18 @@ Two of those are **visible focus indicators**. Removing them to satisfy a
 rule is *no drop shadows*, not *no use of the property*.
 
 **One thing moves at a time, and it moves for a reason.** The hero wallet is
-the only place on the site where a figure animates: two sales settle into the
-ledger, then the balance counts to the figure they add up to. Cause, then
-effect, once, in under 1.2 seconds. The restraint is the rule, not the
-animation. A page where every number counts is a page of slot machines, and it
-undoes the thing this palette is for, which is money you can read at a glance.
+the only place on the site where a figure animates: the available balance
+counts once, over 760ms, and then nothing moves again. The restraint is the
+rule, not the animation. A page where every number counts is a page of slot
+machines, and it undoes the thing this palette is for, which is money you can
+read at a glance.
+
+The card briefly carried two ledger rows that staggered in before the count,
+so the surface assembled in the order the money did. They are gone, and the
+reason is worth keeping: the rows showed $23.14 and $43.39 against a balance
+of $195.00, and nothing on screen explained the gap. A hero figure that
+invites a sum it does not satisfy is worse than no rows at all. The month
+reconciles in a sentence now.
 
 `CountUp` renders the true figure on the server, so with no JavaScript, with
 reduced motion, or before hydration the real number is already in the HTML. A

@@ -160,18 +160,24 @@ export default async function Home() {
                   sells, and a reader recognises one of them faster than
                   they parse a category.
 
-                  ONE SENTENCE, AND ONE JOB. It carried a second one --
-                  "A parent or guardian completes the account
-                  verification" -- which is the guardian's sentence welded
-                  to the founder's. Measured, the pair ran four lines and
-                  118px on a phone, and the inline link inside them pulled
-                  the eye off the only hook the hero has. The guardian fact
-                  did not go anywhere: it is the card's footer line, still
-                  inside the first screen, where it sits with the account
-                  it describes instead of interrupting the hook. */}
+                  TWO SENTENCES, AND THE SECOND ONE IS THE PRODUCT.
+                  It ran as one for a while, with the guardian clause moved
+                  down into the card's footer, on the argument that the
+                  hook should not be interrupted. That was the wrong trade.
+                  The headline says a reader can get paid before they are
+                  18; the sentence explaining how that is possible is the
+                  one thing standing between "interesting" and "this is a
+                  loophole", and it was 11.5px of grey four hundred pixels
+                  further down. It is here, at lead size, where the claim
+                  it qualifies is.
+
+                  No inline link in it any more. The link pulled the eye off
+                  the hook, and the card's footer carries the same
+                  destination a screen-inch below. */}
               <p className="hero-lead">
                 Sell the apps, templates and commissions you build, with your own checkout
-                link.
+                link. A parent or guardian is the verified adult on the payment account; the
+                business on it is yours.
               </p>
 
               <HeroWallet />

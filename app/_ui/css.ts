@@ -4175,17 +4175,32 @@ export const CSS2 = `
    The entrance delays are restated to match, because they are indexed on
    DOM position: without this the card would animate in before the two
    elements now sitting above it. */
-@media (max-width:760px) {
-  .fw .hero-stack { display:flex; flex-direction:column; }
-  .fw .hero-stack > .hero-h1   { order:1; }
-  .fw .hero-stack > .hero-lead { order:2; }
-  .fw .hero-stack > .hero-cta  { order:3; margin-top:var(--sp-7); }
-  .fw .hero-stack > .hero-sub2 { order:4; }
-  .fw .hero-stack > .hw        { order:5; margin-top:var(--sp-8); }
-  .fw .hero-stack > .hero-cta  { animation-delay:140ms; }
-  .fw .hero-stack > .hero-sub2 { animation-delay:210ms; }
-  .fw .hero-stack > .hw        { animation-delay:280ms; }
-}
+/* One order, at every width: claim, action, evidence.
+   --------------------------------------------------------------------
+   This was a phone-only reorder, because on a phone the card pushed the
+   hero's own primary action to y=831 in an 844px viewport. The same
+   criticism holds on a desktop for a different reason: the reader meets a
+   product demonstration before being offered the next step, so the button
+   arrives only after they have studied the evidence for a decision nobody
+   has asked them to make yet.
+
+   Source order stays claim, evidence, action, which is the right reading
+   order for a document and what a screen reader and a crawler get. Flex
+   order moves the surface below the action at every width, so there is one
+   composition to reason about rather than two.
+
+   The entrance delays are restated because they are indexed on DOM
+   position: without this the card animates in before the two elements now
+   sitting above it. */
+.fw .hero-stack { display:flex; flex-direction:column; align-items:flex-start; }
+.fw .hero-stack > .hero-h1   { order:1; }
+.fw .hero-stack > .hero-lead { order:2; }
+.fw .hero-stack > .hero-cta  { order:3; }
+.fw .hero-stack > .hero-sub2 { order:4; }
+.fw .hero-stack > .hw        { order:5; margin-top:var(--sp-8); }
+.fw .hero-stack > .hero-cta  { animation-delay:140ms; }
+.fw .hero-stack > .hero-sub2 { animation-delay:210ms; }
+.fw .hero-stack > .hw        { animation-delay:280ms; }
 
 /* The sentence the hero did not have.
    It sits between the statement and the surface, which is where two
@@ -4257,27 +4272,34 @@ export const CSS2 = `
    the flow is not that, and giving it one borrows the signal without the
    behaviour. --lift stays on :hover, on the two things that are actually
    clickable. */
+/* 640px, not the full 1240. The card is three facts; a width built for twelve
+   cannot be filled by three without padding them out with things nobody asked
+   for, which is what the ledger rows were. Sized to its content, the space
+   beside it is the page's left spine rather than a hole inside an object. */
 .fw .hw { margin-top:var(--sp-7); background:var(--card);
-  border:1px solid var(--line); }
+  border:1px solid var(--line); max-width:760px; }
 /* Balance left, the month's four figures right.
    Stacked, the balance sat alone with roughly 840x110 of empty card to
    its right -- the hole the ledger used to fill, and a worse one, because
    a card with content only in its top-left corner reads as unfinished
    rather than as spacious. Side by side, the card's top is used edge to
    edge and the figures get a measure wide enough for their labels. */
-/* align-items:start, not end. Bottom-aligned, the taller money block pushed
-   its own "Available" label 12px off the baseline of the labels beside it --
-   one row with two label baselines, inside a card whose balance carries a
-   0.045em optical correction for its own side bearing. Top-aligned, the label
-   and the first ledger row start on the same line. */
-.fw .hw-body { display:grid; grid-template-columns:auto minmax(0, 1fr);
-  gap:var(--sp-7); align-items:start;
-  padding:var(--sp-7) var(--sp-8); }
+/* One column. The body was a two-track grid holding a balance on the left and
+   a ledger on the right, which is the arrangement that produced the hole: at
+   the full measure it put two small things at opposite ends of 1240px. There
+   is one thing to say here and it is said down the left edge. */
+.fw .hw-body { padding:var(--sp-7) var(--sp-8); }
 .fw .hw-money { min-width:0; }
 
 /* Sentence case, and quiet. An all-caps label on the most important
    number in the hero was a tell worth removing. */
-.fw .hw-k { display:block; font-size:var(--fs-3); color:var(--ink-3); }
+.fw .hw-head { display:flex; align-items:baseline; justify-content:space-between;
+  gap:var(--sp-5); }
+.fw .hw-k { display:block; margin:0; font-size:var(--fs-3); color:var(--ink-3); }
+/* The subtraction, in words. 210.00 less 15.00 is 195.00, which a reader can
+   check without a table and without being handed four figures to add up. */
+.fw .hw-sum { margin:var(--sp-4) 0 0; font-size:var(--fs-3); line-height:1.5;
+  color:var(--ink-2); max-width:46ch; }
 
 /* The one place green does any work.
    --pine is the money-state colour and this is the money. Not the
@@ -4319,42 +4341,6 @@ export const CSS2 = `
   font-weight:var(--fw-bold); color:var(--pine);
   font-variant-numeric:tabular-nums lining-nums; font-feature-settings:"tnum" 1; }
 
-/* The ledger, not a fee table.
-   --------------------------------------------------------------------
-   Four figures used to sit here: Collected, Card fees, Veyro fee and
-   Settling, in a four-column grid whose columns were sized to their
-   content with the slack shared out. That produced even gaps and uneven
-   left edges -- measured at 1440 the four labels began at x=303/563/812/
-   1155, deltas of 260/249/343 -- and the eye reads left edges, so the
-   right of the strip looked blown apart. The fix is not a better grid.
-   The fee breakdown does not belong in a hero at all; see HeroWallet.tsx.
-
-   What is here instead reuses .led, the dashboard's own transaction row,
-   so no new component exists for the hero to drift away from. Its own top
-   border comes off (the card already has an edge, and the money block
-   beside it is the heading this list needs) and the last row loses its
-   rule, so two rows are divided by exactly one hairline. */
-/* Bounded, and pushed to the card's right edge.
-   Left to fill the track, each row ran the card's full 1240px measure and
-   put roughly 980px between a product name and the amount it earned --
-   two facts so far apart they stop reading as one row. Capped, the name
-   and its figure stay within one eye movement, and the card still uses
-   both its edges: the balance holds the left, the ledger holds the right,
-   and the air between them is the gap between a heading and a list. */
-.fw .hw-led { border-top:0; max-width:460px; width:100%; justify-self:end;
-  border-left:1px solid var(--line); padding-left:var(--sp-7); }
-@media (max-width:860px) {
-  /* Stacked, the rule would run along the top of the list where it reads as
-     a second card edge. The system turns its hairlines at the corner rather
-     than keeping them pointed the same way. */
-  .fw .hw-led { max-width:none; justify-self:stretch;
-    border-left:0; padding-left:0; padding-top:var(--sp-5);
-    border-top:1px solid var(--line); }
-}
-.fw .hw-led .led-row:last-child { border-bottom:0; }
-.fw .hw-led .led-row:first-child { padding-top:0; }
-.fw .hw-led .led-n { font-weight:var(--fw-reg); }
-
 /* The footer: the two things said about the card rather than about the
    money, on the card's own ground, under the only rule inside it. */
 /* Two columns on a wide card, because stacked it was 109px of a 302px
@@ -4364,12 +4350,13 @@ export const CSS2 = `
 /* One row, not two columns of disclosure. The footer carried four facts
    over two paragraphs -- 173px of grey text inside a phone's first screen,
    more than the headline. One sentence and a three-word example tag. */
-.fw .hw-foot { display:flex; align-items:baseline; justify-content:space-between;
-  flex-wrap:wrap; gap:var(--sp-2) var(--sp-6);
-  padding:var(--sp-5) var(--sp-8); border-top:1px solid var(--line);
+.fw .hw-foot { padding:var(--sp-5) var(--sp-8); border-top:1px solid var(--line);
   background:var(--surface); }
-.fw .hw-eg { flex:none; }
-.fw .hw-foot p { margin:0; font-size:var(--fs-2); line-height:1.55; color:var(--ink-3); }
+/* Body size and --ink-2, not 11.5px in the quietest ink available. This
+   sentence carries the mechanism the whole product rests on; it was the
+   smallest text in the hero. */
+.fw .hw-foot p { margin:0; font-size:var(--fs-3); line-height:1.55; color:var(--ink-2); }
+.fw .hw-eg { flex:none; font-size:var(--fs-2); color:var(--ink-3); }
 
 /* The link does not break across lines. At 390 it wrapped as "What a parent"
    / "takes on", with the underline split in two, which reads as a rendering
