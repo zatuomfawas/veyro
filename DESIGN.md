@@ -46,6 +46,17 @@ change to that one line.
 **Type.** Ten steps, `--fs-1` (11.5px) to `--fs-10` (56px). Nothing between
 them. Three weights only: 400 reads, 500 labels, 600 headings.
 
+**One exception, at display size.** The landing hero's `h1` clamps up to 72px,
+past the top of the scale, and takes **500** rather than 600. Weight, tracking
+and leading are one setting that moves with size, not three independent knobs:
+a face that reads as confident at 34px reads as blunt at 72, which is why
+display type is drawn lighter and set looser. The hero is tracked at -0.022em
+and leaded at 1.08 for the same reason, against -0.016em and tighter leading
+for the headings inside the scale. Below 960px the hero drops back to 600,
+because the argument reverses once the type is small enough that 500 reads thin
+rather than refined. Nothing else above `--fs-8` exists today; if something
+arrives, it inherits this rule rather than inventing a fourth weight.
+
 **Spacing.** `--sp-1` to `--sp-10`: 4, 8, 12, 16, 20, 24, 32, 40, 56, 72.
 
 Every margin, padding and gap traces to one of those, inline styles included.
@@ -139,7 +150,11 @@ blur — while an element is sitting still.
 
 There is one blurred shadow, `--lift`, and nothing wears it at rest. It appears
 on `.btn:hover` and `a.card:hover` and goes again on `:active`, paired with a
-1–2px translate. It is there to answer a pointer, which is the one thing a
+1–2px translate. The hero wallet card was given `--lift` in October 2026 on the
+argument that Stripe and Mercury float their hero surfaces; they do, and it was
+still reverted, because a blurred shadow is what a floating translucent layer
+earns and a card resting in the flow is not one. Borrowing the signal without
+the behaviour is the failure mode this rule exists to prevent. It is there to answer a pointer, which is the one thing a
 border cannot do as legibly, and it is on the two things that are actually
 clickable. Note what does **not** get it: `.card` on its own. The wallet
 preview and the guardian panel are cards you read, not cards you click, and
@@ -159,6 +174,13 @@ rule is *no drop shadows*, not *no use of the property*.
 
 **Touch targets are at least 44px** at mobile widths (`--tap`). WCAG 2.2 AA
 asks for 24px; 44px is the size a thumb actually hits.
+
+**A press lands instantly; only the release eases.** `.btn:active` sets
+`transition-duration: 0s`, so the colour and the 1px drop happen on the same
+frame as the pointer goes down, and the normal 110ms curve runs on the way back
+out. 110ms is short, but it is still a ramp on the one event the user caused
+themselves, and a control that takes a tenth of a second to acknowledge a finger
+reads as slightly dead.
 
 ---
 

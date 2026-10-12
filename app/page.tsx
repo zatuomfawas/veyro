@@ -232,8 +232,8 @@ export default async function Home() {
               <div className="stmt-a">
                 <p className="body">
                   Payment services want an adult on the account, so under 18 that is usually
-                  where it stops. The workaround is to use a parent&rsquo;s &mdash; and watch
-                  your first sales land in the middle of their grocery shopping.
+                  where it stops. The workaround is to use a parent&rsquo;s, and watch your
+                  first sales land in the middle of their grocery shopping.
                 </p>
                 <p className="body" style={{ marginTop: "var(--sp-5)" }}>
                   Veyro is the other way. A parent or guardian is the verified adult on the
@@ -368,7 +368,7 @@ export default async function Home() {
                 and the first place a parent should learn that is not Stripe. */}
             <h2 className="lp-h2 lp-h2-tight">Find out if you can start.</h2>
             <p className="body" style={{ marginTop: 14, marginLeft: "auto", marginRight: "auto" }}>
-              Two questions &mdash; where you live and how old you are &mdash; and you will know.
+              Two questions: where you live, and how old you are.
             </p>
 
             {/* Pricing, as three figures rather than a sentence.

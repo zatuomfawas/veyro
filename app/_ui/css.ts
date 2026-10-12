@@ -417,6 +417,13 @@ export const CSS = `
 .fw .btn:active:not(:disabled) { transform:translateY(0); box-shadow:none; }
 .fw .btn { transition:background-color var(--t), border-color var(--t), color var(--t),
   box-shadow var(--t), transform var(--t); }
+/* The press lands immediately; only the release eases back.
+   110ms is short, but it is still a ramp on the one event the user
+   caused themselves, and a control that takes a tenth of a second to
+   acknowledge a finger reads as slightly dead. Zero on :active, the
+   normal curve on the way out, so pressing is instant and un-pressing
+   settles. Nothing new animates that was not animating before. */
+.fw .btn:active:not(:disabled) { transition-duration:0s; }
 .fw .btn:active { background:var(--brand-a); border-color:var(--brand-a); }
 .fw .btn[aria-busy="true"] { background:var(--brand-h); border-color:var(--brand-h); opacity:.85; cursor:progress; }
 .fw .btn[aria-busy="true"]::before { content:""; width:var(--marker); height:var(--marker); background:var(--reverse); flex:none; }
@@ -4139,15 +4146,22 @@ export const CSS2 = `
    and a border and no radius, and every button sets border-radius:0
    explicitly; a rounded corner here would be a new corner style on a page
    that has none. */
-/* A border and a lift, not a border alone.
-   Stripe and Mercury both float their hero surfaces -- Stripe runs
-   0 4px 24px rgba(0,0,0,.06) and a second, wider one. Veyro had the
-   --lift token already and was not using it here, so the card read as a
-   rectangle drawn on the page rather than a surface above it. Square
-   still: every reference rounds between 4 and 32px, and not rounding is
-   the thing that keeps this from looking like the same SaaS template. */
+/* A border, and no shadow. REVERTED.
+   A previous pass gave this --lift on the evidence that Stripe and
+   Mercury float their hero surfaces. They do, and it is still wrong
+   here: DESIGN.md says elevation is a border or a fill change and never
+   blur while an element is sitting still, and it names this exact
+   element as the one that must not get it -- "the wallet preview and the
+   guardian panel are cards you read, not cards you click, and lifting
+   them would promise a click that is not there."
+
+   The Apple material guidance agrees rather than conflicts: a blurred
+   shadow is what a floating, translucent layer earns. A card resting in
+   the flow is not that, and giving it one borrows the signal without the
+   behaviour. --lift stays on :hover, on the two things that are actually
+   clickable. */
 .fw .hw { margin-top:var(--sp-7); background:var(--card);
-  border:1px solid var(--line); box-shadow:var(--lift); }
+  border:1px solid var(--line); }
 /* Balance left, the month's four figures right.
    Stacked, the balance sat alone with roughly 840x110 of empty card to
    its right -- the hole the ledger used to fill, and a worse one, because

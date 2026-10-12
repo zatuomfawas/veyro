@@ -46,8 +46,8 @@ export function AudienceSplit() {
         <h3 className="aud-k">If you are building something</h3>
         <p className="aud-h">Can I start selling?</p>
         <p className="aud-b">
-          Yes, if the payment provider supports your country &mdash; the three steps above are
-          the whole of it. After that the product is yours to run and nobody signs off your
+          Yes, if the payment provider supports your country. The three steps above are the
+          whole of it, and after that the product is yours to run with nobody signing off your
           sales.
         </p>
         <ul className="ticks" style={{ marginTop: "var(--sp-4)" }}>
@@ -62,7 +62,7 @@ export function AudienceSplit() {
         <h3 className="aud-k">If your child sent you a link</h3>
         <p className="aud-h">Is this legitimate?</p>
         <p className="aud-b">
-          Your name goes on the account. We wrote the whole of what that means &mdash; the
+          Your name goes on the account. We wrote the whole of what that means: the
           responsibilities, the limits, and the parts no lawyer has confirmed yet.
         </p>
         <ul className="ticks" style={{ marginTop: "var(--sp-4)" }}>
