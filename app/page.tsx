@@ -57,7 +57,14 @@ export default async function Home() {
             <div className="lp-links">
               <Link className="btn btn-q btn-sm hide-s" href="/how-it-works">How it works</Link>
               <Link className="btn btn-q btn-sm hide-s" href="/for-parents">For parents</Link>
-              <Link className="btn btn-q btn-sm hide-s" href="/docs/sdk">Docs</Link>
+              {/* Pricing, not Docs. The nav has three quiet slots and this one
+                  was pointing a thirteen-to-seventeen-year-old who has just
+                  arrived asking "can I sell this?" at an SDK reference. What
+                  they ask second, every time, is what it costs -- the page
+                  below answers it in a three-figure row for exactly that
+                  reason. Docs keeps its place in the footer and in the phone
+                  drawer, where a developer looking for it will look. */}
+              <Link className="btn btn-q btn-sm hide-s" href="/pricing">Pricing</Link>
               {user ? (
                 <Link className="btn btn-sm" href={defaultLandingFor(user.role)}>
                   Back to your dashboard

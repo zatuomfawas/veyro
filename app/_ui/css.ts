@@ -2731,6 +2731,19 @@ export const CSS2 = `
 .fw .pwtoggle:hover { color:var(--ink); }
 .fw .lp-links button.mobmenu { display:none; }
 .fw .mobpanel { display:none; }
+/* The theme switch, in the drawer rather than in the bar. The row carries a
+   visible label because the control is a 46px track with no text beside it
+   once it leaves the navbar, and a switch nobody can name is a switch nobody
+   flips. */
+.fw .mobpanel-set { display:flex; align-items:center; justify-content:space-between;
+  gap:var(--sp-5); padding:var(--sp-4) 2px 2px; font-size:var(--fs-4);
+  font-weight:var(--fw-med); color:var(--ink); min-height:var(--tap); }
+.fw .mobpanel-set > span { white-space:nowrap; }
+/* The panel styles every button in it as a full-width row, which is right for
+   the nav links and wrong for a switch: at width:100% it took the row's space
+   and squeezed "Dark mode" onto two lines beside it. (0,3,0) against the
+   panel rule's (0,2,1). */
+.fw .mobpanel-set > button.themeswitch { width:auto; flex:none; }
 .fw .mobpanel button { display:block; width:100%; text-align:left; background:transparent; border:0;
   border-bottom:1px solid var(--line-soft); padding:14px 2px; font-size:var(--fs-4); font-weight:var(--fw-med);
   color:var(--ink); cursor:pointer; }
@@ -4473,7 +4486,14 @@ export const CSS2 = `
 @media (max-width:430px) {
   .fw .lp-links { gap:2px; }
   .fw .lp-links > .btn-sm { padding:0 9px; }
-  .fw .lp-links .themeswitch { padding:6px 2px; }
+  /* Hidden in the bar at this width: MobileNav renders the switch inside the
+     drawer instead, so the phone navbar is wordmark, action, menu. */
+  /* button.themeswitch, not .themeswitch: the switch is a <button> and
+     .fw .lp-links button:not(.btn) sets display on it at (0,3,1). A class-only
+     selector here is (0,3,0) and loses, which is the same specificity trap
+     that kept the three-step journey from ever collapsing. */
+  .fw .lp-links > button.themeswitch { display:none; }
+  .fw .mobpanel .themeswitch { padding:6px 2px; }
   .fw .lp-links .themeswitch-track { width:40px; }
   .fw .lp-links .themeswitch[aria-checked="true"] .themeswitch-thumb { transform:translateX(16px); }
   .fw .lp-links button.mobmenu { padding:7px 7px; }

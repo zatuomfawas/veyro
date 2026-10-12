@@ -13,6 +13,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 
 export type NavItem = { href: string; label: string };
 
@@ -51,6 +52,16 @@ export function MobileNav({ items }: { items: NavItem[] }) {
               {item.label}
             </Link>
           ))}
+          {/* The switch lives here on a phone, and the navbar hides its copy
+              at the same width. In the bar it was a fourth control wedged
+              between the one button that matters and the menu that opens
+              this panel, splitting that pair on the narrowest screen the
+              site has. A theme preference is a setting, and a drawer is
+              where settings belong. */}
+          <div className="mobpanel-set">
+            <span>Dark mode</span>
+            <ThemeToggle />
+          </div>
         </div>
       )}
     </>
