@@ -97,10 +97,30 @@ provider reply Veyro obtained and publishes in full.
   above it, no plan and no subscription. The fee rounds down, always, so a
   fraction of a cent is never charged. It is incremental and ratcheted: refunds
   reduce qualifying monthly earnings for deciding what later payments owe, but
-  never claw back a fee already taken. **Fees start 15 October 2026.** Card
-  processing fees are charged on top by Stripe, which sets and deducts them.
-  The arithmetic lives in `lib/pricing.ts` and the prose figures are rendered
-  from it, so a quoted number cannot disagree with the rule.
+  never claw back a fee already taken. Card processing fees are charged on top
+  by Stripe, which sets and deducts them. The arithmetic lives in
+  `lib/pricing.ts` and the prose figures are rendered from it, so a quoted
+  number cannot disagree with the rule.
+- **The fee start date is pending, and the site still says 15 October 2026.**
+  Confirmed slipping on 12 October 2026 with no replacement date set. This is
+  the one piece of drift on the site with a deadline attached: from 15 October
+  the published copy asserts that fees have started, and they will not have.
+  The date is not computed from anything, so it has to be changed by hand in
+  each of these, and the Terms are the one that matters legally:
+
+  - `app/terms/page.tsx` — `EFFECTIVE`, the Terms' own effective date
+  - `app/terms/2026-09-16/page.tsx` — the superseded Terms say when they stop
+    governing, in the body and in the metadata description
+  - `app/pricing/page.tsx` — twice, in the fee-timing note and the closing text
+  - `app/_ui/faq.tsx` — the fee answer
+  - `app/about/page.tsx` — the fourth commitment, "Most people will never pay
+    Veyro anything"
+  - `app/dashboard/founder/page.tsx` — the `feesStart` prop
+
+  Nine occurrences across those six files, found with
+  `grep -rn "15 October 2026" app lib`. Nobody should guess a new date into
+  them: a Terms effective date with a dated archive beside it is a legal
+  construct, not copy. Set the date, then change all nine together.
 - **Currency** is formatted from the currency's own minor-unit exponent via
   `Intl`, not from an assumed two decimals. Figures quoted in prose are USD.
 - **Stack**: Next.js 16 App Router, React 19, Prisma 7 against Postgres, Stripe,
@@ -123,8 +143,14 @@ provider reply Veyro obtained and publishes in full.
 
 ## Brand Commitments
 
-- **Veyro**, withveyro.com, hello@withveyro.com. The two role words are
-  **founder** and **guardian**, used consistently.
+- **Veyro**, withveyro.com. The published contact address is
+  **withveyro@gmail.com**, confirmed 12 October 2026 as the address that stays.
+  It lives in one place, `lib/support.ts`, and everything that shows or links an
+  address imports it from there. Mail is not *sent* from it: Resend will only
+  send from a verified domain, so outbound stays on withveyro.com and this is
+  the Reply-To. An earlier draft of this file recorded hello@withveyro.com,
+  which the code never used. The two role words are **founder** and
+  **guardian**, used consistently.
 - **Built solo by Moutaz Duwaji.** `/about` says there is no team page because
   there is no team. His first-person account there is quoted voice: it keeps his
   phrasing, including punctuation the house style forbids elsewhere, and is not
@@ -153,9 +179,13 @@ provider reply Veyro obtained and publishes in full.
   reply, the mechanism, and the honesty of the disclosures.
 - Brand assets in repo: `app/icon.svg`, `app/apple-icon.tsx`, the `Wordmark`
   component, and OG images generated in code. No photography, no illustration.
-- **`public/llms.txt` is stale on pricing.** It states "Veyro takes no
-  percentage of transactions", which the 3% fee contradicts. `lib/pricing.ts`,
-  `/pricing`, and `/terms` are authoritative.
+- **`public/llms.txt`** is the summary AI crawlers read, and it is hand-written
+  rather than generated, so it drifts silently. It claimed "Veyro takes no
+  percentage of transactions" until 12 October 2026, which the 3% fee had
+  contradicted since the fee existed. Corrected. `lib/pricing.ts` is
+  authoritative for every figure; `/pricing` and `/terms` are authoritative for
+  the wording. Re-read this file whenever pricing, eligibility or the contact
+  address changes.
 
 ## Product Principles
 

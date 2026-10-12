@@ -39,8 +39,14 @@ withveyro.com
   to Stripe's hosted forms. Veyro stores a reference to the account, nothing
   that could be used to impersonate anyone.
 
-- **Veyro takes no percentage of transactions.** Stripe charges its own fees,
-  which Stripe sets and deducts.
+- **Veyro charges nothing below $100 earned in a calendar month, then 3% on the
+  amount above that.** No plan and no subscription. The fee is computed by
+  `feeMinor()` in lib/pricing.ts and rounds down, so a fraction of a cent is
+  never charged. It is incremental and ratcheted: a refund lowers the running
+  monthly total used to decide what later payments owe, but never claws back a
+  fee already taken. Stripe's own card processing fees are charged on top, and
+  Stripe sets and deducts those. The start date for Veyro's fee has not been
+  confirmed; the site currently names 15 October 2026.
 
 - **None of this is settled law.** Stripe's written policy permits it. Whether a
   minor may hold such an account with a guardian as representative has not been
@@ -50,6 +56,7 @@ withveyro.com
 ## Key pages
 
 - /check — the eligibility checker, two questions, no account
+- /pricing — the fee in full, with worked examples and our own cost base
 - /how-it-works — Stripe's reply quoted in full, including what they would not confirm
 - /for-guardians — what an adult takes on, including the liability
 - /terms — Terms of Service
@@ -58,4 +65,4 @@ withveyro.com
 
 ## Contact
 
-hello@withveyro.com
+withveyro@gmail.com
