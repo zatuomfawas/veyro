@@ -123,8 +123,22 @@ export default async function Home() {
         <div className="hero-band">
           <div className="wrap-lp hero">
             <div className="hero-stack">
+              {/* Outcome, not capability.
+                  "You can take payments before you're 18" states a
+                  permission. It is unique to Veyro, which is why it beat
+                  the commodity line before it, but it leaves the visitor
+                  to work out what they get -- a capability, not a
+                  transformation. Leading on getting paid for what you
+                  make says the outcome and keeps the only claim no other
+                  payments company can make.
+
+                  Not "You built it. Now get paid", which is the obvious
+                  rewrite: the section one screen down already opens "You
+                  built it. Getting paid for it is the hard part", and two
+                  identical openings a screen apart is the repetition the
+                  last few passes went to remove. */}
               <h1 className="hero-h1">
-                You can take payments before you&rsquo;re 18.
+                Get paid for what you make, before you&rsquo;re 18.
               </h1>
 
               <HeroWallet />
@@ -134,6 +148,13 @@ export default async function Home() {
                 {/* No appended arrow. The link works without one. */}
                 <Link className="hero-alt" href="/how-it-works">How it works</Link>
               </div>
+
+              {/* The checker genuinely needs nothing: app/check is a public
+                  standalone page with no auth, no database and no API
+                  calls, which its own header comment says. Worth saying,
+                  because "check eligibility" sounds like a form that
+                  wants your details. */}
+              <p className="hero-sub2">Free to check. No account needed.</p>
             </div>
           </div>
         </div>

@@ -4026,12 +4026,24 @@ export const CSS2 = `
    column instead, so the statement and the card below it share a left
    edge AND a right edge and read as one object. No element was added to
    fill it; the type was sized to the column it already had. */
-.fw .hero-h1 { margin:0; font-size:clamp(34px, 4.1vw, 59px); line-height:1.04;
-  letter-spacing:-0.035em; font-weight:var(--fw-bold); color:var(--ink);
+/* Sized to one line across the measure, and the measure has not changed
+   while the sentence got six characters longer -- so the ceiling comes
+   down with it. Checked at every width rather than estimated: the lesson
+   from the problem statement, which once fitted its column with three
+   pixels to spare. One line from 768 up with 47px of slack at the
+   tightest; the floor came down from 32 to 30 because at 375 the second
+   line filled its column exactly, which is the same knife-edge in a
+   worse form. */
+.fw .hero-h1 { margin:0; font-size:clamp(30px, 3.6vw, 52px); line-height:1.06;
+  letter-spacing:-0.033em; font-weight:var(--fw-bold); color:var(--ink);
   max-width:none; text-wrap:balance; }
 
 .fw .hero-cta { display:flex; align-items:center; flex-wrap:wrap;
   gap:var(--sp-6); margin-top:var(--sp-7); }
+/* Under the action, not beside it: it qualifies the commitment the button
+   asks for, and "check eligibility" sounds like a form that wants your
+   details when it wants a country and a birth year. */
+.fw .hero-sub2 { margin:var(--sp-4) 0 0; font-size:var(--fs-2); color:var(--ink-3); }
 @media (max-width:560px) {
   .fw .hero-cta { gap:var(--sp-2); margin-top:var(--sp-6); }
   .fw .hero-alt { align-self:flex-start; }
@@ -4117,12 +4129,16 @@ export const CSS2 = `
 
 /* The footer: the two things said about the card rather than about the
    money, on the card's own ground, under the only rule inside it. */
-.fw .hw-foot { display:flex; flex-wrap:wrap; gap:var(--sp-3) var(--sp-7);
-  justify-content:space-between; align-items:baseline;
-  padding:var(--sp-5) var(--sp-8); border-top:1px solid var(--line);
+/* Stacked, not spread. The two lines were a caption and a note, so
+   space-between read fine; they are four facts now and facts read as a
+   block. The first line is the arrangement, the second is the caveat. */
+.fw .hw-foot { padding:var(--sp-5) var(--sp-8); border-top:1px solid var(--line);
   background:var(--surface); }
-.fw .hw-foot p { margin:0; font-size:var(--fs-2); line-height:1.55; color:var(--ink-3); }
-.fw .hw-foot p:first-child { max-width:62ch; }
+.fw .hw-foot p { margin:0; font-size:var(--fs-2); line-height:1.6; color:var(--ink-3);
+  max-width:88ch; }
+.fw .hw-foot p + p { margin-top:var(--sp-2); }
+.fw .hw-foot .linkbtn { color:var(--ink-2); }
+.fw .hw-foot .linkbtn:hover { color:var(--ink); }
 
 @media (max-width:860px) {
   /* The figures go under the balance rather than beside it. */

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { formatMinor } from "@/lib/money";
 import {
   BALANCE_MINOR, COLLECTED_MINOR, PROCESSING_MINOR, VEYRO_FEE_MINOR, SETTLING_MINOR,
@@ -39,6 +40,14 @@ import { CountUp } from "@/app/_ui/CountUp";
 // available balance and the amount still settling. Collected is the gross
 // before anything is taken and the two fees are what leaves, so they stay
 // ink. No green on the card, its border, its footer or its rule.
+//
+// THE FOOTER IS THE TRUST STATEMENT. A product that involves a minor's
+// money, an adult's identity and somebody else's balance sheet carries a
+// higher trust burden than a SaaS tool, and the four facts that make the
+// arrangement legible should not need a second page. They are in the card
+// because the last pass put everything wallet-related in the card, and
+// they are at the point of the ask because that is where they are
+// needed.
 
 /**
  * The month, named so each figure can be checked on its own.
@@ -87,17 +96,44 @@ export function HeroWallet() {
         </dl>
       </div>
 
-      {/* The card's footer carries both of the things said about the card
-          rather than about the money. The payout line is load-bearing for
-          accuracy -- it is the correction to a claim this site shipped
-          saying nobody could block a payout -- and it lost its home when
-          the ledger zone went, so it sits here beside the caption. */}
-      <div className="hw-foot" aria-hidden="true">
+      {/* The footer is the hero's trust statement, not a caption.
+          ------------------------------------------------------------
+          It said what the mockup was and who schedules payouts. Those are
+          two of the four things a first-time visitor needs, and framing
+          them as notes about a picture buried them. A product that
+          involves a minor's money, an adult's identity and somebody
+          else's balance sheet carries a higher trust burden than a SaaS
+          tool, and the arrangement should not need a second page to
+          understand.
+
+          Four facts and the example disclosure, in the card, at the point
+          of the ask. "Veyro never holds the money" was the one missing
+          from the hero entirely -- it lived only in the section below and
+          the site footer.
+
+          The payout fact is folded into the first sentence rather than
+          dropped. An earlier pass marked "Payouts are scheduled in
+          Stripe, by your guardian" as not to be regressed: it is the
+          correction to a claim this site shipped saying nobody could
+          block a payout. Rewriting the footer nearly lost it, which is
+          exactly how a correction gets quietly undone.
+
+          NOT aria-hidden any more. It was, which was fine for a caption
+          and is not fine now that it carries a link: a focusable element
+          inside an aria-hidden subtree is reachable by keyboard and
+          invisible to a screen reader, which is the worst of both. Only
+          the figures above are hidden, and the paragraph above those
+          describes them. */}
+      <div className="hw-foot">
         <p>
-          An example wallet. Yours once your country is supported and a parent or guardian is
-          verified on the account.
+          <Link className="linkbtn" href="/for-parents">A parent or guardian</Link> is the
+          verified adult on the account, and schedules payouts in Stripe. Payments are
+          processed and held there too, never by Veyro.
         </p>
-        <p>Payouts are scheduled in Stripe, by your guardian.</p>
+        <p>
+          Example figures. Whether you can take payments depends on your country and the
+          payment provider&rsquo;s own checks.
+        </p>
       </div>
     </div>
   );
