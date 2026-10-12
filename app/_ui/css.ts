@@ -4034,7 +4034,7 @@ export const CSS2 = `
    tightest; the floor came down from 32 to 30 because at 375 the second
    line filled its column exactly, which is the same knife-edge in a
    worse form. */
-.fw .hero-h1 { margin:0; font-size:clamp(30px, 3.6vw, 52px); line-height:1.06;
+.fw .hero-h1 { margin:0; font-size:clamp(34px, 4.0vw, 58px); line-height:1.05;
   letter-spacing:-0.033em; font-weight:var(--fw-bold); color:var(--ink);
   max-width:none; text-wrap:balance; }
 
@@ -4103,8 +4103,8 @@ export const CSS2 = `
    rather than as spacious. Side by side, the card's top is used edge to
    edge and the figures get a measure wide enough for their labels. */
 .fw .hw-body { display:grid; grid-template-columns:auto minmax(0, 1fr);
-  gap:var(--sp-9); align-items:end;
-  padding:var(--sp-8) var(--sp-8) var(--sp-7); }
+  gap:var(--sp-7); align-items:end;
+  padding:var(--sp-7) var(--sp-8); }
 .fw .hw-money { min-width:0; }
 
 /* Sentence case, and quiet. An all-caps label on the most important
@@ -4122,8 +4122,21 @@ export const CSS2 = `
    is the fashionable treatment: every left edge inside this card lands on
    one line, and shrinking the $ pushes the digits off it for a flourish.
    Measured, not assumed. */
+/* 52px, down from 92.
+   Measured, the balance rendered at 89px against a 52px headline: the
+   largest and most saturated thing in the hero was an invented number,
+   and the sentence carrying the positioning was 42% smaller. Evidence
+   should not out-shout the claim it is evidence for. It is still the
+   anchor of its own card and still the only green, which is enough
+   salience without taking the page's focal point.
+
+   BOTH FLOORS MATTER, not just the ceilings. Fixing this at 1440 and
+   stopping there left the inversion intact everywhere else: the two
+   clamps had different minimums, so from 768 down the balance was 38px
+   against a 31px headline and the problem came straight back. Measured
+   at 375, 390, 768, 1024 and 1440 -- the headline leads at all five. */
 .fw .hw-bal { display:block; margin-top:var(--sp-2);
-  font-size:clamp(46px, 6.2vw, 92px); line-height:1; letter-spacing:-0.045em;
+  font-size:clamp(28px, 3.6vw, 52px); line-height:1; letter-spacing:-0.04em;
   font-weight:var(--fw-bold); color:var(--pine);
   font-variant-numeric:tabular-nums lining-nums; font-feature-settings:"tnum" 1; }
 
@@ -4131,8 +4144,16 @@ export const CSS2 = `
    the other half of the surface; with the card to themselves they use its
    width, which is also what stops a 1240px card from being a wide band
    with everything bunched at the left. */
-.fw .hw-break { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr));
-  gap:var(--sp-5) var(--sp-7); margin:0; }
+/* Four across again. They were paired when the balance was 92px and the
+   money zone needed half the card; at 52px that zone is 209px wide, and
+   two columns left the four figures sprawling over 917px with a label in
+   the middle of each. One row of four, each column wide enough for its
+   longest label and no wider. */
+.fw .hw-break { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr));
+  gap:var(--sp-5) var(--sp-6); margin:0; }
+@media (max-width:1100px) {
+  .fw .hw-break { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+}
 .fw .hw-break > div { min-width:0; }
 .fw .hw-break dt { font-size:var(--fs-2); line-height:1.4; color:var(--ink-3); }
 .fw .hw-break dd { margin:4px 0 0; font-size:var(--fs-4); font-weight:var(--fw-bold);
@@ -4144,20 +4165,22 @@ export const CSS2 = `
 
 /* The footer: the two things said about the card rather than about the
    money, on the card's own ground, under the only rule inside it. */
-/* Stacked, not spread. The two lines were a caption and a note, so
-   space-between read fine; they are four facts now and facts read as a
-   block. The first line is the arrangement, the second is the caveat. */
-.fw .hw-foot { padding:var(--sp-5) var(--sp-8); border-top:1px solid var(--line);
+/* Two columns on a wide card, because stacked it was 109px of a 302px
+   card -- over a third of the surface given to grey disclosure, which
+   makes a product look defensive rather than careful. Side by side the
+   same two facts take two lines instead of four. */
+.fw .hw-foot { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:var(--sp-4) var(--sp-7);
+  padding:var(--sp-5) var(--sp-8); border-top:1px solid var(--line);
   background:var(--surface); }
-.fw .hw-foot p { margin:0; font-size:var(--fs-2); line-height:1.6; color:var(--ink-3);
-  max-width:88ch; }
-.fw .hw-foot p + p { margin-top:var(--sp-2); }
+.fw .hw-foot p { margin:0; font-size:var(--fs-2); line-height:1.55; color:var(--ink-3); }
+@media (max-width:860px) { .fw .hw-foot { grid-template-columns:minmax(0,1fr); } }
 .fw .hw-foot .linkbtn { color:var(--ink-2); }
 .fw .hw-foot .linkbtn:hover { color:var(--ink); }
 
 @media (max-width:860px) {
   /* The figures go under the balance rather than beside it. */
-  .fw .hw-body { grid-template-columns:minmax(0, 1fr); gap:var(--sp-7);
+  .fw .hw-body { grid-template-columns:minmax(0, 1fr); gap:var(--sp-6);
     align-items:start; padding:var(--sp-6); }
   .fw .hw-foot { padding:var(--sp-5) var(--sp-6); }
 }
