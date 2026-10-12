@@ -4201,10 +4201,25 @@ export const CSS2 = `
    two columns left the four figures sprawling over 917px with a label in
    the middle of each. One row of four, each column wide enough for its
    longest label and no wider. */
-.fw .hw-break { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr));
-  gap:var(--sp-5) var(--sp-6); margin:0; }
+/* Even GAPS, not even columns.
+   repeat(4, 1fr) made the columns identical -- a 255px pitch, measured
+   exactly even -- and the rhythm still read wrong, because what the eye
+   spaces is the text and the text is not the same width: "Collected" is
+   55px and "Veyro fee (3% over $100)" is 152. Measured gaps between the
+   label blocks were 200, 200, 103.
+
+   Columns sized to their content with the slack shared between them puts
+   the same distance between every pair, which is what "evenly spaced"
+   actually means here. The first cell still starts on the track's left
+   edge and the last still ends on its right, so the card's outer
+   alignment is unchanged. */
+.fw .hw-break { display:grid; grid-template-columns:repeat(4, auto);
+  justify-content:space-between; gap:var(--sp-5) var(--sp-6); margin:0; }
 @media (max-width:1100px) {
-  .fw .hw-break { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+  /* Two up, and back to equal columns: with only two per row there is no
+     rhythm to get wrong, and equal columns keep the pair aligned. */
+  .fw .hw-break { grid-template-columns:repeat(2, minmax(0, 1fr));
+    justify-content:stretch; }
 }
 .fw .hw-break > div { min-width:0; }
 .fw .hw-break dt { font-size:var(--fs-2); line-height:1.4; color:var(--ink-3); }
