@@ -87,7 +87,11 @@ export function ParentPanel() {
 
       <div className="dp-body">
         <div className="pp-seq">
-        <h3 className="fig-k" style={{ marginBottom: "var(--sp-4)" }}>Setting it up</h3>
+        {/* h2, not h3. This is the first heading after the page's h1, so an
+            h3 here skipped a level -- the one structural error a screen
+            reader's heading list shows and a sighted reader never sees. The
+            class still sets the size; the tag sets the outline. */}
+        <h2 className="fig-k" style={{ marginBottom: "var(--sp-4)" }}>Setting it up</h2>
         <ol className="pp-steps">
           {STEPS.map(([t, d, yours], i) => (
             <li
@@ -115,7 +119,7 @@ export function ParentPanel() {
         </div>
 
         <div className="pp-ctl">
-          <h3 className="fig-k">Afterwards, in Stripe</h3>
+          <h2 className="fig-k">Afterwards, in Stripe</h2>
           <div className="pp-btns">
             {CONTROLS.map(([t, d]) => (
               <div className="pp-btn" key={t}>

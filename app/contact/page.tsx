@@ -52,8 +52,7 @@ export default function Contact() {
       <main id="main" className="wrap-lp" style={{ paddingTop: 40, paddingBottom: 56 }}>
         <div className="ctc-h">
           <div>
-            <span className="lp-eyebrow">Contact</span>
-            <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)", maxWidth: "14ch" }}>
+            <h1 className="lp-h2" style={{ maxWidth: "14ch" }}>
               Talk to a person.
             </h1>
             <p className="body" style={{ marginTop: "var(--sp-4)", maxWidth: "40ch" }}>

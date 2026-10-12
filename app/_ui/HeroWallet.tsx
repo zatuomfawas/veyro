@@ -1,149 +1,113 @@
+import Link from "next/link";
 import { formatMinor } from "@/lib/money";
 import {
-  BALANCE_MINOR, COLLECTED_MINOR, PROCESSING_MINOR, VEYRO_FEE_MINOR, SETTLING_MINOR,
+  BALANCE_MINOR, SALE_GROSS_MINOR, SALE_FEE_MINOR, SALE_NAME, SALE_WHEN, PRIOR,
 } from "@/app/_ui/wallet-example";
-import { CountUp } from "@/app/_ui/CountUp";
 
-// The hero's money position, as one contained surface.
+// The hero's money position: what you earned, and the two things that earned
+// it.
 //
-// WHAT THIS REPLACED. Two hairlines bounding figures that sat directly on
-// the page ground, with a transaction ledger in a second zone to the
-// right. It read as loose parts arranged on a background rather than as
-// one object: four rules, two columns and a caption outside the thing it
-// captioned.
+// WHAT THIS REPLACED, AND WHY. The card used to carry five figures -- the
+// balance, then Collected, Card fees, Veyro fee (3% over $100) and Settling
+// (not cleared yet) -- over two paragraphs of disclosure. The argument for it
+// was that every figure reconciles and a sceptical parent can add them up.
+// That argument is right about the ledger and wrong about the hero, for three
+// measured reasons.
 //
-// Now: one surface colour, one border, one padding, and a footer divided
-// from the body by the only internal rule. Square, because the design
-// system is square -- .card sets a border and a background and no radius,
-// and buttons set border-radius:0 explicitly. A rounded card here would be
-// a new corner style on a page that has none.
+//   It answered the wrong question first. A fee breakdown answers "what does
+//   this cost", which is the second question a visitor has. The first is
+//   "what is this", and the card spent 44% of a phone's first screen on the
+//   answer to the second one.
 //
-// THE LEDGER IS GONE, not hidden. Two transaction rows and a payout line
-// were the second half of this surface, and they are deleted rather than
-// display:none -- a row nobody can see is still a row somebody maintains.
-// /how-it-works still shows a full ledger through LiveWallet, which is
-// where a reader who wants the month's detail is already going; nothing
-// was added there.
+//   Reconciliation is a task. Handing a reader 210.00 - 8.55 - 3.30 - 3.15
+//   before they have been told what the product is asks them to do arithmetic
+//   to earn the headline.
 //
-// THE FOUR FIGURES SIT BESIDE THE BALANCE, not under it. Removing the
-// ledger left roughly 840x110 of empty card to the right of the figure --
-// the hole the ledger used to fill, and a worse one, because a card with
-// content only in its top-left corner reads as unfinished rather than as
-// spacious. Side by side, the card's top is used edge to edge.
+//   It did not fit. Measured at 390x844, the card ran 427px and pushed the
+//   hero's own primary action to y=851 -- below the fold, on the one device
+//   the primary audience is actually holding.
 //
-// EVERY FIGURE RECONCILES. feeMinor() computes the $3.30 from the same
-// function that charges a real founder, and
-// 210.00 - 8.55 - 3.30 - 3.15 = 195.00 exactly.
+// The month's full arithmetic did not go anywhere: LiveWallet on
+// /how-it-works carries all of it, interrogable, which is where a reader who
+// wants to check the sums is already going. What the hero shows now is the
+// thing the headline promises -- money that is yours, and the things you made
+// that produced it.
 //
-// GREEN MARKS THE MONEY THAT IS THE FOUNDER'S and nothing else: the
-// available balance and the amount still settling. Collected is the gross
-// before anything is taken and the two fees are what leaves, so they stay
-// ink. No green on the card, its border, its footer or its rule.
+// GREEN MARKS THE FOUNDER'S MONEY and nothing else: the balance, and the two
+// amounts that landed. No green on the card, its border, its rule or its
+// footer.
 //
-// THE FOOTER IS THE TRUST STATEMENT. A product that involves a minor's
-// money, an adult's identity and somebody else's balance sheet carries a
-// higher trust burden than a SaaS tool, and the four facts that make the
-// arrangement legible should not need a second page. They are in the card
-// because the last pass put everything wallet-related in the card, and
-// they are at the point of the ask because that is where they are
-// needed.
+// NO COUNT-UP ON THE BALANCE. It animated from zero over 850ms, which meant
+// the single green number in the hero was wrong for most of the first second
+// on a page whose whole argument is that the figures are checkable. The
+// entrance the hero already has is the authored moment; a second one on the
+// number itself was motion for its own sake.
 
-/**
- * The month, named so each figure can be checked on its own.
- *
- * The two bracketed labels are the point. "Veyro fee" alone is a number
- * you take on trust; "Veyro fee (3% over $100)" is one you can do in your
- * head against the pricing page. And "Settling" is our word rather than a
- * word, so it says what it means where a reader first meets it.
- */
-const BREAKDOWN = [
-  { k: "Collected", v: COLLECTED_MINOR },
-  { k: "Card fees", v: PROCESSING_MINOR, sub: true },
-  { k: "Veyro fee (3% over $100)", v: VEYRO_FEE_MINOR, sub: true },
-  { k: "Settling (not cleared yet)", v: SETTLING_MINOR, sub: true, money: true },
+/** The two most recent payments, newest first, from the one invented month. */
+const ROWS = [
+  { name: SALE_NAME, when: SALE_WHEN, amt: SALE_GROSS_MINOR - SALE_FEE_MINOR },
+  { name: PRIOR[0].name, when: PRIOR[0].when, amt: PRIOR[0].amt },
 ] as const;
 
 export function HeroWallet() {
   return (
     <div className="hw">
       <p className="sr-only">
-        An example founder wallet. {formatMinor(COLLECTED_MINOR, "USD")} collected this month,
-        less {formatMinor(PROCESSING_MINOR, "USD")} in card processing fees,{" "}
-        {formatMinor(VEYRO_FEE_MINOR, "USD")} to Veyro and{" "}
-        {formatMinor(SETTLING_MINOR, "USD")} still settling, leaving an available balance of{" "}
-        {formatMinor(BALANCE_MINOR, "USD")}. Payouts are scheduled in Stripe by the guardian,
-        who is the account holder. Every figure is invented.
+        An example founder wallet, with {formatMinor(BALANCE_MINOR, "USD")} available and the
+        two most recent payments: {SALE_NAME},{" "}
+        {formatMinor(SALE_GROSS_MINOR - SALE_FEE_MINOR, "USD")}, and {PRIOR[0].name},{" "}
+        {formatMinor(PRIOR[0].amt, "USD")}. The account is in the guardian&rsquo;s name and they
+        schedule payouts in Stripe, which holds the money. Every figure is invented.
       </p>
 
       <div className="hw-body" aria-hidden="true">
         <div className="hw-money">
           <span className="hw-k">Available</span>
-          <span className="hw-bal">
-            <CountUp amountMinor={BALANCE_MINOR} currency="USD" durationMs={850} />
-          </span>
+          <span className="hw-bal">{formatMinor(BALANCE_MINOR, "USD")}</span>
         </div>
 
-        <dl className="hw-break">
-          {BREAKDOWN.map((f) => (
-            <div key={f.k}>
-              <dt>{f.k}</dt>
-              {/* A minus on the three that come off. Bare, the four
-                  figures are a list and the reader has to work out which
-                  direction each one goes; signed, 210.00 less 8.55 less
-                  3.30 less 3.15 is visibly the 195.00 above them. The
-                  settling figure is signed too -- it is subtracted from
-                  what is available even though the money is still the
-                  founder's, which is why it keeps the money colour. */}
-              <dd data-money={"money" in f && f.money ? "1" : undefined}>
-                {"sub" in f && f.sub ? "\u2212" : ""}{formatMinor(f.v, "USD")}
-              </dd>
+        {/* The real ledger row from the dashboard, not a drawing of one:
+            .led / .led-row / .led-n / .led-sub / .led-amt are the same
+            classes LiveWallet and the founder's own wallet use, so the hero
+            is showing the product rather than an illustration of it. Two
+            rows, because a balance with nothing behind it is a statistic and
+            a balance with the things that produced it is a wallet. */}
+        <div className="led hw-led">
+          {ROWS.map((r) => (
+            <div className="led-row" key={r.name}>
+              <span className="led-n">
+                {r.name}
+                <span className="led-sub">Paid {r.when}</span>
+              </span>
+              <span className="led-amt fig-pos">+{formatMinor(r.amt, "USD")}</span>
             </div>
           ))}
-        </dl>
+        </div>
       </div>
 
-      {/* The footer is the hero's trust statement, not a caption.
+      {/* One line, not two paragraphs.
           ------------------------------------------------------------
-          It said what the mockup was and who schedules payouts. Those are
-          two of the four things a first-time visitor needs, and framing
-          them as notes about a picture buried them. A product that
-          involves a minor's money, an adult's identity and somebody
-          else's balance sheet carries a higher trust burden than a SaaS
-          tool, and the arrangement should not need a second page to
-          understand.
+          The footer carried four facts over two columns -- 173px of grey
+          disclosure inside a phone's first screen, more than the headline
+          itself. What survives is the one fact a reader cannot get anywhere
+          else on this screen and would be wrong to assume: whose account the
+          money is in, and that it is never ours.
 
-          Four facts and the example disclosure, in the card, at the point
-          of the ask. "Veyro never holds the money" was the one missing
-          from the hero entirely -- it lived only in the section below and
-          the site footer.
+          The country caveat that used to sit beside it ("whether you can take
+          payments depends on your country") is the entire subject of /check,
+          which the button directly below this card goes to. Saying it here
+          made the hero argue with its own call to action.
 
-          The verification clause moved up to the hero's own sentence, so
-          a parent meets it in the first thing they read rather than three
-          hundred pixels down; what stays here is who holds the account,
-          who schedules payouts and who never touches the money.
-
-          The payout fact is folded into the first sentence rather than
-          dropped. An earlier pass marked "Payouts are scheduled in
-          Stripe, by your guardian" as not to be regressed: it is the
-          correction to a claim this site shipped saying nobody could
-          block a payout. Rewriting the footer nearly lost it, which is
-          exactly how a correction gets quietly undone.
-
-          NOT aria-hidden any more. It was, which was fine for a caption
-          and is not fine now that it carries a link: a focusable element
-          inside an aria-hidden subtree is reachable by keyboard and
-          invisible to a screen reader, which is the worst of both. Only
-          the figures above are hidden, and the paragraph above those
-          describes them. */}
+          NOT aria-hidden: it carries a link, and a focusable element inside
+          an aria-hidden subtree is reachable by keyboard and invisible to a
+          screen reader. Only the figures above are hidden, and the paragraph
+          above those describes them. */}
       <div className="hw-foot">
         <p>
-          The account is in the guardian&rsquo;s name, and they schedule payouts in Stripe,
-          which processes and holds the money. Veyro never does.
+          The account is in your guardian&rsquo;s name and Stripe holds the money. Veyro never
+          does. <Link className="linkbtn" href="/for-parents">What a parent takes on</Link>
         </p>
-        <p>
-          Example figures. Whether you can take payments depends on your country and the
-          payment provider&rsquo;s own checks.
-        </p>
+        <p className="hw-eg">Example figures</p>
       </div>
     </div>
   );

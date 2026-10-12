@@ -132,7 +132,7 @@ const GUARDIAN_DOES = [
     + "about ten minutes."],
   ["Gets told what happens", "An email every time you request a payout, and a permanent record. "
     + "They are not asked to approve individual sales, and on this account type nobody can block "
-    + "a payout — not them, and not us."],
+    + "a payout, not them and not us."],
 ];
 
 const FAQ: [string, React.ReactNode][] = [
@@ -142,14 +142,14 @@ const FAQ: [string, React.ReactNode][] = [
       No. The verification happens once. After it, they are the named adult on the payment
       account and they get an email each time you request a payout, which is a notice rather
       than a request to approve. They do not touch your products, your prices or your links.
-      The one thing that stays theirs is the payment account itself &mdash; refunds are issued
+      The one thing that stays theirs is the payment account itself. Refunds are issued
       from it, and so is anything the provider asks for later.
     </>,
   ],
   [
     "What if my parent says no, or never replies?",
     <>
-      Then the account cannot take payments, and there is no way around that &mdash; it is the
+      Then the account cannot take payments, and there is no way around that: it is the
       part that makes the whole arrangement lawful rather than a workaround. You can send a fresh
       invite whenever you like, and invites last fourteen days. If the hesitation is about what
       they are signing up for, the page written for them answers it in their words, including
@@ -164,7 +164,7 @@ const FAQ: [string, React.ReactNode][] = [
       than a gap: card details entered on a page you control are card details you become
       responsible for, and the compliance that follows is not something to hand a fifteen-year-old
       by accident. What does exist is{" "}
-      <Link className="linkbtn" href="/docs/sdk">an npm package</Link> &mdash; a React component
+      <Link className="linkbtn" href="/docs/sdk">an npm package</Link>: a React component
       that opens the checkout and tells your code when the payment lands, so you can unlock the
       thing or send the file without writing a webhook. The card form itself stays on our page.
     </>,
@@ -174,7 +174,7 @@ const FAQ: [string, React.ReactNode][] = [
     <>
       Two separate waits, and it is worth knowing which is which. First the payment clears with
       the processor, usually a couple of days. Then it pays out to the bank account on your
-      payment account, on <strong>its own schedule</strong> &mdash; typically longer for the first
+      payment account, on <strong>its own schedule</strong>, typically longer for the first
       payout and shorter after that, varying by country.{" "}
       <Link className="linkbtn" href="/how-it-works">Your wallet</Link> shows which money is still
       settling and which is available, so you are never guessing. Veyro never holds the money and
@@ -195,7 +195,7 @@ const FAQ: [string, React.ReactNode][] = [
       Your guardian issues it from the Stripe dashboard, because that is where the money actually
       sits. The customer gets their money back and the processor keeps its original fee, so a
       refunded sale costs you that fee. Veyro records the refund against the payment and your
-      wallet subtracts it, so what you see is what you have &mdash; a refunded sale stops counting
+      wallet subtracts it, so what you see is what you have. A refunded sale stops counting
       towards the free limit too.
     </>,
   ],
@@ -243,20 +243,16 @@ export default function GetStarted() {
           <div className="wrap-lp gs-hero">
             <div className="gs-hero-grid">
               <div>
-                <p className="hero-kicker">
-                  <span className="hero-kicker-dot" aria-hidden="true" />
-                  Get started
-                </p>
                 <h1 className="hero-h1">From your app to your first payment.</h1>
                 <p className="hero-lead">
                   About fifteen minutes, and ten of them belong to a parent. The whole path in
-                  the order you will actually do it &mdash; including the part that stops most
+                  the order you will actually do it, including the part that stops most
                   people, which is not the code.
                 </p>
 
                 <div className="hero-cta">
-                  <Link className="btn btn-lg" href="/auth/signup">Create my founder account</Link>
-                  <Link className="btn btn-2 btn-lg" href="/check">Check where I live</Link>
+                  <Link className="btn btn-lg" href="/auth/signup">Create your founder account</Link>
+                  <Link className="btn btn-2 btn-lg" href="/check">Check eligibility</Link>
                 </div>
               </div>
 
@@ -289,13 +285,12 @@ export default function GetStarted() {
           <div className="wrap-lp">
             <div className="aside-grid">
               <div className="aside-head">
-                <span className="lp-eyebrow">The part that decides it</span>
-                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                <h2 className="lp-h2">
                   Asking your parent is the hard bit. Not the code.
                 </h2>
                 <p className="body" style={{ marginTop: "var(--sp-4)" }}>
                   Everything else here is filling in a form. This is a conversation, and it is
-                  where people stall &mdash; so do it first, before you build the buy button.
+                  where people stall, so do it first, before you build the buy button.
                 </p>
                 <p className="small" style={{ marginTop: "var(--sp-4)" }}>
                   <Link className="linkbtn" href="/for-parents">The page written for them</Link>
@@ -331,8 +326,7 @@ export default function GetStarted() {
         {/* ---------------- where the money goes ---------------------------- */}
         <section className="lp ch ch-surface">
           <div className="wrap-lp">
-            <span className="lp-eyebrow">Where a payment goes</span>
-            <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)", maxWidth: "20ch" }}>
+            <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>
               Four stops. The money only ever rests at one.
             </h2>
 
@@ -369,8 +363,7 @@ export default function GetStarted() {
           <div className="wrap-lp">
             <div className="aside-grid">
               <div className="aside-head">
-                <span className="lp-eyebrow">Your half</span>
-                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                <h2 className="lp-h2">
                   The integration is a link.
                 </h2>
                 <p className="body" style={{ marginTop: "var(--sp-4)" }}>
@@ -427,8 +420,7 @@ export function BuyButton() {
         {/* ---------------- questions --------------------------------------- */}
         <section className="lp ch ch-surface">
           <div className="wrap-lp">
-            <span className="lp-eyebrow">Before you start</span>
-            <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)", maxWidth: "22ch" }}>
+            <h2 className="lp-h2" style={{ maxWidth: "22ch" }}>
               Questions people ask at exactly this point.
             </h2>
             <div className="ruled" style={{ marginTop: "var(--sp-7)" }}>
@@ -448,12 +440,12 @@ export function BuyButton() {
             <h2 className="lp-h2">Start with the ask, not the code.</h2>
             <p className="body" style={{ marginTop: 14, marginLeft: "auto", marginRight: "auto" }}>
               If you are 13 or over and there is an adult who will be the guardian, you can set
-              your side up in about five minutes. Send them the message above first, though
-              &mdash; nothing you build can take a payment until they are verified.
+              your side up in about five minutes. Send them the message above first, though:
+              nothing you build can take a payment until they are verified.
             </p>
             <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
-              <Link className="btn btn-lg" href="/auth/signup">Create my founder account</Link>
-              <Link className="btn btn-2 btn-lg" href="/check">Check where I live</Link>
+              <Link className="btn btn-lg" href="/auth/signup">Create your founder account</Link>
+              <Link className="btn btn-2 btn-lg" href="/check">Check eligibility</Link>
             </div>
             <p className="tiny" style={{ marginTop: 16 }}>
               Free under $100 a month, then 3% of the amount above it. Card processing fees still
@@ -474,7 +466,7 @@ export function BuyButton() {
       />
 
       <ScrollTop />
-      <StickyCta href="/auth/signup" label="Create my founder account" note="Free. Two minutes." />
+      <StickyCta href="/auth/signup" label="Create your founder account" note="Free. Two minutes." />
       <SiteFooter />
     </div>
   );

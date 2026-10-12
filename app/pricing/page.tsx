@@ -114,7 +114,7 @@ export default function Pricing() {
             <div className="lp-links">
               <Link className="btn btn-q btn-sm hide-s" href="/how-it-works">How it works</Link>
               <Link className="btn btn-q btn-sm hide-s" href="/for-parents">For parents</Link>
-              <Link className="btn btn-sm" href="/get-started">Start</Link>
+              <Link className="btn btn-sm" href="/get-started">Get started</Link>
               <ThemeToggle />
               <MobileNav
                 items={[
@@ -147,10 +147,6 @@ export default function Pricing() {
           <div className="wrap-lp gs-hero">
             <div className="gs-hero-grid">
               <div>
-                <p className="hero-kicker">
-                  <span className="hero-kicker-dot" aria-hidden="true" />
-                  Pricing
-                </p>
                 <h1 className="hero-h1" style={{ maxWidth: "16ch" }}>
                   One product. One number.
                 </h1>
@@ -170,8 +166,8 @@ export default function Pricing() {
                 </div>
 
                 <div className="hero-cta">
-                  <Link className="btn btn-lg" href="/auth/signup">Start &mdash; it&rsquo;s free</Link>
-                  <Link className="btn btn-2 btn-lg" href="/get-started">See the whole path</Link>
+                  <Link className="btn btn-lg" href="/auth/signup">Create your founder account</Link>
+                  <Link className="btn btn-2 btn-lg" href="/get-started">Get started</Link>
                 </div>
               </div>
 
@@ -286,7 +282,7 @@ export default function Pricing() {
           <div className="wrap-lp refflow">
         <h2 className="lp-h2" style={{ maxWidth: "18ch" }}>Why these numbers</h2>
         <p className="body" style={{ marginTop: 8 }}>
-          Running an active seller costs about $3.25 a month before anyone earns a penny &mdash;
+          Running an active seller costs about $3.25 a month before anyone earns a penny:
           the processor charges $2.00 for the account, $0.25 a payout, and a quarter of a percent
           each on the payout and on routing the funds. A dormant account costs nothing, which is
           why being under the limit is genuinely free rather than something paid users subsidise.
@@ -295,12 +291,25 @@ export default function Pricing() {
           Once you are earning $100 or more a month, the 3% pays for the part that only matters
           when real money is moving: watching the account&rsquo;s standing, handling the disputes,
           and answering your parent when they ring. Those things are there from the first sale
-          either way &mdash; the fee is what makes them sustainable, not what unlocks them.
+          either way. The fee is what makes them sustainable, not what unlocks them.
         </p>
+        {/* This paragraph used to open "In comparable marketplaces, 44% of
+            sellers never earn anything at all and the median earner makes
+            around $120 a month", and then rested the whole justification of
+            the $100 limit on those two figures. Neither is sourced, on the
+            one site whose entire argument is that every number traces to
+            something: the fee comes out of lib/pricing.ts, the $3.25 is our
+            own cost base, and the Stripe policy is quoted verbatim with the
+            date we received it. A borrowed statistic nobody can check sits
+            badly next to all three, and we have no study to cite for it.
+
+            What replaces it claims nothing about anybody else's marketplace.
+            It states why WE put the line there, which is a fact about a
+            decision we made and can therefore stand behind. */}
         <p className="body" style={{ marginTop: 12 }}>
-          In comparable marketplaces, 44% of sellers never earn anything at all and the median
-          earner makes around $120 a month. A free limit at $100 therefore covers roughly half of
-          everyone who ever earns a cent, which is the point of putting it there.
+          The limit sits at $100 because below it you are still finding out whether anyone wants
+          the thing you made. Charging for that would be charging you to experiment. We would
+          rather carry the accounts that never earn than meter the ones still trying.
         </p>
         <p className="body" style={{ marginTop: 12 }}>
           3% is a number we can say out loud. Someone earning $400 a month pays $9. A higher rate
@@ -315,7 +324,7 @@ export default function Pricing() {
         </p>
 
         <div className="row" style={{ marginTop: "var(--sp-7)", gap: 8, flexWrap: "wrap" }}>
-          <Link className="btn btn-lg" href="/get-started">Start &mdash; it&rsquo;s free</Link>
+          <Link className="btn btn-lg" href="/get-started">Get started</Link>
           <Link className="btn btn-2 btn-lg" href="/for-parents">For parents</Link>
         </div>
           </div>

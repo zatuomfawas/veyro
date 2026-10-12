@@ -153,16 +153,18 @@ export default async function Home() {
                   sells, and a reader recognises one of them faster than
                   they parse a category.
 
-                  The guardian clause moved up here from the card footer
-                  rather than being added, so a parent meets it in the
-                  first thing they read instead of three hundred pixels
-                  down. The footer below keeps who holds the account, who
-                  schedules payouts and who never touches the money. */}
+                  ONE SENTENCE, AND ONE JOB. It carried a second one --
+                  "A parent or guardian completes the account
+                  verification" -- which is the guardian's sentence welded
+                  to the founder's. Measured, the pair ran four lines and
+                  118px on a phone, and the inline link inside them pulled
+                  the eye off the only hook the hero has. The guardian fact
+                  did not go anywhere: it is the card's footer line, still
+                  inside the first screen, where it sits with the account
+                  it describes instead of interrupting the hook. */}
               <p className="hero-lead">
                 Sell the apps, templates and commissions you build, with your own checkout
-                link.{" "}
-                <Link className="linkbtn" href="/for-parents">A parent or guardian</Link>{" "}
-                completes the account verification.
+                link.
               </p>
 
               <HeroWallet />
@@ -196,7 +198,6 @@ export default async function Home() {
         <section className="lp ch">
           <div className="wrap-lp">
             <div className="stmt">
-              <span className="lp-eyebrow">The problem</span>
               {/* Recognition, not explanation.
                   ----------------------------------------------------------
                   This block used to open "You can build something worth
@@ -265,10 +266,7 @@ export default async function Home() {
           <div className="wrap-lp">
             <div className="moneyband-h">
               <div>
-                <span className="lp-eyebrow">Where the money goes</span>
-                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
-                  It never stops here.
-                </h2>
+                <h2 className="lp-h2">It never stops here.</h2>
               </div>
               {/* The third sentence here was "It is never the thing holding
                    your money", which is word for word what the trust section
@@ -295,10 +293,7 @@ export default async function Home() {
           <div className="wrap-lp">
             <div className="aside-grid">
               <div className="aside-head">
-                <span className="lp-eyebrow">Start to paid</span>
-                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
-                  Three steps. One of them is your parent.
-                </h2>
+                <h2 className="lp-h2">Three steps. One of them is your parent.</h2>
                 {/* The lead here said "from nothing to money in an account
                      with your name on the products", which the heading above
                      and the band above that had both already said. The three
@@ -327,10 +322,7 @@ export default async function Home() {
           <div className="wrap-lp">
             <div className="secth">
               <div>
-                <span className="lp-eyebrow">Two people have to say yes</span>
-                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
-                  One of them is reading over your shoulder.
-                </h2>
+                <h2 className="lp-h2">One of them is reading over your shoulder.</h2>
               </div>
               <p className="secth-l">
                 Veyro is software, not a bank, and it never holds your money. The payment
@@ -378,8 +370,14 @@ export default async function Home() {
                 shape rather than a new one. */}
             <dl className="hero-facts ctafacts">
               <div>
-                <dt className="fig-k">Free every month</dt>
-                <dd className="fig fig-sm">$100</dd>
+                {/* "Free every month / $100" inverted. As a dt over a dd the
+                    eye resolves the pair as label: value -- "free every
+                    month: $100" -- which is a reading of our pricing that
+                    says we charge a hundred dollars a month, in the last
+                    block before the decision. Its two siblings read
+                    correctly, which is what made this one invisible. */}
+                <dt className="fig-k">First $100 each month</dt>
+                <dd className="fig fig-sm">Free</dd>
               </div>
               <div>
                 <dt className="fig-k">Above that</dt>
@@ -431,7 +429,7 @@ export default async function Home() {
           up is the other half of the same decision and the navbar's own
           "Get started" scrolls away behind the drawer on a phone. */}
       <StickyCta href="/get-started" label="Get started"
-        note="Free under $100 a month. No card." />
+        note="Free until you earn $100 in a month. No card." />
       <SiteFooter />
     </div>
   );

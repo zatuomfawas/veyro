@@ -95,13 +95,23 @@ const NOTICE_BORDER: Record<Tone, string> = {
  * confirmation; errors that need interrupting use role="alert" on the field.
  */
 export function Notice({
-  tone = "amber", head, children, action, live,
+  tone = "amber", head, children, action, live, lead,
 }: {
   tone?: Tone;
   head: React.ReactNode;
   children: React.ReactNode;
   action?: React.ReactNode;
   live?: boolean;
+  /**
+   * Sets the head at the size of a section heading rather than a label.
+   *
+   * For the one notice on a page that is the answer the reader came for --
+   * the eligibility verdict is the case this was added for. At the default
+   * size that verdict rendered smaller than the lead paragraph above it and
+   * smaller than the figures beside it, which is the wrong size for the
+   * single most important word in a funnel.
+   */
+  lead?: boolean;
 }) {
   return (
     <div
@@ -113,7 +123,9 @@ export function Notice({
       className={live ? "reveal" : undefined}
       style={{ background: NOTICE_BG[tone], border: "1px solid " + NOTICE_BORDER[tone], borderRadius: 0, padding: "14px 16px" }}
     >
-      <div style={{ fontSize: "var(--fs-3)", fontWeight: 560, marginBottom: 4 }}>{head}</div>
+      <div style={lead
+        ? { fontSize: "var(--fs-6)", fontWeight: "var(--fw-bold)", letterSpacing: "-0.02em", marginBottom: 6 }
+        : { fontSize: "var(--fs-3)", fontWeight: 560, marginBottom: 4 }}>{head}</div>
       <div className="small" style={{ maxWidth: "var(--m-body)" }}>{children}</div>
       {action && <div style={{ marginTop: 12 }}>{action}</div>}
     </div>

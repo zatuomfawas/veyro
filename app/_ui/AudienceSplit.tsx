@@ -33,8 +33,15 @@ const FOUNDER = [
   "See every payment, fee and payout as it happens",
 ] as const;
 
+// Two capabilities, not three mixed signals. The first line used to be "You
+// are not asked to approve individual sales" -- a true and important scope
+// statement, and the wrong thing to render as a pine tick. Pine is the money
+// and settled colour, so a green mark against a limit on the reader's own
+// authority reads as reassurance for the thing it is withholding. The CSS has
+// a data-no guard written for exactly this (css.ts, .ticks) and this list
+// never set it. The fact is not dropped: it moves into the paragraph above,
+// where it reads as scope rather than as a benefit.
 const PARENT = [
-  "You are not asked to approve individual sales",
   "You own the account and can close or freeze it whenever",
   "Every payment and fee on the record, and on your dashboard",
 ] as const;
@@ -54,7 +61,7 @@ export function AudienceSplit() {
           {FOUNDER.map((x) => <li key={x}>{x}</li>)}
         </ul>
         <div className="aud-foot">
-          <Link className="btn" href="/get-started">Start &mdash; it&rsquo;s free</Link>
+          <Link className="btn" href="/get-started">Get started</Link>
         </div>
       </section>
 
@@ -62,8 +69,9 @@ export function AudienceSplit() {
         <h3 className="aud-k">If your child sent you a link</h3>
         <p className="aud-h">Is this legitimate?</p>
         <p className="aud-b">
-          Your name goes on the account. We wrote the whole of what that means: the
-          responsibilities, the limits, and the parts no lawyer has confirmed yet.
+          Your name goes on the account, and you are not asked to approve individual sales.
+          We wrote the whole of what that means: the responsibilities, the limits, and the
+          parts no lawyer has confirmed yet.
         </p>
         <ul className="ticks" style={{ marginTop: "var(--sp-4)" }}>
           {PARENT.map((x) => <li key={x}>{x}</li>)}

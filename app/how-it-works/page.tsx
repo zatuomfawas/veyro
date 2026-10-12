@@ -113,10 +113,6 @@ export default function HowItWorks() {
           <div className="wrap-lp gs-hero">
             <div className="gs-hero-grid">
               <div>
-                <p className="hero-kicker">
-                  <span className="hero-kicker-dot" aria-hidden="true" />
-                  How it works
-                </p>
                 <h1 className="hero-h1">What Veyro does, and what Stripe does.</h1>
                 <p className="hero-lead">
                   Stripe moves the money, and has let a 13-year-old hold an account with an adult
@@ -126,7 +122,7 @@ export default function HowItWorks() {
                 </p>
                 <div className="hero-cta">
                   <Link className="btn btn-lg" href="/check">Check what applies to you</Link>
-                  <Link className="btn btn-2 btn-lg" href="/get-started">See the whole path</Link>
+                  <Link className="btn btn-2 btn-lg" href="/get-started">Get started</Link>
                 </div>
                 <p className="tiny" style={{ marginTop: "var(--sp-6)", maxWidth: "46ch" }}>
                   Last checked {UPDATED}. The rules underneath this change, and when they do this

@@ -52,7 +52,15 @@ export const CSS = `
   --tap:44px; --marker:7px;
   --nav-h:62px;
   /* Line length. Four measures, chosen once */
-  --m-tight:34ch; --m-lead:52ch; --m-body:66ch; --m-wide:76ch;
+  /* Measures, retuned to the characters they actually produce.
+     A ch is the width of "0", and in Onest that runs about 1.4x the average
+     character, so the body measure at 66ch was rendering 93 characters to
+     the line and .body's own 70ch was rendering 99 -- well past the 65-75
+     a reading measure is chosen for. Measured on the rendered page rather
+     than assumed: 768px of .body at 16.5px carried 99 characters, i.e.
+     7.76px each against a ch of 10.97px. The names and the job are
+     unchanged; the numbers now mean what the names always said. */
+  --m-tight:34ch; --m-lead:52ch; --m-body:54ch; --m-wide:62ch;
   /* Layout: one asymmetric split, used everywhere a section has two parts */
   --split-a:minmax(0,5fr); --split-b:minmax(0,7fr);
 
@@ -343,8 +351,15 @@ export const CSS = `
 .fw .h3 { font-size:var(--fs-6); line-height:1.32; letter-spacing:-0.016em; font-weight:var(--fw-bold); }
 .fw .h4 { font-size:var(--fs-4); line-height:1.4; letter-spacing:-0.008em; font-weight:var(--fw-bold); }
 .fw .lead { font-size:var(--fs-5); line-height:1.58; color:var(--ink-2); max-width:var(--m-lead); }
-.fw .body { font-size:var(--fs-4); line-height:1.5; color:var(--ink-2); max-width:70ch; }
-.fw .small { font-size:var(--fs-3); line-height:1.5; color:var(--ink-2); }
+/* The token, not a second raw number beside it: this was 70ch while the
+   measure token said 66ch, so the one style most body copy uses opted out
+   of the scale it was supposed to belong to. */
+.fw .body { font-size:var(--fs-4); line-height:1.5; color:var(--ink-2); max-width:var(--m-body); }
+/* .small had no measure at all, which is how a 100-character line of it ended
+   up inside a panel on /how-it-works. It is a reading size, so it takes a
+   reading measure; at fs-3 the body token lands it around 75 characters. */
+.fw .small { font-size:var(--fs-3); line-height:1.5; color:var(--ink-2);
+  max-width:var(--m-body); }
 .fw .tiny { font-size:var(--fs-2); line-height:1.45; color:var(--ink-3); }
 .fw .lbl { font-size:var(--fs-2); color:var(--ink-3); letter-spacing:0.004em; }
 .fw .num { font-variant-numeric: tabular-nums lining-nums; font-feature-settings:"tnum" 1; }
@@ -476,6 +491,10 @@ export const CSS = `
 .fw .card-h { padding:var(--sp-3) var(--sp-5); min-height:45px; border-bottom:1px solid var(--line-soft); display:flex; align-items:center; justify-content:space-between; gap:12px; }
 .fw .card-b { padding:var(--sp-5); }
 .fw .card-f { padding:var(--sp-3) var(--sp-5); border-top:1px solid var(--line-soft); background:transparent; }
+/* A card footer is usually one short note, so .tiny had no measure here and
+   did not need one -- until the note ran to three lines of 89 characters at
+   12.5px, which is the hardest reading on the page in the smallest type. */
+.fw .card-f > .tiny { max-width:var(--m-body); }
 .fw .panel { background:transparent; border-top:1px solid var(--line); padding:14px 0 0; }
 
 /* badges */
@@ -535,7 +554,8 @@ export const CSS = `
 .fw .charcount { float:right; font-size:var(--fs-1); color:var(--ink-3); font-variant-numeric:tabular-nums; }
 .fw .charcount[data-near="1"] { color:var(--amber); }
 .fw .charcount[data-over="1"] { color:var(--clay); font-weight:var(--fw-med); }
-.fw .hint { display:block; margin-top:5px; font-size:var(--fs-2); color:var(--ink-3); }
+.fw .hint { display:block; margin-top:5px; font-size:var(--fs-2); color:var(--ink-3);
+  max-width:var(--m-body); }
 .fw .err { display:block; margin-top:5px; font-size:var(--fs-2); color:var(--clay); }
 /* Something arriving because you asked for it.
    A confirmation, an error, a panel that just opened. It rises 4px and fades,
@@ -974,6 +994,21 @@ export const CSS = `
   .fw .jn { grid-template-columns:minmax(0,1fr); }
   .fw .jn-s + .jn-s { border-left:0; }
 }
+/* The three-step row stacks too, and it needs saying twice.
+   .jn[data-steps="3"] is an attribute selector, (0,3,0); the two collapse
+   rules above are (0,2,0), and a media query adds no specificity of its own.
+   So the three-column grid outranked both of them and held three columns all
+   the way down -- measured 119px per column at 390, which put "Your parent
+   approves, once" on four lines with ", once" orphaned behind a leading
+   comma, and ran the body copy at two words to the line.
+
+   Straight to one column rather than through two: three steps in a
+   two-column grid leave the third on a row of its own, which reads as a
+   dropped item rather than as a sequence. */
+@media (max-width:860px) {
+  .fw .jn[data-steps="3"] { grid-template-columns:minmax(0,1fr); }
+  .fw .jn[data-steps="3"] .jn-s + .jn-s { border-left:0; }
+}
 
 /* ---- what is included ----------------------------------------------------
    One list, one column, no ticks and crosses. The two panels this replaced
@@ -999,7 +1034,7 @@ export const CSS = `
 /* 87 characters a line measured on /how-it-works, where this block gets the
    full page width. The row should span; the answer inside it should not. */
 .fw .obj-a { margin:0; font-size:var(--fs-3); line-height:1.6; color:var(--ink-2);
-  max-width:var(--m-wide); }
+  max-width:var(--m-body); }
 .fw .obj-mark { width:20px; height:20px; flex:none; display:flex; align-items:center;
   justify-content:center; margin-top:2px; color:var(--pine);
   background:var(--pine-bg); border:1px solid var(--pine-line); }
@@ -2772,7 +2807,8 @@ export const CSS2 = `
   max-width:var(--m-wide); }
 @media (max-width:760px) { .fw .ruled > div { grid-template-columns:1fr; gap:5px; } }
 .fw .arrowlist { list-style:none; margin:0; padding:0; }
-.fw .arrowlist li { padding:5px 0 5px 0; font-size:var(--fs-3); color:var(--ink-2); position:relative; }
+.fw .arrowlist li { padding:5px 0 5px 0; font-size:var(--fs-3); color:var(--ink-2); position:relative;
+  max-width:var(--m-body); }
 .fw .arrowlist li + li { border-top:1px solid var(--line-soft); }
 .fw .ctx { display:flex; align-items:center; gap:9px; margin:0 16px 10px; padding:0 0 12px; border-bottom:1px solid var(--line); }
 .fw .initials { width:26px; height:26px; background:var(--brand); color:var(--reverse); font-size:var(--fs-1); font-weight:var(--fw-bold); letter-spacing:0.02em; display:flex; align-items:center; justify-content:center; flex:none; }
@@ -3579,7 +3615,12 @@ export const CSS2 = `
    ending in six hundred pixels of nothing, which is what it did when the
    content ran out at half the viewport height. */
 .fw .ckpage { background:var(--surface); }
-.fw .ckhead { padding:var(--sp-10) 0 var(--sp-8); text-align:center; }
+/* padding-block, not the shorthand. This element carries .wrap-lp as well,
+   whose horizontal padding is the page gutter; the shorthand here is the
+   same specificity and sits later in the file, so it was silently zeroing
+   that gutter and running the lead paragraph from edge to edge of the
+   viewport -- measured 0px on both sides at 390 and at 1440. */
+.fw .ckhead { padding-top:var(--sp-10); padding-bottom:var(--sp-8); text-align:center; }
 .fw .ckhead-h { margin:var(--sp-3) 0 0; font-size:clamp(30px, 4vw, 46px);
   line-height:1.08; letter-spacing:-0.03em; font-weight:var(--fw-bold); }
 .fw .ckhead-lead { margin:var(--sp-5) auto 0; font-size:var(--fs-5); line-height:1.55;
@@ -3605,7 +3646,9 @@ export const CSS2 = `
 @media (max-width:560px) {
   .fw .cktool .checkform { grid-template-columns:1fr; gap:var(--sp-4); }
   .fw .cktool .card-b { padding:var(--sp-5); }
-  .fw .ckhead { padding:var(--sp-8) 0 var(--sp-6); }
+  /* padding-block here too: the shorthand zeroed the page gutter, which is
+     the bug this page had at every width and still had at this one. */
+  .fw .ckhead { padding-top:var(--sp-8); padding-bottom:var(--sp-6); }
 }
 
 /* The evidence band. A different ground from the tool above it, so the page
@@ -4100,6 +4143,35 @@ export const CSS2 = `
    details when it wants a country and a birth year. */
 .fw .hero-sub2 { margin:var(--sp-4) 0 0; font-size:var(--fs-2); color:var(--ink-3); }
 
+/* On a phone the action comes before the evidence.
+   --------------------------------------------------------------------
+   Measured at 390x844, the hero band ran 968px -- taller than the
+   viewport it opens in -- and .hero-cta began at y=851. The one action
+   the page was rebuilt to lead with was below the fold, and the sticky
+   bar sat over the bottom of the wallet card, so the first screen ended
+   on a truncated surface and a button for somewhere else.
+
+   Source order stays claim, evidence, action, which is the right reading
+   order for a document and the order a screen reader and a crawler get.
+   Flex order moves the surface below the action for the one width where
+   the fold is the binding constraint. Nothing is hidden and no markup is
+   duplicated.
+
+   The entrance delays are restated to match, because they are indexed on
+   DOM position: without this the card would animate in before the two
+   elements now sitting above it. */
+@media (max-width:760px) {
+  .fw .hero-stack { display:flex; flex-direction:column; }
+  .fw .hero-stack > .hero-h1   { order:1; }
+  .fw .hero-stack > .hero-lead { order:2; }
+  .fw .hero-stack > .hero-cta  { order:3; margin-top:var(--sp-7); }
+  .fw .hero-stack > .hero-sub2 { order:4; }
+  .fw .hero-stack > .hw        { order:5; margin-top:var(--sp-8); }
+  .fw .hero-stack > .hero-cta  { animation-delay:140ms; }
+  .fw .hero-stack > .hero-sub2 { animation-delay:210ms; }
+  .fw .hero-stack > .hw        { animation-delay:280ms; }
+}
+
 /* The sentence the hero did not have.
    It sits between the statement and the surface, which is where two
    separate reviews said it was missing: the page went from the headline
@@ -4131,10 +4203,17 @@ export const CSS2 = `
 
 /* The secondary action is a link, not a second button, and it no longer
    carries an appended arrow. */
+/* The rule under it is an underline, not a bottom border.
+   min-height:var(--tap) makes the box 44px for the thumb, and a
+   border-bottom draws on the box -- so the rule sat about twelve pixels
+   under the text with nothing between them, reading as a stray line rather
+   than as an underline. text-decoration draws on the text, at an offset we
+   choose, and the box keeps its tap target. */
 .fw .hero-alt { display:inline-flex; align-items:center; min-height:var(--tap);
   font-size:var(--fs-4); font-weight:var(--fw-med); color:var(--ink);
-  text-decoration:none; border-bottom:1px solid var(--line); padding-bottom:1px; }
-.fw .hero-alt:hover { border-bottom-color:var(--ink); }
+  text-decoration:underline; text-decoration-thickness:1px;
+  text-decoration-color:var(--line-hover); text-underline-offset:5px; }
+.fw .hero-alt:hover { text-decoration-color:var(--ink); }
 .fw .hero-alt:focus-visible { outline:2px solid var(--pine); outline-offset:3px; }
 
 /* ---------------------------------------------------------- the surface
@@ -4171,8 +4250,13 @@ export const CSS2 = `
    a card with content only in its top-left corner reads as unfinished
    rather than as spacious. Side by side, the card's top is used edge to
    edge and the figures get a measure wide enough for their labels. */
+/* align-items:start, not end. Bottom-aligned, the taller money block pushed
+   its own "Available" label 12px off the baseline of the labels beside it --
+   one row with two label baselines, inside a card whose balance carries a
+   0.045em optical correction for its own side bearing. Top-aligned, the label
+   and the first ledger row start on the same line. */
 .fw .hw-body { display:grid; grid-template-columns:auto minmax(0, 1fr);
-  gap:var(--sp-7); align-items:end;
+  gap:var(--sp-7); align-items:start;
   padding:var(--sp-7) var(--sp-8); }
 .fw .hw-money { min-width:0; }
 
@@ -4220,43 +4304,33 @@ export const CSS2 = `
   font-weight:var(--fw-bold); color:var(--pine);
   font-variant-numeric:tabular-nums lining-nums; font-feature-settings:"tnum" 1; }
 
-/* Four across, not two by two. They were paired because the ledger had
-   the other half of the surface; with the card to themselves they use its
-   width, which is also what stops a 1240px card from being a wide band
-   with everything bunched at the left. */
-/* Four across again. They were paired when the balance was 92px and the
-   money zone needed half the card; at 52px that zone is 209px wide, and
-   two columns left the four figures sprawling over 917px with a label in
-   the middle of each. One row of four, each column wide enough for its
-   longest label and no wider. */
-/* Even GAPS, not even columns.
-   repeat(4, 1fr) made the columns identical -- a 255px pitch, measured
-   exactly even -- and the rhythm still read wrong, because what the eye
-   spaces is the text and the text is not the same width: "Collected" is
-   55px and "Veyro fee (3% over $100)" is 152. Measured gaps between the
-   label blocks were 200, 200, 103.
+/* The ledger, not a fee table.
+   --------------------------------------------------------------------
+   Four figures used to sit here: Collected, Card fees, Veyro fee and
+   Settling, in a four-column grid whose columns were sized to their
+   content with the slack shared out. That produced even gaps and uneven
+   left edges -- measured at 1440 the four labels began at x=303/563/812/
+   1155, deltas of 260/249/343 -- and the eye reads left edges, so the
+   right of the strip looked blown apart. The fix is not a better grid.
+   The fee breakdown does not belong in a hero at all; see HeroWallet.tsx.
 
-   Columns sized to their content with the slack shared between them puts
-   the same distance between every pair, which is what "evenly spaced"
-   actually means here. The first cell still starts on the track's left
-   edge and the last still ends on its right, so the card's outer
-   alignment is unchanged. */
-.fw .hw-break { display:grid; grid-template-columns:repeat(4, auto);
-  justify-content:space-between; gap:var(--sp-5) var(--sp-6); margin:0; }
-@media (max-width:1100px) {
-  /* Two up, and back to equal columns: with only two per row there is no
-     rhythm to get wrong, and equal columns keep the pair aligned. */
-  .fw .hw-break { grid-template-columns:repeat(2, minmax(0, 1fr));
-    justify-content:stretch; }
-}
-.fw .hw-break > div { min-width:0; }
-.fw .hw-break dt { font-size:var(--fs-2); line-height:1.4; color:var(--ink-3); }
-.fw .hw-break dd { margin:4px 0 0; font-size:var(--fs-4); font-weight:var(--fw-bold);
-  color:var(--ink); font-variant-numeric:tabular-nums; }
-/* Settling is money that will be the founder's, so it takes the money
-   colour. Collected is the gross before anything is taken and the two
-   fees are what leaves, so they stay ink. */
-.fw .hw-break dd[data-money="1"] { color:var(--pine); }
+   What is here instead reuses .led, the dashboard's own transaction row,
+   so no new component exists for the hero to drift away from. Its own top
+   border comes off (the card already has an edge, and the money block
+   beside it is the heading this list needs) and the last row loses its
+   rule, so two rows are divided by exactly one hairline. */
+/* Bounded, and pushed to the card's right edge.
+   Left to fill the track, each row ran the card's full 1240px measure and
+   put roughly 980px between a product name and the amount it earned --
+   two facts so far apart they stop reading as one row. Capped, the name
+   and its figure stay within one eye movement, and the card still uses
+   both its edges: the balance holds the left, the ledger holds the right,
+   and the air between them is the gap between a heading and a list. */
+.fw .hw-led { border-top:0; max-width:460px; width:100%; justify-self:end; }
+@media (max-width:860px) { .fw .hw-led { max-width:none; justify-self:stretch; } }
+.fw .hw-led .led-row:last-child { border-bottom:0; }
+.fw .hw-led .led-row:first-child { padding-top:0; }
+.fw .hw-led .led-n { font-weight:var(--fw-reg); }
 
 /* The footer: the two things said about the card rather than about the
    money, on the card's own ground, under the only rule inside it. */
@@ -4264,12 +4338,16 @@ export const CSS2 = `
    card -- over a third of the surface given to grey disclosure, which
    makes a product look defensive rather than careful. Side by side the
    same two facts take two lines instead of four. */
-.fw .hw-foot { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-  gap:var(--sp-4) var(--sp-7);
+/* One row, not two columns of disclosure. The footer carried four facts
+   over two paragraphs -- 173px of grey text inside a phone's first screen,
+   more than the headline. One sentence and a three-word example tag. */
+.fw .hw-foot { display:flex; align-items:baseline; justify-content:space-between;
+  flex-wrap:wrap; gap:var(--sp-2) var(--sp-6);
   padding:var(--sp-5) var(--sp-8); border-top:1px solid var(--line);
   background:var(--surface); }
+.fw .hw-eg { flex:none; }
 .fw .hw-foot p { margin:0; font-size:var(--fs-2); line-height:1.55; color:var(--ink-3); }
-@media (max-width:860px) { .fw .hw-foot { grid-template-columns:minmax(0,1fr); } }
+
 .fw .hw-foot .linkbtn { color:var(--ink-2); }
 .fw .hw-foot .linkbtn:hover { color:var(--ink); }
 
@@ -4279,14 +4357,7 @@ export const CSS2 = `
     align-items:start; padding:var(--sp-6); }
   .fw .hw-foot { padding:var(--sp-5) var(--sp-6); }
 }
-@media (max-width:420px) {
-  /* No margin-top. It was left over from when the figures stacked under
-     the balance with a margin rather than a grid gap, and it added 32px
-     on top of the 32px gap -- measured 64px at 375 against 32 at 768,
-     which is the sort of thing that reads as a hole and never gets
-     explained. The grid owns the spacing now. */
-  .fw .hw-break { gap:var(--sp-4) var(--sp-5); }
-}
+
 
 /* ---------------------------------------------------------------- the problem
    One measure of type, no grid. The question is set large and the answer is

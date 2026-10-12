@@ -125,10 +125,6 @@ export default function SdkDocs() {
           <div className="wrap-lp">
             <div className="sdk-hero-grid">
               <div className="sdk-hero-t">
-                <p className="hero-kicker">
-                  <span className="hero-kicker-dot" aria-hidden="true" />
-                  Add Veyro to your app
-                </p>
                 <h1 className="hero-h1">One component. No server code.</h1>
                 <p className="hero-lead">
                   You already built the thing. This is the whole of what it takes to start

@@ -81,8 +81,7 @@ export function ParentAccount() {
   return (
     <div className="objection">
       <div className="headc">
-        <span className="lp-eyebrow">The obvious question</span>
-        <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+        <h2 className="lp-h2">
           Why not just use your parent&rsquo;s account?
         </h2>
         <p className="lp-lead" style={{ marginTop: 16 }}>

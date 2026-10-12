@@ -20,6 +20,12 @@ export const ICONS: Record<string, string> = {
   // sits with them rather than looking imported: nib, shaft, and the rule the
   // pencil rests on.
   pencil: "M2.5 13.5h3l7.2-7.2a1.4 1.4 0 0 0 0-2l-1-1a1.4 1.4 0 0 0-2 0L2.5 10.5zM9.3 3.9l2.8 2.8",
+  // The theme switch used the Unicode glyphs for a sun and a moon, set at
+  // 11px inside a 20px thumb, where a sun renders as an ambiguous dot. These
+  // are drawn on the same 16px grid and the same 1.35 stroke as everything
+  // above, so the switch belongs to the icon set rather than to the font.
+  sun: "M11 8a3 3 0 1 1-6 0 3 3 0 1 1 6 0M8 1.6v1.5M8 12.9v1.5M14.4 8h-1.5M3.1 8H1.6M12.5 3.5l-1.1 1.1M4.6 11.4l-1.1 1.1M12.5 12.5l-1.1-1.1M4.6 4.6 3.5 3.5",
+  moon: "M13.2 10.3A5.7 5.7 0 0 1 5.7 2.8a5.7 5.7 0 1 0 7.5 7.5Z",
 };
 
 export function Icon({ name, size = 15 }: { name: string; size?: number }) {

@@ -149,8 +149,7 @@ export default function LegalPage() {
       <main id="main" className="wrap-lp longform has-rail" style={{ paddingTop: 32, paddingBottom: 56 }}>
         {/* The sections of this page are the six doubts, not its one heading. */}
         <SectionRail label="What is unproven" selector=".numbered > li > span:first-child" />
-        <span className="lp-eyebrow">Straight answers</span>
-        <h1 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>What is not settled yet.</h1>
+        <h1 className="lp-h2">What is not settled yet.</h1>
         <p className="lead" style={{ marginTop: 16 }}>
           Veyro is built on a route that a payment provider permits and that no court has ruled
           on. Six things about that are unproven, unfinished or weaker than they sound. They are

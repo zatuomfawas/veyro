@@ -80,10 +80,6 @@ export default function FaqPage() {
           <div className="wrap-lp gs-hero">
             <div className="gs-hero-grid">
               <div>
-                <p className="hero-kicker">
-                  <span className="hero-kicker-dot" aria-hidden="true" />
-                  Questions
-                </p>
                 <h1 className="hero-h1">The ones people actually ask.</h1>
                 <p className="hero-lead">
                   Including the ones with answers you might not want. Where something is not
@@ -116,8 +112,7 @@ export default function FaqPage() {
             already has. */}
         <section className="lp ch ch-surface">
           <div className="wrap-lp">
-            <span className="lp-eyebrow">The arrangement, once</span>
-            <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)", maxWidth: "20ch" }}>
+            <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>
               Most of these are the same question about money.
             </h2>
             <div style={{ marginTop: "var(--sp-7)" }}>
@@ -135,7 +130,7 @@ export default function FaqPage() {
                 <div className="aside-grid">
                   <div className="aside-head">
                     <span className="lp-eyebrow">{String(gi + 1).padStart(2, "0")}</span>
-                    <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>{g.title}</h2>
+                    <h2 className="lp-h2">{g.title}</h2>
                     <p className="body" style={{ marginTop: "var(--sp-4)" }}>{g.lead}</p>
                   </div>
 
@@ -163,7 +158,7 @@ export default function FaqPage() {
           lead="These are the ten that come up most. Anything else goes to a person, and a person
             answers it — there is no ticket queue to disappear into."
           primary={{ href: "/contact", label: "Ask us directly" }}
-          secondary={{ href: "/get-started", label: "See the whole path" }}
+          secondary={{ href: "/get-started", label: "Get started" }}
         />
           </div>
         </section>

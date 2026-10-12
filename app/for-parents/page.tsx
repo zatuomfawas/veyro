@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   title: "For parents: your child runs it, you own the account",
   description:
     "Your role in four steps, who holds the money, what happens in a dispute, and the four "
-    + "questions parents actually ask — including the parts no lawyer has confirmed.",
+    + "questions parents actually ask, including the parts no lawyer has confirmed.",
   alternates: { canonical: SITE + "/for-parents" },
   robots: { index: true, follow: true },
   openGraph: {
@@ -71,7 +71,7 @@ const QUESTIONS: QA[] = [
       "The processor's own written policy allows it. No court has ruled on it, and we are not going to pretend one has.",
     a: (
       <p className="body" style={{ marginTop: 0 }}>
-        That policy is quoted in full &mdash; named, dated and unedited &mdash; on{" "}
+        That policy is quoted in full (named, dated and unedited) on{" "}
         <Link className="linkbtn" href="/how-it-works">how it works</Link>. What it is not is a
         court ruling: no judge has tested whether a minor can be bound by the contracts
         underneath, and no lawyer has confirmed it in any country.{" "}
@@ -82,7 +82,7 @@ const QUESTIONS: QA[] = [
   },
   {
     q: "Am I liable if it goes wrong?",
-    verdict: "Yes — and that is the point",
+    verdict: "Yes, and that is the point",
     tone: "pine",
     lead:
       "You are the account owner, because an adult has to be the party anyone can actually hold to the agreement.",
@@ -90,7 +90,7 @@ const QUESTIONS: QA[] = [
       <p className="body" style={{ marginTop: 0 }}>
         A contract with a minor is voidable at the minor&rsquo;s election, so the enforceable
         party has to be an adult. You get identity-checked, not your child. Refunds, chargebacks
-        and disputes are ultimately yours &mdash; as they would be if your child used your own
+        and disputes are ultimately yours, as they would be if your child used your own
         account. What changes is that this is a separate account for a separate activity.
       </p>
     ),
@@ -124,7 +124,7 @@ const QUESTIONS: QA[] = [
       "You can close or freeze the account at any time, directly with the processor. Nothing in Veyro can prevent that.",
     a: (
       <p className="body" style={{ marginTop: 0 }}>
-        Nothing in Veyro is designed to prevent it either &mdash; the account is yours and the
+        Nothing in Veyro is designed to prevent it either: the account is yours and the
         route to closing it does not pass through us. You are not asked to approve individual
         sales, which is deliberate: a teenager who needs permission for every sale is not running
         anything.
@@ -175,10 +175,6 @@ export default function ForParents() {
           <div className="wrap-lp gs-hero">
             <div className="gs-hero-grid">
               <div>
-                <p className="hero-kicker">
-                  <span className="hero-kicker-dot" aria-hidden="true" />
-                  For parents and guardians
-                </p>
                 <h1 className="hero-h1" style={{ maxWidth: "17ch" }}>
                   Your child runs the business. You are the adult on the account.
                 </h1>
@@ -226,8 +222,7 @@ export default function ForParents() {
           <div className="wrap-lp">
             <div className="aside-grid">
               <div className="aside-head">
-                <span className="lp-eyebrow">Your role</span>
-                <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)" }}>
+                <h2 className="lp-h2">
                   Four steps, and the middle one is yours.
                 </h2>
                 <p className="body" style={{ marginTop: "var(--sp-4)" }}>
@@ -277,8 +272,7 @@ export default function ForParents() {
             record it, the account is yours. */}
         <section className="lp ch">
           <div className="wrap-lp">
-            <span className="lp-eyebrow">Trust and safety</span>
-            <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)", maxWidth: "26ch" }}>
+            <h2 className="lp-h2" style={{ maxWidth: "26ch" }}>
               Stripe holds the money. Veyro keeps the record. You own the account.
             </h2>
             <p className="body" style={{ marginTop: "var(--sp-4)", maxWidth: "var(--m-body)" }}>
@@ -306,8 +300,8 @@ export default function ForParents() {
               <li className="statcard">
                 <div className="statcard-h"><span className="statcard-n">You</span></div>
                 <p className="statcard-r">
-                  Own the account and its controls, and carry the obligations that come with it
-                  &mdash; including disputes.
+                  Own the account and its controls, and carry the obligations that come with
+                  it, including disputes.
                 </p>
                 <span className="statcard-l tiny">In Stripe, not here.</span>
               </li>
@@ -357,8 +351,7 @@ export default function ForParents() {
             lib/disputes.ts does and no more. */}
         <section className="lp ch ch-surface">
           <div className="wrap-lp">
-            <span className="lp-eyebrow">If a customer disputes a charge</span>
-            <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)", maxWidth: "24ch" }}>
+            <h2 className="lp-h2" style={{ maxWidth: "24ch" }}>
               You respond, in Stripe. Veyro makes sure you know.
             </h2>
 
@@ -403,8 +396,7 @@ export default function ForParents() {
         {/* ---------------- 4. the four questions ---------------- */}
         <section className="lp ch">
           <div className="wrap-lp">
-            <span className="lp-eyebrow">The four questions</span>
-            <h2 className="lp-h2" style={{ marginTop: "var(--sp-2)", maxWidth: "22ch" }}>
+            <h2 className="lp-h2" style={{ maxWidth: "22ch" }}>
               Legal, liability, tax, and getting out.
             </h2>
 
@@ -434,7 +426,7 @@ export default function ForParents() {
               <h3 className="h4" style={{ marginTop: 0 }}>What you will actually sign</h3>
               <p className="body" style={{ marginTop: "var(--sp-3)" }}>
                 The identity check happens on Stripe&rsquo;s own hosted form. Veyro never receives
-                your documents, your bank details or the money &mdash; read{" "}
+                your documents, your bank details or the money. Read{" "}
                 <a className="linkbtn" href="https://stripe.com/legal/connect-account" target="_blank" rel="noopener noreferrer">
                   Stripe&rsquo;s Connected Account Agreement
                 </a>{" "}

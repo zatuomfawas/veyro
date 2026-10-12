@@ -37,6 +37,8 @@ export const BALANCE_MINOR =
 export const SALE_GROSS_MINOR = 2400;
 export const SALE_FEE_MINOR = 86;
 export const SALE_NAME = "Notion Second Brain template";
+/** Its date, so the hero's two rows do not both read "2 Oct". */
+export const SALE_WHEN = "4 Oct";
 
 /** Settled rows, newest first. */
 export const PRIOR = [

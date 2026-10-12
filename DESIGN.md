@@ -65,7 +65,17 @@ Page-level rhythm is separate and deliberately larger: `--lp-pad-lg/md/sm`
 sit outside the component scale.
 
 **Measure.** Four line lengths, chosen once: `--m-tight` 34ch, `--m-lead` 52ch,
-`--m-body` 66ch, `--m-wide` 76ch.
+`--m-body` 54ch, `--m-wide` 62ch.
+
+The two larger ones were 66ch and 76ch, and they were retuned in October 2026
+because a `ch` is the width of a `0` and Onest's `0` runs about 1.4x its average
+character. Measured on the rendered page rather than assumed: `.body` at 70ch
+was 768px wide at 16.5px and carried **99 characters to the line**, against the
+65 to 75 a reading measure exists to produce. `.body` also carried its own raw
+`70ch` rather than the token, so the one class most body copy uses had opted out
+of the scale. It takes `--m-body` now.
+
+If you widen these again, check the rendered character count, not the token.
 
 **Containers.** `--lp-max` 1200px for marketing, `.wrap-w` 1400px for
 dashboards, `.wrap-n` 768px for prose, `.wrap-s` 560px for auth. Gutter is
@@ -197,6 +207,18 @@ are in the codebase and none should arrive:
 - Skeleton shimmer loaders. Use a plain, honest loading state
 - Hover states that scale, rotate or add shadow. A hover is a background or
   border change, nothing else
+- **A label above a heading.** An eyebrow, a kicker, a two-word category set
+  over the title it belongs to. Twenty of them came out in October 2026, across
+  the homepage, `/get-started`, `/for-parents`, `/pricing`, `/check`, `/about`,
+  `/faq`, `/legal`, `/status`, `/contact`, `/how-it-works`, `/docs/sdk` and
+  `404`. Nearly all of them restated the heading underneath in fewer words
+  ("The problem" over "You built it. Getting paid for it is the hard part"),
+  which costs a line of vertical space and a beat of attention to say nothing.
+  Two uses survive and both are legitimate: `LegalShell`'s "The clauses" and
+  "On this page" are real `<h2>` section headings that happen to use the small
+  size, and the FAQ's zero-padded group ordinal is a position in a sequence a
+  reader navigates. A heading carries its own weight. Write the heading.
+
 - **Em dashes in user-facing copy.** Use the punctuation the sentence needs: a
   period for two statements, a comma for an aside, a colon where the second half
   explains the first, parentheses for a true parenthetical. Code comments are

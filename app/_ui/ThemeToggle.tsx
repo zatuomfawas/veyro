@@ -20,6 +20,7 @@
 // answer.
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
+import { Icon } from "@/app/_ui/marks";
 
 // Two states, not three. There used to be a "system" value that deferred to
 // prefers-color-scheme, and the stylesheet had a media query to match it. Both
@@ -93,7 +94,9 @@ export function ThemeToggle() {
       onClick={flip}
     >
       <span className="themeswitch-track" aria-hidden="true">
-        <span className="themeswitch-thumb">{resolved === "dark" ? "☾" : "☀"}</span>
+        <span className="themeswitch-thumb">
+          <Icon name={resolved === "dark" ? "moon" : "sun"} size={13} />
+        </span>
       </span>
     </button>
   );

@@ -5,6 +5,12 @@
 // step is the one a builder is nervous about and the one a parent is deciding
 // on, so it gets the middle of three where it cannot be skimmed past.
 //
+// "Verifies", not "approves". The word was "approves", which is the one verb
+// this product cannot use loosely: on a Standard connected account nobody
+// approves a payout, and the landing page's own closing section had already
+// dropped the same phrase for the same reason. What the guardian does is get
+// verified -- Stripe checks their identity, once -- so that is what it says.
+//
 // Step two used to end "After it, they are not in the loop on your payouts."
 // Two things make that false. A connected account can be put back into
 // REQUIREMENTS_DUE at any time, which the schema models and the guardian
@@ -26,7 +32,7 @@ const STEPS: Step[] = [
     icon: (<svg viewBox="0 0 24 24" aria-hidden="true"><path {...S} d="M9 7 4 12l5 5M15 7l5 5-5 5" /></svg>),
   },
   {
-    n: "02", t: "Your parent approves, once",
+    n: "02", t: "Your parent verifies, once",
     d: "They verify themselves on a secure form Veyro never sees, and the account is opened in their name. After that you run the day to day.",
     who: "Them, not you",
     icon: (<svg viewBox="0 0 24 24" aria-hidden="true"><path {...S} d="M12 3 4 6v6c0 4.4 3.4 8.2 8 9 4.6-.8 8-4.6 8-9V6l-8-3Z" /><path {...S} d="m9 12 2 2 4-4" /></svg>),

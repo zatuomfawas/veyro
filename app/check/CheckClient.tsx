@@ -177,12 +177,15 @@ function EligibilityCheck({
     <div className={embedded ? undefined : "ckpage"}>
       {!embedded && (
         <div className="wrap-lp ckhead">
-          <span className="lp-eyebrow">Eligibility</span>
           <h1 className="ckhead-h">Check what applies to you</h1>
+          {/* Three short sentences, not one of 196 characters. Centred text
+              is read a line at a time against a moving left edge, so a
+              six-line centred paragraph on a phone costs more than the same
+              words ranged left; the fix is fewer words rather than a second
+              alignment on a page whose form is centred. */}
           <p className="ckhead-lead">
-            Two questions. Where you live and when you were born decide which route is open, and
-            whether you need us at all. No account, no email address, and the answer is the same
-            whether it is yes or no.
+            Two questions: where you live, and when you were born. They decide which route is
+            open, and whether you need us at all. No account, no email address.
           </p>
         </div>
       )}
@@ -228,12 +231,12 @@ function EligibilityCheck({
              a result that changes silently is one they can miss entirely. */
           <div className="check-res" key={`${R.route}-${R.country?.[0]}-${R.region}`}>
             {R.route === "guardian" && (
-              <Notice tone="pine" head={"Verified in " + (R.region || R.country?.[1])}
+              <Notice live lead tone="pine" head={"Verified in " + (R.region || R.country?.[1])}
                 action={<Btn size="sm" onClick={() => go("signup")}>Create your account</Btn>}>
                 <p>
                   {R.country?.[1]} is on the payment provider&rsquo;s supported list, and this route is open to you.
                   In {R.region || R.country?.[1]} you can sign a binding contract in your own name from{" "}
-                  {R.majority}; you&rsquo;re {age}, so a parent or legal guardian is named as the adult on the payment
+                  {R.majority}; you turn {age} this year, so a parent or legal guardian is named as the adult on the payment
                   account before it can take charges or pay out. They pass the provider&rsquo;s identity checks and
                   accept responsibility for the account, which is what the provider requires and what makes the rest of
                   it legitimate. You keep running the business. We walk both of you through the setup and keep the
@@ -256,7 +259,7 @@ function EligibilityCheck({
               </Notice>
             )}
             {R.route === "adult" && (
-              <Notice tone="grey" head="You don't need us for this"
+              <Notice live lead tone="grey" head="You don't need us for this"
                 action={
                   <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
                     <Btn size="sm" variant="2" onClick={() => go("signup")}>Create an account anyway</Btn>
@@ -264,7 +267,8 @@ function EligibilityCheck({
                   </div>
                 }>
                 {R.country?.[1]} is supported by the payment provider, and at your age none of this applies to you
-                anyway. You&rsquo;re {age}, and you can contract in your own name in {R.region || R.country?.[1]} from{" "}
+                anyway. You turn {age} this year, and you can contract in your own name in{" "}
+                {R.region || R.country?.[1]} from{" "}
                 {R.majority}.
                 You can open a payment account in your own name directly with a provider. We exist for
                 founders who are blocked by the age rule. If you run a programme for founders who are, that&rsquo;s a
@@ -272,7 +276,7 @@ function EligibilityCheck({
               </Notice>
             )}
             {R.route === "extended" && (
-              <Notice tone="amber" head={"Different provider in " + R.country?.[1]}>
+              <Notice live lead tone="amber" head={"Different provider in " + R.country?.[1]}>
                 Stripe reaches {R.country?.[1]} through Paystack, its extended network, rather than through a Stripe
                 account. Everything we have verified about minors and guardian representatives is Stripe&rsquo;s policy,
                 not Paystack&rsquo;s, and we have not read Paystack&rsquo;s rules. We are not going to apply one company&rsquo;s
@@ -280,13 +284,13 @@ function EligibilityCheck({
               </Notice>
             )}
             {R.route === "preview" && (
-              <Notice tone="amber" head={R.country?.[1] + " is in preview"}>
+              <Notice live lead tone="amber" head={R.country?.[1] + " is in preview"}>
                 Stripe lists {R.country?.[1]} as preview: businesses there contact Stripe sales rather than signing up
                 themselves. There is no self-serve route for us to build on, so we cannot take you through setup.
               </Notice>
             )}
             {R.route === "adults_only" && (
-              <Notice tone="clay" head={"You must be at least " + R.majority + " in " + R.country?.[1]}>
+              <Notice live lead tone="clay" head={"You must be at least " + R.majority + " in " + R.country?.[1]}>
                 {R.country?.[1]} is the one country the payment provider carves out of the under-18 route. Stripe told
                 us directly: account holders there must be at least {R.majority}, and a parent or legal guardian on the
                 account does not change it. You&rsquo;re {age}, so there is no version of this that works yet: not with
@@ -294,14 +298,14 @@ function EligibilityCheck({
               </Notice>
             )}
             {R.route === "too_young" && (
-              <Notice tone="clay" head="Not yet, and we won't pretend otherwise">
+              <Notice live lead tone="clay" head="Not yet, and we won't pretend otherwise">
                 The provider&rsquo;s minimum age is 13, whoever is helping you. There is no version of this that works at
                 {" " + age}, and anyone offering you one is asking you to put false information on a financial
                 application. Keep building. Come back.
               </Notice>
             )}
             {R.route === "no_country" && (
-              <Notice tone="clay" head="Not available where you are">
+              <Notice live lead tone="clay" head="Not available where you are">
                 The payment provider we use supports self-serve signup in 43 countries, and yours isn&rsquo;t among them. That&rsquo;s a
                 provider restriction we can&rsquo;t work around, and we&rsquo;re not going to suggest registering a company
                 somewhere else to get past it.
@@ -331,7 +335,7 @@ function EligibilityCheck({
 
             {(["guardian", "adult", "preview", "extended", "adults_only"] as Route[]).includes(R.route) && (
               <div className="panel" style={{ marginTop: 12 }}>
-                {R.note && <>
+                {R.note && !R.region && <>
                   <div className="lbl" style={{ marginBottom: 4 }}>Worth knowing about {R.country?.[1]}</div>
                   <p className="small" style={{ marginBottom: 12 }}>{R.note}</p>
                 </>}

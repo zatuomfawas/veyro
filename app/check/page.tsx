@@ -41,7 +41,7 @@ export default function CheckPage() {
             <div className="lp-links">
               <Link className="btn btn-q btn-sm hide-s" href="/how-it-works">How it works</Link>
               <Link className="btn btn-q btn-sm hide-s" href="/for-parents">For parents</Link>
-              <Link className="btn btn-sm" href="/get-started">Start</Link>
+              <Link className="btn btn-sm" href="/get-started">Get started</Link>
               <ThemeToggle />
               <MobileNav
                 items={[
@@ -49,7 +49,7 @@ export default function CheckPage() {
                   { href: "/for-parents", label: "For parents" },
                   { href: "/pricing", label: "Pricing" },
                   { href: "/faq", label: "Questions" },
-                  { href: "/get-started", label: "Start" },
+                  { href: "/get-started", label: "Get started" },
                 ]}
               />
             </div>
@@ -69,7 +69,7 @@ export default function CheckPage() {
             lead="If it works where you live, the next step is about five minutes of your own
               and ten of a parent's. If it does not, the limit is the payment provider's rather
               than ours, and it is worth telling us where you are."
-            primary={{ href: "/get-started", label: "See the whole path" }}
+            primary={{ href: "/get-started", label: "Get started" }}
             secondary={{ href: "/for-parents", label: "The page for your parent" }}
             note="The checker reads published sources and no account is involved, so nothing you
               typed was stored."

@@ -86,7 +86,7 @@ export function TalkToAPerson({ href }: { href: string }) {
         </button>
       </div>
       <p className="talkpop-b">
-        <a className="linkbtn" href={href}>Email us directly</a> and a person replies &mdash; not
+        <a className="linkbtn" href={href}>Email us directly</a> and a person replies: not
         a form, and not your child&rsquo;s account manager. Reading all of this and still saying
         no is a perfectly good outcome.
       </p>
