@@ -249,22 +249,24 @@ export const CSS = `
    say what this is, the picture confirms it. */
 @keyframes veyro-rise { from { opacity:0; transform:translateY(var(--rise)); } to { opacity:1; transform:none; } }
 
-.fw .hero-grid > div > *,
-.fw .hero-grid > div:last-child {
-  animation:veyro-rise var(--t-4) var(--ease-out) both;
-}
-.fw .hero-grid > div:first-child > *:nth-child(2) { animation-delay:60ms; }
-.fw .hero-grid > div:first-child > *:nth-child(3) { animation-delay:120ms; }
-.fw .hero-grid > div:first-child > *:nth-child(4) { animation-delay:180ms; }
-.fw .hero-grid > div:first-child > *:nth-child(5) { animation-delay:240ms; }
-.fw .hero-grid > div:last-child { animation-delay:200ms; }
-/* The preview's own rows follow it in. Capped at four: past that a stagger
-   stops reading as one movement and starts reading as a queue. */
-.fw .hero-grid > div:last-child .card { animation:veyro-rise var(--t-4) var(--ease-out) both; }
-.fw .hero-grid > div:last-child .card:nth-of-type(2) { animation-delay:300ms; }
+/* Rewired to .hero-stack, and it had stopped running entirely.
+   Every selector here pointed at .hero-grid, which was the two-column
+   hero; restructuring it into a vertical stack two passes ago renamed
+   the element and silently killed the entrance with it. The hero has
+   been appearing with no transition at all since -- four animated
+   elements in the fold against Mercury's nine and Stripe's forty-two,
+   and three of Veyro's four were hover states.
+
+   Five children, one movement: headline, line, card, action, note. The
+   stagger is 70ms, which is short enough to read as one thing arriving
+   rather than a queue of five. */
+.fw .hero-stack > * { animation:veyro-rise var(--t-4) var(--ease-out) both; }
+.fw .hero-stack > *:nth-child(2) { animation-delay:70ms; }
+.fw .hero-stack > *:nth-child(3) { animation-delay:140ms; }
+.fw .hero-stack > *:nth-child(4) { animation-delay:210ms; }
+.fw .hero-stack > *:nth-child(5) { animation-delay:280ms; }
 @media (prefers-reduced-motion: reduce) {
-  .fw .hero-grid > div > *, .fw .hero-grid > div:last-child,
-  .fw .hero-grid > div:last-child .card { animation:none !important; }
+  .fw .hero-stack > * { animation:none !important; }
 }
 
 /* The steps themselves come after the line has been drawn, not alongside it. */
@@ -4055,9 +4057,31 @@ export const CSS2 = `
    the headline floor up, so the ratio holds from 375 to 1440 and the
    balance is still the largest thing inside its own card at every
    width. */
-.fw .hero-h1 { margin:0; font-size:clamp(36px, 5.0vw, 72px); line-height:1.03;
-  letter-spacing:-0.033em; font-weight:var(--fw-bold); color:var(--ink);
+/* Display optics, measured off the references rather than guessed.
+   Headline weight and tracking at 1440:
+
+     Stripe  300 / -0.020em / lh 1.15
+     Ramp    400 / ~0       / lh 1.00
+     Mercury 480 /  0       / lh 1.11
+     Veyro   600 / -0.033em / lh 1.03
+
+   Veyro was the heaviest and the tightest of the four, which at 72px
+   reads as blunt rather than confident -- the old setting was tuned when
+   this line was 52px and one line long. Lighter weight and looser
+   tracking as the size goes up is the ordinary optical-sizing rule, and
+   Onest loads 500. The line-height opens too, because 1.03 crowds two
+   lines in a way it never did one. */
+.fw .hero-h1 { margin:0; font-size:clamp(36px, 5.0vw, 72px); line-height:1.08;
+  letter-spacing:-0.022em; font-weight:var(--fw-med); color:var(--ink);
   max-width:none; text-wrap:balance; }
+/* 960, not 760. The lighter weight is a display treatment and the
+   headline scales at 5vw, so it is still only 38px at a 768 viewport --
+   which fell outside a 760 breakpoint and got the thin setting at a size
+   that cannot carry it. 5vw crosses 48px at 960, so that is where the
+   two settings swap. */
+@media (max-width:959px) {
+  .fw .hero-h1 { font-weight:var(--fw-bold); letter-spacing:-0.03em; line-height:1.05; }
+}
 
 .fw .hero-cta { display:flex; align-items:center; flex-wrap:wrap;
   gap:var(--sp-6); margin-top:var(--sp-7); }
@@ -4115,8 +4139,15 @@ export const CSS2 = `
    and a border and no radius, and every button sets border-radius:0
    explicitly; a rounded corner here would be a new corner style on a page
    that has none. */
+/* A border and a lift, not a border alone.
+   Stripe and Mercury both float their hero surfaces -- Stripe runs
+   0 4px 24px rgba(0,0,0,.06) and a second, wider one. Veyro had the
+   --lift token already and was not using it here, so the card read as a
+   rectangle drawn on the page rather than a surface above it. Square
+   still: every reference rounds between 4 and 32px, and not rounding is
+   the thing that keeps this from looking like the same SaaS template. */
 .fw .hw { margin-top:var(--sp-7); background:var(--card);
-  border:1px solid var(--line); }
+  border:1px solid var(--line); box-shadow:var(--lift); }
 /* Balance left, the month's four figures right.
    Stacked, the balance sat alone with roughly 840x110 of empty card to
    its right -- the hole the ledger used to fill, and a worse one, because
