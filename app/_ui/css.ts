@@ -4202,6 +4202,48 @@ export const CSS2 = `
 .fw .hero-stack > .hero-sub2 { animation-delay:210ms; }
 .fw .hero-stack > .hw        { animation-delay:280ms; }
 
+/* Two columns from 940 up: the argument on the left, the money beside it.
+   --------------------------------------------------------------------
+   Single-column, the hero was a 780px headline and a 760px card inside a
+   1240px measure, which left most of the right-hand third of the first
+   screen empty from the headline down. That is not restraint, it is a
+   column that stopped. Set side by side, the band is full at its own
+   width and the card no longer has to be wide to avoid looking stranded.
+
+   Explicit placement rather than source order, so the flex stack above
+   keeps owning every width below 940 and the markup never changes. The
+   card spans the four text rows and centres against them. */
+@media (min-width:940px) {
+  .fw .hero-stack { display:grid; align-items:start;
+    grid-template-columns:minmax(0, 1.06fr) minmax(0, 0.94fr);
+    column-gap:var(--sp-10); }
+  .fw .hero-stack > .hero-h1   { grid-column:1; grid-row:1; }
+  .fw .hero-stack > .hero-lead { grid-column:1; grid-row:2; }
+  .fw .hero-stack > .hero-cta  { grid-column:1; grid-row:3; }
+  .fw .hero-stack > .hero-sub2 { grid-column:1; grid-row:4; }
+  /* Top-aligned, not centred. Centred, the card's top edge landed against
+     nothing and it read as floating in the gap beside the type. Sharing a
+     top edge with the headline gives the two columns one line to start
+     from, which is the same spine every section below the hero uses. */
+  .fw .hero-stack > .hw        { grid-column:2; grid-row:1 / span 4;
+    align-self:start; margin-top:0; max-width:none; }
+  .fw .hero-h1 { font-size:clamp(44px, 4.3vw, 62px); }
+  /* No balancing in this column.
+     text-wrap:balance evens the lines by length, and at this width that
+     produced a short first line over two long ones -- 330px above 490 and
+     490, which reads as a line that ran out rather than as a break somebody
+     chose. Left to wrap, the rag descends: 527, 496, 310. A short last line
+     is how type is supposed to end; a short first one is what looks like an
+     accident. */
+  .fw .hero-h1 { text-wrap:pretty; }
+  /* The balance anchors a column of its own now rather than sitting inside a
+     full-width band, so it takes a step up. Still well below the headline:
+     40 against 62 keeps the claim louder than the evidence for it, which is
+     the ratio this card lost once before by rendering at 89px under a 52px
+     headline. */
+  .fw .hw-bal { font-size:clamp(32px, 2.9vw, 40px); }
+}
+
 /* The sentence the hero did not have.
    It sits between the statement and the surface, which is where two
    separate reviews said it was missing: the page went from the headline

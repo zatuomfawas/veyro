@@ -95,38 +95,46 @@ export default async function Home() {
 
       <main id="main" className="has-sticky home">
         {/* ---- the hero ----
-            A SEQUENCE DOWN THE PAGE, NOT A SPLIT ACROSS IT.
+            TWO COLUMNS FROM 940 UP, AND THIS FILE ARGUED THE OPPOSITE FOR
+            A LONG TIME, SO HERE IS WHY IT CHANGED.
 
-            It was headline-left, wallet-right: the most common SaaS hero
-            arrangement there is, and it reads as "headline, and also here
-            is a screenshot". The wallet was 616px of a 1240px measure,
-            parked in the right-hand half, which made it supporting
-            evidence rather than the thing being shown.
+            The argument against a split was that headline-left /
+            wallet-right is the most common SaaS hero arrangement there is
+            and reads as "headline, and also here is a screenshot". That
+            was a fair description of what this hero used to be: the card
+            was a 616px fee table parked in the right-hand half, and it did
+            read as a screenshot beside a sentence.
 
-            Now: statement, surface, the line that qualifies both, action.
-            The statement spans the full measure and the surface spans it
-            too, so the two share a left edge and a right edge and read as
-            one object rather than two columns.
+            So the hero became a single column -- statement, surface,
+            action, all spanning the measure. That fixed the screenshot
+            problem and bought a worse one. A 780px headline and a 760px
+            card inside a 1240px measure leave most of the right-hand third
+            of the first screen empty from the headline down, and the
+            vertical sequence pushed the band to 822px. Negative space that
+            large is not restraint, it is a column that stopped.
 
-            LEFT-ALIGNED, NOT CENTRED, and that is the part a different
-            designer would not arrive at. Centring is what this brief asks
-            for by implication and it is the default twice over: every
-            vertical hero on the web is centred, and centring here would
-            break the only alignment spine the page has -- every section
-            below starts at the same left edge this does.
+            What changed in between is the card. It is three facts now, not
+            a fee table, so it is small enough to sit beside the argument
+            instead of underneath it, and the thing the old objection was
+            really about -- a big mock dashboard competing with the
+            headline -- cannot happen at this size. The band is 555px, both
+            columns are occupied, and the two share a top edge.
 
-            The caption that used to sit under the surface is inside the
-            card now, in its footer, so nothing wallet-related is left
-            loose on the page ground.
+            The action still comes before the evidence in the left column,
+            which was the point of the single-column pass and survives this
+            one. Below 940 the whole thing is still that single column:
+            claim, action, evidence, in that order. 940 is the breakpoint
+            DESIGN.md already calls "hero splits".
 
             THE HEADLINE IS THE OLD ONE. "Build your business. Start
             getting paid." could run on Stripe, Gumroad, Shopify or Paddle
             unchanged, which is the test it fails. This one cannot be said
-            by anybody else. I tried to beat it -- "Get paid before you're
-            18", "Take payments at 15", "You don't have to be 18 to get
-            paid for this" -- and did not, so it is reused on purpose
-            rather than out of inertia. No two-tone colour accent: the
-            weight comes from scale and tracking. */}
+            by anybody else. "You built it. Now get paid for it." was
+            proposed and declined for two reasons: the section one screen
+            down already opens "You built it. Getting paid for it is the
+            hard part", and the replacement drops the only clause no
+            competitor can copy. No two-tone colour accent: the weight
+            comes from scale and tracking. */}
         <div className="hero-band">
           <div className="wrap-lp hero">
             <div className="hero-stack">
