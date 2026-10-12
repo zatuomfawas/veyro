@@ -4077,31 +4077,21 @@ export const CSS2 = `
    the headline floor up, so the ratio holds from 375 to 1440 and the
    balance is still the largest thing inside its own card at every
    width. */
-/* Display optics, measured off the references rather than guessed.
-   Headline weight and tracking at 1440:
+/* The same setting as every other title on the site, scaled up.
+   This briefly ran at 500 / -0.022em / lh 1.08 as a display treatment,
+   argued from how Stripe, Ramp and Mercury set their heroes lighter than
+   their section headings. Measured against our own page, that made the
+   hero the only title at 500 -- .lp-h2 and .stmt-q are both 600 at
+   -0.028em -- so the first line a visitor reads was the one line that did
+   not look like Veyro. Borrowed optics are worth less than an internally
+   consistent voice, so the weight, tracking and leading here now come
+   from .lp-h2 and only the size is the hero's own.
 
-     Stripe  300 / -0.020em / lh 1.15
-     Ramp    400 / ~0       / lh 1.00
-     Mercury 480 /  0       / lh 1.11
-     Veyro   600 / -0.033em / lh 1.03
-
-   Veyro was the heaviest and the tightest of the four, which at 72px
-   reads as blunt rather than confident -- the old setting was tuned when
-   this line was 52px and one line long. Lighter weight and looser
-   tracking as the size goes up is the ordinary optical-sizing rule, and
-   Onest loads 500. The line-height opens too, because 1.03 crowds two
-   lines in a way it never did one. */
-.fw .hero-h1 { margin:0; font-size:clamp(36px, 5.0vw, 72px); line-height:1.08;
-  letter-spacing:-0.022em; font-weight:var(--fw-med); color:var(--ink);
+   Which also means no breakpoint override: .lp-h2 holds one setting at
+   every width and so does this. */
+.fw .hero-h1 { margin:0; font-size:clamp(36px, 5.0vw, 72px); line-height:1.1;
+  letter-spacing:-0.028em; font-weight:var(--fw-bold); color:var(--ink);
   max-width:none; text-wrap:balance; }
-/* 960, not 760. The lighter weight is a display treatment and the
-   headline scales at 5vw, so it is still only 38px at a 768 viewport --
-   which fell outside a 760 breakpoint and got the thin setting at a size
-   that cannot carry it. 5vw crosses 48px at 960, so that is where the
-   two settings swap. */
-@media (max-width:959px) {
-  .fw .hero-h1 { font-weight:var(--fw-bold); letter-spacing:-0.03em; line-height:1.05; }
-}
 
 .fw .hero-cta { display:flex; align-items:center; flex-wrap:wrap;
   gap:var(--sp-6); margin-top:var(--sp-7); }
@@ -4214,7 +4204,18 @@ export const CSS2 = `
    clamps had different minimums, so from 768 down the balance was 38px
    against a 31px headline and the problem came straight back. Measured
    at 375, 390, 768, 1024 and 1440 -- the headline leads at all five. */
-.fw .hw-bal { display:block; margin-top:var(--sp-2);
+/* -0.045em of optical correction, which is the $ glyph's own left side
+   bearing. The boxes were already flush -- measured, the label and the
+   figure both start at exactly the same x at every width from 320 to
+   1920, 0.00px of drift -- but a box edge is not what anyone looks at.
+   Scanning the painted pixels at 3x, the A of "Available" inks 0.11px
+   into its box and the $ inks 1.56px into its, so the figure sat a pixel
+   and a half right of the label it belongs to. In em: 0.0451 at 32px,
+   0.0456 at 31.68, 0.046 at 24 -- a constant proportion of the type
+   size, as a side bearing has to be, so the correction is in em and
+   holds across the clamp. text-indent and not margin, because the box is
+   in the right place already; it is the ink that needs moving. */
+.fw .hw-bal { display:block; margin-top:var(--sp-2); text-indent:-0.045em;
   font-size:clamp(24px, 2.2vw, 32px); line-height:1; letter-spacing:-0.03em;
   font-weight:var(--fw-bold); color:var(--pine);
   font-variant-numeric:tabular-nums lining-nums; font-feature-settings:"tnum" 1; }

@@ -46,16 +46,13 @@ change to that one line.
 **Type.** Ten steps, `--fs-1` (11.5px) to `--fs-10` (56px). Nothing between
 them. Three weights only: 400 reads, 500 labels, 600 headings.
 
-**One exception, at display size.** The landing hero's `h1` clamps up to 72px,
-past the top of the scale, and takes **500** rather than 600. Weight, tracking
-and leading are one setting that moves with size, not three independent knobs:
-a face that reads as confident at 34px reads as blunt at 72, which is why
-display type is drawn lighter and set looser. The hero is tracked at -0.022em
-and leaded at 1.08 for the same reason, against -0.016em and tighter leading
-for the headings inside the scale. Below 960px the hero drops back to 600,
-because the argument reverses once the type is small enough that 500 reads thin
-rather than refined. Nothing else above `--fs-8` exists today; if something
-arrives, it inherits this rule rather than inventing a fourth weight.
+Size is the only thing a title varies. The landing hero's `h1` clamps up to
+72px, past the top of the scale, but it takes the same 600 at -0.028em as
+`.lp-h2` and `.stmt-q` and holds it at every width. A lighter display weight
+was tried here and removed: it made the hero the one title on the site that
+did not look like the others, which costs more than the optics gained.
+Anything else that arrives above `--fs-8` inherits that -- a new size, not a
+fourth weight.
 
 **Spacing.** `--sp-1` to `--sp-10`: 4, 8, 12, 16, 20, 24, 32, 40, 56, 72.
 
