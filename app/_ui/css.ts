@@ -492,6 +492,46 @@ export const CSS = `
 .fw .tierlist { margin:var(--sp-5) 0 0; display:flex; flex-direction:column; gap:var(--sp-4); }
 .fw .tierlist dt { font-size:var(--fs-3); font-weight:var(--fw-bold); }
 .fw .tierlist dd { margin:2px 0 0; font-size:var(--fs-2); color:var(--ink-2); line-height:1.55; }
+/* ---- 404 -----------------------------------------------------------------
+   A routing miss, laid out like the rest of the site rather than as a
+   novelty. No oversized numeral, no apology, no illustration: the page's
+   job is to say what happened and give somewhere to go, and this brand does
+   that in type and hairlines everywhere else.
+
+   The destinations are rows, not a row of buttons. Four buttons is a menu
+   pretending to be a decision; a row carrying a name and a line of what is
+   behind it is the shape the ledger and the comparison already use, so the
+   one page a visitor reaches by accident still looks like the site they
+   were trying to reach. */
+.fw .nf { padding-block:var(--sp-9) var(--sp-10); }
+.fw .nf-h { margin:0; max-width:18ch; }
+.fw .nf-l { margin:var(--sp-4) 0 0; max-width:var(--m-body); }
+.fw .nf-cta { display:flex; align-items:center; flex-wrap:wrap;
+  gap:var(--sp-7); margin-top:var(--sp-7); }
+.fw .nf-places { margin-top:var(--sp-10); }
+.fw .nf-k { margin:0 0 var(--sp-4); font-size:var(--fs-2); color:var(--ink-3); }
+.fw .nf-list { list-style:none; margin:0; padding:0; border-top:1px solid var(--line); }
+.fw .nf-list li { border-bottom:1px solid var(--line); }
+/* The whole row is the target, not the four words in it. At 44px tall with
+   the note inside the link, a thumb hits the row rather than hunting the
+   label, which is the difference between a list you can use on a phone and
+   one you can only read. */
+.fw .nf-list a { display:flex; align-items:baseline; justify-content:space-between;
+  gap:var(--sp-5); padding:var(--sp-5) 0; min-height:var(--tap);
+  text-decoration:none; color:var(--ink); }
+.fw .nf-list a:hover { color:var(--pine); }
+.fw .nf-list a:hover .nf-n { color:var(--ink-2); }
+.fw .nf-list a:focus-visible { outline:var(--focus-w) solid var(--pine);
+  outline-offset:-2px; }
+.fw .nf-t { font-size:var(--fs-4); font-weight:var(--fw-med); }
+.fw .nf-n { font-size:var(--fs-2); color:var(--ink-3); text-align:right; }
+@media (max-width:560px) {
+  /* Stacked, because side by side the note is squeezed to about 120px and
+     breaks over three lines against a two-word label. */
+  .fw .nf-list a { flex-direction:column; align-items:flex-start; gap:2px; }
+  .fw .nf-n { text-align:left; }
+}
+
 .fw .permit-h { max-width:24ch; }
 .fw .permit-fig { margin:var(--sp-8) 0 0; padding-top:var(--sp-6);
   border-top:1px solid var(--ink); }
@@ -2200,7 +2240,11 @@ export const CSS2 = `
 .fw .footlink:hover { color:var(--ink); text-decoration:underline; }
 .fw .foot-bottom { margin-top:var(--sp-8); padding-top:var(--sp-6); border-top:1px solid var(--line);
   display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr); gap:var(--sp-8); }
-.fw .ftr-copyright, .fw .ftr-disclosure { font-size:var(--fs-2); line-height:1.7; color:var(--ink-3); }
+/* Both carry a measure. The disclosure is the longest sentence in the footer
+   and ran 117 characters to the line across the full width; at 11.5px that is
+   the hardest reading on the page in the smallest type anyone sets. */
+.fw .ftr-copyright, .fw .ftr-disclosure { font-size:var(--fs-2); line-height:1.7;
+  color:var(--ink-3); max-width:var(--m-wide); }
 
 /* Homepage: one illustrative product, followed by the decisions that matter. */
 .fw .home-hero { padding-block:88px 80px; }
@@ -2238,7 +2282,8 @@ export const CSS2 = `
 .fw .home-pricing > .linkbtn { display:inline-block; margin-top:var(--sp-4); font-size:var(--fs-3); }
 .fw .home-questions-grid { display:grid; grid-template-columns:minmax(0,0.8fr) minmax(0,1.2fr); gap:80px; }
 .fw .home-questions .body { margin-block:var(--sp-5); }
-.fw .home-policy-note { margin-top:var(--sp-6); color:var(--ink-3); line-height:1.7; font-size:var(--fs-2); }
+.fw .home-policy-note { margin-top:var(--sp-6); color:var(--ink-3); line-height:1.7;
+  font-size:var(--fs-2); max-width:var(--m-body); }
 .fw .home-close { background:var(--surface); border-top:1px solid var(--line); padding-block:var(--sp-9); }
 .fw .home-close-inner { display:flex; justify-content:space-between; align-items:center; gap:var(--sp-8); }
 .fw .home-close p { margin-top:var(--sp-3); font-size:var(--fs-3); color:var(--ink-2); line-height:1.65; }

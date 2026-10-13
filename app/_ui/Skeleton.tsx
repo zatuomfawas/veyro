@@ -91,39 +91,84 @@ export function DashboardSkeleton({ what = "your money" }: { what?: string }) {
  * from DashHeader and Section, so the skeleton is built from the same
  * measurements rather than from a guess at what they look like.
  */
+/**
+ * The dashboard chrome every signed-in page draws before its own content.
+ *
+ * Shared rather than repeated, because the point of these placeholders is
+ * that they match, and three copies of a nav bar is three chances for one of
+ * them to stop matching.
+ */
+function DashChrome() {
+  return (
+    <div className="navbar dashboard-nav" aria-hidden="true">
+      <div className="wrap-w">
+        <div className="lp-nav dashboard-nav-inner">
+          <Bar w="104px" h={20} />
+          <Bar w="190px" h={16} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Two columns of titled cards under a page heading: Settings, and the
+ * guardian's overview.
+ *
+ * IT USES THE REAL CLASSES. The cards here are .card.dashboard-section with a
+ * .card-h and a .card-b inside, which is exactly what dash.tsx's Section
+ * renders, and the page is .wrap-w under the same .navbar.dashboard-nav that
+ * DashNav draws. That is deliberate: a placeholder built out of its own
+ * private .skel-card has its own padding and its own border, so it is only
+ * ever approximately the size of the thing it stands in for, and it drifts
+ * every time Section changes. Borrowing the real classes means it cannot.
+ *
+ * WHAT WAS WRONG BEFORE. It drew no navigation at all, and both pages it
+ * covers are mounted under a sticky dashboard nav. The placeholder was a
+ * whole nav bar shorter than the page, so the heading jumped up the screen
+ * the moment the real content arrived -- which is the one fault a skeleton
+ * exists to prevent.
+ */
 export function PageSkeleton({
   what, left = 3, right = 2,
 }: { what: string; left?: number; right?: number }) {
   return (
     <div className="fw">
       <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
+      <DashChrome />
       <main className="wrap-w" style={{ paddingTop: 24, paddingBottom: 56 }}>
         <p className="sr-only" role="status" aria-live="polite">
-          Loading {what}…
+          Loading {what}&hellip;
         </p>
 
         <div aria-hidden="true">
-          <Bar w="220px" h={26} />
-          <Bar w="340px" h={12} mt={10} />
+          <div className="page-h" style={{ marginBottom: 24 }}>
+            <Bar w="220px" h={30} />
+            <Bar w="340px" h={13} mt={10} />
+          </div>
 
-          <div className="grid-2" style={{ gap: 32, alignItems: "start", marginTop: 24 }}>
+          <div className="grid-2" style={{ gap: 32, alignItems: "start" }}>
             <div>
               {Array.from({ length: left }, (_, i) => (
-                <div className="skel-card" key={i}>
-                  <Bar w="130px" h={14} />
-                  <Bar w="100%" h={11} mt={14} />
-                  <Bar w="84%" h={11} mt={8} />
-                </div>
+                <section className="card dashboard-section" style={{ marginBottom: 24 }} key={i}>
+                  <div className="card-h dashboard-section-head"><Bar w="130px" h={16} /></div>
+                  <div className="card-b dashboard-section-body">
+                    <Bar w="100%" h={12} />
+                    <Bar w="84%" h={12} mt={10} />
+                  </div>
+                </section>
               ))}
             </div>
             <div>
               {Array.from({ length: right }, (_, i) => (
-                <div className="skel-card" key={i}>
-                  <Bar w="150px" h={14} />
-                  <Bar w="100%" h={11} mt={14} />
-                  <Bar w="90%" h={11} mt={8} />
-                  <Bar w="66%" h={11} mt={8} />
-                </div>
+                <section className="card dashboard-section" style={{ marginBottom: 24 }} key={i}>
+                  <div className="card-h dashboard-section-head"><Bar w="150px" h={16} /></div>
+                  <div className="card-b dashboard-section-body">
+                    <Bar w="100%" h={12} />
+                    <Bar w="90%" h={12} mt={10} />
+                    <Bar w="66%" h={12} mt={10} />
+                  </div>
+                </section>
               ))}
             </div>
           </div>
@@ -146,8 +191,10 @@ export function NarrowSkeleton({ what }: { what: string }) {
   return (
     <div className="fw">
       <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
-      <div className="wrap-s">
-        <div className="lp-nav" style={{ borderBottom: 0 }}>
+      {/* .task-nav, as /pay and the consent page both render it. Without the
+          class the bar was a plain .lp-nav and sat at a different height. */}
+      <div className="wrap-s" aria-hidden="true">
+        <div className="lp-nav task-nav">
           <Bar w="74px" h={18} />
           <Bar w="150px" h={11} />
         </div>
@@ -161,11 +208,13 @@ export function NarrowSkeleton({ what }: { what: string }) {
           <Bar w="70%" h={26} />
           <Bar w="45%" h={12} mt={12} />
 
-          <div className="skel-card" style={{ marginTop: 24 }}>
-            <Bar w="55%" h={14} />
-            <Bar w="100%" h={11} mt={14} />
-            <Bar w="78%" h={11} mt={8} />
-            <Bar w="120px" h={30} mt={20} />
+          <div className="card" style={{ marginTop: 24 }}>
+            <div className="card-b">
+              <Bar w="55%" h={14} />
+              <Bar w="100%" h={11} mt={14} />
+              <Bar w="78%" h={11} mt={8} />
+              <Bar w="120px" h={30} mt={20} />
+            </div>
           </div>
 
           <Bar w="100%" h={44} mt={20} />
@@ -177,12 +226,15 @@ export function NarrowSkeleton({ what }: { what: string }) {
 }
 
 /**
- * One column of rows, under a page heading: the founder's products.
+ * One column of rows under a page heading: the founder's products.
  *
  * Not PageSkeleton, which draws two columns. That page is a single Section
  * holding a list and a form, and a two-column placeholder would rearrange
- * itself into one the moment the real thing arrived -- the exact fault the
- * DashboardSkeleton comment above exists to warn about.
+ * itself into one the moment the real thing arrived.
+ *
+ * It was missing the dashboard nav, same as PageSkeleton was, and it drew its
+ * card with the placeholder's own border rather than the Section's. Both are
+ * the real classes now.
  */
 export function ListSkeleton({
   what, rows = 3,
@@ -190,31 +242,42 @@ export function ListSkeleton({
   return (
     <div className="fw">
       <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
+      <DashChrome />
       <main className="wrap-w" style={{ paddingTop: 24, paddingBottom: 56 }}>
         <p className="sr-only" role="status" aria-live="polite">
           Loading {what}&hellip;
         </p>
 
         <div aria-hidden="true">
-          <Bar w="220px" h={26} />
-          <Bar w="340px" h={12} mt={10} />
-
-          <div className="skel-card" style={{ marginTop: 24 }}>
-            <Bar w="140px" h={14} />
-            {Array.from({ length: rows }, (_, i) => (
-              <div className="skel-row" key={i}>
-                <Bar w="46%" h={12} />
-                <Bar w="92px" h={12} />
-              </div>
-            ))}
-            {/* The add-a-product form, which is always on this page whether or
-                not there is anything in the list above it. */}
-            <Bar w="100%" h={1} mt={24} />
-            <Bar w="180px" h={14} mt={20} />
-            <Bar w="100%" h={38} mt={14} />
-            <Bar w="100%" h={38} mt={10} />
-            <Bar w="150px" h={40} mt={16} />
+          <div className="page-h" style={{ marginBottom: 24 }}>
+            <Bar w="220px" h={30} />
+            <Bar w="340px" h={13} mt={10} />
           </div>
+
+          <section className="card dashboard-section" style={{ marginBottom: 24 }}>
+            <div className="card-h dashboard-section-head"><Bar w="140px" h={16} /></div>
+            <div className="card-b dashboard-section-body">
+              {Array.from({ length: rows }, (_, i) => (
+                <div className="skel-row" key={i}>
+                  <Bar w="46%" h={12} />
+                  <Bar w="92px" h={12} />
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* The add-a-product form is its own Section on the real page,
+              always present whether or not the list above it has anything
+              in it. It was drawn inside the list's card here, which put a
+              border where the page has a gap. */}
+          <section className="card dashboard-section">
+            <div className="card-h dashboard-section-head"><Bar w="180px" h={16} /></div>
+            <div className="card-b dashboard-section-body">
+              <Bar w="100%" h={38} />
+              <Bar w="100%" h={38} mt={10} />
+              <Bar w="150px" h={40} mt={16} />
+            </div>
+          </section>
         </div>
       </main>
     </div>
@@ -228,10 +291,19 @@ export function ListSkeleton({
  * person -- /auth/verify looks a token up before it can say anything, and
  * that is a page somebody reaches by clicking a link in an email, so a blank
  * screen reads as a dead link rather than as a slow one.
+ *
+ * IT BORROWS AuthShell'S OWN CLASSES, and this one was the furthest off. The
+ * real shell is .auth-main, which sets min-height to the viewport less the
+ * nav and lays its two halves out with .auth-layout. The placeholder used a
+ * bare .wrap-lp with inline padding and a plain .truthgrid, so it was both
+ * shorter than the page and spaced differently from it: the card arrived in
+ * a different place than the grey box that had been standing in for it, on
+ * the one kind of page where a reader is already wondering whether their
+ * link worked.
  */
 export function AuthSkeleton({ what }: { what: string }) {
   return (
-    <div className="fw">
+    <div className="fw auth-page">
       <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <div className="navbar">
         <div className="wrap-lp">
@@ -241,22 +313,24 @@ export function AuthSkeleton({ what }: { what: string }) {
           </div>
         </div>
       </div>
-      <main className="wrap-lp" style={{ paddingTop: 40, paddingBottom: 56 }}>
+      <main className="wrap-lp auth-main">
         <p className="sr-only" role="status" aria-live="polite">
           Loading {what}&hellip;
         </p>
 
-        <div className="truthgrid" aria-hidden="true" style={{ alignItems: "start" }}>
-          <div>
-            <Bar w="70%" h={26} />
-            <Bar w="100%" h={11} mt={16} />
-            <Bar w="86%" h={11} mt={8} />
+        <div className="truthgrid auth-layout" aria-hidden="true">
+          <div className="auth-intro">
+            <Bar w="70%" h={30} />
+            <Bar w="100%" h={12} mt={16} />
+            <Bar w="86%" h={12} mt={8} />
           </div>
-          <div className="skel-card">
-            <Bar w="55%" h={14} />
-            <Bar w="100%" h={11} mt={14} />
-            <Bar w="78%" h={11} mt={8} />
-            <Bar w="100%" h={40} mt={20} />
+          <div className="card">
+            <div className="card-b">
+              <Bar w="55%" h={14} />
+              <Bar w="100%" h={11} mt={14} />
+              <Bar w="78%" h={11} mt={8} />
+              <Bar w="100%" h={40} mt={20} />
+            </div>
           </div>
         </div>
       </main>
