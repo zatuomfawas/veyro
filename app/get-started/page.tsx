@@ -8,6 +8,7 @@ import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { SiteNav } from "@/app/_ui/SiteNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { AskYourGuardian } from "./AskYourGuardian";
+import { Accordion } from "@/app/_ui/Accordion";
 
 export const viewport = buildViewport();
 
@@ -282,10 +283,9 @@ export default function GetStarted() {
             </div>
             <div className="public-faq">
               {FAQ.map(([q, a]) => (
-                <details key={q}>
-                  <summary>{q}</summary>
+                <Accordion key={q} summary={q}>
                   <p className="body">{a}</p>
-                </details>
+                </Accordion>
               ))}
             </div>
           </div>

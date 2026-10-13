@@ -94,8 +94,9 @@ export default function RequestPayout({
     return (
       <Notice tone="pine" head={`${formatMinor(done.amountMinor, currency)} requested`}>
         <p style={{ margin: "0 0 8px" }}>
-          Your guardian has been told, and the request is on your permanent record. Payouts run on
-          Stripe&rsquo;s own schedule, so this is a request to Stripe, not a transfer Veyro makes.
+          Your guardian has been told, and the request is on your permanent record. This records
+          your request; it does not confirm a bank transfer. Payouts are handled in Stripe under
+          the account&rsquo;s current settings.
         </p>
         <p style={{ margin: "0 0 12px" }}>
           {formatMinor(done.leftMinor, currency)} still available.
@@ -116,7 +117,7 @@ export default function RequestPayout({
       )}
 
       <Field
-        label={`How much do you want to withdraw?`}
+        label="Amount to request"
         error={error || undefined}
         hint={`${formatMinor(availableMinor, currency)} available in ${currency}.`}
       >
@@ -130,6 +131,10 @@ export default function RequestPayout({
           onChange={(e) => { setAmount(e.target.value); setError(null); }}
         />
       </Field>
+
+      <p className="small payout-request-context">
+        Veyro records the request and notifies your guardian. Stripe handles the bank transfer.
+      </p>
 
       <Btn
         type="button"
@@ -154,8 +159,8 @@ export default function RequestPayout({
         onCancel={() => setConfirming(false)}
       >
         <p style={{ marginTop: 0 }}>
-          You are asking for <strong>{minor !== null ? formatMinor(minor, currency) : ""}</strong> to
-          be sent to the bank account on your Stripe account.
+          You are recording a payout request for <strong>{minor !== null ? formatMinor(minor, currency) : ""}</strong>.
+          This amount is reserved from your available balance; it does not initiate a bank transfer.
         </p>
         <p style={{ marginBottom: 0 }}>
           Your guardian is told every time, and the request is permanent on your record. They are

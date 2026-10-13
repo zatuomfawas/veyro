@@ -43,7 +43,10 @@ import Notifications from "@/app/_ui/Notifications";
 import { AddToApp } from "./AddToApp";
 import { RevealAnchor } from "./RevealAnchor";
 import RequestPayout from "./RequestPayout";
-import { EarningsHero } from "./EarningsHero";
+import { EarningsHero, RevenueDetails } from "./EarningsHero";
+import { PayoutOverview } from "./PayoutOverview";
+import { Analytics } from "./Analytics";
+import { Accordion } from "@/app/_ui/Accordion";
 import { weekStart, foldWeek } from "@/lib/week";
 import { canTakePayment } from "@/lib/sale-rules";
 import {
@@ -118,7 +121,7 @@ function activityLine(row: AuditRow): string | null {
 
 /* ---------------- small pieces ---------------- */
 
-const TX_BADGE: Record<string, string> = { COMPLETED: "b-pine", PENDING: "b-amber", REFUNDED: "b-grey" };
+const TX_BADGE: Record<string, string> = { COMPLETED: "b-pine", PENDING: "b-amber", REFUNDED: "b-clay" };
 const TX_LABEL: Record<string, string> = { COMPLETED: "Paid", PENDING: "Settling", REFUNDED: "Refunded" };
 const PAYOUT_BADGE: Record<string, string> = {
   REQUESTED: "b-amber", APPROVED: "b-slate", SENT: "b-pine", FAILED: "b-clay",
@@ -327,384 +330,224 @@ export default async function FounderDashboard() {
   const primaryCurrency = richest?.currency ?? "USD";
   const primaryAvailable = richest?.available ?? 0;
 
+
+  const needsSetup = state !== "consented" || account?.status !== "ACTIVE" || !firstLive || Boolean(consent?.newLinkRequestedAt);
+  const responseNeeded = disputes.filter((d) => d.state === "NEEDS_RESPONSE").length;
+  const disputeRows = disputes.map((d) => ({
+    id: d.id, stripeDisputeId: d.stripeDisputeId, amountMinor: d.amountMinor,
+    currency: d.currency, reason: d.reason, state: d.state,
+    evidenceDueBy: d.evidenceDueBy?.toISOString() ?? null,
+    openedAt: d.openedAt.toISOString(),
+  }));
+
   return (
-    <div className="fw">
+    <div className="fw founder-dashboard">
       <style>{CSS + CSS2}</style>
       <DashNav role="FOUNDER" current="dashboard" />
-      {/* Makes the in-page links reach targets inside the folded Account &
-          setup section. See RevealAnchor.tsx. */}
       <RevealAnchor />
-
-      <main id="main" className="wrap-w" style={{ paddingTop: 24, paddingBottom: 56 }}>
-        {/* ---------------- header ---------------- */}
+      <main id="main" className="wrap-w dashboard-main">
         <BusinessHeader
           name={user.name}
           country={COUNTRY_NAME.get(user.countryCode) ?? user.countryCode}
           status={computeOverall(state, account?.status)}
           email={user.email}
         />
+        <nav className="dashboard-subnav" aria-label="On this page">
+          <a href="#transactions">Transactions</a>
+          <a href="#payouts">Payout requests</a>
+          <a href="#revenue-details">Revenue &amp; fees</a>
+          <a href="#account-setup">Account &amp; setup</a>
+        </nav>
 
-        {/* ---------------- the two questions ----------------
-            "How much have I made" on the left, "what happens next" on the
-            right. grid-2 collapses at 760px with revenue first, which is the
-            right order on a phone too. */}
-        {/* stretch, not start: two cards of different heights side by side read
-            as an accident. Matched frames read as a pair, and the one action in
-            the right-hand card sits on its floor rather than halfway up. */}
-          {/* ---------------- the money, once ----------------
-              This was two things: a RevenueCard here reading $207.00 earned,
-              and a Wallet section halfway down the left column reading $186.27
-              net. Two money summaries on one screen, different figures,
-              neither obviously the answer to "how much do I have". The fold is
-              the real one, so it comes up here and the duplicate below goes.
+        <div className="dashboard-top">
+          <EarningsHero fold={primaryFold} otherFolds={otherFolds}
+            checkoutHref={snippetLive ? payPath : null} />
+          <PayoutOverview schedule={payoutSchedule} latest={payouts[0] ?? null}
+            hasAccount={Boolean(account?.providerAccountId)} guardianName={guardianName} />
+        </div>
 
-              Dark, and the full width of the page. On a page that was nine
-              identical white cards this is the only container that says "start
-              here", and it is the reversal the marketing page ends on, so the
-              product looks like what was promised. */}
-          {/* Rendered whether or not anything has sold. primaryFold is null
-              until the first payment, and gating the whole band on it meant a
-              founder who had just signed up got no wallet at all — the one
-              thing they opened the page for, missing, on the day it matters
-              most. The empty case shows a real zero and says what fills it. */}
-          {primaryFold ? (
-            <EarningsHero
-              fold={primaryFold}
-              payments={paymentCount}
-              series={weekSeries}
-              otherFolds={otherFolds}
-            />
-          ) : (
-            <div className="wallethero">
-              <span className="wh-label">Available to request</span>
-              <span className="wh-big">{formatMinor(0, "USD")}</span>
-              <span className="wh-sub">
-                Nothing has sold yet. The first time someone pays, what they paid, what the
-                processing fee took and what you keep all appear here &mdash; and this figure is what you can
-                request.
-              </span>
-              <div className="row" style={{ marginTop: "var(--sp-7)", gap: 8, flexWrap: "wrap" }}>
-                {firstLive
-                  ? (
-                    <Link className="btn" href={`/pay/${founderId}/${firstLive.id}`} target="_blank" rel="noreferrer">
-                      Open your checkout
-                    </Link>
-                  )
-                  : null}
+        {needsSetup && (
+          <section className="dashboard-actions" aria-labelledby="action-heading">
+            <div className="dashboard-action-context">
+              <h2 className="h4" id="action-heading">
+                {consent?.newLinkRequestedAt ? "Your guardian needs a new invite"
+                  : state === "none" ? "Start with your guardian"
+                  : state === "declined" || state === "expired" ? "Send a new guardian invite"
+                  : account?.status === "ACTIVE" ? "Get your checkout ready"
+                  : "Payment setup"}
+              </h2>
+              <div className="dashboard-action-status">
+                <GuardianStatus state={state} guardianName={guardianName}
+                  invitedEmail={consent?.invitedEmail} consentedAt={consent?.consentedAt}
+                  expiresAt={consent?.inviteExpiresAt} />
+                <PaymentStatus accountStatus={account?.status} requirements={due}
+                  guardianName={guardianName} connectedAt={account?.connectedAt} />
               </div>
             </div>
-          )}
-
-          {snippetProduct && (
-            <AddToApp
-              productId={snippetProduct.id}
-              productName={snippetProduct.name}
-              live={snippetLive}
-              blockedReason={snippetBlocked}
-            />
-          )}
-
-          <ThisMonth
-            qmeMinor={qmeMinor}
-            feeMinor={monthFeeMinor}
-            currency={primaryFold?.currency ?? "USD"}
-            collecting={collecting}
-            crossed={crossedThreshold}
-            feesStart="15 October 2026"
-          />
-
-          {/* Context, not content. Figures a founder glances at, so they sit on
-              a rule rather than inside four more bordered cards on a page whose
-              whole problem is bordered cards. */}
-          {/* What is left of the old top row: the half that answers "what
-              happens next". A strip now, not a column, because the money it
-              used to sit beside has moved above it. */}
-          <div className="card" style={{ marginBottom: "var(--sp-7)" }}>
-            <div className="card-b">
-              <div className="reqlist">
-                <GuardianStatus
-                  state={state}
-                  guardianName={guardianName}
-                  invitedEmail={consent?.invitedEmail}
-                  consentedAt={consent?.consentedAt}
-                  expiresAt={consent?.inviteExpiresAt}
-                />
-                <PaymentStatus
-                  accountStatus={account?.status}
-                  requirements={due}
-                  guardianName={guardianName}
-                  connectedAt={account?.connectedAt}
-                />
-              </div>
-              <div style={{ marginTop: "var(--sp-5)" }}>
-                <PrimaryAction state={state} accountStatus={account?.status} />
-              </div>
+            <div className="dashboard-action-control">
+              {consent?.newLinkRequestedAt
+                ? <Link className="btn" href="#guardian">Send a new invite</Link>
+                : <PrimaryAction state={state} accountStatus={account?.status} />}
+              <Link className="linkbtn" href="#account-setup">View setup &middot; {setupDone} of {setupTotal}</Link>
             </div>
-          </div>
+          </section>
+        )}
+        {responseNeeded > 0 && (
+          <Notice tone="clay" head={`${responseNeeded} disputed ${responseNeeded === 1 ? "payment needs" : "payments need"} a response`}>
+            {guardianName} responds in Stripe. <Link className="linkbtn" href="#disputes">View the dispute and deadline</Link>.
+          </Notice>
+        )}
 
-
-        {/* Below revenue, above the working sections. An unread "Payment setup
-            needs redoing" is urgent, but not more urgent than the number the
-            founder opened the page to see. */}
-        <Notifications rows={notificationRows} />
-
-        {/* One column, in the order the questions get asked: how much
-            have I made, how do I wire it up, what came in, when does it
-            reach my bank. Everything that is not one of those is behind
-            the disclosure at the bottom.
-
-            The products section is not here and is not gone: it moved to
-            /dashboard/founder/products. It is still the only place a
-            product can be made or edited, and the snippet above needs a
-            product id to be worth pasting -- deleting it would remove the
-            ability to sell anything, not just the clutter. */}
-          {/* ---------------- 6. transactions ---------------- */}
-          {summaryYears.length > 0 && (
-            <Section title="Annual Earnings &amp; Payout Summary">
-              <p className="body" style={{ marginTop: 0 }}>
-                A record of what you earned and what was paid out, for any year you were over
-                $100 in at least one month. It is not tax advice &mdash; it is a document to give
-                an accountant, not one to file.
-              </p>
-              <div className="row" style={{ gap: 8, flexWrap: "wrap", marginTop: "var(--sp-4)" }}>
-                {summaryYears.map((y) => (
-                  <a key={y} className="btn btn-2 btn-sm"
-                     href={`/api/founder/annual-summary?year=${y}`}>
-                    Download {y}
-                  </a>
-                ))}
-              </div>
+        <div className="dashboard-grid">
+          <div className="dashboard-primary">
+            <Section title="Recent transactions" id="transactions" className="anchor dashboard-transactions"
+              aside={transactions.length > 0 ? <span className="small">Latest {transactions.length}</span> : undefined}>
+              {transactions.length === 0 ? (
+                <EmptyState heading="No payments yet"
+                  action={products.length === 0
+                    ? { label: "Create your first product", href: "/dashboard/founder/products" }
+                    : { label: "Get integration code", href: "#integrate" }}
+                  secondary={products.length > 0
+                    ? draftsOnly || !canCharge
+                      ? { label: draftsOnly ? "Set your product live" : "View payment setup", href: draftsOnly ? "/dashboard/founder/products" : "#account-setup" }
+                      : { label: "Open your checkout", href: payPath! }
+                    : undefined}>
+                  {products.length === 0
+                    ? "Create a product, then add your checkout to your app. Customer payments will appear here."
+                    : draftsOnly
+                      ? "Your product is still a draft. You can integrate the code now, then set it live when payment setup is complete."
+                      : !canCharge
+                        ? "Your guardian needs to finish payment setup before customers can pay. You can prepare your integration in the meantime."
+                        : "Your checkout is ready. Share it or add it to your app; customer payments and their processing status will appear here."}
+                </EmptyState>
+              ) : Object.entries(
+                transactions.reduce<Record<string, typeof transactions>>((acc, t) => {
+                  const day = fmtDate(t.createdAt);
+                  (acc[day] ??= []).push(t);
+                  return acc;
+                }, {}),
+              ).map(([day, rows]) => {
+                const cur = rows[0].currency;
+                const sameCurrency = rows.every((r) => r.currency === cur);
+                const cleared = rows
+                  .filter((r) => r.status === "COMPLETED" && r.feeMinor != null)
+                  .reduce((n, r) => n + (r.amountMinor - (r.feeMinor ?? 0)), 0);
+                return (
+                  <div className="txgroup" key={day}>
+                    <div className="txday">
+                      <span className="txday-d">{day}</span>
+                      {sameCurrency && cleared > 0 && <span className="txday-t num">{formatMinor(cleared, cur)} after fees</span>}
+                    </div>
+                    <ul className="txlist" aria-label={`Payments on ${day}`}>
+                      {rows.map((t) => {
+                        const refunded = t.status === "REFUNDED";
+                        const settled = t.status === "COMPLETED" && t.feeMinor != null;
+                        return (
+                          <li className="txrow" key={t.id}>
+                            <div className="tx-identity">
+                              <span className="tx-name">{t.product?.name ?? "None"}</span>
+                              <span className="tx-ref" title={t.stripePaymentIntentId}>Reference: {t.stripePaymentIntentId}</span>
+                              {t.refundedMinor > 0 && <span className="tx-adjustments" data-tone="clay">Refund recorded: {formatMinor(t.refundedMinor, t.currency)}</span>}
+                              {t.disputedMinor > 0 && <span className="tx-adjustments" data-tone="clay">Dispute loss recorded: {formatMinor(t.disputedMinor, t.currency)}</span>}
+                            </div>
+                            <div className="tx-financial">
+                              <span className="tx-amount"><span className="tx-field-label">Paid &middot; {t.currency}</span><span className="num">{formatMinor(t.amountMinor, t.currency)}</span></span>
+                              <span className="tx-fee"><span className="tx-field-label">Processing fee</span><span className="num">{t.feeMinor == null ? "Not reported yet" : formatMinor(t.feeMinor, t.currency)}</span></span>
+                              <span className="tx-net" data-tone={refunded ? "out" : settled ? "settled" : undefined}><span className="tx-field-label">{refunded ? "Refund status" : "After fees"}</span><span className="num">{refunded ? "Refunded" : t.feeMinor == null ? "—" : formatMinor(t.amountMinor - t.feeMinor, t.currency)}</span></span>
+                            </div>
+                            <span className={"badge tx-status " + (TX_BADGE[t.status] ?? "b-grey")}>{TX_LABEL[t.status] ?? t.status}</span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                );
+              })}
+              {transactions.length > 0 && <p className="transaction-note small">Amounts remain in their original currency. A fee that Stripe has not reported is shown as unknown, never as zero.</p>}
             </Section>
-          )}
 
-          <Section title="Support">
-            <SupportCard
-              founderId={founderId}
-              eligible={eligibility.eligible}
-              guardianName={guardianName}
-            />
-          </Section>
-
-          <Section title="Payout frequency">
-            <PayoutSupport
-              schedule={payoutSchedule}
-              eligible={eligibility.eligible}
-              guardianName={guardianName}
-            />
-          </Section>
-
-          <Section title="Disputes">
-            <Disputes
-              rows={disputes.map((d) => ({
-                id: d.id,
-                stripeDisputeId: d.stripeDisputeId,
-                amountMinor: d.amountMinor,
-                currency: d.currency,
-                reason: d.reason,
-                state: d.state,
-                evidenceDueBy: d.evidenceDueBy?.toISOString() ?? null,
-                openedAt: d.openedAt.toISOString(),
-              }))}
-              eligible={eligibility.eligible}
-              guardianName={guardianName}
-            />
-          </Section>
-
-          <Section title="Transactions">
-            {transactions.length === 0 ? (
-              /* Three situations, and the common one first. Veyro is the layer
-                 that gets payments working, not a shop someone stocks, so the
-                 empty state points at the integration panel above rather than
-                 telling them to go and make something to sell.
-
-                 The draft branch used to link to #products, an anchor on this
-                 page. Products moved to their own page and the anchor went
-                 with them, so that button had been scrolling nowhere. */
-              products.length === 0 ? (
-                <EmptyState
-                  heading="No payments yet"
-                  action={
-                    <Link className="btn" href="/dashboard/founder/products">
-                      Add payments to your app
-                    </Link>
-                  }
-                >
-                  Payments will show up here once you&rsquo;ve integrated Veyro&rsquo;s code into
-                  your app and customers start paying you. You need one product first &mdash; it
-                  is what the code points at.
-                </EmptyState>
-              ) : draftsOnly ? (
-                <EmptyState
-                  heading="No payments yet"
-                  action={<Link className="btn" href="#integrate">Get integration code</Link>}
-                  secondary={{ label: "Set it live", href: "/dashboard/founder/products" }}
-                >
-                  Payments will show up here once you&rsquo;ve integrated Veyro&rsquo;s code into
-                  your app and customers start paying you. Your product is still a draft, so set
-                  it live before you send anyone to it.
-                </EmptyState>
-              ) : (
-                <EmptyState
-                  heading="No payments yet"
-                  action={<Link className="btn" href="#integrate">Get integration code</Link>}
-                  secondary={{ label: "Or copy the link", href: payPath! }}
-                >
-                  Payments will show up here once you&rsquo;ve integrated Veyro&rsquo;s code into
-                  your app and customers start paying you. Every one lands here within seconds
-                  &mdash; amount, product, and the processing fee.
-                </EmptyState>
-              )
-            ) : (
-                <div>
-                  {/* Grouped by the day the money moved, because that is how a
-                      founder remembers a sale — "the two on Friday", not rows
-                      14 and 15. The day carries its own cleared total, which
-                      six numeric columns never showed. */}
-                  {Object.entries(
-                    transactions.reduce<Record<string, typeof transactions>>((acc, t) => {
-                      const k = fmtDate(t.createdAt);
-                      (acc[k] ??= []).push(t);
-                      return acc;
-                    }, {}),
-                  ).map(([day, rows]) => {
-                    // Only cleared money counts toward the day's figure, and
-                    // only in one currency — a day that mixed USD and EUR
-                    // would otherwise get a total that means nothing.
-                    const cur = rows[0].currency;
-                    const sameCurrency = rows.every((r) => r.currency === cur);
-                    const cleared = rows
-                      .filter((r) => r.status === "COMPLETED" && r.feeMinor != null)
-                      .reduce((n, r) => n + (r.amountMinor - (r.feeMinor ?? 0)), 0);
-                    return (
-                      <div className="txgroup" key={day}>
-                        <div className="txday">
-                          <span className="txday-d">{day}</span>
-                          {sameCurrency && cleared > 0 && (
-                            <span className="txday-t">{formatMinor(cleared, cur)} kept</span>
-                          )}
-                        </div>
-                        <ul className="txlist" aria-label={`Payments on ${day}`}>
-                        {rows.map((t) => {
-                          const refunded = t.status === "REFUNDED";
-                          const settled = t.status === "COMPLETED" && t.feeMinor != null;
-                          return (
-                            <li className="txrow" key={t.id}>
-                              <div>
-                                <span className="tx-name">{t.product?.name ?? "None"}</span>
-                                {/* The processor's own reference, so a founder
-                                    asking about a payment can quote something
-                                    support recognises rather than describing
-                                    it. */}
-                                <span className="tx-ref">{t.stripePaymentIntentId}</span>
-                              </div>
-                              <div className="tx-flow">
-                                <span>{formatMinor(t.amountMinor, t.currency)}</span>
-                                <span className="tx-arrow">&minus;</span>
-                                <span>
-                                  {t.feeMinor == null
-                                    ? "fee pending"
-                                    : formatMinor(t.feeMinor, t.currency) + " fee"}
-                                </span>
-                                <span className="tx-arrow">&rarr;</span>
-                                {/* Blank rather than a guess while the fee has
-                                    not been reported: net is not knowable
-                                    yet and a placeholder number would be a
-                                    claim about the founder's money. */}
-                                <span
-                                  className="tx-net"
-                                  data-tone={refunded ? "out" : settled ? "settled" : undefined}
-                                >
-                                  {refunded
-                                    ? "refunded"
-                                    : t.feeMinor == null
-                                      ? "—"
-                                      : formatMinor(t.amountMinor - t.feeMinor, t.currency)}
-                                </span>
-                                <span className={"badge " + (TX_BADGE[t.status] ?? "b-grey")}>
-                                  {TX_LABEL[t.status] ?? t.status}
-                                </span>
-                              </div>
-                            </li>
-                          );
-                        })}
-                        </ul>
-                      </div>
-                    );
-                  })}
-                </div>
+            {responseNeeded > 0 && (
+              <Section title="Disputes" id="disputes" className="anchor">
+                <Disputes rows={disputeRows} eligible={eligibility.eligible} guardianName={guardianName} />
+              </Section>
             )}
-          </Section>
-          {/* ---------------- payouts ---------------- */}
-          <div id="payouts" className="anchor" />
-          <Section
-            title="Payouts"
-            aside={
-              payouts.length > 0
-                ? <span className="badge b-grey">
-                    {payouts.length === 1 ? "1 request" : `${payouts.length} requests`}
-                  </span>
-                : undefined
-            }
-          >
-            <RequestPayout
-              currency={primaryCurrency}
-              availableMinor={primaryAvailable}
-              accountActive={account?.status === "ACTIVE"}
-            />
-
-            {payouts.length > 0 && (
-              <>
-                <hr className="rule" style={{ margin: "20px 0 16px" }} />
-                  {/* A sequence, not a table. A requested payout and a sent
-                      one used to get the same row and the same weight, so
-                      "where is my money now" had to be read out of a badge.
-                      The spine is .tl, which already carries the guardian
-                      relationship on the marketing page. */}
+          </div>
+          <aside className="dashboard-aside" aria-label="Payout requests and updates">
+            <Section title="Request a payout" id="payouts" className="anchor dashboard-payouts"
+              aside={<span className="balance-currency">{primaryCurrency}</span>}>
+              {primaryFold && primaryFold.currency !== primaryCurrency && (
+                <p className="small payout-currency-note">The overview above is in {primaryFold.currency}. This request uses {primaryCurrency}, the currency with the most available to request. Currencies are never combined.</p>
+              )}
+              <RequestPayout currency={primaryCurrency} availableMinor={primaryAvailable}
+                accountActive={account?.status === "ACTIVE"} />
+              {payouts.length > 0 && (
+                <div className="payout-history">
+                  <h3 className="h4">Request history</h3>
                   <ol className="tl payoutline" aria-label="Payout requests, newest first">
                     {payouts.map((p) => {
                       const done = p.status === "SENT";
                       const failed = p.status === "FAILED";
                       return (
                         <li key={p.id}>
-                          <span
-                            className="pt"
-                            data-on={failed ? "bad" : done ? "done" : "waiting"}
-                            aria-hidden="true"
-                          />
-                          <span>
+                          <span className="pt" data-on={failed ? "bad" : done ? "done" : "waiting"} aria-hidden="true" />
+                          <div>
                             <span className="tl-t">
-                              <span className="po-amt">
-                                {formatMinor(p.amountMinor, p.currency)}
-                              </span>
-                              <span className={"badge " + (PAYOUT_BADGE[p.status] ?? "b-grey")}>
-                                {p.status.charAt(0) + p.status.slice(1).toLowerCase()}
-                              </span>
+                              <span className="po-amt num">{formatMinor(p.amountMinor, p.currency)} <span className="payout-history-currency">{p.currency}</span></span>
+                              <span className={"badge " + (PAYOUT_BADGE[p.status] ?? "b-grey")}>{p.status.charAt(0) + p.status.slice(1).toLowerCase()}</span>
                             </span>
-                            <span className="tl-d">
-                              {/* What each state actually means for the money,
-                                  rather than restating the badge. */}
-                              {done
-                                ? `Sent on ${fmtDate(p.createdAt)}. It is paid into the bank account on your payment account.`
-                                : failed
-                                  ? `Requested ${fmtDate(p.createdAt)} and did not go through. The money is still in your wallet.`
-                                  : p.status === "APPROVED"
-                                    ? `Approved, waiting on the processor. Requested ${fmtDate(p.createdAt)}.`
-                                    : `Requested ${fmtDate(p.createdAt)}. Held out of your available balance so it cannot be spent twice.`}
-                            </span>
-                          </span>
+                            <span className="tl-d">Requested {fmtDate(p.createdAt)}.</span>
+                            <span className="tl-d">{done
+                              ? "Recorded as sent to the bank account on your payment account."
+                              : failed ? "Did not go through. This request is no longer reserved from your available balance."
+                              : p.status === "APPROVED" ? "Approved; not yet recorded as sent."
+                              : "Reserved from your available balance; not yet recorded as sent."}</span>
+                          </div>
                         </li>
                       );
                     })}
                   </ol>
-              </>
-            )}
-          </Section>
+                </div>
+              )}
+            </Section>
+            <Notifications rows={notificationRows} />
+          </aside>
+        </div>
 
-        {/* ---------------- everything else, folded away ---------------- */}
-        <details className="acct">
-          <summary>Account &amp; setup</summary>
-          <div className="acct-b">
-              {/* ---------------- setup ---------------- */}
+        <div className="dashboard-disclosures">
+          <Accordion className="dashboard-disclosure" summary={<span className="dashboard-disclosure-title">Add payments to your app</span>} defaultOpen={transactions.length === 0 && snippetLive}>
+            {snippetProduct ? (
+              <AddToApp productId={snippetProduct.id} productName={snippetProduct.name}
+                live={snippetLive} blockedReason={snippetBlocked} />
+            ) : (
+              <div className="dashboard-disclosure-inner" id="integrate">
+                <EmptyState heading="Start with a product" action={{ label: "Create a product", href: "/dashboard/founder/products" }}>Your integration uses a product ID. Create the product first, then return for the code.</EmptyState>
+              </div>
+            )}
+          </Accordion>
+
+          <Accordion className="dashboard-disclosure" summary={<span className="dashboard-disclosure-title">Revenue &amp; fees</span>}>
+            <div className="dashboard-disclosure-inner anchor" id="revenue-details">
+              <RevenueDetails folds={byEarned} payments={paymentCount} series={weekSeries} />
+              <ThisMonth qmeMinor={qmeMinor} feeMinor={monthFeeMinor} currency="USD"
+                collecting={collecting} crossed={crossedThreshold} feesStart="15 October 2026" />
+              <section className="dashboard-report-section" aria-labelledby="analytics-heading">
+                <h3 id="analytics-heading" className="h4">Last 30 days</h3>
+                <Analytics fold={analytics} hasProducts={products.length > 0} />
+              </section>
+              {summaryYears.length > 0 && (
+                <section className="dashboard-report-section" aria-labelledby="annual-heading">
+                  <h3 className="h4" id="annual-heading">Annual earnings &amp; payout summary</h3>
+                  <p className="small">A record for any year you earned over $100 in at least one month, to share with an accountant. It is not tax advice or a document to file.</p>
+                  <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
+                    {summaryYears.map((y) => <a key={y} className="btn btn-2 btn-sm" href={`/api/founder/annual-summary?year=${y}`}>Download {y}</a>)}
+                  </div>
+                </section>
+              )}
+            </div>
+          </Accordion>
+
+          <Accordion className="dashboard-disclosure" summary={<span className="dashboard-disclosure-title">Account &amp; setup <span className="dashboard-disclosure-meta">{setupDone} of {setupTotal} complete</span></span>}>
+            <div className="dashboard-disclosure-inner anchor" id="account-setup">
               <Section
                 title="Setup"
                 aside={
@@ -755,14 +598,14 @@ export default async function FounderDashboard() {
                     label="First payment"
                     detail={
                       transactions.length > 0
-                        ? "Money came in. It is in your wallet."
+                        ? "A payment has been recorded. Its status is shown in transactions."
                         : "Share your checkout link. The first payment shows up here."
                     }
                   />
                 </div>
               </Section>
   
-              {/* ---------------- 2. guardian ---------------- */}
+              
               <div id="guardian" className="anchor" />
               <Section
                 title="Your guardian"
@@ -813,9 +656,7 @@ export default async function FounderDashboard() {
                         working. Sending a new one replaces it.
                       </Notice>
                     )}
-                    {/* They opened a dead link and asked for another. This is the
-                        one thing blocking the account, and the person waiting has
-                        no way to move it forward themselves. */}
+                    
                     {consent?.newLinkRequestedAt && (
                       <Notice
                         tone="amber"
@@ -831,7 +672,7 @@ export default async function FounderDashboard() {
                 )}
               </Section>
   
-              {/* ---------------- 3. payments ---------------- */}
+              
               <Section
                 title="Payments"
                 aside={
@@ -879,7 +720,7 @@ export default async function FounderDashboard() {
                 ) : account.status === "ACTIVE" ? (
                   <div>
                     <p className="body" style={{ marginTop: 0 }}>
-                      ✓ Live{account.connectedAt ? ` since ${fmtDate(account.connectedAt)}` : ""}. Your
+                      Live{account.connectedAt ? ` since ${fmtDate(account.connectedAt)}` : ""}. Your
                       payment account can take money.
                     </p>
                     {firstLive ? (
@@ -888,7 +729,7 @@ export default async function FounderDashboard() {
                       </Link>
                     ) : (
                       <p className="small" style={{ margin: 0 }}>
-                        Create a live product below and its checkout link appears here.
+                        Set a product live on your products page and its checkout link appears here.
                       </p>
                     )}
                   </div>
@@ -917,63 +758,35 @@ export default async function FounderDashboard() {
                 )}
               </Section>
   
-              {/* ---------------- last 30 days ---------------- */}
-              {/* Above the wallet on purpose. The wallet answers "where is my
-                  money"; this answers "is any of this working", which is the
-                  question you arrive with. */}
-              {/* "Last 30 days" stood here and repeated the four figures now on the
-                  rule at the top of the page. What it had that the rail does not is
-                  the best seller and the caveat about how views are counted, so that
-                  is what is left of it. */}
-              {analytics.topProduct && (
-                <p className="small" style={{ marginTop: "calc(-1 * var(--sp-5))", marginBottom: "var(--sp-7)" }}>
-                  Best seller: <strong>{analytics.topProduct.name}</strong>, {analytics.topProduct.purchases}
-                  {analytics.topProduct.purchases === 1 ? " sale" : " sales"} totalling{" "}
-                  {formatMinor(analytics.topProduct.grossMinor, analytics.topProduct.currency)}. Views are
-                  counted once per browser session, and amounts are gross, before the processing fee.
-                </p>
-              )}
-  
-              {/* The Wallet section stood here. It is the dark hero at the top of
-                  the page now: it was the second money summary on one screen, with a
-                  different figure from the first, and two answers to "how much do I
-                  have" is worse than either alone. */}
-  
-              {/* ---------------- 7. recent activity ---------------- */}
-              <Section title="Recent activity">
-                {activityLines.length === 0 ? (
-                  /* Not one of the four in the brief, but it used the same
-                     component and said even less. Activity is a record of things
-                     the other sections cause, so it points at the first of them
-                     rather than inventing an action of its own. */
-                  <EmptyState heading="Nothing has happened yet">
-                    Invites, payments and payouts are listed here as they happen, newest first.
-                  </EmptyState>
-                ) : (
-                  <div className="reqlist">
-                    {activityLines.map(({ row, line }) => (
-                      <div className="reqrow" key={row.id}>
-                        <div>
-                          <span className="req-t">{line}</span>
-                          <span className="req-d">{fmtDate(row.createdAt)}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </Section>
-            <div id="products" className="anchor" />
-            <Section title="Products">
-              <p className="body" style={{ margin: 0 }}>
-                What people pay for, and the checkout link for each one, live on their
-                own page.{" "}
-                <Link className="linkbtn" href="/dashboard/founder/products">Open your products</Link>
-              </p>
-            </Section>
-          </div>
-        </details>
-      </main>
 
+              <div id="products" className="anchor" />
+              <Section title="Products">
+                <p className="body" style={{ margin: 0 }}>Manage what customers pay for and each checkout link on your <Link className="linkbtn" href="/dashboard/founder/products">products page</Link>.</p>
+              </Section>
+            </div>
+          </Accordion>
+
+          <Accordion className="dashboard-disclosure" summary={<span className="dashboard-disclosure-title">Payout schedule &amp; support</span>}>
+            <div className="dashboard-disclosure-inner">
+              <Section title="Payout frequency"><PayoutSupport schedule={payoutSchedule} eligible={eligibility.eligible} guardianName={guardianName} /></Section>
+              <Section title="Support"><SupportCard founderId={founderId} eligible={eligibility.eligible} guardianName={guardianName} /></Section>
+              {responseNeeded === 0 && <Section title="Disputes" id="disputes" className="anchor"><Disputes rows={disputeRows} eligible={eligibility.eligible} guardianName={guardianName} /></Section>}
+            </div>
+          </Accordion>
+
+          <Accordion className="dashboard-disclosure" summary={<span className="dashboard-disclosure-title">Account activity</span>}>
+            <div className="dashboard-disclosure-inner">
+              {activityLines.length === 0 ? (
+                <EmptyState heading="No account activity yet">Invites, payments and payouts are recorded here as they happen.</EmptyState>
+              ) : (
+                <ul className="account-activity-list">
+                  {activityLines.map(({ row, line }) => <li key={row.id}><span>{line}</span><time dateTime={row.createdAt.toISOString()}>{fmtDate(row.createdAt)}</time></li>)}
+                </ul>
+              )}
+            </div>
+          </Accordion>
+        </div>
+      </main>
     </div>
   );
 }

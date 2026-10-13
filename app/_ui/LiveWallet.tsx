@@ -74,9 +74,9 @@ import {
 type Phase = 0 | 1 | 2 | 3;
 
 const SEQUENCE: { at: number; to: Phase }[] = [
-  { at: 1500, to: 1 },
-  { at: 2400, to: 2 },
-  { at: 3300, to: 3 },
+  { at: 500, to: 1 },
+  { at: 1100, to: 2 },
+  { at: 1800, to: 3 },
 ];
 
 
@@ -124,8 +124,8 @@ export function LiveWallet() {
     const el = node.current;
     if (!el) return;
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced || typeof IntersectionObserver === "undefined") {
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (motion.matches || typeof IntersectionObserver === "undefined") {
       ran.current = true;
       setPhase(3);
       return;
@@ -139,8 +139,24 @@ export function LiveWallet() {
       for (const s of SEQUENCE) timers.push(setTimeout(() => setPhase(s.to), s.at));
     }, { threshold: 0.15 });
 
+    const finish = () => {
+      ran.current = true;
+      io.disconnect();
+      for (const timer of timers) clearTimeout(timer);
+      setPhase(3);
+    };
+    const onMotion = () => { if (motion.matches) finish(); };
+    const onVisibility = () => { if (document.hidden && ran.current) finish(); };
+
     io.observe(el);
-    return () => { io.disconnect(); for (const t of timers) clearTimeout(t); };
+    motion.addEventListener("change", onMotion);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      io.disconnect();
+      for (const timer of timers) clearTimeout(timer);
+      motion.removeEventListener("change", onMotion);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
   }, []);
 
   const saleVisible = phase >= 1;

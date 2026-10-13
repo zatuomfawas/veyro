@@ -39,7 +39,7 @@ export function PriceCalculator() {
   const free = fee === 0;
 
   return (
-    <div className="calc">
+    <div className="calc contrast-surface">
       <div className="calc-top">
         <label className="fig-k" htmlFor={id}>You earn, in a month</label>
         <output className="fig fig-lg" htmlFor={id}>{formatMinor(earned, "USD")}</output>

@@ -58,9 +58,9 @@ export default async function ProductsPage() {
   }));
 
   return (
-    <div className="fw">
+    <div className="fw founder-workspace">
       <style>{CSS + CSS2}</style>
-      <DashNav role={user.role as DashRole} current="dashboard" />
+      <DashNav role={user.role as DashRole} current="products" />
 
       <main id="main" className="wrap-w" style={{ paddingTop: 24, paddingBottom: 56 }}>
         <DashHeader

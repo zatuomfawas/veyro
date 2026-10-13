@@ -91,7 +91,7 @@ export function BuyButton() {
           instead of sitting under it, which also puts "Copy code" beside the
           code rather than below a block you have to scroll past. */}
       <div className="addapp-grid">
-        <pre className="addapp-code"><code>{snippet}</code></pre>
+        <pre className="addapp-code" tabIndex={0} aria-label="Your Veyro integration code"><code>{snippet}</code></pre>
 
         <div className="addapp-side">
       <p className="addapp-d">

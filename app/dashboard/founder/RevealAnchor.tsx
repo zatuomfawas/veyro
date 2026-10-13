@@ -43,7 +43,11 @@ export function RevealAnchor() {
         chain.push(d);
         d = d.parentElement?.closest("details");
       }
-      for (const node of chain.reverse()) node.open = true;
+      for (const node of chain.reverse()) {
+        // Finish any disclosure animation before measuring its anchor target.
+        node.dispatchEvent(new Event("veyro:disclosure-open"));
+        node.open = true;
+      }
     }
 
     /** Reveal, scroll, and put the keyboard where the eye went. */

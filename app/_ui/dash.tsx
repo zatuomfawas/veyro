@@ -33,17 +33,24 @@ const HOME_FOR: Record<string, string> = {
  */
 export function DashNav({
   role, current,
-}: { role?: DashRole; current?: "dashboard" | "settings" } = {}) {
+}: { role?: DashRole; current?: "dashboard" | "products" | "settings" } = {}) {
   const home = role ? HOME_FOR[role] : undefined;
+  const active = current === "settings" ? "/dashboard/settings"
+    : current === "products" ? "/dashboard/founder/products" : home;
+  const items = [
+    ...(home ? [{ href: home, label: "Overview" }] : []),
+    ...(role === "FOUNDER" ? [{ href: "/dashboard/founder/products", label: "Products" }] : []),
+    { href: "/dashboard/settings", label: "Settings" },
+  ];
 
   return (
     <>
       <SkipLink />
       {/* .navbar makes it sticky. A dashboard scrolls a long way, and Settings
           and Sign out were both gone by the second screen. */}
-      <div className="navbar">
+      <div className="navbar dashboard-nav" data-role={role?.toLowerCase()}>
         <div className="wrap-w">
-          <nav className="lp-nav" aria-label="Dashboard">
+          <nav className="lp-nav dashboard-nav-inner" aria-label="Dashboard">
           <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
           {/* Four controls did not fit a phone.
               ------------------------------------------------------------
@@ -68,7 +75,13 @@ export function DashNav({
                 href={home}
                 aria-current={current === "dashboard" ? "page" : undefined}
               >
-                Dashboard
+                Overview
+              </Link>
+            )}
+            {role === "FOUNDER" && (
+              <Link className="btn btn-q btn-sm hide-s" href="/dashboard/founder/products"
+                aria-current={current === "products" ? "page" : undefined}>
+                Products
               </Link>
             )}
             <Link
@@ -81,12 +94,7 @@ export function DashNav({
             {/* Before Sign out, so the destructive control stays last. */}
             <ThemeToggle />
             <SignOut />
-            <MobileNav
-              items={[
-                ...(home ? [{ href: home, label: "Dashboard" }] : []),
-                { href: "/dashboard/settings", label: "Settings" },
-              ]}
-            />
+            <MobileNav items={items} active={active} />
             </div>
           </nav>
         </div>
@@ -112,15 +120,15 @@ export function DashHeader({
 
 /** A titled card. */
 export function Section({
-  title, aside, children,
-}: { title: string; aside?: React.ReactNode; children: React.ReactNode }) {
+  title, aside, children, className, id,
+}: { title: string; aside?: React.ReactNode; children: React.ReactNode; className?: string; id?: string }) {
   return (
-    <section className="card" style={{ marginBottom: 24 }}>
-      <div className="card-h">
+    <section id={id} className={"card dashboard-section" + (className ? " " + className : "")} style={{ marginBottom: 24 }}>
+      <div className="card-h dashboard-section-head">
         <h2 className="h4" style={{ margin: 0 }}>{title}</h2>
         {aside}
       </div>
-      <div className="card-b">{children}</div>
+      <div className="card-b dashboard-section-body">{children}</div>
     </section>
   );
 }

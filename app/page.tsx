@@ -9,6 +9,7 @@ import { HeroWallet } from "@/app/_ui/HeroWallet";
 import { SiteNav } from "@/app/_ui/SiteNav";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { FAQ } from "@/app/_ui/faq";
+import { Accordion } from "@/app/_ui/Accordion";
 
 export const metadata = buildMetadata("landing");
 export const viewport = buildViewport();
@@ -80,7 +81,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="home-section home-money" aria-labelledby="money-title">
+        <section className="home-section home-money contrast-surface" aria-labelledby="money-title">
           <div className="wrap-lp home-money-grid">
             <div>
               <h2 id="money-title">A clear picture of your business money.</h2>
@@ -120,10 +121,9 @@ export default async function Home() {
             </div>
             <div className="public-faq">
               {HOME_QUESTIONS.map((entry) => (
-                <details key={entry.q}>
-                  <summary>{entry.q}</summary>
+                <Accordion key={entry.q} summary={entry.q}>
                   <div className="small">{entry.a}</div>
-                </details>
+                </Accordion>
               ))}
               <p className="home-policy-note">
                 Stripe&rsquo;s policy supports guardian involvement for under-18 accounts.

@@ -97,5 +97,23 @@ test("every skeleton names what is loading, for people who cannot see it", () =>
   // One live region per variant, and the blocks themselves hidden: a row of
   // empty divs announced one by one is worse than silence.
   assert.equal((sk.match(/role="status" aria-live="polite"/g) ?? []).length, exported.length);
-  assert.equal((sk.match(/aria-hidden="true"/g) ?? []).length, exported.length);
+
+  // Checked per variant rather than by counting the file.
+  //
+  // This used to assert that the number of aria-hidden attributes equalled the
+  // number of exports, which was a proxy for "every variant hides its blocks"
+  // and held only while each variant had exactly one decorative region. The
+  // dashboard skeleton draws its nav as well as its body, so it legitimately
+  // has two, and the count broke while the thing it was protecting was fine.
+  //
+  // Splitting on the export boundary tests the invariant that actually
+  // matters: no variant forgets to hide its blocks. It is stricter than the
+  // count was, because a variant with two hidden regions and one with none
+  // used to pass.
+  const chunks = sk.split(/export function /).slice(1);
+  assert.equal(chunks.length, exported.length);
+  for (const [i, chunk] of chunks.entries()) {
+    assert.ok(chunk.includes('aria-hidden="true"'),
+      exported[i] + " must hide its placeholder blocks from screen readers");
+  }
 });

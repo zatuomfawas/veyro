@@ -28,9 +28,7 @@ export const metadata: Metadata = {
   },
 };
 
-// The same entries the homepage shows, from app/_ui/faq.tsx. Native <details>,
-// so it opens without JavaScript and every answer is in the HTML for a crawler
-// and a screen reader to reach.
+// Shared answers stay fully visible here for reading and indexed navigation.
 export default function FaqPage() {
   return (
     <div className="fw public-page">

@@ -1,13 +1,14 @@
 import { formatMinor } from "@/lib/money";
 import { FREE_FLOOR_MINOR, RATE } from "@/lib/pricing";
+import { CountUp } from "@/app/_ui/CountUp";
 import {
   PRODUCT_NAME, PRODUCT_PRICE_MINOR, PRODUCT_SALES, PRODUCT_EARNED_MINOR, PRODUCT_FEE_MINOR,
 } from "@/app/_ui/wallet-example";
 
-/** A static example; earnings and fees use the product's shared arithmetic. */
+/** An illustrative example; earnings and fees use the product's shared arithmetic. */
 export function HeroWallet() {
   return (
-    <div className="hw">
+    <div className="hw contrast-surface" data-count-group>
       <div className="hw-head">
         <p className="hw-k">Product earnings</p>
         <span className="hw-eg">Example</span>
@@ -20,7 +21,7 @@ export function HeroWallet() {
         </p>
 
         <p className="hw-total-label">Sales this month</p>
-        <p className="hw-bal">{formatMinor(PRODUCT_EARNED_MINOR, "USD")}</p>
+        <p className="hw-bal"><CountUp amountMinor={PRODUCT_EARNED_MINOR} currency="USD" /></p>
 
         <dl className="hw-breakdown">
           <div>

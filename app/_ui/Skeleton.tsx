@@ -24,94 +24,61 @@ function Bar({ w, h = 14, mt = 0 }: { w: string; h?: number; mt?: number }) {
     <div
       className="skel"
       data-shimmer="1"
-      style={{ width: w, height: h, marginTop: mt }}
+      style={{ width: w, maxWidth: "100%", height: h, marginTop: mt }}
     />
   );
 }
 
 export function DashboardSkeleton({ what = "your money" }: { what?: string }) {
   return (
-    <div className="fw">
+    <div className="fw founder-dashboard">
       <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
-      <main className="wrap-w" style={{ paddingTop: 24, paddingBottom: 56 }}>
-        {/* The words, for anyone who cannot see the shape. */}
-        <p className="sr-only" role="status" aria-live="polite">
-          Loading {what}…
-        </p>
-
-        {/* One column, in the order the real page is in: earnings, then the
-            integration panel, then transactions, then payouts, then the line
-            that opens everything else.
-
-            It used to draw a rail of four stats and two columns of cards,
-            which was the dashboard's shape before it was reorganised around
-            payments. A placeholder for a layout that no longer exists is worse
-            than no placeholder at all: the page visibly rearranges itself the
-            moment the real thing arrives, which is the one problem a skeleton
-            is supposed to solve. */}
+      <div className="navbar dashboard-nav" data-role="founder" aria-hidden="true">
+        <div className="wrap-w">
+          <div className="lp-nav dashboard-nav-inner"><Bar w="104px" h={20} /><Bar w="190px" h={16} /></div>
+        </div>
+      </div>
+      <main className="wrap-w dashboard-main">
+        <p className="sr-only" role="status" aria-live="polite">Loading {what}…</p>
         <div aria-hidden="true">
-          <Bar w="220px" h={26} />
-          <Bar w="340px" h={12} mt={10} />
-
-          {/* Earnings. Balance and the withdraw button on one row, the three
-              figures under it, then the week as a strip. */}
-          <div className="skel-hero" style={{ marginTop: 24 }}>
-            <div className="skel-herorow">
-              <div>
-                <Bar w="150px" h={12} />
-                <Bar w="260px" h={44} mt={12} />
+          <div className="dashboard-heading"><Bar w="220px" h={30} /><Bar w="340px" h={13} mt={12} /></div>
+          <div className="dashboard-subnav"><Bar w="100%" h={16} /></div>
+          <div className="dashboard-top">
+            <div className="account-balance">
+              <Bar w="150px" h={16} /><Bar w="260px" h={54} mt={18} />
+              <Bar w="100%" h={13} mt={18} />
+              <div className="money-states">
+                {[0, 1, 2].map((i) => (
+                  <div className="money-state" key={i}><Bar w="100%" h={12} /><Bar w="100%" h={24} mt={12} /><Bar w="90%" h={12} mt={8} /></div>
+                ))}
               </div>
-              <Bar w="130px" h={40} />
+              <Bar w="160px" h={38} mt={24} />
             </div>
-            <div className="skel-figs">
-              {[0, 1, 2].map((i) => (
-                <div key={i}>
-                  <Bar w="96px" h={20} />
-                  <Bar w="120px" h={11} mt={8} />
-                </div>
-              ))}
-            </div>
-            <div className="skel-week">
-              {[38, 62, 20, 78, 100, 70, 88].map((h, i) => (
-                <span className="skel-weekcol" key={i}>
-                  <span className="skel skel-weekbar" data-shimmer="1" style={{ height: `${h}%` }} />
-                </span>
-              ))}
+            <div className="payout-overview">
+              <Bar w="130px" h={16} /><Bar w="180px" h={28} mt={20} />
+              <Bar w="100%" h={13} mt={18} /><Bar w="86%" h={13} mt={9} />
+              <div className="payout-latest"><Bar w="120px" h={12} /><Bar w="180px" h={20} mt={12} /><Bar w="100%" h={13} mt={12} /></div>
             </div>
           </div>
-
-          {/* The integration panel: a heading, then the snippet beside what
-              you do with it, which is how the real one is laid out. */}
-          <div className="skel-card" style={{ marginTop: "var(--sp-7)" }}>
-            <Bar w="280px" h={16} />
-            <div className="skel-int">
-              <Bar w="100%" h={190} />
-              <div>
-                <Bar w="100%" h={11} />
-                <Bar w="88%" h={11} mt={8} />
-                <Bar w="62%" h={11} mt={8} />
-                <Bar w="100%" h={34} mt={20} />
-                <Bar w="100%" h={44} mt={16} />
+          <div className="dashboard-grid">
+            <div className="dashboard-primary">
+              <div className="card dashboard-section">
+                <div className="card-h dashboard-section-head"><Bar w="190px" h={18} /></div>
+                <div className="card-b dashboard-section-body">
+                  {[0, 1, 2].map((i) => <div className="skel-row" key={i}><Bar w="42%" h={13} /><Bar w="30%" h={13} /></div>)}
+                </div>
+              </div>
+            </div>
+            <div className="dashboard-aside">
+              <div className="card dashboard-section">
+                <div className="card-h dashboard-section-head"><Bar w="170px" h={18} /></div>
+                <div className="card-b dashboard-section-body"><Bar w="100%" h={13} /><Bar w="100%" h={38} mt={18} /><Bar w="150px" h={38} mt={16} /></div>
               </div>
             </div>
           </div>
-
-          {/* Transactions, then payouts. Rows, not paragraphs. */}
-          {[4, 2].map((rows, k) => (
-            <div className="skel-card" key={k} style={{ marginTop: "var(--sp-6)" }}>
-              <Bar w={k === 0 ? "140px" : "110px"} h={14} />
-              {Array.from({ length: rows }, (_, i) => (
-                <div className="skel-row" key={i}>
-                  <Bar w="40%" h={12} />
-                  <Bar w="84px" h={12} />
-                </div>
-              ))}
-            </div>
-          ))}
-
-          {/* Everything else is behind one line on the real page, so it is one
-              line here. */}
-          <Bar w="180px" h={14} mt={28} />
+          <div className="dashboard-disclosures">
+            {[0, 1, 2, 3, 4].map((i) => <div className="dashboard-disclosure" key={i}><div className="disclosure-summary"><Bar w="240px" h={15} /></div></div>)}
+          </div>
         </div>
       </main>
     </div>
