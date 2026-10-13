@@ -2297,7 +2297,23 @@
 .fw .task-nav-note { font-size:var(--fs-2); color:var(--ink-3); text-align:right; }
 
 /* Footer is navigation and context, rather than another call to action. */
-.fw .foot { border-top:1px solid var(--line); padding-block:var(--sp-9) var(--sp-7); background:var(--paper); }
+/* The footer is a quiet close, not a black slab.
+   ------------------------------------------------------------------------
+   It carried .contrast-surface, which hard-codes the dark palette, so on a
+   white site the page ended in a full-width block of near-black. That reads
+   as a different website bolted to the bottom of this one, and it fought the
+   one thing this palette is for, which is paper.
+
+   --surface-2 instead: two shades off the page, bounded by the rule the rest
+   of the site uses to separate things. It recedes in both themes rather than
+   shouting in one of them.
+
+   Two rather than one, because the closing call to action directly above is
+   already --surface. At the same value the two ran together into a single
+   tinted block with a hairline through the middle of it, and the page had no
+   visible end. A step down gives the foot of the page somewhere to land. */
+.fw .foot { border-top:1px solid var(--line); padding-block:var(--sp-9) var(--sp-7);
+  background:var(--surface-2); }
 .fw .footgrid { display:grid; grid-template-columns:minmax(0,1.6fr) repeat(3,minmax(0,1fr)); gap:var(--sp-8); }
 .fw .ftr-brand-note { font-size:var(--fs-3); color:var(--ink-2); line-height:1.65; max-width:28ch; margin-top:var(--sp-4); }
 .fw .ftr-contact { margin-top:var(--sp-3); font-size:var(--fs-2); }
@@ -2510,13 +2526,34 @@
   --placeholder:#8c949b; --select-bg:#2e3841; --track-free:#163027; --track-rest:#24282c;
   background:var(--paper); color:var(--ink); color-scheme:dark;
 }
+/* CONTRAST MEANS "AGAINST THE PAGE", NOT "DARK".
+   ------------------------------------------------------------------------
+   The block above hard-codes the dark palette, which is right on a white
+   page and wrong on a dark one: in dark mode the band's tokens and the
+   page's tokens were near enough identical that the band stopped existing.
+   Switching the theme appeared to do nothing to the one element whose whole
+   job is to be a break you can see from the scrollbar.
+
+   In dark mode the band contrasts upward instead. It lifts off the page
+   rather than sinking into it, keeps its own border and keeps the lifted
+   pine, so the device survives the theme instead of only working in one of
+   them. */
+[data-theme="dark"] .fw .contrast-surface,
+[data-theme="dark"] .fw .dashboard-nav[data-role="founder"],
+[data-theme="dark"] .fw .payout-overview {
+  --paper:#1b1f23; --card:#20252a; --surface:#23282d; --surface-2:#2b3137;
+  --ink:#f2f4f5; --ink-2:#b8bfc5; --ink-3:#949ca3;
+  --line:#363c42; --line-soft:#2d3339; --line-hover:#474e55;
+  background:var(--paper); color:var(--ink);
+}
+
 .fw .contrast-surface :focus-visible, .fw .dashboard-nav :focus-visible,
 .fw .payout-overview :focus-visible { outline-color:var(--pine); }
 .fw .contrast-surface .wm-tile, .fw .dashboard-nav[data-role="founder"] .wm-tile { color:var(--reverse); }
 .fw .hw.contrast-surface { border-color:var(--line); background:var(--paper); }
 .fw .hw.contrast-surface .hw-head { background:var(--card); }
 .fw .home-money.contrast-surface { border-top-color:var(--line); }
-.fw .foot.contrast-surface { border-top-color:var(--line); }
+
 .fw .calc.contrast-surface { border-color:var(--line); }
 
 /* Feedback is immediate; disclosure motion preserves the current presented height. */

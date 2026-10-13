@@ -37,7 +37,7 @@ const COLUMNS: { head: string; links: { href: string; label: string }[] }[] = [
 
 export function SiteFooter() {
   return (
-    <footer className="foot contrast-surface">
+    <footer className="foot">
       <div className="wrap-lp">
         <div className="footgrid">
           <div className="ftr-brand">
