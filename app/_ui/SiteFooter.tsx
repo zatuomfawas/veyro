@@ -3,13 +3,7 @@ import { Wordmark } from "@/app/_ui/marks";
 import { SUPPORT_EMAIL } from "@/lib/support";
 
 
-// Three columns, and nothing in them that is not a real page.
-//
-// The legal links are live because the pages exist; each says at the top that
-// it is drafted rather than lawyer-reviewed. The year is computed, never
-// hardcoded: a stale copyright line is a small thing that tells a visitor
-// nobody is looking after the site.
-const COLUMNS: { head: string; links: { href: string; label: string; external?: boolean }[] }[] = [
+const COLUMNS: { head: string; links: { href: string; label: string }[] }[] = [
   {
     head: "Product",
     links: [
@@ -22,7 +16,7 @@ const COLUMNS: { head: string; links: { href: string; label: string; external?: 
     ],
   },
   {
-    head: "Company",
+    head: "Help & company",
     links: [
       { href: "/about", label: "About" },
       { href: "/faq", label: "Questions" },
@@ -46,34 +40,39 @@ export function SiteFooter() {
     <footer className="foot">
       <div className="wrap-lp">
         <div className="footgrid">
-          <div>
-            <Wordmark size={19} tile />
-            <p className="tiny" style={{ marginTop: 12, maxWidth: "32ch" }}>
-              Financial infrastructure for young founders. Software, not a bank.
+          <div className="ftr-brand">
+            <Link href="/" aria-label="Veyro, home"><Wordmark size={19} tile /></Link>
+            <p className="small ftr-brand-note">
+              Payments for young founders, with a guardian involved.
             </p>
-            <p className="tiny" style={{ marginTop: 12 }}>
+            <p className="small ftr-contact">
               <a className="linkbtn" href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
             </p>
           </div>
 
           {COLUMNS.map((col) => (
-            <div key={col.head}>
-              <h3>{col.head}</h3>
-              {col.links.map((l) => (
-                <Link key={l.href} className="linkbtn footlink" href={l.href}>
-                  {l.label}
-                </Link>
-              ))}
-            </div>
+            <nav key={col.head} aria-label={col.head}>
+              <h2 className="ftr-col-title">{col.head}</h2>
+              <ul className="ftr-links">
+                {col.links.map((l) => (
+                  <li key={l.href}>
+                    <Link className="linkbtn footlink" href={l.href}>{l.label}</Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           ))}
         </div>
 
-        <p className="tiny" style={{ marginTop: 32, maxWidth: "var(--m-body)" }}>
-          &copy; {new Date().getFullYear()} Veyro. Veyro is software and does not hold customer
-          funds. Payments are processed and settled by Stripe, and money moves between a customer
-          and the founder&rsquo;s own connected account. Nothing here is legal or tax advice, and
-          availability is set by the payment provider and can change.
-        </p>
+        <div className="foot-bottom">
+          <p className="tiny ftr-copyright">&copy; {new Date().getFullYear()} Veyro.</p>
+          <p className="tiny ftr-disclosure">
+            Veyro is software and does not hold customer funds. Payments are processed and
+            settled by Stripe, and money moves between a customer and the founder&rsquo;s own
+            connected account. Nothing here is legal or tax advice, and availability is set
+            by the payment provider and can change.
+          </p>
+        </div>
       </div>
     </footer>
   );

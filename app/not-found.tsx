@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { buildMetadata, buildViewport } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
-import { Wordmark, SkipLink } from "@/app/_ui/marks";
+import { SkipLink } from "@/app/_ui/marks";
+import { SiteNav } from "@/app/_ui/SiteNav";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 
 // noindex, per SEO_ROUTES.notfound — a 404 should never be indexed.
@@ -16,18 +17,11 @@ export const viewport = buildViewport();
 // here. They exist now.)
 export default function NotFound() {
   return (
-    <div className="fw">
+    <div className="fw public-page">
       <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
 
-      <div className="wrap-n">
-        <div className="lp-nav">
-          <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
-          <div className="lp-links">
-            <Link className="btn btn-2 btn-sm" href="/check">Check eligibility</Link>
-          </div>
-        </div>
-      </div>
+      <SiteNav />
 
       <main id="main" className="wrap-n" style={{ paddingTop: 48, paddingBottom: 56 }}>
         <h1 className="d2" style={{ marginTop: 8, maxWidth: "18ch" }}>

@@ -1,285 +1,376 @@
-# Veyro design system
-
-The system lives in `app/_ui/css.ts` as two exported strings (`CSS`, `CSS2`),
-injected by each page inside a `.fw` wrapper. This file records the decisions
-behind it so they get referenced rather than reinvented.
-
-Everything here is already true of the code. If you change one, change it here
-too.
-
+---
+name: "Veyro"
+description: "Clear payment records for young founders and their guardians."
+colors:
+  paper: "#ffffff"
+  surface: "#f7f7f6"
+  surface-2: "#eeeeec"
+  card: "#ffffff"
+  reverse: "#ffffff"
+  line: "#e3e3e0"
+  line-soft: "#eeeeec"
+  line-hover: "#d4d4d1"
+  control-line: "#878d92"
+  brand: "#111315"
+  brand-h: "#2b2f33"
+  brand-a: "#000000"
+  ink: "#111315"
+  ink-2: "#4a4f54"
+  ink-3: "#61666b"
+  placeholder: "#6b7075"
+  pine: "#12513a"
+  pine-h: "#0b3a29"
+  pine-line: "#acc2ba"
+  amber: "#8a5a12"
+  amber-line: "#cdb899"
+  slate: "#22456b"
+  slate-line: "#adbac8"
+  clay: "#9c2b22"
+  clay-line: "#d5a6a2"
+  track-free: "#e4efe9"
+  track-rest: "#ececeb"
+  select-bg: "#e2e3e3"
+  scrim: "rgba(17,19,21,.32)"
+  dark-paper: "#0f1113"
+  dark-surface: "#16191c"
+  dark-surface-2: "#1e2226"
+  dark-card: "#14171a"
+  dark-reverse: "#0f1113"
+  dark-line: "#2a2f34"
+  dark-line-soft: "#22262a"
+  dark-control-line: "#7b848b"
+  dark-brand: "#e8eaec"
+  dark-brand-h: "#ffffff"
+  dark-ink: "#e8eaec"
+  dark-ink-2: "#aab1b7"
+  dark-ink-3: "#8c949b"
+  dark-pine: "#5fb48f"
+  dark-pine-h: "#7cc9a6"
+  dark-pine-bg: "#12251e"
+  dark-pine-line: "#245040"
+  dark-amber: "#d9a441"
+  dark-amber-bg: "#2a2112"
+  dark-amber-line: "#4f3f19"
+  dark-slate: "#83aadb"
+  dark-slate-bg: "#15202e"
+  dark-slate-line: "#294660"
+  dark-clay: "#e39089"
+  dark-clay-bg: "#2b1917"
+  dark-clay-line: "#5d322c"
+typography:
+  fs-1:
+    fontSize: "12px"
+  fs-2:
+    fontSize: "13px"
+  fs-3:
+    fontSize: "14px"
+  fs-4:
+    fontSize: "16px"
+  fs-5:
+    fontSize: "18px"
+  fs-6:
+    fontSize: "22px"
+  fs-7:
+    fontSize: "26px"
+  fs-8:
+    fontSize: "32px"
+  fs-9:
+    fontSize: "44px"
+  fs-10:
+    fontSize: "56px"
+  home-display:
+    fontFamily: "Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif"
+    fontSize: "clamp(38px, 4.2vw, 58px)"
+    fontWeight: 600
+    lineHeight: 1.1
+    letterSpacing: "-0.035em"
+  display:
+    fontFamily: "Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif"
+    fontSize: "clamp(36px, 4vw, 52px)"
+    fontWeight: 600
+    lineHeight: 1.12
+    letterSpacing: "-0.03em"
+  headline:
+    fontFamily: "Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif"
+    fontSize: "32px"
+    fontWeight: 600
+    lineHeight: 1.25
+    letterSpacing: "-0.025em"
+  title:
+    fontFamily: "Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif"
+    fontSize: "22px"
+    fontWeight: 600
+    lineHeight: 1.32
+    letterSpacing: "-0.016em"
+  body:
+    fontFamily: "Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif"
+    fontSize: "16px"
+    fontWeight: 400
+    lineHeight: 1.5
+  lead:
+    fontFamily: "Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif"
+    fontSize: "18px"
+    fontWeight: 400
+    lineHeight: 1.6
+  label:
+    fontFamily: "Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif"
+    fontSize: "14px"
+    fontWeight: 500
+    lineHeight: 1.5
+  wordmark:
+    fontFamily: "Archivo, \"Helvetica Neue\", \"Arial Black\", Helvetica, Arial, sans-serif"
+    fontSize: "21px"
+    fontWeight: 800
+    lineHeight: 1
+    letterSpacing: "-0.035em"
+    fontVariation: "\"wdth\" 118"
+rounded:
+  square: "0"
+spacing:
+  sp-1: "4px"
+  sp-2: "8px"
+  sp-3: "12px"
+  sp-4: "16px"
+  sp-5: "20px"
+  sp-6: "24px"
+  sp-7: "32px"
+  sp-8: "40px"
+  sp-9: "56px"
+  sp-10: "72px"
+  gutter: "clamp(20px, 4vw, 48px)"
+  public-section: "64px"
+  public-section-mobile: "48px"
+components:
+  button-primary:
+    backgroundColor: "{colors.brand}"
+    textColor: "{colors.reverse}"
+    typography: "{typography.label}"
+    rounded: "{rounded.square}"
+    padding: "0 16px"
+    height: "38px"
+  button-primary-hover:
+    backgroundColor: "{colors.brand-h}"
+    textColor: "{colors.reverse}"
+    rounded: "{rounded.square}"
+  button-secondary:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.ink}"
+    typography: "{typography.label}"
+    rounded: "{rounded.square}"
+    padding: "0 16px"
+    height: "38px"
+  button-quiet:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink-2}"
+    typography: "{typography.label}"
+    rounded: "{rounded.square}"
+    padding: "0 16px"
+    height: "38px"
+  button-danger:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.clay}"
+    typography: "{typography.label}"
+    rounded: "{rounded.square}"
+    padding: "0 16px"
+    height: "38px"
+  button-large:
+    backgroundColor: "{colors.brand}"
+    textColor: "{colors.reverse}"
+    typography: "{typography.body}"
+    rounded: "{rounded.square}"
+    padding: "0 20px"
+    height: "46px"
+  input:
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.ink}"
+    typography: "{typography.label}"
+    rounded: "{rounded.square}"
+    padding: "0 12px"
+    height: "38px"
+    width: "100%"
+  status-badge:
+    backgroundColor: "transparent"
+    textColor: "{colors.pine}"
+    rounded: "{rounded.square}"
+    padding: "0 7px"
+    height: "20px"
+  card:
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.square}"
+    padding: "20px"
+  navigation:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.ink-2}"
+    rounded: "{rounded.square}"
+    height: "72px"
+  hero-wallet:
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.square}"
+    padding: "32px"
+  guardian-guide:
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.square}"
+    padding: "24px"
+  pricing-calculator:
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.square}"
+    padding: "24px"
 ---
 
-## Typefaces
+# Design System: Veyro
 
-**Archivo** for display, **Onest** for interface text. Both are loaded by
-`next/font/google` in `app/layout.tsx`, which downloads them at build time and
-serves them from our own origin.
+## Overview
 
-Why these two:
+**Creative North Star: "The Clear Record"**
 
-- **Archivo** has a real variable width axis. The wordmark stretches to 118%
-  (`--display-wdth`), and a variable axis is the only way to do that without
-  scaling glyphs and distorting the strokes. It is used for the wordmark and
-  nothing else. Never for interface text.
-- **Onest** is a plain, high-x-height workhorse that stays readable at 11.5px,
-  the smallest step in the type scale. It does not compete with the display face.
+Veyro uses a plain financial record as its visual model: readable type, square controls, thin rules and deliberate space. White and neutral paper carry the interface. Meaningful color marks money, action and status without becoming decoration.
 
-Why not the obvious ones: Inter, Geist and Space Grotesk are the default picks
-and read as such. Archivo and Onest are well-made, freely licensed, and
-distinctive without being decorative.
+The system serves young founders and guardians together. Product explanations feel approachable; account tasks stay direct and legible. Use the shared primitives so public pages, authentication, checkout and dashboards remain recognizably part of the same product.
 
-**Never load fonts with `@import` from a CDN.** That is what this codebase used
-to do, inside the injected `<style>` block. Two problems: an `@import` is only
-honoured at the top of a stylesheet, so a browser was entitled to ignore it
-where it sat; and when it did work, first paint waited on a third-party request
-that can be slow, blocked, or unreachable, with no signal. The page would
-silently render in Arial.
+**Key Characteristics:**
 
-`--ui` still names **Haffer** first. Haffer is the intended primary and is
-commercially licensed; Onest is the implemented stand-in. Licensing it is a
-change to that one line.
+- Onest for interface text; Archivo for the existing wordmark.
+- Square controls and surfaces, with thin rules instead of decorative framing.
+- Neutral foundations with explicit, named financial states.
+- Shared components, responsive layouts and keyboard-visible interaction states.
 
----
+The implementation source is `app/_ui/css.ts`; fonts are loaded in `app/layout.tsx`. Frontmatter records the actual primitives. The `dark-` color entries describe the corresponding overrides in the shared dark theme, rather than a second independent palette. The sidecar adds behavior and self-contained light-theme component previews. Its synthesized tonal ramps are preview strips, not a new runtime color scale. Homepage composition lives in `.impeccable/surfaces/home.md`.
 
-## Scale
+## Colors
 
-**Type.** Ten steps, `--fs-1` (11.5px) to `--fs-10` (56px). Nothing between
-them. Three weights only: 400 reads, 500 labels, 600 headings.
+The palette is neutral paper with restrained, functional accents.
 
-Size is the only thing a title varies. The landing hero's `h1` clamps up to
-72px, past the top of the scale, but it takes the same 600 at -0.028em as
-`.lp-h2` and `.stmt-q` and holds it at every width. A lighter display weight
-was tried here and removed: it made the hero the one title on the site that
-did not look like the others, which costs more than the optics gained.
-Anything else that arrives above `--fs-8` inherits that -- a new size, not a
-fourth weight.
+### Primary
 
-**Spacing.** `--sp-1` to `--sp-10`: 4, 8, 12, 16, 20, 24, 32, 40, 56, 72.
+- **Record Ink** (`brand`, `brand-h`, `brand-a`): primary actions and their hover/press states. The dominant action is dark in the light theme and reverses in dark mode.
+- **Pine** (`pine`, `pine-h`, `pine-line`): money and positive states, text links, focus, and the incumbent Veyro mark. Its reuse carries a recognizable action and identity role; financial state is always written explicitly.
 
-Every margin, padding and gap traces to one of those, inline styles included.
-There are no 10s, 14s, 18s or 22s. If a value feels like it wants to be 18, it
-is 16 or 20.
+### Secondary
 
-Page-level rhythm is separate and deliberately larger: `--lp-pad-lg/md/sm`
-(104/72/48) for landing sections, and section padding above 72px is allowed to
-sit outside the component scale.
+- **Amber** (`amber`, `amber-line`): attention, limitations and pending information.
+- **Slate** (`slate`, `slate-line`): informational account states.
+- **Clay** (`clay`, `clay-line`): errors and destructive intent.
 
-**Measure.** Four line lengths, chosen once: `--m-tight` 34ch, `--m-lead` 52ch,
-`--m-body` 54ch, `--m-wide` 62ch.
+### Neutral
 
-The two larger ones were 66ch and 76ch, and they were retuned in October 2026
-because a `ch` is the width of a `0` and Onest's `0` runs about 1.4x its average
-character. Measured on the rendered page rather than assumed: `.body` at 70ch
-was 768px wide at 16.5px and carried **99 characters to the line**, against the
-65 to 75 a reading measure exists to produce. `.body` also carried its own raw
-`70ch` rather than the token, so the one class most body copy uses had opted out
-of the scale. It takes `--m-body` now.
+- **Paper and Card** (`paper`, `card`): page and panel foundations. A panel earns its boundary from a rule rather than a shadow.
+- **Recessed Paper** (`surface`, `surface-2`): grouped regions, secondary states and selected neutral areas.
+- **Ink** (`ink`, `ink-2`, `ink-3`): primary, supporting and tertiary text. Placeholder text has its own token.
+- **Rules** (`line`, `line-soft`, `line-hover`): dividers and passive surface boundaries.
+- **Control Boundary** (`control-line`): input, select and toggle boundaries. Do not substitute the quieter divider token.
+- **Reverse, Selection and Scrim** (`reverse`, `select-bg`, `scrim`): reversed text, selected text and modal background separation.
+- **Allowance Track** (`track-free`, `track-rest`): the pricing slider's labelled free portion and remaining range.
 
-If you widen these again, check the rendered character count, not the token.
+Dark mode remaps the same roles. Semantic badges gain dark tinted fills; their text and meaning stay explicit. Inverted sections use their own shared overrides and light focus indicators. Recheck `npm run contrast` after palette changes; that check is targeted evidence, not a claim of full accessibility certification.
 
-**Containers.** `--lp-max` 1200px for marketing, `.wrap-w` 1400px for
-dashboards, `.wrap-n` 768px for prose, `.wrap-s` 560px for auth. Gutter is
-`--lp-gut`, 32px, dropping to 18px then 14px at the narrow breakpoints.
+**The Written State Rule.** Every financial and account state has a visible label. Color supports the wording; it never replaces it.
 
----
+## Typography
 
-## Colour
+**Interface Font:** Onest, with the system sans-serif fallback stack in the frontmatter.
 
-Monochrome first, and cool rather than warm. The palette was ivory through
-September 2026; it now reads as neutral paper, which is what the rest of
-financial software looks like and what a parent assessing the product expects.
+**Wordmark Font:** Archivo, with the existing variable width treatment. The mark uses the heavy weight and extended width; neither treatment carries into interface text.
 
-`--paper` (#ffffff) is the page. `--card` (#ffffff) is raised surfaces: on a
-white page it cannot be lighter than the page, so a raised surface earns its
-edge from `--line` instead of from a fill. `--surface` (#f7f7f6) and
-`--surface-2` (#eeeeec) are recessed. One consequence to remember: alternating
-landing sections use `--surface`, not `--card`, because `--card` no longer
-differs from the page.
+**Code Font:** The system monospace stack for code, integration prompts and compact ordinals.
 
-- Brand `#111315`, hover `#2b2f33` — **black, not green.**
-- Ink `#111315`, with `--ink-2` and `--ink-3` for secondary and tertiary text
-- Status families, each with a text colour and a line colour: pine (good),
-  amber (attention), clay (bad), slate (informational), grey (neutral)
+### Hierarchy
 
-**Green is the brand, and green is money.** `--pine` (#12513a) does two jobs.
+The ten shared size steps run from `fs-1` through `fs-10`. Regular text uses weight 400, labels and controls 500, and headings 600. Wordmark weight 800 is an identity exception. Numeric displays use tabular figures.
 
-It is the identity: the V in the wordmark, every link, the focus ring, and the
-6px rule beside the landing page's opening paragraph.
+- **Home display:** the `home-display` role, capped at 58px on desktop. Intermediate layouts use 44px, the collapsed layout uses 40px, and the narrow mobile heading is 36px. Preserve its balanced, short measure.
+- **Supporting public display:** the `display` role, capped at 52px and reduced to 36px at the main mobile collapse.
+- **Public section headline:** 32px on desktop and 28px on mobile, with slightly tightened tracking. Application task titles use the shared 32px title and reduce to 26px where their layout requires it.
+- **Body and lead:** normal body is 16px; public hero leads use 18px and become 16px on mobile. Supporting content remains 14px where density matters.
+- **Labels and metadata:** controls use clear 14px labels; compact supporting metadata uses the 13px and 12px steps. Do not make main reading copy metadata-sized.
 
-It is also the settled-money state: the `b-pine` badge, the available segment
-of the money band, and the available figure in `MoneyPosition`.
+Reading measure tokens are tight (34ch), lead (52ch), body (54ch), and wide (62ch). These are layout limits, not a guarantee of a character count with every font. Check the rendered line length before widening prose.
 
-This used to be one job. Through September 2026 pine marked money and nothing
-else — not a link, not a focus ring, not the wordmark — on the argument that a
-colour meaning one thing is worth more than a colour that is merely on brand.
-That was reversed deliberately, and the cost is real and worth naming: where a
-green badge used to be the only green on screen, it now sits on pages that
-also have green links. The badge is still legible because **no financial state
-has ever been carried by colour alone** — `b-pine` reads "Available", the band
-segment is labelled, the ledger line says "Available" in words. Keep it that
-way. The moment a state is signalled only by being green, this palette stops
-working.
+**The One Interface Voice Rule.** Use Onest for headings, prose, labels and numbers. Keep Archivo in the wordmark.
 
-**Where pine must not go.** Anything on `--ink`. Pine on ink measures 2.01:1,
-under the 3:1 a focus indicator has to clear and nowhere near text contrast, so
-`.lp-dark` overrides links and the focus ring back to white and must keep doing
-so. A green border on the black primary button is the same number and would be
-an accent nobody could see. `npm run contrast` asserts all of this.
+## Layout
 
-No pastels. No gradients of any kind. No coloured left-border stripe on cards.
+Public pages share a centered outer container capped at 1248px, including fluid inline gutters from 20px to 48px. The header, main content and footer align to it. General application wrappers can use 1280px, 1600px for wide account views, 880px for prose and 720px for compact tasks. Authentication uses a 960px two-column composition inside the public frame and a 560px single-column composition when collapsed.
 
-### Two thresholds, not one
+Use the ten spacing steps for component rhythm. Public sections use 64px vertical padding on desktop and 48px on mobile; the homepage uses its documented surface rhythm. Arrange explanatory copy and evidence in simple two-column layouts, with thin rules where related content needs separation.
 
-`--line` (#e3e3e0) is for dividers, which are decorative and may be quiet.
-`--control-line` (#878d92) is for the resting border of anything you have to
-find and operate — inputs, selects, textareas, the `.tick` checkbox. WCAG 1.4.11
-wants 3:1 for a UI component boundary, and `--line` measures 1.29:1 on white, so
-the two cannot be the same token. Do not "tidy" controls back onto `--line`.
+The main collapse is 760px: navigation becomes a menu, explanatory columns and authentication stack, and section headings reduce. A 980px adjustment reduces wide gaps before collapse; 940px and 900px support existing split and content grids. The 560px and 420px adjustments simplify dense panels and tight layouts. Layouts must remain usable at 320px with the eligibility action and menu visible.
 
-Run `npm run contrast` after touching any colour. It parses the tokens straight
-out of `css.ts` and fails the build on a regression, so the numbers in this
-document stay true rather than becoming folklore. The tightest text pair is
-`--ink-3` on `--surface-2` at 4.99:1, against a 4.5:1 floor.
+Keep intrinsic widths flexible. Tables and code blocks can scroll inside their own labelled, focusable region rather than forcing the page wide. Use a caption and column headers for tabular records. Coarse-pointer controls use the shared 44px minimum target; the mobile navigation action and menu preserve that minimum.
 
----
+## Elevation & Depth
 
-## Rules that do not bend
+Hierarchy comes from spacing, neutral fills, borders and clear text. Buttons have no drop shadow in either rest or hover states. Passive cards, the earnings example, the guardian guide and checkout previews remain flat. Existing clickable card links may use the small shared lift on hover; that exception communicates an actual link. A fixed floating prompt can use the same lift because it sits above document flow.
 
-**Border radius is 0.** `--radius: 0`. There is exactly one exception,
-`.tl .pt`, the timeline dot, which is a circle by definition rather than a
-rounded rectangle. The `.choice` tick used to be a second one and is now a
-square, because the question it answers is on/off rather than one-of-several.
-Nothing else gets a radius, including anything pasted in from a component
-library.
+Zero-blur inset rings are focus, validation or selection boundaries. They remain part of the system and must not be removed by a blanket ban on the `box-shadow` property. Confirmation dialogs use a scrim and solid outlined panel, with no decorative elevation treatment.
 
-**No drop shadows at rest.** Elevation is a border or a fill change, never
-blur — while an element is sitting still.
+**The Flat Record Rule.** Buttons and passive panels have no drop shadow. Use borders, fill changes and spacing to establish hierarchy.
 
-There is one blurred shadow, `--lift`, and nothing wears it at rest. It appears
-on `.btn:hover` and `a.card:hover` and goes again on `:active`, paired with a
-1–2px translate. The hero wallet card was given `--lift` in October 2026 on the
-argument that Stripe and Mercury float their hero surfaces; they do, and it was
-still reverted, because a blurred shadow is what a floating translucent layer
-earns and a card resting in the flow is not one. Borrowing the signal without
-the behaviour is the failure mode this rule exists to prevent. It is there to answer a pointer, which is the one thing a
-border cannot do as legibly, and it is on the two things that are actually
-clickable. Note what does **not** get it: `.card` on its own. The wallet
-preview and the guardian panel are cards you read, not cards you click, and
-lifting them under the pointer would promise a click that is not there.
+## Shapes
 
-Every other `box-shadow` in the system is `inset` with **zero blur radius**. They are borders drawn inside the element's box, used where a
-real border would shift layout:
+Rectangular controls and surfaces have square corners. Buttons, cards, form controls, notices, dialogs, navigation treatments and the theme switch all follow that geometry. Existing circular timeline or status markers and circles within icons are semantic marks rather than rounded rectangular surfaces.
 
-- `.ta:focus`, `.ta.bad` — the focus and error ring on a textarea
-- `.choice[data-on="1"]`, `.hpanel-on`, `.frame-rail button[data-on="1"]` —
-  selected state
-- `.stagebar button[data-on="1"]` — a 3px top rule on the active tab
-
-Two of those are **visible focus indicators**. Removing them to satisfy a
-"no box-shadow" rule read literally would be an accessibility regression. The
-rule is *no drop shadows*, not *no use of the property*.
-
-**One thing moves at a time, and it moves for a reason.** The hero card is the
-only place on the site where a figure animates: the example product's earnings
-count once, over 760ms, and then nothing moves again. The restraint is the
-rule, not the animation. A page where every number counts is a page of slot
-machines, and it undoes the thing this palette is for, which is money you can
-read at a glance.
-
-The card has shown the month's available balance three different ways and all
-three failed the same test: $195.00 is a number a reader cannot relate to, and
-dressing it in a fee table, in ledger rows that did not add up to it, or in a
-sentence that did, never fixed that. It shows one product now, at a price and
-a volume somebody can picture, and what Veyro takes out of it. Both figures
-are computed, the fee by the same function that charges a real founder.
-
-**The hero's vertical rhythm is two numbers**, 16 and 32: 16 between things
-that belong together, 32 between groups, in both columns. It was six different
-gaps, all on the spacing scale and none of them agreeing about what a gap
-meant.
-
-`CountUp` renders the true figure on the server, so with no JavaScript, with
-reduced motion, or before hydration the real number is already in the HTML. A
-balance is never caught showing a zero it will fill in later. Any future
-animated figure has to clear the same bar.
-
-**Touch targets are at least 44px** at mobile widths (`--tap`). WCAG 2.2 AA
-asks for 24px; 44px is the size a thumb actually hits.
-
-**A press lands instantly; only the release eases.** `.btn:active` sets
-`transition-duration: 0s`, so the colour and the 1px drop happen on the same
-frame as the pointer goes down, and the normal 110ms curve runs on the way back
-out. 110ms is short, but it is still a ramp on the one event the user caused
-themselves, and a control that takes a tenth of a second to acknowledge a finger
-reads as slightly dead.
-
----
-
-## Patterns that are forbidden
-
-These are the things that make a site read as machine-generated. None of them
-are in the codebase and none should arrive:
-
-- Bento grid layouts
-- Terminal or code-window decoration
-- Radial gradient orbs, blurred colour blobs
-- Dot-grid or graph-paper backgrounds
-- Sparkle or star icons as ornament
-- Animated arrows: bouncing, pulsing, drifting
-- Checkmark bullet lists (`✓ Feature one`). Write prose, or use `.arrowlist`
-- Soft or large radius on cards and buttons
-- Skeleton shimmer loaders. Use a plain, honest loading state
-- Hover states that scale, rotate or add shadow. A hover is a background or
-  border change, nothing else
-- **A label above a heading.** An eyebrow, a kicker, a two-word category set
-  over the title it belongs to. Twenty of them came out in October 2026, across
-  the homepage, `/get-started`, `/for-parents`, `/pricing`, `/check`, `/about`,
-  `/faq`, `/legal`, `/status`, `/contact`, `/how-it-works`, `/docs/sdk` and
-  `404`. Nearly all of them restated the heading underneath in fewer words
-  ("The problem" over "You built it. Getting paid for it is the hard part"),
-  which costs a line of vertical space and a beat of attention to say nothing.
-  Two uses survive and both are legitimate: `LegalShell`'s "The clauses" and
-  "On this page" are real `<h2>` section headings that happen to use the small
-  size, and the FAQ's zero-padded group ordinal is a position in a sequence a
-  reader navigates. A heading carries its own weight. Write the heading.
-
-- **Em dashes in user-facing copy.** Use the punctuation the sentence needs: a
-  period for two statements, a comma for an aside, a colon where the second half
-  explains the first, parentheses for a true parenthetical. Code comments are
-  exempt, they are not copy.
-
-  **One further exemption: quoted human voice.** The rule governs text written
-  in the product's voice. It does not govern someone's own words. The founder's
-  account on `/about` keeps its em dash because that is his phrasing and his
-  rhythm, quoted as given, and flattening a person's sentence to satisfy a
-  house style is not a style fix. The same goes for the verbatim Stripe quotes
-  on `/how-it-works`: never edit quoted material to match this document. Both
-  places carry a comment saying so, because a find-and-replace pass will not
-  read this file.
-
----
+Borders are thin and deliberate. Use the control boundary for fields; use the quiet line for passive panels and separators. Reuse the existing SVG V and Archivo lockup rather than creating a second logo or drawing replacement browser framing.
 
 ## Components
 
-`app/_ui/form.tsx` holds `Btn`, `Field` and `Notice`. `app/_ui/marks.tsx` holds
-`Icon`, `Wordmark` and `SkipLink`. `app/_ui/dash.tsx` holds the signed-in
-furniture: `DashNav`, `DashHeader`, `Section`, `EmptyState`, plus one shared
-`fmtDate` so dates read the same everywhere.
+### Buttons
 
-Use them. A second button implementation is how a design system dies.
+Primary actions are solid Record Ink with reverse text. Secondary actions are paper with a thin rule; quiet actions use transparent backgrounds and neutral text; destructive actions use Clay text and its boundary. Standard, small and large buttons share the same geometry and label weight. Desktop heights are 38px, 30px and 46px respectively; coarse pointers receive the 44px minimum.
 
-Layout blocks available and already styled: `card` / `card-h` / `card-b` /
-`card-f`, `tbl` inside `tblwrap`, `badge` with `b-*` tones, `statusblock`,
-`reqlist` / `reqrow`, `grid-2`, `grid-4`, `truthgrid`, `trustgrid`, `herofacts`,
-`journey`, `numbered`, `disc`, `hero-band`, `split-lead`.
+Hover changes fill or boundary without a lift. Presses acknowledge immediately; release uses the short shared transition. Busy state keeps a clear text label and a compact marker. Disabled controls use neutral fills and remain visibly different from active controls. Keyboard focus uses the shared offset ring.
 
----
+### Cards / Containers
 
-## Responsive
+Flat outlined rectangles carry product content. Header and footer rules separate related content without creating nested decoration. Standard card bodies use the 20px spacing step; the earnings example uses a roomier 32px body; authentication forms use 32px on desktop and 24px when collapsed. A card's appearance alone does not make it clickable.
 
-Breakpoints, in the order they apply: 940 (hero splits), 900 (two-column
-explanatory grids), 760 (the main collapse: `grid-2`, `grid-4`, `herofacts`,
-`numbered`, nav links hide), 560, 420 (tightest gutters).
+### Inputs / Fields
 
-Tables always sit inside `.tblwrap`, which scrolls horizontally rather than
-breaking the page. Nothing carries a fixed `min-width` above 360px.
+Inputs, selects and textareas use white or dark-card fill, the control boundary, square corners and visible labels. Field focus changes to the brand boundary with a zero-blur inset ring. Errors add explicit text and an invalid state, alongside the Clay boundary. Hints and errors are linked through accessible descriptions. Password reveal is a labelled button with a pressed state; Caps Lock feedback appears as text.
+
+### Status Badges / Notices
+
+Compact rectangular badges pair a status label with a semantic text color and boundary. Neutral badges use recessed paper. Notices combine a heading, explanation and optional action; new feedback can use a status announcement. Never use an unlabeled colored dot as the sole account state.
+
+### Navigation / Footer
+
+`SiteNav` supplies the steady, solid public header: Veyro mark, the same product links, account access, a prominent eligibility or contextual action, and the theme control. Active links use current-page semantics. The mobile menu exposes the relevant links, closes on selection, outside focus or Escape, and returns focus to its trigger on Escape. Its scroll height stays within the viewport.
+
+Focused task and dashboard headers retain their distinct labels, destinations and account semantics. `AuthShell` shares the public navigation and aligns its explanation with the form. Avoid replacing task-specific navigation with a generic marketing menu.
+
+`SiteFooter` is navigation and context: actual product, company and legal URLs, the shared support email, and the complete disclosure of Veyro's software role and Stripe's processing role. Its small text remains readable and its mobile links have adequate targets.
+
+### Examples / Checkout
+
+The earnings preview is a static, visibly labelled example. Price and sales produce the total; the fee uses the shared arithmetic. It does not count up or resemble live account activity. The guardian preview is a static guide with numbered setup steps and clear descriptions of controls provided in Stripe. It has no simulated browser chrome or animated completion sequence.
+
+Keep useful interactions in the pricing calculator, share and integration examples, and applicable account demonstrations. The pricing range is a real labelled control with correct server-rendered starting figures. Checkout previews and live checkout share heading, summary and assurance primitives; their card-form behavior remains appropriate to each context. A still preview must visibly explain that no payment is taken.
+
+### Dialogs / Motion
+
+Confirmation dialogs carry a title and dialog semantics, move focus into the panel, contain keyboard focus, make background branches inert, and restore prior focus when dismissed. Escape and backdrop dismissal respect busy state and the configured task behavior. Reuse the shared dialog rather than reproducing only its appearance.
+
+Motion communicates a state change. The shared 110ms and 170ms transitions keep ordinary interactions quick; longer reveal durations are reserved for established explanatory behavior. Reduced-motion mode removes transitions and animation and leaves the actual content visible. The homepage earnings preview and guardian guide remain static in every motion mode.
+
+## Do's and Don'ts
+
+### Do:
+
+- **Do** reuse the shared buttons, fields, notices, navigation, footer and checkout content primitives.
+- **Do** use the established type and spacing scales, with the documented responsive heading exceptions.
+- **Do** keep money figures tabular, examples visibly labelled and fees derived from the shared calculation.
+- **Do** preserve real link destinations, guardian-role wording and full product disclosures.
+- **Do** retain labelled controls, visible focus, keyboard access to scroll regions and reduced-motion behavior.
+- **Do** test new layouts at 320px and at the main 760px collapse, including open menus and long content.
+
+### Don't:
+
+- **Don't** add rounded rectangles, decorative gradients, blurred ornaments or simulated browser chrome to explanatory panels.
+- **Don't** give buttons or passive panels a lift, scale animation or drop shadow.
+- **Don't** duplicate a heading with a category label above it unless that label adds a distinct navigation or structural meaning.
+- **Don't** present example account controls as live actions, or remove useful calculator and share interactions while simplifying their appearance.
+- **Don't** invent testimonials, activity, payment availability or a launch-ready state.
+- **Don't** treat this design document as a replacement for product facts. The fee-launch drift remains an unresolved issue in PRODUCT.md.

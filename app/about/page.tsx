@@ -2,12 +2,11 @@ import Link from "next/link";
 import { buildViewport, SITE } from "@/lib/seo";
 import type { Metadata } from "next";
 import { CSS, CSS2 } from "@/app/_ui/css";
-import { Wordmark, SkipLink } from "@/app/_ui/marks";
+import { SkipLink } from "@/app/_ui/marks";
+import { SiteNav } from "@/app/_ui/SiteNav";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { MoneyRail } from "@/app/_ui/MoneyRail";
-import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
-import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { SUPPORT_EMAIL } from "@/lib/support";
 
 export const viewport = buildViewport();
@@ -105,31 +104,11 @@ const COMMITMENTS: { head: string; body: React.ReactNode }[] = [
 
 export default function About() {
   return (
-    <div className="fw">
+    <div className="fw public-page">
       <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
 
-      <div className="navbar">
-        <div className="wrap-lp">
-          <nav className="lp-nav" aria-label="Main">
-            <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
-            <div className="lp-links">
-              <Link className="btn btn-q btn-sm hide-s" href="/how-it-works">How it works</Link>
-              <Link className="btn btn-q btn-sm hide-s" href="/for-parents">For parents</Link>
-              <Link className="btn btn-sm" href="/check">Check eligibility</Link>
-              <ThemeToggle />
-              <MobileNav
-                items={[
-                  { href: "/how-it-works", label: "How we built it" },
-                  { href: "/for-parents", label: "For parents" },
-                  { href: "/check", label: "Check eligibility" },
-                  { href: "/", label: "Home" },
-                ]}
-              />
-            </div>
-          </nav>
-        </div>
-      </div>
+      <SiteNav active="/about" />
 
       <main id="main" className="wrap-lp" style={{ paddingTop: 40, paddingBottom: 56 }}>
         <h1 className="lp-h2">

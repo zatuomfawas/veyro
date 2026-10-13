@@ -1,15 +1,13 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { buildViewport, SITE } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
-import { Wordmark, SkipLink } from "@/app/_ui/marks";
+import { SkipLink } from "@/app/_ui/marks";
+import { SiteNav } from "@/app/_ui/SiteNav";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
-import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { ScrollProgress } from "@/app/_ui/ScrollProgress";
 import { FAQ, AUDIENCE_GROUPS } from "@/app/_ui/faq";
 import { MoneyRail } from "@/app/_ui/MoneyRail";
-import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { PageNext } from "@/app/_ui/PageNext";
 
 export const viewport = buildViewport();
@@ -35,30 +33,12 @@ export const metadata: Metadata = {
 // and a screen reader to reach.
 export default function FaqPage() {
   return (
-    <div className="fw">
+    <div className="fw public-page">
       <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <ScrollProgress />
       <SkipLink />
 
-      <div className="navbar">
-        <div className="wrap-lp">
-          <nav className="lp-nav" aria-label="Main">
-            <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
-            <div className="lp-links">
-              <Link className="btn btn-q btn-sm hide-s" href="/how-it-works">How it works</Link>
-              <Link className="btn btn-sm" href="/check">Check eligibility</Link>
-              <ThemeToggle />
-              <MobileNav
-                items={[
-                  { href: "/how-it-works", label: "How it works" },
-                                                      { href: "/for-parents", label: "For parents" },
-                  { href: "/check", label: "Check eligibility" },
-                ]}
-              />
-            </div>
-          </nav>
-        </div>
-      </div>
+      <SiteNav active="/faq" />
 
       {/* An index, then the answers in full.
           ------------------------------------------------------------------

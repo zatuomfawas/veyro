@@ -2,12 +2,11 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { buildViewport, SITE } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
-import { Wordmark, SkipLink } from "@/app/_ui/marks";
+import { SkipLink } from "@/app/_ui/marks";
+import { SiteNav } from "@/app/_ui/SiteNav";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { MoneyRail } from "@/app/_ui/MoneyRail";
-import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
-import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { SectionRail } from "@/app/_ui/SectionRail";
 import { PageNext } from "@/app/_ui/PageNext";
 
@@ -120,31 +119,11 @@ const GAPS: Gap[] = [
 
 export default function LegalPage() {
   return (
-    <div className="fw">
+    <div className="fw public-page">
       <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
 
-      <div className="navbar">
-        <div className="wrap-lp">
-          <nav className="lp-nav" aria-label="Main">
-            <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
-            <div className="lp-links">
-              <Link className="btn btn-q btn-sm hide-s" href="/how-it-works">How it works</Link>
-              <Link className="btn btn-q btn-sm hide-s" href="/faq">Questions</Link>
-              <Link className="btn btn-sm" href="/check">Check eligibility</Link>
-              <ThemeToggle />
-              <MobileNav
-                items={[
-                  { href: "/how-it-works", label: "How it works" },
-                  { href: "/faq", label: "Questions" },
-                  { href: "/for-parents", label: "For parents" },
-                  { href: "/check", label: "Check eligibility" },
-                ]}
-              />
-            </div>
-          </nav>
-        </div>
-      </div>
+      <SiteNav active="/legal" />
 
       <main id="main" className="wrap-lp longform has-rail" style={{ paddingTop: 32, paddingBottom: 56 }}>
         {/* The sections of this page are the six doubts, not its one heading. */}

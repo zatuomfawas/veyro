@@ -4,13 +4,13 @@ import {
   REPLY_DATE, Q_CORE, Q_TYPES, Q_COUNTRIES, Q_ONBOARDING, Q_ARCHITECTURE, HELP_AGE, HELP_VERIFY,
 } from "@/app/_ui/provider-reply";
 import { CSS, CSS2 } from "@/app/_ui/css";
-import { Wordmark, SkipLink } from "@/app/_ui/marks";
+import { SkipLink } from "@/app/_ui/marks";
+import { SiteNav } from "@/app/_ui/SiteNav";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { RoleStack } from "@/app/_ui/RoleStack";
 import { ScrollProgress } from "@/app/_ui/ScrollProgress";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { StickyCta } from "@/app/_ui/StickyCta";
-import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { FlowDiagram } from "@/app/_ui/FlowDiagram";
 import { GuardianPermissions } from "@/app/_ui/GuardianPermissions";
 import { MoneyRail } from "@/app/_ui/MoneyRail";
@@ -43,23 +43,12 @@ function Quote({ children }: { children: React.ReactNode }) {
 
 export default function HowItWorks() {
   return (
-    <div className="fw">
+    <div className="fw public-page">
       <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <ScrollProgress />
       <SkipLink />
 
-      <div className="navbar">
-        <div className="wrap-lp">
-          <nav className="lp-nav" aria-label="Main">
-            <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
-            <div className="lp-links">
-              <Link className="btn btn-q btn-sm hide-s" href="/for-parents">For parents</Link>
-              <Link className="btn btn-2 btn-sm" href="/check">Check eligibility</Link>
-              <ThemeToggle />
-            </div>
-          </nav>
-        </div>
-      </div>
+      <SiteNav active="/how-it-works" />
 
       {/* paddingBottom is inline, so it overrides .has-sticky's 86px on mobile.
           It must stay at or above 86 or the sticky CTA will cover the last

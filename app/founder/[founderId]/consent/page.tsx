@@ -47,14 +47,16 @@ const fmtDate = (d: Date | string) =>
 function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="fw">
-      <style>{CSS + CSS2}</style>
+      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
-      <div className="wrap-s">
-        <div className="lp-nav" style={{ borderBottom: 0 }}>
-          <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
-          <Link className="btn btn-q btn-sm" href="/how-it-works">What this means</Link>
+      <header className="task-navbar">
+        <div className="wrap-s">
+          <nav className="lp-nav task-nav" aria-label="Invitation">
+            <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
+            <Link className="btn btn-q btn-sm" href="/how-it-works">What this means</Link>
+          </nav>
         </div>
-      </div>
+      </header>
       <main id="main" className="wrap-s" style={{ marginTop: 8, marginBottom: 90 }}>
         {children}
       </main>

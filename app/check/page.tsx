@@ -1,10 +1,8 @@
-import Link from "next/link";
 import { buildMetadata, buildViewport } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
-import { Wordmark, SkipLink } from "@/app/_ui/marks";
+import { SkipLink } from "@/app/_ui/marks";
+import { SiteNav } from "@/app/_ui/SiteNav";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
-import { MobileNav } from "@/app/_ui/MobileNav";
-import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { PageNext } from "@/app/_ui/PageNext";
 import CheckClient from "./CheckClient";
 
@@ -30,32 +28,11 @@ export const viewport = buildViewport();
 // passed, so the landing page's inline copy is untouched.
 export default function CheckPage() {
   return (
-    <div className="fw">
+    <div className="fw public-page">
       <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
 
-      <div className="navbar">
-        <div className="wrap-lp">
-          <nav className="lp-nav" aria-label="Main">
-            <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
-            <div className="lp-links">
-              <Link className="btn btn-q btn-sm hide-s" href="/how-it-works">How it works</Link>
-              <Link className="btn btn-q btn-sm hide-s" href="/for-parents">For parents</Link>
-              <Link className="btn btn-sm" href="/get-started">Get started</Link>
-              <ThemeToggle />
-              <MobileNav
-                items={[
-                  { href: "/how-it-works", label: "How it works" },
-                  { href: "/for-parents", label: "For parents" },
-                  { href: "/pricing", label: "Pricing" },
-                  { href: "/faq", label: "Questions" },
-                  { href: "/get-started", label: "Get started" },
-                ]}
-              />
-            </div>
-          </nav>
-        </div>
-      </div>
+      <SiteNav active="/check" cta={{ href: "/get-started", label: "Get started" }} />
 
       <main id="main">
         <CheckClient />

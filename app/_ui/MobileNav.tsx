@@ -1,64 +1,77 @@
 "use client";
 
-// The navigation items that vanish at narrow widths, given somewhere to go.
-//
-// The design system hides secondary links with .hide-s below 760px. Hidden is
-// fine; unreachable is not, and until now "How it works" and "For parents"
-// simply disappeared on a phone with no other route to them. This is the
-// hamburger the stylesheet was already written for: .mobmenu and .mobpanel
-// were both styled and used nowhere.
-//
-// The button and the panel only exist below 760px, enforced by the CSS rather
-// than by JavaScript, so nothing here renders twice on a desktop.
-
-import { useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 
 export type NavItem = { href: string; label: string };
 
-export function MobileNav({ items }: { items: NavItem[] }) {
+export function MobileNav({ items, active }: { items: NavItem[]; active?: string }) {
   const [open, setOpen] = useState(false);
+  const id = useId();
+  const panelId = `mobile-nav-${id}`;
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const isInside = (target: EventTarget | null) => target instanceof Node
+      && (buttonRef.current?.contains(target) || panelRef.current?.contains(target));
+    const dismissOutside = (event: Event) => {
+      if (!isInside(event.target)) setOpen(false);
+    };
+    const dismissEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      setOpen(false);
+      buttonRef.current?.focus();
+    };
+    const desktop = window.matchMedia("(min-width: 761px)");
+    const dismissOnDesktop = () => { if (desktop.matches) setOpen(false); };
+
+    document.addEventListener("pointerdown", dismissOutside);
+    document.addEventListener("focusin", dismissOutside);
+    document.addEventListener("keydown", dismissEscape);
+    desktop.addEventListener("change", dismissOnDesktop);
+    return () => {
+      document.removeEventListener("pointerdown", dismissOutside);
+      document.removeEventListener("focusin", dismissOutside);
+      document.removeEventListener("keydown", dismissEscape);
+      desktop.removeEventListener("change", dismissOnDesktop);
+    };
+  }, [open]);
 
   return (
     <>
       <button
+        ref={buttonRef}
         type="button"
         className="mobmenu"
         aria-expanded={open}
-        aria-controls="mobnav"
+        aria-controls={panelId}
         onClick={() => setOpen((v) => !v)}
       >
         {open ? "Close" : "Menu"}
       </button>
 
       {open && (
-        <div className="mobpanel" id="mobnav">
-          {items.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setOpen(false)}
-              // .mobpanel styles `button`, and these are links. The class keeps
-              // the panel's row appearance without pretending a link is a
-              // button, which would lose middle-click and open-in-new-tab.
-              style={{
-                display: "block", width: "100%", textAlign: "left",
-                borderBottom: "1px solid var(--line-soft)", padding: "14px 2px",
-                fontSize: "var(--fs-4)", fontWeight: "var(--fw-med)",
-                color: "var(--ink)", textDecoration: "none", minHeight: "var(--tap)",
-              }}
-            >
-              {item.label}
-            </Link>
-          ))}
-          {/* The switch lives here on a phone, and the navbar hides its copy
-              at the same width. In the bar it was a fourth control wedged
-              between the one button that matters and the menu that opens
-              this panel, splitting that pair on the narrowest screen the
-              site has. A theme preference is a setting, and a drawer is
-              where settings belong. */}
-          <div className="mobpanel-set">
+        <div ref={panelRef} className="mobpanel" id={panelId}>
+          <ul className="mobpanel-links">
+            {items.map((item) => (
+              <li key={item.href}>
+                <Link
+                  className="mobpanel-link"
+                  href={item.href}
+                  aria-current={active === item.href ? "page" : undefined}
+                  onClick={() => setOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div className="mobpanel-set mob-nav-footer">
             <span>Dark mode</span>
             <ThemeToggle />
           </div>

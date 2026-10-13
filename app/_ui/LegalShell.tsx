@@ -1,11 +1,10 @@
-import Link from "next/link";
 import { CSS, CSS2 } from "@/app/_ui/css";
-import { Wordmark, SkipLink } from "@/app/_ui/marks";
+import { SkipLink } from "@/app/_ui/marks";
+import { SiteNav } from "@/app/_ui/SiteNav";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { Notice } from "@/app/_ui/form";
 import { ScrollProgress } from "@/app/_ui/ScrollProgress";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
-import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { PageNext } from "@/app/_ui/PageNext";
 import { SUPPORT_EMAIL } from "@/lib/support";
 
@@ -78,23 +77,12 @@ export function LegalShell({
   shape?: "index" | "aside" | "plain";
 }) {
   return (
-    <div className="fw">
+    <div className="fw public-page">
       <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <ScrollProgress />
       <SkipLink />
 
-      <div className="navbar">
-        <div className="wrap-lp">
-          <nav className="lp-nav" aria-label="Main">
-            <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
-            <div className="lp-links">
-              <Link className="btn btn-q btn-sm hide-s" href="/how-it-works">How it works</Link>
-              <Link className="btn btn-sm" href="/check">Check eligibility</Link>
-              <ThemeToggle />
-            </div>
-          </nav>
-        </div>
-      </div>
+      <SiteNav />
 
       {/* No .longform on main.
           ------------------------------------------------------------------

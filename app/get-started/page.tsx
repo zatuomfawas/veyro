@@ -1,16 +1,12 @@
 import Link from "next/link";
 import { CheckoutPreview } from "@/app/_ui/CheckoutPreview";
-import { FlowDiagram } from "@/app/_ui/FlowDiagram";
 import type { Metadata } from "next";
 import { buildViewport, SITE } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
-import { Wordmark, SkipLink, Icon } from "@/app/_ui/marks";
+import { SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
-import { MobileNav } from "@/app/_ui/MobileNav";
+import { SiteNav } from "@/app/_ui/SiteNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
-import { StickyCta } from "@/app/_ui/StickyCta";
-import { ThemeToggle } from "@/app/_ui/ThemeToggle";
-import { Reveal } from "@/app/_ui/Reveal";
 import { AskYourGuardian } from "./AskYourGuardian";
 
 export const viewport = buildViewport();
@@ -31,70 +27,6 @@ export const metadata: Metadata = {
   },
 };
 
-/* ------------------------------------------------------------------ *
- * WHY THIS PAGE IS SHAPED THE WAY IT IS
- *
- * It was rebuilt against two sets of measurements rather than taste.
- *
- * THE LAYOUT, measured on the page it replaces:
- *
- *   7,309px tall, and the primary action -- "Create my founder
- *   account", the entire purpose of a page called Get started -- sat at
- *   6,773px. Ninety-three per cent of the way down. A reader had to
- *   finish a 1,626-word document before being offered the thing they
- *   arrived to do.
- *
- *   637px of content inside a 1,432px viewport. The rail took 208 and
- *   the remaining 538px -- 38% of the screen -- was empty, all of it
- *   stacked down one side, so the composition sat off-centre with a
- *   column of nothing beside it.
- *
- *   Body text ran to 77 characters. The design system's own reading
- *   measure is --m-body, 66ch, and it exists because the eye loses the
- *   line on the return sweep past about 75.
- *
- *   Six steps, each heading + paragraph + mock screenshot, in one
- *   unbroken rhythm. Nothing told you which of the six actually
- *   decides whether you get paid.
- *
- * THE FUNNEL, counted from the live database:
- *
- *   6 founders -> 5 verified their email -> 4 invited a guardian ->
- *   2 had one accept -> 1 started the payment form -> 0 finished.
- *
- *   Small numbers, and said plainly as such: six accounts is a
- *   direction, not a statistic. But the direction is unambiguous and it
- *   agrees with what the old page already admitted in prose -- "that is
- *   the part people are surprised by", "it is the step that holds
- *   people up". The guardian is where this stops. Half the founders who
- *   asked never got a yes.
- *
- * SO:
- *
- *   The action is in the hero. Not at 6,773px.
- *   The guardian gets its own section, with the words to ask with --
- *   see AskYourGuardian.tsx. The old page's answer to the step that
- *   kills half the funnel was a sentence saying "ask them early".
- *   Three phases by WHO DOES THE WORK, not six flat steps, because the
- *   handoff is the risk and the old shape hid it.
- *   Full-width landing sections instead of one off-centre column, so
- *   the 538px of nothing carries the previews.
- *   A time budget, because "how long is this going to take" is the
- *   first question anyone has and the old page never answered it.
- *
- * The interface previews are built from the product's own components,
- * never screenshotted: an image goes stale when a button moves, cannot
- * be read aloud or translated, and a real one would mean showing
- * somebody's account. Every figure is invented and every panel says so.
- * ------------------------------------------------------------------ */
-
-const FLOW = [
-  { n: "Your app", t: "The link", d: "A normal link or button in whatever you built.", you: true },
-  { n: "Veyro", t: "Checkout", d: "A hosted page with the product, price and card form." },
-  { n: "The processor", t: "The payment", d: "Takes the card, charges it, holds the money." },
-  { n: "Your wallet", t: "The record", d: "Veyro folds the payment into your ledger.", you: true },
-];
-
 /** The three phases, by who is holding the work. */
 const PHASES = [
   {
@@ -102,24 +34,23 @@ const PHASES = [
     key: "you",
     time: "2 minutes",
     title: "Make your account",
-    d: "Name, email, date of birth, country. The date of birth decides which route is open to "
-      + "you; the country decides what the provider will ask your guardian for.",
+    d: "Add your name, email, full date of birth and country. Your age and country decide "
+      + "which payment route is available.",
   },
   {
-    who: "Your parent",
+    who: "Your guardian",
     key: "parent",
     time: "About 10 minutes, once",
     title: "They get verified",
-    d: "They accept your invite, then fill in the payment provider's own form with their ID and "
-      + "a bank account. Nothing can take a payment until this is done.",
+    d: "They accept your invite and complete Stripe's own identity and bank-account forms. "
+      + "Payments stay unavailable until verification is complete.",
   },
   {
     who: "You",
     key: "you",
     time: "A few minutes",
     title: "Add a product, paste the link",
-    d: "A name, a price, and you get a checkout link. Put it anywhere a link goes. The money "
-      + "lands in the account with your name on the products.",
+    d: "Set a product name and price, then share its checkout link in your app, site or bio.",
   },
 ];
 
@@ -203,63 +134,29 @@ const FAQ: [string, React.ReactNode][] = [
 
 export default function GetStarted() {
   return (
-    <div className="fw">
+    <div className="fw public-page onboarding-page">
       <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
+      <SiteNav />
 
-      <div className="navbar">
-        <div className="wrap-lp">
-          <nav className="lp-nav" aria-label="Main">
-            <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
-            <div className="lp-links">
-              <Link className="btn btn-q btn-sm hide-s" href="/how-it-works">How it works</Link>
-              <Link className="btn btn-q btn-sm hide-s" href="/for-parents">For parents</Link>
-              {/* hide-s, because "Check eligibility" is the longest label in
-                  the set and at 375px it pushed the menu button onto a second
-                  row -- measured on the live page, so this is an old fault
-                  rather than a new one. The mobile menu below already carries
-                  it, and the sticky bar carries the primary action, so nothing
-                  is lost by dropping it from the bar on a phone. */}
-              <Link className="btn btn-sm hide-s" href="/check">Check eligibility</Link>
-              <ThemeToggle />
-              <MobileNav
-                items={[
-                  { href: "/how-it-works", label: "How it works" },
-                  { href: "/for-parents", label: "For parents" },
-                  { href: "/docs/sdk", label: "Docs" },
-                  { href: "/faq", label: "Questions" },
-                  { href: "/check", label: "Check eligibility" },
-                ]}
-              />
-            </div>
-          </nav>
-        </div>
-      </div>
-
-      <main id="main" className="has-sticky">
-
-        {/* ---------------- hero: the action is here, not at 6,773px --------- */}
+      <main id="main">
         <div className="hero-band">
           <div className="wrap-lp gs-hero">
             <div className="gs-hero-grid">
               <div>
-                <h1 className="hero-h1">From your app to your first payment.</h1>
+                <h1 className="hero-h1">Your first payment, step by step.</h1>
                 <p className="hero-lead">
-                  About fifteen minutes, and ten of them belong to a parent. The whole path in
-                  the order you will actually do it, including the part that stops most
-                  people, which is not the code.
+                  Make an account, get your guardian verified, then share a checkout link.
+                  Here is what each of you needs to do.
                 </p>
 
                 <div className="hero-cta">
-                  <Link className="btn btn-lg" href="/auth/signup">Create your founder account</Link>
-                  <Link className="btn btn-2 btn-lg" href="/check">Check eligibility</Link>
+                  <Link className="btn btn-lg" href="/check">Check eligibility</Link>
+                  <Link className="linkbtn" href="/auth/signup">Create a founder account</Link>
                 </div>
               </div>
 
-              {/* The path itself, beside the promise rather than a screen
-                  below it. Grouped by who holds the work, because the
-                  handoff in the middle is the only part with risk in it. */}
-              <ol className="gs-phases">
+              <ol className="gs-phases" aria-label="Setup steps and estimated time">
                 {PHASES.map((p, i) => (
                   <li className="gs-phase" data-who={p.key} key={p.title}>
                     <span className="gs-phase-n" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
@@ -276,21 +173,14 @@ export default function GetStarted() {
           </div>
         </div>
 
-        {/* ---------------- the guardian: the one that decides it ------------
-            Its own section, at full width, immediately after the overview and
-            before anything about code. On the page this replaces it was step 2
-            of 6, drawn identically to "add a product" -- and it is the step
-            half the founders here never got past. */}
         <section className="lp ch">
           <div className="wrap-lp">
             <div className="aside-grid">
               <div className="aside-head">
-                <h2 className="lp-h2">
-                  Asking your parent is the hard bit. Not the code.
-                </h2>
+                <h2 className="lp-h2">Start with your guardian.</h2>
                 <p className="body" style={{ marginTop: "var(--sp-4)" }}>
-                  Everything else here is filling in a form. This is a conversation, and it is
-                  where people stall, so do it first, before you build the buy button.
+                  They will verify their identity with Stripe and take responsibility for
+                  the payment account. Help them understand the role before sending your invite.
                 </p>
                 <p className="small" style={{ marginTop: "var(--sp-4)" }}>
                   <Link className="linkbtn" href="/for-parents">The page written for them</Link>
@@ -300,18 +190,13 @@ export default function GetStarted() {
               </div>
 
               <div>
-                <h3 className="h4" style={{ marginTop: 0 }}>What they are actually agreeing to</h3>
+                <h3 className="h4" style={{ marginTop: 0 }}>What they agree to</h3>
                 <div className="reqlist" style={{ marginTop: "var(--sp-4)" }}>
                   {GUARDIAN_DOES.map(([k, v]) => (
                     <div className="reqrow" key={k}>
-                      <div style={{ display: "flex", gap: 10, alignItems: "baseline" }}>
-                        <span style={{ color: "var(--pine)", display: "inline-flex", marginTop: 2 }}>
-                          <Icon name="check" size={13} />
-                        </span>
-                        <span>
-                          <span className="req-t">{k}</span>
-                          <span className="req-d">{v}</span>
-                        </span>
+                      <div>
+                        <span className="req-t">{k}</span>
+                        <span className="req-d">{v}</span>
                       </div>
                     </div>
                   ))}
@@ -323,49 +208,33 @@ export default function GetStarted() {
           </div>
         </section>
 
-        {/* ---------------- where the money goes ---------------------------- */}
         <section className="lp ch ch-surface">
-          <div className="wrap-lp">
-            <h2 className="lp-h2" style={{ maxWidth: "20ch" }}>
-              Four stops. The money only ever rests at one.
-            </h2>
-
-            <FlowDiagram stops={FLOW} label="Payment flow, in order" style={{ marginTop: "var(--sp-7)" }} />
-            <p className="tiny" style={{ marginTop: 12 }}>
-              The two outlined in green are the parts you touch. Veyro keeps the record and shows
-              you the position; it is never in the path of the money.
-            </p>
-
-            <div className="gs-split">
+          <div className="wrap-lp gs-hero-grid">
               <div>
-                <h3 className="h4" style={{ marginTop: 0 }}>What your customer sees</h3>
-                <p className="body" style={{ marginTop: 10 }}>
-                  One page: your product name, your price, and a card field. Veyro hosts it and
-                  the card field belongs to the processor, so the number goes straight to them.
+                <h2 className="lp-h2">A checkout ready to share.</h2>
+                <p className="body" style={{ marginTop: "var(--sp-4)" }}>
+                  Your customer sees your name, product and price on one hosted page.
+                  Stripe&rsquo;s card field sends payment details directly to Stripe.
+                  They never reach you or Veyro.
                 </p>
-                <ul className="ticks" style={{ marginTop: "var(--sp-4)" }}>
-                  <li>Your product name and price, not ours</li>
-                  <li>A processor-hosted card field, so the number never reaches you or us</li>
+                <ul className="arrowlist" style={{ marginTop: "var(--sp-5)" }}>
                   <li>Works from a link in a bio, a DM, or a button in your app</li>
-                  <li>Your name on it, so a buyer knows who they are paying</li>
+                  <li>One checkout link for every product you create</li>
+                  <li>Stripe holds the money; Veyro records the payment in your wallet</li>
                 </ul>
                 <p className="small" style={{ marginTop: "var(--sp-4)" }}>
                   Nothing here to build, style or keep running.
                 </p>
               </div>
               <CheckoutPreview />
-            </div>
           </div>
         </section>
 
-        {/* ---------------- the code, for the part that is code -------------- */}
         <section className="lp ch">
           <div className="wrap-lp">
             <div className="aside-grid">
               <div className="aside-head">
-                <h2 className="lp-h2">
-                  The integration is a link.
-                </h2>
+                <h2 className="lp-h2">Add the link to your app.</h2>
                 <p className="body" style={{ marginTop: "var(--sp-4)" }}>
                   There is nothing to install and no key to keep secret. It is a URL, so anything
                   that can hold a link can sell your work.
@@ -381,73 +250,60 @@ export default function GetStarted() {
                   <span>Plain HTML</span>
                   <span>A button that goes to checkout</span>
                 </div>
-                <pre className="code">{`<a
+                <pre className="code" role="region" aria-label="HTML checkout link example" tabIndex={0}>{`<a
   class="buy"
   href="https://withveyro.com/pay/`}<span className="c">{"{your-id}"}</span>{`/`}<span className="c">{"{product-id}"}</span>{`"
   target="_blank"
   rel="noopener noreferrer"
 >
-  Buy the template — $12
+  Buy the template ($12)
 </a>`}</pre>
 
-                <div className="codecap" style={{ marginTop: "var(--sp-5)" }}>
-                  <span>React</span>
-                  <span>The same link as a component</span>
-                </div>
-                <pre className="code"><span className="c">{`// One constant, so a price or a product change is one edit.`}</span>{`
-const CHECKOUT = "https://withveyro.com/pay/`}<span className="c">{"{your-id}"}</span>{`/`}<span className="c">{"{product-id}"}</span>{`";
-
-export function BuyButton() {
-  return (
-    <a href={CHECKOUT} target="_blank" rel="noopener noreferrer" className="buy">
-      Buy the template — $12
-    </a>
-  );
-}`}</pre>
-
                 <p className="small" style={{ marginTop: "var(--sp-4)" }}>
-                  <strong>rel=&ldquo;noopener noreferrer&rdquo;</strong> is not decoration. Without
-                  it the page you open can reach back into yours through{" "}
-                  <span className="mono">window.opener</span>. Any link with{" "}
-                  <span className="mono">target=&ldquo;_blank&rdquo;</span> should carry it, not
-                  just this one.
+                  Replace the two IDs with your checkout link from the dashboard.
+                  Keep <span className="mono">rel=&ldquo;noopener noreferrer&rdquo;</span> when
+                  opening a new tab so it cannot access your page through <span className="mono">window.opener</span>.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ---------------- questions --------------------------------------- */}
         <section className="lp ch ch-surface">
-          <div className="wrap-lp">
-            <h2 className="lp-h2" style={{ maxWidth: "22ch" }}>
-              Questions people ask at exactly this point.
-            </h2>
-            <div className="ruled" style={{ marginTop: "var(--sp-7)" }}>
+          <div className="wrap-lp aside-grid">
+            <div className="aside-head">
+              <h2 className="lp-h2">Before you get started.</h2>
+              <p className="body" style={{ marginTop: "var(--sp-4)" }}>
+                The guardian&rsquo;s role, refunds and when money reaches the bank.
+              </p>
+              <p className="small" style={{ marginTop: "var(--sp-5)" }}>
+                <Link className="linkbtn" href="/faq">All questions</Link>
+              </p>
+            </div>
+            <div className="public-faq">
               {FAQ.map(([q, a]) => (
-                <div key={q}>
-                  <h3 className="h4" style={{ margin: 0 }}>{q}</h3>
-                  <p className="body" style={{ margin: 0, maxWidth: "var(--m-body)" }}>{a}</p>
-                </div>
+                <details key={q}>
+                  <summary>{q}</summary>
+                  <p className="body">{a}</p>
+                </details>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ---------------- close ------------------------------------------- */}
-        <section className="lp ch ch-9 lp-dark">
-          <div className="wrap-lp lp-center">
-            <h2 className="lp-h2">Start with the ask, not the code.</h2>
-            <p className="body" style={{ marginTop: 14, marginLeft: "auto", marginRight: "auto" }}>
+        <section className="lp ch public-close">
+          <div className="wrap-lp">
+            <h2 className="lp-h2">Ready to set up your side?</h2>
+            <p className="body" style={{ marginTop: "var(--sp-4)" }}>
               If you are 13 or over and there is an adult who will be the guardian, you can set
               your side up in about five minutes. Send them the message above first, though:
               nothing you build can take a payment until they are verified.
             </p>
-            <div className="row" style={{ marginTop: 24, gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
+            <div className="hero-cta">
               <Link className="btn btn-lg" href="/auth/signup">Create your founder account</Link>
-              <Link className="btn btn-2 btn-lg" href="/check">Check eligibility</Link>
+              <Link className="linkbtn" href="/check">Check eligibility</Link>
             </div>
-            <p className="tiny" style={{ marginTop: 16 }}>
+            <p className="small" style={{ marginTop: "var(--sp-5)" }}>
               Free under $100 a month, then 3% of the amount above it. Card processing fees still
               apply.{" "}
               <Link className="linkbtn" href="/pricing">Pricing</Link>
@@ -459,14 +315,7 @@ export function BuyButton() {
 
       </main>
 
-      <Reveal
-        scope=".fw"
-        select="section.lp > .wrap-lp > *"
-        stagger=".jn"
-      />
-
       <ScrollTop />
-      <StickyCta href="/auth/signup" label="Create your founder account" note="Free. Two minutes." />
       <SiteFooter />
     </div>
   );

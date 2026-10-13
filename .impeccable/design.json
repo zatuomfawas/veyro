@@ -1,0 +1,1008 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-13T06:08:43Z",
+  "title": "Design System: Veyro",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "tonalRamp": [
+          "oklch(15.0% 0.0000 0.0)",
+          "oklch(26.4% 0.0000 0.0)",
+          "oklch(37.9% 0.0000 0.0)",
+          "oklch(49.3% 0.0000 0.0)",
+          "oklch(60.7% 0.0000 0.0)",
+          "oklch(72.1% 0.0000 0.0)",
+          "oklch(83.6% 0.0000 0.0)",
+          "oklch(95.0% 0.0000 0.0)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Recessed Paper",
+        "tonalRamp": [
+          "oklch(15.0% 0.0013 106.4)",
+          "oklch(26.4% 0.0013 106.4)",
+          "oklch(37.9% 0.0013 106.4)",
+          "oklch(49.3% 0.0013 106.4)",
+          "oklch(60.7% 0.0013 106.4)",
+          "oklch(72.1% 0.0013 106.4)",
+          "oklch(83.6% 0.0013 106.4)",
+          "oklch(95.0% 0.0013 106.4)"
+        ]
+      },
+      "surface-2": {
+        "role": "neutral",
+        "displayName": "Recessed Paper 2",
+        "tonalRamp": [
+          "oklch(15.0% 0.0027 106.5)",
+          "oklch(26.4% 0.0027 106.5)",
+          "oklch(37.9% 0.0027 106.5)",
+          "oklch(49.3% 0.0027 106.5)",
+          "oklch(60.7% 0.0027 106.5)",
+          "oklch(72.1% 0.0027 106.5)",
+          "oklch(83.6% 0.0027 106.5)",
+          "oklch(95.0% 0.0027 106.5)"
+        ]
+      },
+      "card": {
+        "role": "neutral",
+        "displayName": "Card",
+        "tonalRamp": [
+          "oklch(15.0% 0.0000 0.0)",
+          "oklch(26.4% 0.0000 0.0)",
+          "oklch(37.9% 0.0000 0.0)",
+          "oklch(49.3% 0.0000 0.0)",
+          "oklch(60.7% 0.0000 0.0)",
+          "oklch(72.1% 0.0000 0.0)",
+          "oklch(83.6% 0.0000 0.0)",
+          "oklch(95.0% 0.0000 0.0)"
+        ]
+      },
+      "reverse": {
+        "role": "neutral",
+        "displayName": "Reverse",
+        "tonalRamp": [
+          "oklch(15.0% 0.0000 0.0)",
+          "oklch(26.4% 0.0000 0.0)",
+          "oklch(37.9% 0.0000 0.0)",
+          "oklch(49.3% 0.0000 0.0)",
+          "oklch(60.7% 0.0000 0.0)",
+          "oklch(72.1% 0.0000 0.0)",
+          "oklch(83.6% 0.0000 0.0)",
+          "oklch(95.0% 0.0000 0.0)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Rule",
+        "tonalRamp": [
+          "oklch(15.0% 0.0040 106.5)",
+          "oklch(26.4% 0.0040 106.5)",
+          "oklch(37.9% 0.0040 106.5)",
+          "oklch(49.3% 0.0040 106.5)",
+          "oklch(60.7% 0.0040 106.5)",
+          "oklch(72.1% 0.0040 106.5)",
+          "oklch(83.6% 0.0040 106.5)",
+          "oklch(95.0% 0.0040 106.5)"
+        ]
+      },
+      "line-soft": {
+        "role": "neutral",
+        "displayName": "Soft Rule",
+        "tonalRamp": [
+          "oklch(15.0% 0.0027 106.5)",
+          "oklch(26.4% 0.0027 106.5)",
+          "oklch(37.9% 0.0027 106.5)",
+          "oklch(49.3% 0.0027 106.5)",
+          "oklch(60.7% 0.0027 106.5)",
+          "oklch(72.1% 0.0027 106.5)",
+          "oklch(83.6% 0.0027 106.5)",
+          "oklch(95.0% 0.0027 106.5)"
+        ]
+      },
+      "line-hover": {
+        "role": "neutral",
+        "displayName": "Rule Hover",
+        "tonalRamp": [
+          "oklch(15.0% 0.0041 106.5)",
+          "oklch(26.4% 0.0041 106.5)",
+          "oklch(37.9% 0.0041 106.5)",
+          "oklch(49.3% 0.0041 106.5)",
+          "oklch(60.7% 0.0041 106.5)",
+          "oklch(72.1% 0.0041 106.5)",
+          "oklch(83.6% 0.0041 106.5)",
+          "oklch(95.0% 0.0041 106.5)"
+        ]
+      },
+      "control-line": {
+        "role": "neutral",
+        "displayName": "Control Boundary",
+        "tonalRamp": [
+          "oklch(15.0% 0.0103 242.9)",
+          "oklch(26.4% 0.0103 242.9)",
+          "oklch(37.9% 0.0103 242.9)",
+          "oklch(49.3% 0.0103 242.9)",
+          "oklch(60.7% 0.0103 242.9)",
+          "oklch(72.1% 0.0103 242.9)",
+          "oklch(83.6% 0.0103 242.9)",
+          "oklch(95.0% 0.0103 242.9)"
+        ]
+      },
+      "brand": {
+        "role": "primary",
+        "displayName": "Record Ink",
+        "tonalRamp": [
+          "oklch(15.0% 0.0052 248.1)",
+          "oklch(26.4% 0.0052 248.1)",
+          "oklch(37.9% 0.0052 248.1)",
+          "oklch(49.3% 0.0052 248.1)",
+          "oklch(60.7% 0.0052 248.1)",
+          "oklch(72.1% 0.0052 248.1)",
+          "oklch(83.6% 0.0052 248.1)",
+          "oklch(95.0% 0.0052 248.1)"
+        ]
+      },
+      "brand-h": {
+        "role": "primary",
+        "displayName": "Record Ink Hover",
+        "tonalRamp": [
+          "oklch(15.0% 0.0092 248.1)",
+          "oklch(26.4% 0.0092 248.1)",
+          "oklch(37.9% 0.0092 248.1)",
+          "oklch(49.3% 0.0092 248.1)",
+          "oklch(60.7% 0.0092 248.1)",
+          "oklch(72.1% 0.0092 248.1)",
+          "oklch(83.6% 0.0092 248.1)",
+          "oklch(95.0% 0.0092 248.1)"
+        ]
+      },
+      "brand-a": {
+        "role": "primary",
+        "displayName": "Record Ink Press",
+        "tonalRamp": [
+          "oklch(15.0% 0.0000 0.0)",
+          "oklch(26.4% 0.0000 0.0)",
+          "oklch(37.9% 0.0000 0.0)",
+          "oklch(49.3% 0.0000 0.0)",
+          "oklch(60.7% 0.0000 0.0)",
+          "oklch(72.1% 0.0000 0.0)",
+          "oklch(83.6% 0.0000 0.0)",
+          "oklch(95.0% 0.0000 0.0)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "tonalRamp": [
+          "oklch(15.0% 0.0052 248.1)",
+          "oklch(26.4% 0.0052 248.1)",
+          "oklch(37.9% 0.0052 248.1)",
+          "oklch(49.3% 0.0052 248.1)",
+          "oklch(60.7% 0.0052 248.1)",
+          "oklch(72.1% 0.0052 248.1)",
+          "oklch(83.6% 0.0052 248.1)",
+          "oklch(95.0% 0.0052 248.1)"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Supporting Ink",
+        "tonalRamp": [
+          "oklch(15.0% 0.0105 248.1)",
+          "oklch(26.4% 0.0105 248.1)",
+          "oklch(37.9% 0.0105 248.1)",
+          "oklch(49.3% 0.0105 248.1)",
+          "oklch(60.7% 0.0105 248.1)",
+          "oklch(72.1% 0.0105 248.1)",
+          "oklch(83.6% 0.0105 248.1)",
+          "oklch(95.0% 0.0105 248.1)"
+        ]
+      },
+      "ink-3": {
+        "role": "neutral",
+        "displayName": "Tertiary Ink",
+        "tonalRamp": [
+          "oklch(15.0% 0.0101 248.0)",
+          "oklch(26.4% 0.0101 248.0)",
+          "oklch(37.9% 0.0101 248.0)",
+          "oklch(49.3% 0.0101 248.0)",
+          "oklch(60.7% 0.0101 248.0)",
+          "oklch(72.1% 0.0101 248.0)",
+          "oklch(83.6% 0.0101 248.0)",
+          "oklch(95.0% 0.0101 248.0)"
+        ]
+      },
+      "placeholder": {
+        "role": "neutral",
+        "displayName": "Placeholder",
+        "tonalRamp": [
+          "oklch(15.0% 0.0099 248.0)",
+          "oklch(26.4% 0.0099 248.0)",
+          "oklch(37.9% 0.0099 248.0)",
+          "oklch(49.3% 0.0099 248.0)",
+          "oklch(60.7% 0.0099 248.0)",
+          "oklch(72.1% 0.0099 248.0)",
+          "oklch(83.6% 0.0099 248.0)",
+          "oklch(95.0% 0.0099 248.0)"
+        ]
+      },
+      "pine": {
+        "role": "primary",
+        "displayName": "Pine",
+        "tonalRamp": [
+          "oklch(15.0% 0.0740 164.0)",
+          "oklch(26.4% 0.0740 164.0)",
+          "oklch(37.9% 0.0740 164.0)",
+          "oklch(49.3% 0.0740 164.0)",
+          "oklch(60.7% 0.0740 164.0)",
+          "oklch(72.1% 0.0740 164.0)",
+          "oklch(83.6% 0.0740 164.0)",
+          "oklch(95.0% 0.0740 164.0)"
+        ]
+      },
+      "pine-h": {
+        "role": "primary",
+        "displayName": "Pine Hover",
+        "tonalRamp": [
+          "oklch(15.0% 0.0585 164.4)",
+          "oklch(26.4% 0.0585 164.4)",
+          "oklch(37.9% 0.0585 164.4)",
+          "oklch(49.3% 0.0585 164.4)",
+          "oklch(60.7% 0.0585 164.4)",
+          "oklch(72.1% 0.0585 164.4)",
+          "oklch(83.6% 0.0585 164.4)",
+          "oklch(95.0% 0.0585 164.4)"
+        ]
+      },
+      "pine-line": {
+        "role": "primary",
+        "displayName": "Pine Boundary",
+        "tonalRamp": [
+          "oklch(15.0% 0.0265 171.8)",
+          "oklch(26.4% 0.0265 171.8)",
+          "oklch(37.9% 0.0265 171.8)",
+          "oklch(49.3% 0.0265 171.8)",
+          "oklch(60.7% 0.0265 171.8)",
+          "oklch(72.1% 0.0265 171.8)",
+          "oklch(83.6% 0.0265 171.8)",
+          "oklch(95.0% 0.0265 171.8)"
+        ]
+      },
+      "amber": {
+        "role": "secondary",
+        "displayName": "Amber",
+        "tonalRamp": [
+          "oklch(15.0% 0.1025 70.8)",
+          "oklch(26.4% 0.1025 70.8)",
+          "oklch(37.9% 0.1025 70.8)",
+          "oklch(49.3% 0.1025 70.8)",
+          "oklch(60.7% 0.1025 70.8)",
+          "oklch(72.1% 0.1025 70.8)",
+          "oklch(83.6% 0.1025 70.8)",
+          "oklch(95.0% 0.1025 70.8)"
+        ]
+      },
+      "amber-line": {
+        "role": "secondary",
+        "displayName": "Amber Boundary",
+        "tonalRamp": [
+          "oklch(15.0% 0.0485 77.5)",
+          "oklch(26.4% 0.0485 77.5)",
+          "oklch(37.9% 0.0485 77.5)",
+          "oklch(49.3% 0.0485 77.5)",
+          "oklch(60.7% 0.0485 77.5)",
+          "oklch(72.1% 0.0485 77.5)",
+          "oklch(83.6% 0.0485 77.5)",
+          "oklch(95.0% 0.0485 77.5)"
+        ]
+      },
+      "slate": {
+        "role": "secondary",
+        "displayName": "Slate",
+        "tonalRamp": [
+          "oklch(15.0% 0.0769 252.1)",
+          "oklch(26.4% 0.0769 252.1)",
+          "oklch(37.9% 0.0769 252.1)",
+          "oklch(49.3% 0.0769 252.1)",
+          "oklch(60.7% 0.0769 252.1)",
+          "oklch(72.1% 0.0769 252.1)",
+          "oklch(83.6% 0.0769 252.1)",
+          "oklch(95.0% 0.0769 252.1)"
+        ]
+      },
+      "slate-line": {
+        "role": "secondary",
+        "displayName": "Slate Boundary",
+        "tonalRamp": [
+          "oklch(15.0% 0.0246 250.1)",
+          "oklch(26.4% 0.0246 250.1)",
+          "oklch(37.9% 0.0246 250.1)",
+          "oklch(49.3% 0.0246 250.1)",
+          "oklch(60.7% 0.0246 250.1)",
+          "oklch(72.1% 0.0246 250.1)",
+          "oklch(83.6% 0.0246 250.1)",
+          "oklch(95.0% 0.0246 250.1)"
+        ]
+      },
+      "clay": {
+        "role": "secondary",
+        "displayName": "Clay",
+        "tonalRamp": [
+          "oklch(15.0% 0.1505 28.8)",
+          "oklch(26.4% 0.1505 28.8)",
+          "oklch(37.9% 0.1505 28.8)",
+          "oklch(49.3% 0.1505 28.8)",
+          "oklch(60.7% 0.1505 28.8)",
+          "oklch(72.1% 0.1505 28.8)",
+          "oklch(83.6% 0.1505 28.8)",
+          "oklch(95.0% 0.1505 28.8)"
+        ]
+      },
+      "clay-line": {
+        "role": "secondary",
+        "displayName": "Clay Boundary",
+        "tonalRamp": [
+          "oklch(15.0% 0.0561 24.1)",
+          "oklch(26.4% 0.0561 24.1)",
+          "oklch(37.9% 0.0561 24.1)",
+          "oklch(49.3% 0.0561 24.1)",
+          "oklch(60.7% 0.0561 24.1)",
+          "oklch(72.1% 0.0561 24.1)",
+          "oklch(83.6% 0.0561 24.1)",
+          "oklch(95.0% 0.0561 24.1)"
+        ]
+      },
+      "track-free": {
+        "role": "neutral",
+        "displayName": "Free Allowance Track",
+        "tonalRamp": [
+          "oklch(15.0% 0.0141 162.5)",
+          "oklch(26.4% 0.0141 162.5)",
+          "oklch(37.9% 0.0141 162.5)",
+          "oklch(49.3% 0.0141 162.5)",
+          "oklch(60.7% 0.0141 162.5)",
+          "oklch(72.1% 0.0141 162.5)",
+          "oklch(83.6% 0.0141 162.5)",
+          "oklch(95.0% 0.0141 162.5)"
+        ]
+      },
+      "track-rest": {
+        "role": "neutral",
+        "displayName": "Remaining Track",
+        "tonalRamp": [
+          "oklch(15.0% 0.0013 106.4)",
+          "oklch(26.4% 0.0013 106.4)",
+          "oklch(37.9% 0.0013 106.4)",
+          "oklch(49.3% 0.0013 106.4)",
+          "oklch(60.7% 0.0013 106.4)",
+          "oklch(72.1% 0.0013 106.4)",
+          "oklch(83.6% 0.0013 106.4)",
+          "oklch(95.0% 0.0013 106.4)"
+        ]
+      },
+      "select-bg": {
+        "role": "neutral",
+        "displayName": "Selection",
+        "tonalRamp": [
+          "oklch(15.0% 0.0011 197.1)",
+          "oklch(26.4% 0.0011 197.1)",
+          "oklch(37.9% 0.0011 197.1)",
+          "oklch(49.3% 0.0011 197.1)",
+          "oklch(60.7% 0.0011 197.1)",
+          "oklch(72.1% 0.0011 197.1)",
+          "oklch(83.6% 0.0011 197.1)",
+          "oklch(95.0% 0.0011 197.1)"
+        ]
+      },
+      "scrim": {
+        "role": "neutral",
+        "displayName": "Scrim"
+      },
+      "dark-paper": {
+        "role": "neutral",
+        "displayName": "Dark Paper",
+        "tonalRamp": [
+          "oklch(15.0% 0.0052 248.1)",
+          "oklch(26.4% 0.0052 248.1)",
+          "oklch(37.9% 0.0052 248.1)",
+          "oklch(49.3% 0.0052 248.1)",
+          "oklch(60.7% 0.0052 248.1)",
+          "oklch(72.1% 0.0052 248.1)",
+          "oklch(83.6% 0.0052 248.1)",
+          "oklch(95.0% 0.0052 248.1)"
+        ]
+      },
+      "dark-surface": {
+        "role": "neutral",
+        "displayName": "Dark Recessed Paper",
+        "tonalRamp": [
+          "oklch(15.0% 0.0075 248.2)",
+          "oklch(26.4% 0.0075 248.2)",
+          "oklch(37.9% 0.0075 248.2)",
+          "oklch(49.3% 0.0075 248.2)",
+          "oklch(60.7% 0.0075 248.2)",
+          "oklch(72.1% 0.0075 248.2)",
+          "oklch(83.6% 0.0075 248.2)",
+          "oklch(95.0% 0.0075 248.2)"
+        ]
+      },
+      "dark-surface-2": {
+        "role": "neutral",
+        "displayName": "Dark Recessed Paper 2",
+        "tonalRamp": [
+          "oklch(15.0% 0.0096 248.2)",
+          "oklch(26.4% 0.0096 248.2)",
+          "oklch(37.9% 0.0096 248.2)",
+          "oklch(49.3% 0.0096 248.2)",
+          "oklch(60.7% 0.0096 248.2)",
+          "oklch(72.1% 0.0096 248.2)",
+          "oklch(83.6% 0.0096 248.2)",
+          "oklch(95.0% 0.0096 248.2)"
+        ]
+      },
+      "dark-card": {
+        "role": "neutral",
+        "displayName": "Dark Card",
+        "tonalRamp": [
+          "oklch(15.0% 0.0076 248.2)",
+          "oklch(26.4% 0.0076 248.2)",
+          "oklch(37.9% 0.0076 248.2)",
+          "oklch(49.3% 0.0076 248.2)",
+          "oklch(60.7% 0.0076 248.2)",
+          "oklch(72.1% 0.0076 248.2)",
+          "oklch(83.6% 0.0076 248.2)",
+          "oklch(95.0% 0.0076 248.2)"
+        ]
+      },
+      "dark-reverse": {
+        "role": "neutral",
+        "displayName": "Dark Reverse",
+        "tonalRamp": [
+          "oklch(15.0% 0.0052 248.1)",
+          "oklch(26.4% 0.0052 248.1)",
+          "oklch(37.9% 0.0052 248.1)",
+          "oklch(49.3% 0.0052 248.1)",
+          "oklch(60.7% 0.0052 248.1)",
+          "oklch(72.1% 0.0052 248.1)",
+          "oklch(83.6% 0.0052 248.1)",
+          "oklch(95.0% 0.0052 248.1)"
+        ]
+      },
+      "dark-line": {
+        "role": "neutral",
+        "displayName": "Dark Rule",
+        "tonalRamp": [
+          "oklch(15.0% 0.0114 248.2)",
+          "oklch(26.4% 0.0114 248.2)",
+          "oklch(37.9% 0.0114 248.2)",
+          "oklch(49.3% 0.0114 248.2)",
+          "oklch(60.7% 0.0114 248.2)",
+          "oklch(72.1% 0.0114 248.2)",
+          "oklch(83.6% 0.0114 248.2)",
+          "oklch(95.0% 0.0114 248.2)"
+        ]
+      },
+      "dark-line-soft": {
+        "role": "neutral",
+        "displayName": "Dark Soft Rule",
+        "tonalRamp": [
+          "oklch(15.0% 0.0095 248.2)",
+          "oklch(26.4% 0.0095 248.2)",
+          "oklch(37.9% 0.0095 248.2)",
+          "oklch(49.3% 0.0095 248.2)",
+          "oklch(60.7% 0.0095 248.2)",
+          "oklch(72.1% 0.0095 248.2)",
+          "oklch(83.6% 0.0095 248.2)",
+          "oklch(95.0% 0.0095 248.2)"
+        ]
+      },
+      "dark-control-line": {
+        "role": "neutral",
+        "displayName": "Dark Control Boundary",
+        "tonalRamp": [
+          "oklch(15.0% 0.0150 241.1)",
+          "oklch(26.4% 0.0150 241.1)",
+          "oklch(37.9% 0.0150 241.1)",
+          "oklch(49.3% 0.0150 241.1)",
+          "oklch(60.7% 0.0150 241.1)",
+          "oklch(72.1% 0.0150 241.1)",
+          "oklch(83.6% 0.0150 241.1)",
+          "oklch(95.0% 0.0150 241.1)"
+        ]
+      },
+      "dark-brand": {
+        "role": "primary",
+        "displayName": "Dark Record Ink",
+        "tonalRamp": [
+          "oklch(15.0% 0.0035 247.9)",
+          "oklch(26.4% 0.0035 247.9)",
+          "oklch(37.9% 0.0035 247.9)",
+          "oklch(49.3% 0.0035 247.9)",
+          "oklch(60.7% 0.0035 247.9)",
+          "oklch(72.1% 0.0035 247.9)",
+          "oklch(83.6% 0.0035 247.9)",
+          "oklch(95.0% 0.0035 247.9)"
+        ]
+      },
+      "dark-brand-h": {
+        "role": "primary",
+        "displayName": "Dark Record Ink Hover",
+        "tonalRamp": [
+          "oklch(15.0% 0.0000 0.0)",
+          "oklch(26.4% 0.0000 0.0)",
+          "oklch(37.9% 0.0000 0.0)",
+          "oklch(49.3% 0.0000 0.0)",
+          "oklch(60.7% 0.0000 0.0)",
+          "oklch(72.1% 0.0000 0.0)",
+          "oklch(83.6% 0.0000 0.0)",
+          "oklch(95.0% 0.0000 0.0)"
+        ]
+      },
+      "dark-ink": {
+        "role": "neutral",
+        "displayName": "Dark Ink",
+        "tonalRamp": [
+          "oklch(15.0% 0.0035 247.9)",
+          "oklch(26.4% 0.0035 247.9)",
+          "oklch(37.9% 0.0035 247.9)",
+          "oklch(49.3% 0.0035 247.9)",
+          "oklch(60.7% 0.0035 247.9)",
+          "oklch(72.1% 0.0035 247.9)",
+          "oklch(83.6% 0.0035 247.9)",
+          "oklch(95.0% 0.0035 247.9)"
+        ]
+      },
+      "dark-ink-2": {
+        "role": "neutral",
+        "displayName": "Dark Supporting Ink",
+        "tonalRamp": [
+          "oklch(15.0% 0.0117 243.7)",
+          "oklch(26.4% 0.0117 243.7)",
+          "oklch(37.9% 0.0117 243.7)",
+          "oklch(49.3% 0.0117 243.7)",
+          "oklch(60.7% 0.0117 243.7)",
+          "oklch(72.1% 0.0117 243.7)",
+          "oklch(83.6% 0.0117 243.7)",
+          "oklch(95.0% 0.0117 243.7)"
+        ]
+      },
+      "dark-ink-3": {
+        "role": "neutral",
+        "displayName": "Dark Tertiary Ink",
+        "tonalRamp": [
+          "oklch(15.0% 0.0139 244.4)",
+          "oklch(26.4% 0.0139 244.4)",
+          "oklch(37.9% 0.0139 244.4)",
+          "oklch(49.3% 0.0139 244.4)",
+          "oklch(60.7% 0.0139 244.4)",
+          "oklch(72.1% 0.0139 244.4)",
+          "oklch(83.6% 0.0139 244.4)",
+          "oklch(95.0% 0.0139 244.4)"
+        ]
+      },
+      "dark-pine": {
+        "role": "primary",
+        "displayName": "Dark Pine",
+        "tonalRamp": [
+          "oklch(15.0% 0.1002 163.6)",
+          "oklch(26.4% 0.1002 163.6)",
+          "oklch(37.9% 0.1002 163.6)",
+          "oklch(49.3% 0.1002 163.6)",
+          "oklch(60.7% 0.1002 163.6)",
+          "oklch(72.1% 0.1002 163.6)",
+          "oklch(83.6% 0.1002 163.6)",
+          "oklch(95.0% 0.1002 163.6)"
+        ]
+      },
+      "dark-pine-h": {
+        "role": "primary",
+        "displayName": "Dark Pine Hover",
+        "tonalRamp": [
+          "oklch(15.0% 0.0922 163.7)",
+          "oklch(26.4% 0.0922 163.7)",
+          "oklch(37.9% 0.0922 163.7)",
+          "oklch(49.3% 0.0922 163.7)",
+          "oklch(60.7% 0.0922 163.7)",
+          "oklch(72.1% 0.0922 163.7)",
+          "oklch(83.6% 0.0922 163.7)",
+          "oklch(95.0% 0.0922 163.7)"
+        ]
+      },
+      "dark-pine-bg": {
+        "role": "primary",
+        "displayName": "Dark Pine Fill",
+        "tonalRamp": [
+          "oklch(15.0% 0.0286 168.4)",
+          "oklch(26.4% 0.0286 168.4)",
+          "oklch(37.9% 0.0286 168.4)",
+          "oklch(49.3% 0.0286 168.4)",
+          "oklch(60.7% 0.0286 168.4)",
+          "oklch(72.1% 0.0286 168.4)",
+          "oklch(83.6% 0.0286 168.4)",
+          "oklch(95.0% 0.0286 168.4)"
+        ]
+      },
+      "dark-pine-line": {
+        "role": "primary",
+        "displayName": "Dark Pine Boundary",
+        "tonalRamp": [
+          "oklch(15.0% 0.0565 167.4)",
+          "oklch(26.4% 0.0565 167.4)",
+          "oklch(37.9% 0.0565 167.4)",
+          "oklch(49.3% 0.0565 167.4)",
+          "oklch(60.7% 0.0565 167.4)",
+          "oklch(72.1% 0.0565 167.4)",
+          "oklch(83.6% 0.0565 167.4)",
+          "oklch(95.0% 0.0565 167.4)"
+        ]
+      },
+      "dark-amber": {
+        "role": "secondary",
+        "displayName": "Dark Amber",
+        "tonalRamp": [
+          "oklch(15.0% 0.1295 79.8)",
+          "oklch(26.4% 0.1295 79.8)",
+          "oklch(37.9% 0.1295 79.8)",
+          "oklch(49.3% 0.1295 79.8)",
+          "oklch(60.7% 0.1295 79.8)",
+          "oklch(72.1% 0.1295 79.8)",
+          "oklch(83.6% 0.1295 79.8)",
+          "oklch(95.0% 0.1295 79.8)"
+        ]
+      },
+      "dark-amber-bg": {
+        "role": "secondary",
+        "displayName": "Dark Amber Fill",
+        "tonalRamp": [
+          "oklch(15.0% 0.0291 79.6)",
+          "oklch(26.4% 0.0291 79.6)",
+          "oklch(37.9% 0.0291 79.6)",
+          "oklch(49.3% 0.0291 79.6)",
+          "oklch(60.7% 0.0291 79.6)",
+          "oklch(72.1% 0.0291 79.6)",
+          "oklch(83.6% 0.0291 79.6)",
+          "oklch(95.0% 0.0291 79.6)"
+        ]
+      },
+      "dark-amber-line": {
+        "role": "secondary",
+        "displayName": "Dark Amber Boundary",
+        "tonalRamp": [
+          "oklch(15.0% 0.0587 86.4)",
+          "oklch(26.4% 0.0587 86.4)",
+          "oklch(37.9% 0.0587 86.4)",
+          "oklch(49.3% 0.0587 86.4)",
+          "oklch(60.7% 0.0587 86.4)",
+          "oklch(72.1% 0.0587 86.4)",
+          "oklch(83.6% 0.0587 86.4)",
+          "oklch(95.0% 0.0587 86.4)"
+        ]
+      },
+      "dark-slate": {
+        "role": "secondary",
+        "displayName": "Dark Slate",
+        "tonalRamp": [
+          "oklch(15.0% 0.0834 254.5)",
+          "oklch(26.4% 0.0834 254.5)",
+          "oklch(37.9% 0.0834 254.5)",
+          "oklch(49.3% 0.0834 254.5)",
+          "oklch(60.7% 0.0834 254.5)",
+          "oklch(72.1% 0.0834 254.5)",
+          "oklch(83.6% 0.0834 254.5)",
+          "oklch(95.0% 0.0834 254.5)"
+        ]
+      },
+      "dark-slate-bg": {
+        "role": "secondary",
+        "displayName": "Dark Slate Fill",
+        "tonalRamp": [
+          "oklch(15.0% 0.0313 254.8)",
+          "oklch(26.4% 0.0313 254.8)",
+          "oklch(37.9% 0.0313 254.8)",
+          "oklch(49.3% 0.0313 254.8)",
+          "oklch(60.7% 0.0313 254.8)",
+          "oklch(72.1% 0.0313 254.8)",
+          "oklch(83.6% 0.0313 254.8)",
+          "oklch(95.0% 0.0313 254.8)"
+        ]
+      },
+      "dark-slate-line": {
+        "role": "secondary",
+        "displayName": "Dark Slate Boundary",
+        "tonalRamp": [
+          "oklch(15.0% 0.0567 246.9)",
+          "oklch(26.4% 0.0567 246.9)",
+          "oklch(37.9% 0.0567 246.9)",
+          "oklch(49.3% 0.0567 246.9)",
+          "oklch(60.7% 0.0567 246.9)",
+          "oklch(72.1% 0.0567 246.9)",
+          "oklch(83.6% 0.0567 246.9)",
+          "oklch(95.0% 0.0567 246.9)"
+        ]
+      },
+      "dark-clay": {
+        "role": "secondary",
+        "displayName": "Dark Clay",
+        "tonalRamp": [
+          "oklch(15.0% 0.1021 25.1)",
+          "oklch(26.4% 0.1021 25.1)",
+          "oklch(37.9% 0.1021 25.1)",
+          "oklch(49.3% 0.1021 25.1)",
+          "oklch(60.7% 0.1021 25.1)",
+          "oklch(72.1% 0.1021 25.1)",
+          "oklch(83.6% 0.1021 25.1)",
+          "oklch(95.0% 0.1021 25.1)"
+        ]
+      },
+      "dark-clay-bg": {
+        "role": "secondary",
+        "displayName": "Dark Clay Fill",
+        "tonalRamp": [
+          "oklch(15.0% 0.0294 26.5)",
+          "oklch(26.4% 0.0294 26.5)",
+          "oklch(37.9% 0.0294 26.5)",
+          "oklch(49.3% 0.0294 26.5)",
+          "oklch(60.7% 0.0294 26.5)",
+          "oklch(72.1% 0.0294 26.5)",
+          "oklch(83.6% 0.0294 26.5)",
+          "oklch(95.0% 0.0294 26.5)"
+        ]
+      },
+      "dark-clay-line": {
+        "role": "secondary",
+        "displayName": "Dark Clay Boundary",
+        "tonalRamp": [
+          "oklch(15.0% 0.0636 28.9)",
+          "oklch(26.4% 0.0636 28.9)",
+          "oklch(37.9% 0.0636 28.9)",
+          "oklch(49.3% 0.0636 28.9)",
+          "oklch(60.7% 0.0636 28.9)",
+          "oklch(72.1% 0.0636 28.9)",
+          "oklch(83.6% 0.0636 28.9)",
+          "oklch(95.0% 0.0636 28.9)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "home-display": {
+        "displayName": "Home Display",
+        "purpose": "Homepage statement with its documented responsive sizes."
+      },
+      "display": {
+        "displayName": "Public Display",
+        "purpose": "Supporting public page heroes."
+      },
+      "headline": {
+        "displayName": "Section Headline",
+        "purpose": "Public section headings, reduced on mobile."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Compact headings."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Normal reading copy."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Supporting hero prose."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Field labels and controls."
+      },
+      "wordmark": {
+        "displayName": "Archivo Wordmark",
+        "purpose": "Existing Veyro identity only."
+      }
+    },
+    "shadows": [
+      {
+        "name": "lift",
+        "value": "0 1px 2px rgba(17,19,21,.06), 0 4px 12px rgba(17,19,21,.07)",
+        "purpose": "Existing clickable card hover and floating prompt only. Buttons and passive surfaces have no drop shadow."
+      },
+      {
+        "name": "field-focus",
+        "value": "inset 0 0 0 1px var(--brand)",
+        "purpose": "Zero-blur control boundary for focus."
+      },
+      {
+        "name": "field-invalid",
+        "value": "inset 0 0 0 1px var(--clay)",
+        "purpose": "Zero-blur invalid-field boundary paired with explicit error text."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(.4, 0, .2, 1)",
+        "purpose": "Ordinary component state changes."
+      },
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(.22, 1, .36, 1)",
+        "purpose": "Established explanatory reveals."
+      },
+      {
+        "name": "t-1",
+        "value": "110ms",
+        "purpose": "Short state transition."
+      },
+      {
+        "name": "t-2",
+        "value": "170ms",
+        "purpose": "Short state transition."
+      },
+      {
+        "name": "t-3",
+        "value": "320ms",
+        "purpose": "Existing explanatory reveal timing; excludes the static hero and guardian guide."
+      },
+      {
+        "name": "t-4",
+        "value": "560ms",
+        "purpose": "Existing explanatory reveal timing; excludes the static hero and guardian guide."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "transition-duration:0ms; animation-duration:0ms; scroll-behavior:auto",
+        "purpose": "Keep readable content visible and remove nonessential movement."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wide-adjustment",
+        "value": "980px"
+      },
+      {
+        "name": "split-collapse",
+        "value": "940px"
+      },
+      {
+        "name": "content-collapse",
+        "value": "900px"
+      },
+      {
+        "name": "main-collapse",
+        "value": "760px"
+      },
+      {
+        "name": "compact-panel",
+        "value": "560px"
+      },
+      {
+        "name": "narrow",
+        "value": "420px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "A shared action with square shape, visible focus and no lift.",
+      "html": "<button class=\"ds-button-primary\" type=\"button\">Check eligibility</button>",
+      "css": ".ds-button-primary{display:inline-flex;align-items:center;justify-content:center;height:38px;padding:0 16px;border:1px solid;border-radius:0;font-size:14px;font-weight:500;letter-spacing:-.006em;cursor:pointer;white-space:nowrap;font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;transition:background-color 110ms cubic-bezier(.4,0,.2,1),border-color 110ms cubic-bezier(.4,0,.2,1),color 110ms cubic-bezier(.4,0,.2,1);color:#ffffff;background:#111315;border-color:#111315;}.ds-button-primary:hover{background:#2b2f33;border-color:#2b2f33;}.ds-button-primary:active{background:#000000;border-color:#000000;transition-duration:0s;}.ds-button-primary:focus-visible{outline:2px solid #12513a;outline-offset:2px;border-radius:0;}.ds-button-primary:disabled{background:#eeeeec;border-color:#e3e3e0;color:#61666b;cursor:not-allowed;}@media(pointer:coarse){.ds-button-primary{min-height:44px;}}@media(prefers-reduced-motion:reduce){.ds-button-primary{transition:none;}}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "A shared action with square shape, visible focus and no lift.",
+      "html": "<button class=\"ds-button-secondary\" type=\"button\">Cancel</button>",
+      "css": ".ds-button-secondary{display:inline-flex;align-items:center;justify-content:center;height:38px;padding:0 16px;border:1px solid;border-radius:0;font-size:14px;font-weight:500;letter-spacing:-.006em;cursor:pointer;white-space:nowrap;font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;transition:background-color 110ms cubic-bezier(.4,0,.2,1),border-color 110ms cubic-bezier(.4,0,.2,1),color 110ms cubic-bezier(.4,0,.2,1);color:#111315;background:#ffffff;border-color:#e3e3e0;}.ds-button-secondary:hover{background:#f7f7f6;border-color:#d4d4d1;}.ds-button-secondary:active{background:#eeeeec;border-color:#61666b;transition-duration:0s;}.ds-button-secondary:focus-visible{outline:2px solid #12513a;outline-offset:2px;border-radius:0;}.ds-button-secondary:disabled{background:#eeeeec;border-color:#e3e3e0;color:#61666b;cursor:not-allowed;}@media(pointer:coarse){.ds-button-secondary{min-height:44px;}}@media(prefers-reduced-motion:reduce){.ds-button-secondary{transition:none;}}"
+    },
+    {
+      "name": "Quiet Button",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "A shared action with square shape, visible focus and no lift.",
+      "html": "<button class=\"ds-button-quiet\" type=\"button\">How it works</button>",
+      "css": ".ds-button-quiet{display:inline-flex;align-items:center;justify-content:center;height:38px;padding:0 16px;border:1px solid;border-radius:0;font-size:14px;font-weight:500;letter-spacing:-.006em;cursor:pointer;white-space:nowrap;font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;transition:background-color 110ms cubic-bezier(.4,0,.2,1),border-color 110ms cubic-bezier(.4,0,.2,1),color 110ms cubic-bezier(.4,0,.2,1);color:#4a4f54;background:transparent;border-color:transparent;}.ds-button-quiet:hover{background:#eeeeec;color:#111315;}.ds-button-quiet:active{background:#eeeeec;transition-duration:0s;}.ds-button-quiet:focus-visible{outline:2px solid #12513a;outline-offset:2px;border-radius:0;}.ds-button-quiet:disabled{background:#eeeeec;border-color:#e3e3e0;color:#61666b;cursor:not-allowed;}@media(pointer:coarse){.ds-button-quiet{min-height:44px;}}@media(prefers-reduced-motion:reduce){.ds-button-quiet{transition:none;}}"
+    },
+    {
+      "name": "Labelled Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "A real label, accessible description and visible control boundary.",
+      "html": "<div class=\"ds-field\"><label class=\"ds-label\" for=\"ds-email\">Email address</label><input class=\"ds-input\" id=\"ds-email\" type=\"email\" aria-describedby=\"ds-email-hint\" placeholder=\"you@example.com\"><span class=\"ds-hint\" id=\"ds-email-hint\">Use an address you can access.</span></div>",
+      "css": ".ds-field{font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;color:#111315;}.ds-label{display:block;margin-bottom:6px;font-size:14px;font-weight:500;line-height:1.5;}.ds-input{width:100%;height:38px;padding:0 12px;border:1px solid #878d92;border-radius:0;background:#fff;color:#111315;font-size:14px;font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;transition:background-color 110ms cubic-bezier(.4,0,.2,1),border-color 110ms cubic-bezier(.4,0,.2,1),color 110ms cubic-bezier(.4,0,.2,1);}.ds-input::placeholder{color:#6b7075;}.ds-input:hover:not(:focus){border-color:#61666b;}.ds-input:focus,.ds-input:focus-visible{outline:none;border-color:#111315;box-shadow:inset 0 0 0 1px #111315;}.ds-input[aria-invalid=\"true\"]{border-color:#9c2b22;box-shadow:inset 0 0 0 1px #9c2b22;}.ds-hint{display:block;margin-top:6px;color:#61666b;font-size:13px;line-height:1.5;}@media(pointer:coarse){.ds-input{min-height:44px;}}@media(prefers-reduced-motion:reduce){.ds-input{transition:none;}}"
+    },
+    {
+      "name": "Available Badge",
+      "kind": "chip",
+      "refersTo": "status-badge",
+      "description": "A labelled financial state.",
+      "html": "<span class=\"ds-badge\">Available</span>",
+      "css": ".ds-badge{display:inline-flex;align-items:center;height:20px;padding:0 7px;border:1px solid #acc2ba;border-radius:0;background:transparent;color:#12513a;font-size:12px;font-weight:600;letter-spacing:.02em;font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;}"
+    },
+    {
+      "name": "Record Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Passive content grouped with a thin rule.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-card-head\">Account status</div><div class=\"ds-card-body\"><h3 class=\"ds-card-title\">Your account record</h3><p class=\"ds-card-copy\">Product, sales and payout information stay together.</p></div></article>",
+      "css": ".ds-card{border:1px solid #e3e3e0;border-radius:0;background:#fff;color:#111315;font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;}.ds-card-head{padding:12px 20px;min-height:45px;border-bottom:1px solid #eeeeec;font-size:14px;font-weight:500;}.ds-card-body{padding:20px;}.ds-card-title{margin:0;font-size:16px;font-weight:600;line-height:1.4;letter-spacing:-.008em;}.ds-card-copy{margin:12px 0 0;font-size:14px;line-height:1.5;color:#4a4f54;}"
+    },
+    {
+      "name": "Public Navigation",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "The shared solid header with its existing mark and primary action.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Main\"><a class=\"ds-nav-brand\" href=\"/\" aria-label=\"Veyro, home\"><svg class=\"ds-nav-mark\" viewBox=\"10 18 80 66\" aria-hidden=\"true\"><path d=\"M10 18 L26 18 L45 57 L64 18 L90 18 L58 84 L43 84 Z\" fill=\"#ffffff\"/></svg><span>Veyro</span></a><div class=\"ds-nav-links\"><a class=\"ds-nav-link\" href=\"/pricing\" aria-current=\"page\">Pricing</a><a class=\"ds-nav-action\" href=\"/check\">Check eligibility</a></div></nav>",
+      "css": ".ds-nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0 20px;background:#fff;border-bottom:1px solid #e3e3e0;color:#111315;font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;}.ds-nav-brand{display:inline-flex;align-items:center;gap:.36em;min-height:44px;font-family:\"Archivo\",\"Helvetica Neue\",\"Arial Black\",Helvetica,Arial,sans-serif;font-weight:800;font-stretch:118%;font-size:21px;letter-spacing:-.045em;color:#111315;text-decoration:none;}.ds-nav-mark{box-sizing:content-box;height:.88em;width:.80em;padding:.20em .18em;background:#12513a;}.ds-nav-brand:hover .ds-nav-mark{background:#0b3a29;}.ds-nav-links{display:flex;align-items:center;gap:8px;}.ds-nav-link,.ds-nav-action{display:inline-flex;align-items:center;justify-content:center;padding:0 12px;height:40px;font-size:13px;font-weight:500;text-decoration:none;transition:background-color 110ms cubic-bezier(.4,0,.2,1),border-color 110ms cubic-bezier(.4,0,.2,1),color 110ms cubic-bezier(.4,0,.2,1);}.ds-nav-link{color:#4a4f54;}.ds-nav-link[aria-current=\"page\"]{background:#f7f7f6;color:#111315;}.ds-nav-link:hover{background:#eeeeec;color:#111315;}.ds-nav-action{padding-inline:16px;background:#111315;color:#fff;border:1px solid #111315;}.ds-nav-action:hover{background:#2b2f33;border-color:#2b2f33;}.ds-nav-action:active{background:#000;transition-duration:0s;}.ds-nav a:focus-visible{outline:2px solid #12513a;outline-offset:2px;border-radius:0;}@media(max-width:420px){.ds-nav{min-height:64px;gap:12px;}.ds-nav-link{display:none;}.ds-nav-action{min-height:44px;padding:0 8px;}}@media(prefers-reduced-motion:reduce){.ds-nav a{transition:none;}}"
+    },
+    {
+      "name": "Product Earnings Example",
+      "kind": "card",
+      "refersTo": "hero-wallet",
+      "description": "Static example of the current shared fee arithmetic.",
+      "html": "<article class=\"ds-wallet\"><div class=\"ds-wallet-head\"><span>Product earnings</span><span class=\"ds-wallet-example\">Example</span></div><div class=\"ds-wallet-body\"><p class=\"ds-wallet-product\">Notion Second Brain template</p><p class=\"ds-wallet-terms\">$12.00 each · 12 sales</p><p class=\"ds-wallet-label\">Sales this month</p><p class=\"ds-wallet-total\">$144.00</p><dl class=\"ds-wallet-fee\"><div><dt>Veyro fee</dt><dd>$1.32</dd></div></dl><p class=\"ds-wallet-note\">First $100.00 each month free. 3% on earnings above it. Stripe processing fees excluded.</p></div></article>",
+      "css": ".ds-wallet{border:1px solid #e3e3e0;border-radius:0;background:#fff;color:#111315;font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;font-variant-numeric:tabular-nums;}.ds-wallet-head{display:flex;justify-content:space-between;gap:20px;padding:16px 24px;border-bottom:1px solid #e3e3e0;font-size:14px;font-weight:500;}.ds-wallet-example{font-size:13px;color:#61666b;font-weight:400;}.ds-wallet-body{padding:32px;}.ds-wallet-product{margin:0;font-size:16px;line-height:1.5;font-weight:500;}.ds-wallet-terms{margin:8px 0 0;font-size:14px;color:#61666b;}.ds-wallet-label{margin:32px 0 0;font-size:13px;color:#4a4f54;}.ds-wallet-total{margin:8px 0 0;font-size:36px;line-height:1.2;letter-spacing:-.03em;font-weight:500;color:#12513a;}.ds-wallet-fee{margin:24px 0 0;padding-top:16px;border-top:1px solid #e3e3e0;}.ds-wallet-fee>div{display:flex;justify-content:space-between;gap:20px;align-items:baseline;}.ds-wallet-fee dt{font-size:14px;color:#4a4f54;}.ds-wallet-fee dd{margin:0;font-size:16px;font-weight:500;}.ds-wallet-note{margin:12px 0 0;font-size:13px;color:#61666b;line-height:1.65;}@media(max-width:420px){.ds-wallet-body{padding:24px;}.ds-wallet-total{font-size:32px;}}"
+    },
+    {
+      "name": "Guardian Guide",
+      "kind": "card",
+      "refersTo": "guardian-guide",
+      "description": "Static steps; Stripe account controls are descriptive rather than clickable.",
+      "html": "<article class=\"ds-guardian\"><div class=\"ds-guardian-head\"><span>Your role as guardian</span><span class=\"ds-guardian-example\">Example</span></div><div class=\"ds-guardian-body\"><h2 class=\"ds-guardian-title\">Setting up</h2><ol class=\"ds-guardian-steps\"><li><strong>Invitation</strong><span>Your child sends you a link to review.</span></li><li><strong>Your consent</strong><span>Read the arrangement and accept from your own Veyro account.</span></li><li><strong>Your verification</strong><span>Complete Stripe’s hosted identity and bank-account forms.</span></li><li><strong>Account status</strong><span>Your dashboard shows when Stripe needs more information.</span></li></ol><h2 class=\"ds-guardian-title\">Account controls in Stripe</h2><p class=\"ds-guardian-note\">These controls live in Stripe, rather than in Veyro.</p></div></article>",
+      "css": ".ds-guardian{border:1px solid #e3e3e0;border-radius:0;background:#fff;color:#111315;font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;}.ds-guardian-head{display:flex;justify-content:space-between;gap:20px;padding:16px 24px;border-bottom:1px solid #e3e3e0;font-size:13px;font-weight:600;}.ds-guardian-example{color:#61666b;font-weight:400;}.ds-guardian-body{padding:24px;}.ds-guardian-title{margin:0 0 12px;font-size:14px;font-weight:500;line-height:1.5;}.ds-guardian-steps{margin:0 0 24px;padding-left:20px;}.ds-guardian-steps li{padding:10px 0;border-bottom:1px solid #eeeeec;}.ds-guardian-steps li:last-child{border-bottom:0;}.ds-guardian-steps strong{font-size:14px;font-weight:500;}.ds-guardian-steps span{display:block;margin-top:2px;font-size:13px;line-height:1.5;color:#61666b;}.ds-guardian-note{margin:0;font-size:13px;line-height:1.65;color:#61666b;}"
+    },
+    {
+      "name": "Pricing Range",
+      "kind": "input",
+      "refersTo": "pricing-calculator",
+      "description": "Native labelled range with the current allowance track. Live calculated output remains in PriceCalculator.",
+      "html": "<div class=\"ds-calculator\"><label class=\"ds-calc-label\" for=\"ds-monthly\">You earn, in a month</label><input class=\"ds-calc-range\" id=\"ds-monthly\" type=\"range\" min=\"0\" max=\"100000\" step=\"2500\" value=\"40000\" aria-describedby=\"ds-calc-help\"><div class=\"ds-calc-scale\"><span>$0</span><span>free under $100</span><span>$1,000</span></div><p class=\"ds-calc-help\" id=\"ds-calc-help\">First $100 each month free. Stripe card processing fees are separate.</p></div>",
+      "css": ".ds-calculator{padding:24px;border:1px solid #e3e3e0;border-radius:0;background:#fff;color:#111315;font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;font-variant-numeric:tabular-nums;}.ds-calc-label{display:block;font-size:13px;color:#61666b;margin-bottom:20px;}.ds-calc-range{appearance:none;display:block;width:100%;height:26px;background:transparent;cursor:pointer;}.ds-calc-range:focus-visible{outline:2px solid #111315;outline-offset:2px;}.ds-calc-range::-webkit-slider-runnable-track{height:6px;border:1px solid #878d92;background:linear-gradient(90deg,#e4efe9 0,#e4efe9 10%,#ececeb 10%,#ececeb 100%);}.ds-calc-range::-moz-range-track{height:6px;border:1px solid #878d92;background:linear-gradient(90deg,#e4efe9 0,#e4efe9 10%,#ececeb 10%,#ececeb 100%);}.ds-calc-range::-webkit-slider-thumb{appearance:none;width:18px;height:18px;margin-top:-7px;background:#111315;border:1px solid #111315;border-radius:0;}.ds-calc-range::-moz-range-thumb{width:18px;height:18px;background:#111315;border:1px solid #111315;border-radius:0;}.ds-calc-scale{display:flex;justify-content:space-between;gap:12px;margin-top:7px;font-size:12px;color:#61666b;}.ds-calc-help{margin:24px 0 0;padding-top:20px;border-top:1px solid #e3e3e0;font-size:13px;line-height:1.6;color:#4a4f54;}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Clear Record",
+    "overview": "Veyro uses a plain financial record as its visual model: readable type, square controls, thin rules and deliberate space. White and neutral paper carry the interface. Meaningful color marks money, action and status without becoming decoration.\n\nThe system serves young founders and guardians together. Product explanations feel approachable; account tasks stay direct and legible. Use the shared primitives so public pages, authentication, checkout and dashboards remain recognizably part of the same product.",
+    "keyCharacteristics": [
+      "Onest for interface text; Archivo for the existing wordmark.",
+      "Square controls and surfaces, with thin rules instead of decorative framing.",
+      "Neutral foundations with explicit, named financial states.",
+      "Shared components, responsive layouts and keyboard-visible interaction states."
+    ],
+    "rules": [
+      {
+        "name": "The Written State Rule",
+        "body": "Every financial and account state has a visible label. Color supports the wording; it never replaces it.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Interface Voice Rule",
+        "body": "Use Onest for headings, prose, labels and numbers. Keep Archivo in the wordmark.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Record Rule",
+        "body": "Buttons and passive panels have no drop shadow. Use borders, fill changes and spacing to establish hierarchy.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do reuse the shared buttons, fields, notices, navigation, footer and checkout content primitives.",
+      "Do use the established type and spacing scales, with the documented responsive heading exceptions.",
+      "Do keep money figures tabular, examples visibly labelled and fees derived from the shared calculation.",
+      "Do preserve real link destinations, guardian-role wording and full product disclosures.",
+      "Do retain labelled controls, visible focus, keyboard access to scroll regions and reduced-motion behavior.",
+      "Do test new layouts at 320px and at the main 760px collapse, including open menus and long content."
+    ],
+    "donts": [
+      "Don't add rounded rectangles, decorative gradients, blurred ornaments or simulated browser chrome to explanatory panels.",
+      "Don't give buttons or passive panels a lift, scale animation or drop shadow.",
+      "Don't duplicate a heading with a category label above it unless that label adds a distinct navigation or structural meaning.",
+      "Don't present example account controls as live actions, or remove useful calculator and share interactions while simplifying their appearance.",
+      "Don't invent testimonials, activity, payment availability or a launch-ready state.",
+      "Don't treat this design document as a replacement for product facts. The fee-launch drift remains an unresolved issue in PRODUCT.md."
+    ]
+  }
+}

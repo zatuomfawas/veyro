@@ -1,59 +1,36 @@
-import { Icon } from "@/app/_ui/marks";
-
-// Who does what, as a stack rather than a sentence.
-//
-// The single most common misunderstanding about Veyro is that it is the payment
-// provider. It is not, and a paragraph saying so is easier to skim past than a
-// diagram showing four separate parties with the money sitting firmly outside
-// Veyro. The order is the real order: nothing below a row can happen until the
-// row above it has.
-const LAYERS = [
+const ROLES = [
   {
-    icon: "person",
     who: "Founder",
-    does: "Builds the business, lists what they sell, and asks for payouts.",
-    controls: "Owns the business",
+    does: "Builds the business, lists products and keeps track of sales.",
+    controls: "Runs the business",
   },
   {
-    icon: "list",
-    who: "Veyro",
-    does: "Guides the setup, tracks who has done what, and keeps the ledger.",
-    controls: "Never touches the money",
-  },
-  {
-    icon: "home",
     who: "Guardian",
-    does: "Completes the adult verification the provider requires, while the founder is under 18.",
-    controls: "Named on the account",
+    does: "Gives consent and completes the adult verification Stripe requires.",
+    controls: "Consent and visibility",
   },
   {
-    icon: "card",
+    who: "Veyro",
+    does: "Guides setup and brings products, sales and payout records together.",
+    controls: "Never holds money",
+  },
+  {
     who: "Stripe",
-    does: "Verifies identity, processes payments, holds the balance and sends payouts.",
-    controls: "Handles all money",
+    does: "Verifies identity, processes payments and sends payouts.",
+    controls: "Handles payments",
   },
 ];
 
 export function RoleStack() {
   return (
-    <ol className="reqlist" style={{ listStyle: "none", margin: 0, padding: 0 }}>
-      {LAYERS.map((l) => (
-        <li className="reqrow" key={l.who}>
-          <div style={{ display: "flex", gap: 12, alignItems: "baseline", width: "100%" }}>
-            <Icon name={l.icon} size={14} />
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <span className="req-t">{l.who}</span>
-              <span className="req-d">{l.does}</span>
-            </div>
-            {/* Not nowrap: on a narrow phone an unwrappable "Never touches the
-                money" would squeeze the description column beside it to a few
-                characters per line. Allowed to wrap, it simply takes two. */}
-            <span className="tiny" style={{ color: "var(--ink-3)", textAlign: "right", flex: "0 1 auto" }}>
-              {l.controls}
-            </span>
-          </div>
-        </li>
+    <dl className="role-list">
+      {ROLES.map((role) => (
+        <div className="role-row" key={role.who}>
+          <dt className="role-name">{role.who}</dt>
+          <dd className="role-description">{role.does}</dd>
+          <dd className="role-control">{role.controls}</dd>
+        </div>
       ))}
-    </ol>
+    </dl>
   );
 }

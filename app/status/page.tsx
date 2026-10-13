@@ -1,10 +1,9 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { buildViewport, SITE } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
-import { Wordmark, SkipLink } from "@/app/_ui/marks";
+import { SkipLink } from "@/app/_ui/marks";
+import { SiteNav } from "@/app/_ui/SiteNav";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
-import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 import { PageNext } from "@/app/_ui/PageNext";
 import { SUPPORT_EMAIL as EMAIL } from "@/lib/support";
 
@@ -56,20 +55,10 @@ const DEPENDENCIES = [
 
 export default function Status() {
   return (
-    <div className="fw">
+    <div className="fw public-page">
       <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
-      <div className="navbar">
-        <div className="wrap-lp">
-          <nav className="lp-nav" aria-label="Main">
-            <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
-            <div className="lp-links">
-              <Link className="btn btn-q btn-sm" href="/contact">Contact</Link>
-              <ThemeToggle />
-            </div>
-          </nav>
-        </div>
-      </div>
+      <SiteNav active="/status" />
 
       {/* A board, not a list.
           ------------------------------------------------------------------

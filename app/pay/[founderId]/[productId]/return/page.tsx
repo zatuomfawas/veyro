@@ -50,15 +50,17 @@ export default async function ReturnPage({
 
   return (
     <div className="fw">
-      <style>{CSS + CSS2}</style>
+      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
 
-      <div className="wrap-s">
-        <div className="lp-nav" style={{ borderBottom: 0 }}>
-          <Wordmark size={19} tile />
-          <span className="tiny">Secure payment</span>
+      <header className="task-navbar">
+        <div className="wrap-s">
+          <div className="lp-nav task-nav">
+            <Wordmark size={19} tile />
+            <span className="tiny task-nav-note">Secure payment</span>
+          </div>
         </div>
-      </div>
+      </header>
 
       <main id="main" className="wrap-s" style={{ marginTop: 24, marginBottom: 90 }}>
         <div className={"statusblock " + copy.tone}>

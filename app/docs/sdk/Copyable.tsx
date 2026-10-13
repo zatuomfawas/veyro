@@ -35,7 +35,9 @@ export function Copyable({ label, code }: { label: string; code: string }) {
           {copied ? "Copied" : "Copy"}
         </Btn>
       </div>
-      <pre className="code">{code}</pre>
+      <pre className="code" tabIndex={0} role="region" aria-label={`${label} snippet`}>
+        {code}
+      </pre>
     </div>
   );
 }

@@ -3,13 +3,12 @@ import { IntegrationPanel } from "@/app/_ui/IntegrationPanel";
 import type { Metadata } from "next";
 import { buildViewport, SITE } from "@/lib/seo";
 import { CSS, CSS2 } from "@/app/_ui/css";
-import { Wordmark, SkipLink } from "@/app/_ui/marks";
+import { SkipLink } from "@/app/_ui/marks";
+import { SiteNav } from "@/app/_ui/SiteNav";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
-import { MobileNav } from "@/app/_ui/MobileNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { SDK_ERROR_TABLE } from "@/lib/sdk-errors";
 import { Copyable } from "./Copyable";
-import { ThemeToggle } from "@/app/_ui/ThemeToggle";
 
 export const viewport = buildViewport();
 
@@ -74,31 +73,11 @@ Read ${SITE}/docs/sdk and fix only what that error points at.`,
 
 export default function SdkDocs() {
   return (
-    <div className="fw">
+    <div className="fw public-page">
       <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
 
-      <div className="navbar">
-        <div className="wrap-lp">
-          <nav className="lp-nav" aria-label="Main">
-            <Link href="/" aria-label="Veyro, home"><Wordmark size={21} tile /></Link>
-            <div className="lp-links">
-              <Link className="btn btn-q btn-sm hide-s" href="/get-started">Get started</Link>
-              <Link className="btn btn-q btn-sm hide-s" href="/how-it-works">How it works</Link>
-              <Link className="btn btn-sm" href="/check">Check eligibility</Link>
-              <ThemeToggle />
-              <MobileNav
-                items={[
-                  { href: "/get-started", label: "Get started" },
-                  { href: "/how-it-works", label: "How it works" },
-                                    { href: "/faq", label: "Questions" },
-                  { href: "/check", label: "Check eligibility" },
-                ]}
-              />
-            </div>
-          </nav>
-        </div>
-      </div>
+      <SiteNav active="/docs/sdk" />
 
       {/* Code on black, in the first screen.
           ------------------------------------------------------------------
@@ -371,7 +350,13 @@ document.querySelector("#buy").addEventListener("click", () => {
           whatever wrote the integration. This table is generated from the same source the API
           answers from, so it cannot fall out of date.
         </p>
-        <div className="tblwrap" style={{ marginTop: 16 }}>
+        <div
+          className="tblwrap"
+          style={{ marginTop: 16 }}
+          tabIndex={0}
+          role="region"
+          aria-label="SDK error codes and recovery steps"
+        >
           <table className="tbl">
             <thead>
               <tr>
