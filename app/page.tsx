@@ -9,6 +9,7 @@ import { SiteNav } from "@/app/_ui/SiteNav";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { FAQ } from "@/app/_ui/faq";
 import { Accordion } from "@/app/_ui/Accordion";
+import { Reveal, type RevealGroup } from "@/app/_ui/Reveal";
 
 export const metadata = buildMetadata("landing");
 export const viewport = buildViewport();
@@ -30,6 +31,35 @@ const STEPS = [
 
 // Answers stay shared with /faq; the homepage is a short route into the product.
 const HOME_QUESTIONS = [FAQ[0], FAQ[2], FAQ[5]];
+
+/**
+ * What moves as the page is scrolled, and how.
+ *
+ * Declared here rather than inside Reveal, so the motion is readable beside
+ * the markup it belongs to. The groups are deliberately disjoint: nothing
+ * animates inside something else that is also animating, because two fades
+ * on nested elements multiply into one slower and dimmer than either.
+ *
+ * The hero is absent on purpose. It is on screen at load, so there is nothing
+ * to reveal, and a first viewport that animates itself on arrival is a splash
+ * screen.
+ */
+const REVEAL: RevealGroup[] = [
+  // The three steps draw their own dividing rules, one after another, and
+  // rise behind them. This is the page's one authored moment: the layout is
+  // built from hairlines, so the hairlines are what move.
+  { select: ".home-steps > li", kind: "rule", stagger: 110 },
+  // The pricing panel hangs off a vertical rule, which draws downward as the
+  // panel settles. Below 760 the real border moves to the top of the panel
+  // and the drawn one follows it.
+  { select: ".home-pricing", kind: "rule-y" },
+  // Headings with their leads, in reading order.
+  { select: ".home-section-head > *", stagger: 70 },
+  { select: ".home-money-grid > div:first-child > *", stagger: 60 },
+  { select: ".home-questions-grid > div:first-child > *", stagger: 60 },
+  { select: ".public-faq > *", stagger: 70 },
+  { select: ".home-close-inner > *", stagger: 80 },
+];
 
 export default async function Home() {
   const user = await currentUser();
@@ -143,6 +173,7 @@ export default async function Home() {
           </div>
         </section>
       </main>
+      <Reveal scope=".fw" groups={REVEAL} />
       <SiteFooter />
     </div>
   );

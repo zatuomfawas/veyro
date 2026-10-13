@@ -98,16 +98,76 @@
 @media (prefers-reduced-motion: reduce) {
   .fw .band-fill > span { transform:none !important; }
 }
+/* 440ms, not 560. A full-width band whose content takes over half a second
+   to arrive is visibly empty while a reader is already looking at it, which
+   was measurable: 120ms after the money section entered, the whole dark band
+   still read as a blank rectangle. The curve does the work; the duration only
+   has to be long enough to be seen. */
 .fw[data-motion="on"] [data-reveal] {
   opacity:0;
   transform:translateY(var(--rise));
-  transition:opacity var(--t-4) var(--ease-out), transform var(--t-4) var(--ease-out);
+  transition:opacity 440ms var(--ease-out), transform 440ms var(--ease-out);
 }
 .fw[data-motion="on"] [data-reveal][data-shown="1"] { opacity:1; transform:none; }
 .fw[data-motion="on"] .flow[data-reveal] { transform:translate(-14px, 6px); }
 .fw[data-motion="on"] .flow[data-reveal][data-shown="1"] { transform:none; }
 .fw[data-motion="on"] .stage[data-reveal] { transform:translateY(10px) scale(.994); }
 .fw[data-motion="on"] .stage[data-reveal][data-shown="1"] { transform:none; }
+/* ---- authored entrances -------------------------------------------------
+   Three kinds, not one fade for everything.
+   -------------------------------------------------------------------------
+   The page used to reveal every section the same way: translate up, fade in,
+   next. Forty elements doing one identical thing is not an entrance, it is a
+   tic, and by the third section a reader has stopped seeing it.
+
+   What this page is actually built from is hairlines. The steps are divided
+   by them, the pricing panel is hung off one, and the money band is bounded
+   by them. So the rules draw themselves, left to right and top to bottom, and
+   the content rises behind them. The motion is the page assembling the way it
+   was drawn rather than a generic arrival, and it is the one idea here rather
+   than five.
+
+   Everything moves on transform and opacity only, so nothing reflows and
+   nothing is measured mid-animation. The borders stay in the box the whole
+   time and only their colour is handed to a pseudo-element, which means the
+   layout is identical before, during and after: a hairline that animated its
+   own width would move every word beneath it. */
+
+/* A horizontal rule, drawn left to right. */
+.fw[data-motion="on"] [data-rv="rule"] { position:relative; border-top-color:transparent; }
+.fw[data-motion="on"] [data-rv="rule"]::before {
+  content:""; position:absolute; top:-1px; left:0; right:0; height:1px;
+  background:var(--line); transform:scaleX(0); transform-origin:left center;
+  transition:transform 460ms var(--ease-out); }
+.fw[data-motion="on"] [data-rv="rule"][data-shown="1"]::before { transform:scaleX(1); }
+
+/* A vertical rule, drawn downward, for the panel that hangs off one. Below
+   760 the real border moves to the top of the panel, so the drawn one moves
+   with it rather than animating an edge that is no longer there. */
+.fw[data-motion="on"] [data-rv="rule-y"] { position:relative; border-left-color:transparent; }
+.fw[data-motion="on"] [data-rv="rule-y"]::before {
+  content:""; position:absolute; left:-1px; top:0; bottom:0; width:1px;
+  background:var(--line); transform:scaleY(0); transform-origin:center top;
+  transition:transform 540ms var(--ease-out); }
+.fw[data-motion="on"] [data-rv="rule-y"][data-shown="1"]::before { transform:scaleY(1); }
+@media (max-width:760px) {
+  .fw[data-motion="on"] [data-rv="rule-y"] { border-left-color:var(--line); border-top-color:transparent; }
+  .fw[data-motion="on"] [data-rv="rule-y"]::before {
+    left:0; right:0; top:-1px; bottom:auto; width:auto; height:1px;
+    transform:scaleX(0); transform-origin:left center; }
+  .fw[data-motion="on"] [data-rv="rule-y"][data-shown="1"]::before { transform:scaleX(1); }
+}
+
+/* A surface settling rather than a line of text arriving: further to travel
+   and longer to land, because a card has more apparent mass than a sentence.
+   No scale. DESIGN.md keeps scale off this system and an entrance is not the
+   place to introduce it. */
+.fw[data-motion="on"] [data-rv="settle"] { transform:translateY(22px); }
+.fw[data-motion="on"] [data-rv="settle"][data-shown="1"] { transform:none; }
+
+/* The stagger is set as an inline delay by Reveal, so a group of any length
+   can follow its own rhythm. These three remain for markup that sets
+   data-delay directly. */
 .fw[data-motion="on"] [data-reveal][data-delay="1"] { transition-delay:70ms; }
 .fw[data-motion="on"] [data-reveal][data-delay="2"] { transition-delay:140ms; }
 .fw[data-motion="on"] [data-reveal][data-delay="3"] { transition-delay:210ms; }
