@@ -1,4 +1,3 @@
-import Link from "next/link";
 
 // "Why not just use your parent's account?"
 //
@@ -13,10 +12,15 @@ import Link from "next/link";
 // the section is now the trade itself, in two columns, with the same hairline
 // idiom the rest of the site uses for money.
 //
-// The last row is a tie and the layout says so without a word: both columns
-// carry the same weight and the same ink, because there is no handover at 18
-// yet and writing that as a win would be the one claim here that does not
-// survive somebody checking it. /legal says the same thing in as many words.
+// WHAT IS NOT HERE, AND WHERE IT IS INSTEAD. This carried a fourth row saying
+// that at 18 a parent's account and a Veyro account are the same, because
+// there is no handover yet. It was honest and it was in the wrong place: the
+// homepage is where somebody decides whether to look further, and a section
+// built to answer one objection should not raise a second one nobody asked
+// about. It is not buried either. /legal states it as a real gap rather than
+// a design decision, the FAQ says it would be wrong to imply otherwise, and
+// both are linked from this page. Say it where somebody is reading about what
+// is unfinished, not where they are deciding whether to start.
 //
 // THE PROCESSOR IS NOT NAMED. This section exists to close the free-workaround
 // objection, and naming the rails inside the answer re-opens it: a reader told
@@ -32,7 +36,7 @@ import Link from "next/link";
 // provider's terms. Nothing here is argued that is not already said to
 // somebody we are sending away.
 
-type Row = { t: string; theirs: React.ReactNode; yours: React.ReactNode; tie?: boolean };
+type Row = { t: string; theirs: React.ReactNode; yours: React.ReactNode };
 
 const ROWS: Row[] = [
   {
@@ -55,15 +59,6 @@ const ROWS: Row[] = [
       account can be closed with the money still in it.</>,
     yours: <>You sign in as yourself and your guardian signs in as themselves. Nobody is
       pretending to be anybody.</>,
-  },
-  {
-    t: "At 18",
-    tie: true,
-    theirs: <>The account never becomes yours. You transfer it or you start again, and the
-      payment history does not come with you.</>,
-    yours: <>The same, today. There is no handover yet, we are building it, and we are not
-      going to pretend it exists.{" "}
-      <Link className="linkbtn" href="/legal">What else is unfinished</Link>.</>,
   },
 ];
 
@@ -92,7 +87,7 @@ export function ParentAccount() {
         </div>
 
         {ROWS.map((r) => (
-          <div className="trade-r" key={r.t} data-tie={r.tie ? "1" : undefined}>
+          <div className="trade-r" key={r.t}>
             <dt className="trade-t">{r.t}</dt>
             <dd className="trade-a">
               <span className="trade-l">On your parent&rsquo;s account</span>

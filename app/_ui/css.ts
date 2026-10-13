@@ -1074,63 +1074,70 @@ export const CSS = `
 }
 
 /* ---- why not just use your parent's account ----------------------------
-   The trade, drawn as a trade.
+   The trade, with your side built as a surface.
    ----------------------------------------------------------------------
    This was five claims with a tick beside each, which DESIGN.md names as a
    forbidden pattern and which is also the wrong shape for the argument: a
-   row of ticks asks to be believed, a comparison asks to be read. Three
-   columns -- what the row is about, what happens on a parent's account,
-   what happens on your own -- with the hairline idiom the rest of the site
-   uses for money, and one vertical rule down the middle so the two halves
-   are visibly two halves.
+   row of ticks asks to be believed, a comparison asks to be read.
 
-   The rule is drawn at half the gutter rather than at its edge, so the two
-   columns sit the same distance from it. Shifted by the whole gap, as it was
-   first written, the line lands flush against the left-hand track and the
-   trade looks lopsided at the one place it is meant to be even.
+   The two halves are not distinguished by colour but by material. What
+   happens on a parent's account sits on the page's own ground in the
+   secondary ink, the way the rest of the page's prose does. What happens on
+   yours is a raised white panel, which on this tinted section is the only
+   place a card can legitimately read as raised at all -- DESIGN.md's point
+   that a raised surface earns its edge from --line, and on a tinted ground
+   it earns it from the fill as well. One side is a description; the other
+   is a thing you could put your finger on, which is the argument.
 
-   The weight does the arguing. The left column takes the secondary ink and
-   the right takes full ink, so a reader skimming only the right-hand side
-   still gets the case. The tie row gives both columns the same ink, which
-   states the honest answer without a word: at 18 there is no difference
-   yet. */
+   The panel takes the pine top rule the journey's first step already uses
+   to say "start here". It is the one green on the section, it is identity
+   rather than money, and nothing else is tinted, so the colour stays worth
+   something. */
 .fw .trade { margin:var(--sp-8) 0 0; }
 .fw .trade-head, .fw .trade-r { display:grid;
   grid-template-columns:minmax(0,0.72fr) minmax(0,1fr) minmax(0,1fr);
   column-gap:var(--sp-7); }
-.fw .trade-head { padding-bottom:var(--sp-3); font-size:var(--fs-2); }
+.fw .trade-head { font-size:var(--fs-2); }
+/* The same vertical padding on every header cell, so the two labels share a
+   baseline. The panel cell carries its own fill and had its own padding,
+   which put "On your own" six pixels off the label beside it. */
+.fw .trade-head > span { padding-block:var(--sp-4); align-self:stretch; }
 .fw .trade-hl { color:var(--ink-3); }
 .fw .trade-hr { color:var(--ink); font-weight:var(--fw-med); }
-.fw .trade-r { padding:var(--sp-6) 0; border-top:1px solid var(--line); }
-.fw .trade-r:last-child { border-bottom:1px solid var(--line); }
+/* The vertical padding lives on the cells, not on the row, so the panel's
+   fill covers the whole height of a row instead of only its text. */
+.fw .trade-r { border-top:1px solid var(--line); }
+.fw .trade-t, .fw .trade-a, .fw .trade-b { padding-block:var(--sp-6); }
 .fw .trade-t { margin:0; font-size:var(--fs-4); font-weight:var(--fw-bold);
   letter-spacing:-0.012em; }
 .fw .trade-a, .fw .trade-b { margin:0; font-size:var(--fs-3); line-height:1.6; }
 .fw .trade-a { color:var(--ink-3); }
-/* The one vertical rule, drawn on the cell that starts the second half. It
-   runs row by row rather than as one element, so it breaks where the rows
-   break and never outlives the last one. */
-.fw .trade-b { color:var(--ink); border-left:1px solid var(--line);
-  padding-left:calc(var(--sp-7) / 2); margin-left:calc(var(--sp-7) / -2); }
-.fw .trade-head > span:last-child { border-left:1px solid transparent;
-  padding-left:calc(var(--sp-7) / 2); margin-left:calc(var(--sp-7) / -2); }
-/* The tie: same ink both sides, because that is the honest answer and the
-   layout can say it faster than a sentence can. */
-.fw .trade-r[data-tie="1"] .trade-b { color:var(--ink-3); }
-.fw .trade-r[data-tie="1"] .trade-t { color:var(--ink-2); }
+.fw .trade-b { color:var(--ink); background:var(--card);
+  border-left:1px solid var(--line); border-right:1px solid var(--line);
+  padding-inline:var(--sp-6); }
+.fw .trade-r:last-child .trade-b { border-bottom:1px solid var(--line); }
+/* The panel starts at the column header, so the label sits on it rather than
+   floating above it, and the accent rule tops the whole thing. */
+.fw .trade-head > span:last-child { background:var(--card);
+  border-left:1px solid var(--line); border-right:1px solid var(--line);
+  border-top:2px solid var(--pine);
+  padding-inline:var(--sp-6); }
 /* The per-cell labels exist for the stacked layout. Above it the column
-   headers carry the same words once, so these would be five repetitions of
-   each. */
+   headers carry the same words once, so these would be three repetitions. */
 .fw .trade-l { display:none; }
 @media (max-width:860px) {
   .fw .trade-head { display:none; }
-  .fw .trade-head, .fw .trade-r { grid-template-columns:minmax(0,1fr); }
-  .fw .trade-r { padding:var(--sp-6) 0; row-gap:var(--sp-4); }
-  .fw .trade-b { border-left:0; padding-left:0; margin-left:0; }
+  .fw .trade-r { grid-template-columns:minmax(0,1fr); row-gap:var(--sp-4); }
+  .fw .trade-t, .fw .trade-a { padding-block:0; }
+  .fw .trade-r { padding-block:var(--sp-6); }
+  .fw .trade-t { margin-bottom:var(--sp-4); }
+  /* Stacked, the panel becomes a block of its own under the description it
+     answers, keeping the same fill, edge and accent. */
+  .fw .trade-b { padding:var(--sp-5); border:1px solid var(--line);
+    border-top:2px solid var(--pine); }
+  .fw .trade-r:last-child .trade-b { border-bottom:1px solid var(--line); }
   .fw .trade-l { display:block; margin-bottom:var(--sp-1);
     font-size:var(--fs-2); color:var(--ink-3); }
-  .fw .trade-r[data-tie="1"] .trade-b .trade-l,
-  .fw .trade-b .trade-l { color:var(--ink-3); }
 }
 
 /* ---- guardian permissions ----------------------------------------------
