@@ -9,7 +9,8 @@ import { SiteNav } from "@/app/_ui/SiteNav";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { FAQ } from "@/app/_ui/faq";
 import { Accordion } from "@/app/_ui/Accordion";
-import { Reveal, type RevealGroup } from "@/app/_ui/Reveal";
+import { type RevealGroup } from "@/app/_ui/Reveal";
+import { SiteReveal } from "@/app/_ui/SiteReveal";
 
 export const metadata = buildMetadata("landing");
 export const viewport = buildViewport();
@@ -44,7 +45,7 @@ const HOME_QUESTIONS = [FAQ[0], FAQ[2], FAQ[5]];
  * to reveal, and a first viewport that animates itself on arrival is a splash
  * screen.
  */
-const REVEAL: RevealGroup[] = [
+const HOME_REVEAL: RevealGroup[] = [
   // The three steps draw their own dividing rules, one after another, and
   // rise behind them. This is the page's one authored moment: the layout is
   // built from hairlines, so the hairlines are what move.
@@ -173,7 +174,7 @@ export default async function Home() {
           </div>
         </section>
       </main>
-      <Reveal scope=".fw" groups={REVEAL} />
+      <SiteReveal extra={HOME_REVEAL} />
       <SiteFooter />
     </div>
   );

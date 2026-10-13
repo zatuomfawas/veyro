@@ -93,12 +93,20 @@ export function Reveal({ scope, groups }: { scope: string; groups: RevealGroup[]
         for (const e of entries) {
           if (!e.isIntersecting) continue;
           const el = e.target as HTMLElement;
+          // Promoted for the length of the animation and then put back.
+          // will-change left on permanently keeps a compositing layer per
+          // element for the rest of the session, which on a page with forty
+          // of them costs memory and can make later scrolling worse than the
+          // animation ever improved it.
+          el.style.willChange = "opacity, transform";
           el.dataset.shown = "1";
           io.unobserve(el);
-          // The delay has done its job; leaving it on would apply to any
-          // later transition this element happens to run.
-          el.addEventListener("transitionend", () => { el.style.transitionDelay = ""; },
-            { once: true });
+          el.addEventListener("transitionend", () => {
+            el.style.willChange = "";
+            // The delay has done its job; leaving it on would apply to any
+            // later transition this element happens to run.
+            el.style.transitionDelay = "";
+          }, { once: true });
         }
       },
       // Positive, so the root box is grown downward and an element starts
@@ -130,6 +138,7 @@ export function Reveal({ scope, groups }: { scope: string; groups: RevealGroup[]
         delete el.dataset.rv;
         delete el.dataset.shown;
         el.style.transitionDelay = "";
+        el.style.willChange = "";
       }
     };
   }, [scope, groups]);

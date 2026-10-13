@@ -3,6 +3,7 @@ import { buildViewport, SITE } from "@/lib/seo";
 import { SkipLink } from "@/app/_ui/marks";
 import { SiteNav } from "@/app/_ui/SiteNav";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
+import { SiteReveal } from "@/app/_ui/SiteReveal";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { ScrollProgress } from "@/app/_ui/ScrollProgress";
 import { FAQ, AUDIENCE_GROUPS } from "@/app/_ui/faq";
@@ -141,6 +142,7 @@ export default function FaqPage() {
       </main>
 
       <ScrollTop />
+      <SiteReveal />
       <SiteFooter />
     </div>
   );

@@ -5,6 +5,7 @@ import { buildViewport, SITE } from "@/lib/seo";
 import { SkipLink } from "@/app/_ui/marks";
 import { SiteNav } from "@/app/_ui/SiteNav";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
+import { SiteReveal } from "@/app/_ui/SiteReveal";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { SDK_ERROR_TABLE } from "@/lib/sdk-errors";
 import { Copyable } from "./Copyable";
@@ -402,6 +403,7 @@ document.querySelector("#buy").addEventListener("click", () => {
       </main>
 
       <ScrollTop />
+      <SiteReveal />
       <SiteFooter />
     </div>
   );

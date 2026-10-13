@@ -75,7 +75,7 @@
   --ease-out: cubic-bezier(.22, 1, .36, 1);
   --t-3: 320ms;
   --t-4: 560ms;
-  --rise: 14px;
+  --rise: 10px;
   --lift: 0 1px 2px rgba(17,19,21,.06), 0 4px 12px rgba(17,19,21,.07);
 }
 .fw .btn, .fw .linkbtn, .fw .input, .fw .select, .fw .ta, .fw .choice, .fw .tick, .fw .tick::after, .fw a.card, .fw .mobmenu {
@@ -98,15 +98,25 @@
 @media (prefers-reduced-motion: reduce) {
   .fw .band-fill > span { transform:none !important; }
 }
-/* 440ms, not 560. A full-width band whose content takes over half a second
-   to arrive is visibly empty while a reader is already looking at it, which
-   was measurable: 120ms after the money section entered, the whole dark band
-   still read as a blank rectangle. The curve does the work; the duration only
-   has to be long enough to be seen. */
+/* OPACITY FINISHES FIRST, AND THE TRAVEL FINISHES AFTER IT.
+   ------------------------------------------------------------------------
+   One duration for both is what makes a scroll entrance feel like an effect
+   rather than like a page settling. Text that is still at half opacity while
+   it is also still moving cannot be read, so a reader waits for the whole
+   animation before they can start. Fading in over 240ms and finishing the
+   10px of travel over 420 means the words are legible almost immediately and
+   the movement resolves underneath them. It is the difference between
+   watching an animation and not noticing one.
+
+   440ms replaced 560 for the same reason: a full-width band that takes over
+   half a second to populate is visibly empty while somebody is already
+   looking at it, measured at 120ms after the money band entered. The travel
+   came down from 14px to 10 because at body size anything further reads as a
+   slide rather than as a settle. */
 .fw[data-motion="on"] [data-reveal] {
   opacity:0;
   transform:translateY(var(--rise));
-  transition:opacity 440ms var(--ease-out), transform 440ms var(--ease-out);
+  transition:opacity 240ms var(--ease-out), transform 420ms var(--ease-out);
 }
 .fw[data-motion="on"] [data-reveal][data-shown="1"] { opacity:1; transform:none; }
 .fw[data-motion="on"] .flow[data-reveal] { transform:translate(-14px, 6px); }
@@ -162,7 +172,8 @@
    and longer to land, because a card has more apparent mass than a sentence.
    No scale. DESIGN.md keeps scale off this system and an entrance is not the
    place to introduce it. */
-.fw[data-motion="on"] [data-rv="settle"] { transform:translateY(22px); }
+.fw[data-motion="on"] [data-rv="settle"] { transform:translateY(16px);
+  transition-duration:260ms, 520ms; }
 .fw[data-motion="on"] [data-rv="settle"][data-shown="1"] { transform:none; }
 
 /* The stagger is set as an inline delay by Reveal, so a group of any length
@@ -2721,7 +2732,15 @@
 .fw .how-chapter:first-child { padding-top:0; }
 .fw .how-chapter h2 { font-size:var(--fs-7); line-height:1.25; letter-spacing:-0.025em; max-width:28ch; }
 .fw .how-chapter h3 { font-size:var(--fs-4); line-height:1.5; margin-top:var(--sp-5); }
-.fw .how-chapter .body { max-width:none; font-size:var(--fs-4); line-height:1.65; }
+/* The chapter column is 780px wide, which at 16.5px carries about 100
+   characters to the line: measured on the rendered page, nine blocks on this
+   page ran between 98 and 115. max-width:none was removing the measure that
+   the rest of the site's body copy keeps, on its longest read. --m-body puts
+   it back at roughly 76, inside the 65 to 75 a reading measure exists for.
+   The column itself is unchanged; only the text inside it is bounded, so
+   headings, tables and quotes still use the full width. */
+.fw .how-chapter .body { max-width:var(--m-body); font-size:var(--fs-4); line-height:1.65; }
+.fw .how-chapter > p, .fw .how-chapter li > p, .fw .how-chapter dd { max-width:var(--m-body); }
 .fw .how-chapter .small { max-width:none; font-size:var(--fs-3); line-height:1.65; }
 .fw .how-chapter p { margin-top:var(--sp-3); }
 .fw .how-chapter-head { margin-bottom:var(--sp-4); }
@@ -2735,7 +2754,8 @@
 .fw .how-steps h3 { margin-top:0; }
 .fw .how-steps p { margin-top:var(--sp-2); font-size:var(--fs-3); line-height:1.65; color:var(--ink-2); }
 .fw .how-evidence-note { margin-top:var(--sp-5); padding:var(--sp-4) var(--sp-5);
-  background:var(--surface); border:1px solid var(--line); }
+  background:var(--surface); border:1px solid var(--line);
+  max-width:var(--m-body); }
 .fw .how-evidence-note p:first-child { margin-top:0; }
 .fw .how-country-list { list-style:none; margin:var(--sp-4) 0 0; padding:0; }
 .fw .how-country-list li { padding-block:var(--sp-3); font-size:var(--fs-3); color:var(--ink-2);

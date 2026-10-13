@@ -6,6 +6,7 @@ import {
 import { SkipLink } from "@/app/_ui/marks";
 import { SiteNav } from "@/app/_ui/SiteNav";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
+import { SiteReveal } from "@/app/_ui/SiteReveal";
 import { RoleStack } from "@/app/_ui/RoleStack";
 import { ScrollProgress } from "@/app/_ui/ScrollProgress";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
@@ -308,6 +309,7 @@ export default function HowItWorks() {
         </div>
       </main>
       <ScrollTop />
+      <SiteReveal />
       <SiteFooter />
     </div>
   );

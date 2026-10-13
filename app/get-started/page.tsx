@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { buildViewport, SITE } from "@/lib/seo";
 import { SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
+import { SiteReveal } from "@/app/_ui/SiteReveal";
 import { SiteNav } from "@/app/_ui/SiteNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { AskYourGuardian } from "./AskYourGuardian";
@@ -314,6 +315,7 @@ export default function GetStarted() {
       </main>
 
       <ScrollTop />
+      <SiteReveal />
       <SiteFooter />
     </div>
   );

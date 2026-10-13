@@ -6,6 +6,7 @@ import { feeMinor, EXAMPLE_EARNINGS_MINOR, FREE_FLOOR_MINOR } from "@/lib/pricin
 import { formatMinor } from "@/lib/money";
 import { SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
+import { SiteReveal } from "@/app/_ui/SiteReveal";
 import { SiteNav } from "@/app/_ui/SiteNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 
@@ -214,6 +215,7 @@ export default function Pricing() {
       </main>
 
       <ScrollTop />
+      <SiteReveal />
       <SiteFooter />
     </div>
   );
