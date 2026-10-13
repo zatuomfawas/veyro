@@ -2,7 +2,6 @@ import Link from "next/link";
 import { IntegrationPanel } from "@/app/_ui/IntegrationPanel";
 import type { Metadata } from "next";
 import { buildViewport, SITE } from "@/lib/seo";
-import { CSS, CSS2 } from "@/app/_ui/css";
 import { SkipLink } from "@/app/_ui/marks";
 import { SiteNav } from "@/app/_ui/SiteNav";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
@@ -74,7 +73,6 @@ Read ${SITE}/docs/sdk and fix only what that error points at.`,
 export default function SdkDocs() {
   return (
     <div className="fw public-page">
-      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
 
       <SiteNav active="/docs/sdk" />

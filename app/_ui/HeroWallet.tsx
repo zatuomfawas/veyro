@@ -8,7 +8,7 @@ import {
 /** An illustrative example; earnings and fees use the product's shared arithmetic. */
 export function HeroWallet() {
   return (
-    <div className="hw contrast-surface" data-count-group>
+    <div className="hw" data-count-group>
       <div className="hw-head">
         <p className="hw-k">Product earnings</p>
         <span className="hw-eg">Example</span>

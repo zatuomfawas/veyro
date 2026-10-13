@@ -32,7 +32,6 @@ import { consentState } from "@/lib/consent";
 import { describeRequirements } from "@/lib/stripe-account";
 import { formatMinor } from "@/lib/checkout";
 
-import { CSS, CSS2 } from "@/app/_ui/css";
 import { Notice } from "@/app/_ui/form";
 import { Requirements } from "@/app/_ui/Requirements";
 import { SIGNUP_COUNTRIES } from "@/app/_ui/countries";
@@ -342,7 +341,6 @@ export default async function FounderDashboard() {
 
   return (
     <div className="fw founder-dashboard">
-      <style>{CSS + CSS2}</style>
       <DashNav role="FOUNDER" current="dashboard" />
       <RevealAnchor />
       <main id="main" className="wrap-w dashboard-main">
@@ -358,13 +356,6 @@ export default async function FounderDashboard() {
           <a href="#revenue-details">Revenue &amp; fees</a>
           <a href="#account-setup">Account &amp; setup</a>
         </nav>
-
-        <div className="dashboard-top">
-          <EarningsHero fold={primaryFold} otherFolds={otherFolds}
-            checkoutHref={snippetLive ? payPath : null} />
-          <PayoutOverview schedule={payoutSchedule} latest={payouts[0] ?? null}
-            hasAccount={Boolean(account?.providerAccountId)} guardianName={guardianName} />
-        </div>
 
         {needsSetup && (
           <section className="dashboard-actions" aria-labelledby="action-heading">
@@ -392,6 +383,13 @@ export default async function FounderDashboard() {
             </div>
           </section>
         )}
+        <div className="dashboard-top">
+          <EarningsHero fold={primaryFold} otherFolds={otherFolds}
+            checkoutHref={snippetLive ? payPath : null} />
+          <PayoutOverview schedule={payoutSchedule} latest={payouts[0] ?? null}
+            hasAccount={Boolean(account?.providerAccountId)} guardianName={guardianName} />
+        </div>
+
         {responseNeeded > 0 && (
           <Notice tone="clay" head={`${responseNeeded} disputed ${responseNeeded === 1 ? "payment needs" : "payments need"} a response`}>
             {guardianName} responds in Stripe. <Link className="linkbtn" href="#disputes">View the dispute and deadline</Link>.

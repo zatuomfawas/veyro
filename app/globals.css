@@ -1,6 +1,6 @@
 /* Document-level reset only.
  *
- * Everything visual lives in the Veyro design system (app/_ui/css.ts), which is
+ * Everything visual lives in the Veyro design system (app/_ui/veyro.css), which is
  * scoped to .fw and owns its own reset, type scale, colour and spacing tokens.
  * This file deliberately stays minimal so the two never fight. */
 
@@ -40,7 +40,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* This must match --paper in app/_ui/css.ts.
+  /* This must match --paper in app/_ui/veyro.css.
    *
    * The literal is unavoidable: the design tokens are scoped to .fw on purpose,
    * so body cannot read var(--paper). It has to be set here anyway, because .fw
@@ -56,7 +56,7 @@ body {
 
 /* Route transition. See app/template.tsx.
  *
- * Lives here rather than in css.ts because the wrapper sits outside .fw, where
+ * Lives here rather than in veyro.css because the wrapper sits outside .fw, where
  * that stylesheet's rules do not reach.
  *
  * No starting opacity is declared anywhere: the element is opaque by default

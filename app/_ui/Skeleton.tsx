@@ -1,4 +1,3 @@
-import { CSS, CSS2 } from "@/app/_ui/css";
 
 // The dashboard's shape, while the dashboard is being fetched.
 //
@@ -32,7 +31,6 @@ function Bar({ w, h = 14, mt = 0 }: { w: string; h?: number; mt?: number }) {
 export function DashboardSkeleton({ what = "your money" }: { what?: string }) {
   return (
     <div className="fw founder-dashboard">
-      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <div className="navbar dashboard-nav" data-role="founder" aria-hidden="true">
         <div className="wrap-w">
           <div className="lp-nav dashboard-nav-inner"><Bar w="104px" h={20} /><Bar w="190px" h={16} /></div>
@@ -134,7 +132,6 @@ export function PageSkeleton({
 }: { what: string; left?: number; right?: number }) {
   return (
     <div className="fw">
-      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <DashChrome />
       <main className="wrap-w" style={{ paddingTop: 24, paddingBottom: 56 }}>
         <p className="sr-only" role="status" aria-live="polite">
@@ -190,7 +187,6 @@ export function PageSkeleton({
 export function NarrowSkeleton({ what }: { what: string }) {
   return (
     <div className="fw">
-      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       {/* .task-nav, as /pay and the consent page both render it. Without the
           class the bar was a plain .lp-nav and sat at a different height. */}
       <div className="wrap-s" aria-hidden="true">
@@ -241,7 +237,6 @@ export function ListSkeleton({
 }: { what: string; rows?: number }) {
   return (
     <div className="fw">
-      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <DashChrome />
       <main className="wrap-w" style={{ paddingTop: 24, paddingBottom: 56 }}>
         <p className="sr-only" role="status" aria-live="polite">
@@ -304,7 +299,6 @@ export function ListSkeleton({
 export function AuthSkeleton({ what }: { what: string }) {
   return (
     <div className="fw auth-page">
-      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <div className="navbar">
         <div className="wrap-lp">
           <div className="lp-nav">

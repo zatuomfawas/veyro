@@ -20,7 +20,7 @@ export function PayoutOverview({ schedule, latest, hasAccount, guardianName }: {
   schedule: PayoutSchedule | null; latest: LatestRequest | null; hasAccount: boolean; guardianName: string;
 }) {
   return (
-    <section className="payout-overview" aria-labelledby="payout-overview-heading">
+    <section className="payout-overview" data-setup={!hasAccount ? "waiting" : undefined} aria-labelledby="payout-overview-heading">
       <div className="payout-overview-heading">
         <h2 id="payout-overview-heading">Next payout</h2>
         {schedule && <span className="payout-enabled">{schedule.payoutsEnabled ? "Payouts enabled" : "Not enabled yet"}</span>}

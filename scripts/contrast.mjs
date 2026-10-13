@@ -1,4 +1,4 @@
-// Measures the design tokens in app/_ui/css.ts against WCAG 2.2 AA.
+// Measures the design tokens in app/_ui/veyro.css against WCAG 2.2 AA.
 //
 // This exists because the token block tells you not to lighten those values
 // without re-running the measurement, and a comment saying "we measured it"
@@ -22,7 +22,7 @@ const ratio = (a, b) => {
   return (hi + 0.05) / (lo + 0.05);
 };
 
-const css = readFileSync(new URL("../app/_ui/css.ts", import.meta.url), "utf8");
+const css = readFileSync(new URL("../app/_ui/veyro.css", import.meta.url), "utf8");
 // The light palette is everything before the first dark token block. Scoping
 // matters: a token light defines as a keyword (--pine-bg: transparent) has no
 // hex to match, and an unscoped search happily returns the DARK value from
@@ -37,7 +37,7 @@ const pick = (where, name) => {
 };
 const tok = (name) => {
   const v = pick(lightCss, name);
-  if (!v) throw new Error(`token --${name} is gone from css.ts`);
+  if (!v) throw new Error(`token --${name} is gone from veyro.css`);
   return v;
 };
 
@@ -53,7 +53,7 @@ const darkBlock = (() => {
   // reported the light values as though they were the dark ones. The dark
   // paper is unambiguous: find it, then take the block it sits in.
   const at = css.indexOf("--paper:#0f1113");
-  if (at < 0) throw new Error("the dark token block is gone from css.ts");
+  if (at < 0) throw new Error("the dark token block is gone from veyro.css");
   const open = css.lastIndexOf("{", at);
   const end = css.indexOf("\n}", at);
   if (open < 0 || end < 0) throw new Error("the dark token block is malformed");

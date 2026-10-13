@@ -48,13 +48,13 @@ const VOICE = {
     doesNot: "Your guardian does not",
     yes: [
       ["Does the identity check", "With their own ID, on a secure form Veyro never sees. Once at setup, and the provider can ask again later."],
-      ["Owns the account", "The payment account is in their name. That is the part that makes this lawful."],
+      ["Owns the account", "The payment account is in their name, as the verified adult Stripe requires."],
       ["Can close or freeze it", "At any time, and not through us. Nothing in Veyro prevents it."],
     ],
     no: [
       ["Own your business", "Not your products, not your customers, not your ideas."],
       ["Approve each sale", "Nobody signs anything off. A sale is a sale."],
-      ["Approve each payout", "They approve the arrangement once. After that you move your own money without asking."],
+      ["Approve each payout", "Veyro records your requests and notifies them. Bank transfers follow the account's settings in Stripe."],
     ],
   },
   guardian: {
@@ -62,13 +62,13 @@ const VOICE = {
     doesNot: "You do not",
     yes: [
       ["The identity check", "With your own ID, on the provider's own form, which Veyro never sees. Once at setup, and they can ask again later."],
-      ["Own the account", "The payment account is in your name. That is the part that makes this lawful."],
+      ["Own the account", "The payment account is in your name, as the verified adult Stripe requires."],
       ["Close or freeze it", "At any time, and not through us. Nothing in Veyro prevents it."],
     ],
     no: [
       ["Own their business", "Not their products, not their customers, not their ideas."],
       ["Approve each sale", "Nobody signs anything off. A sale is a sale."],
-      ["Approve each payout", "You approve the arrangement once. After that they move their own money without asking you."],
+      ["Approve each payout", "Veyro records their requests and notifies you. Bank transfers follow the account's settings in Stripe."],
     ],
   },
 } as const;

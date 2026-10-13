@@ -14,7 +14,7 @@ import { ImageResponse } from "next/og";
 export const OG_SIZE = { width: 1200, height: 630 };
 export const OG_CONTENT_TYPE = "image/png";
 
-// Brand tokens and the accent-mark clip-path, both taken from app/_ui/css.ts
+// Brand tokens and the accent-mark clip-path, both taken from app/_ui/veyro.css
 // (--brand, --reverse, and the polygon used by .dmark) so the card matches the
 // design system rather than approximating it.
 const BRAND = "#111315";

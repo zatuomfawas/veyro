@@ -8,10 +8,9 @@
 // attribute — and the absence of it is light. The system setting is no longer
 // consulted anywhere.
 //
-// The flag is written once, on <html>. The tokens live on .fw — a page injects
-// its own <style> and scopes everything to .fw rather than :root — but the
-// dark rules match on an ancestor carrying the attribute, so a .fw inherits it
-// wherever and whenever it mounts.
+// The flag is written once, on <html>. The shared global stylesheet scopes
+// tokens to .fw rather than :root. Dark rules match an ancestor carrying the
+// attribute, so a .fw inherits the theme wherever and whenever it mounts.
 //
 // No state is read during render. The server cannot know what is in
 // localStorage, so rendering from it would produce markup the client
@@ -60,8 +59,8 @@ function emit() { for (const fn of listeners) fn(); }
 
 export function ThemeToggle() {
   // The inline script in the layout has already set the attribute before
-  // paint. This re-applies it after hydration so a page that mounted a new
-  // .fw wrapper gets the flag too.
+  // paint. This re-applies the stored preference after hydration; every .fw
+  // wrapper inherits the flag from <html>.
   useEffect(() => { apply(read()); }, []);
 
   // No matchMedia subscription any more. Nothing about the rendered theme

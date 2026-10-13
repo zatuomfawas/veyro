@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { buildViewport, SITE } from "@/lib/seo";
-import { CSS, CSS2 } from "@/app/_ui/css";
 import { SkipLink } from "@/app/_ui/marks";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { SiteNav } from "@/app/_ui/SiteNav";
@@ -115,7 +114,6 @@ const QUESTIONS: QA[] = [
 export default function ForParents() {
   return (
     <div className="fw public-page parents-page">
-      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
       <SiteNav active="/for-parents" cta={{ href: "/auth/signup", label: "Create account" }} />
 

@@ -1,4 +1,3 @@
-import { CSS, CSS2 } from "@/app/_ui/css";
 import { SkipLink } from "@/app/_ui/marks";
 import { SiteNav } from "@/app/_ui/SiteNav";
 
@@ -15,7 +14,6 @@ export function AuthShell({
 }) {
   return (
     <div className="fw auth-page">
-      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
 
       <SiteNav />

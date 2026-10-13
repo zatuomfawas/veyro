@@ -15,10 +15,9 @@ import type { NextConfig } from "next";
 // there is no fonts.gstatic.com entry. Images stay on 'self' plus data: URIs,
 // which is what the icon and the OG cards use.
 //
-// 'unsafe-inline' for styles is unavoidable here: the design system ships as a
-// string injected into a <style> tag on every page, and React sets inline style
-// attributes throughout. Removing it means hashing or nonce-ing every one, which
-// is a real change to how the system is delivered, not a config tweak.
+// The shared design system is a native global CSS asset. React also sets inline
+// style attributes for dynamic sizes and component layout, so style-src keeps
+// 'unsafe-inline' for those attributes.
 //
 // 'unsafe-inline' IS granted for scripts, and that is a reversal of what this
 // file said before. The previous policy was wrong and it broke the site.

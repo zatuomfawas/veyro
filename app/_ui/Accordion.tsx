@@ -53,7 +53,8 @@ export function Accordion({
 
     const move = (open: boolean) => {
       // Read the currently presented height before cancelling an interrupted run.
-      const start = panel.getBoundingClientRect().height;
+      // Closed native details can retain descendant layout rectangles in Chromium.
+      const start = details.open ? panel.getBoundingClientRect().height : 0;
       animation?.cancel();
       animation = null;
       if (!open && panel.contains(document.activeElement)) trigger.focus();

@@ -22,7 +22,6 @@ import { authUrlWithNext } from "@/lib/next-path";
 import { describeRequirements } from "@/lib/stripe-account";
 import { Requirements } from "@/app/_ui/Requirements";
 
-import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 import { Notice } from "@/app/_ui/form";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
@@ -47,7 +46,6 @@ const fmtDate = (d: Date | string) =>
 function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="fw">
-      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
       <header className="task-navbar">
         <div className="wrap-s">

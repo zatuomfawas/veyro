@@ -5,7 +5,6 @@ import { buildViewport } from "@/lib/seo";
 import { db } from "@/lib/db";
 import { currentUser } from "@/lib/auth";
 import { canTakePayment } from "@/lib/sale-rules";
-import { CSS, CSS2 } from "@/app/_ui/css";
 import { DashNav, DashHeader, Section, EmptyState, type DashRole } from "@/app/_ui/dash";
 import { FocusButton } from "@/app/_ui/FocusButton";
 import NewProduct, { NAME_FIELD_ID } from "../NewProduct";
@@ -59,7 +58,6 @@ export default async function ProductsPage() {
 
   return (
     <div className="fw founder-workspace">
-      <style>{CSS + CSS2}</style>
       <DashNav role={user.role as DashRole} current="products" />
 
       <main id="main" className="wrap-w" style={{ paddingTop: 24, paddingBottom: 56 }}>

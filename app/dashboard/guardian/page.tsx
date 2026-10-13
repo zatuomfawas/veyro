@@ -21,7 +21,6 @@ import { foldWallet, type Wallet } from "@/lib/ledger";
 import { describeRequirements } from "@/lib/stripe-account";
 import { formatMinor } from "@/lib/checkout";
 
-import { CSS, CSS2 } from "@/app/_ui/css";
 import { Notice } from "@/app/_ui/form";
 import { Requirements } from "@/app/_ui/Requirements";
 import SetUpPayments from "@/app/_ui/SetUpPayments";
@@ -129,7 +128,6 @@ export default async function GuardianDashboard() {
 
   return (
     <div className="fw">
-      <style>{CSS + CSS2}</style>
       <DashNav role="GUARDIAN" current="dashboard" />
 
       <main id="main" className="wrap-w" style={{ paddingTop: 24, paddingBottom: 56 }}>

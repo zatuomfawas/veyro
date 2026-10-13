@@ -15,7 +15,6 @@ import { buildViewport } from "@/lib/seo";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 
-import { CSS, CSS2 } from "@/app/_ui/css";
 import { Notice } from "@/app/_ui/form";
 import { SIGNUP_COUNTRIES } from "@/app/_ui/countries";
 import { DashNav, DashHeader, Section, SUPPORT_EMAIL, fmtDate, type DashRole } from "@/app/_ui/dash";
@@ -49,7 +48,6 @@ export default async function SettingsPage() {
 
   return (
     <div className="fw">
-      <style>{CSS + CSS2}</style>
       <DashNav role={user.role as DashRole} current="settings" />
 
       <main id="main" className="wrap-w" style={{ paddingTop: 24, paddingBottom: 56 }}>

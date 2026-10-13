@@ -21,7 +21,6 @@ import { db } from "@/lib/db";
 import { currentUser } from "@/lib/auth";
 import { buildViewport } from "@/lib/seo";
 import { saleBlockers } from "@/lib/checkout";
-import { CSS, CSS2 } from "@/app/_ui/css";
 import { SkipLink } from "@/app/_ui/marks";
 import { PreviewBody, PreviewChrome } from "../PreviewBody";
 
@@ -59,7 +58,6 @@ export default async function PreviewPage({
 
   return (
     <div className="fw">
-      <style>{CSS + CSS2}</style>
       <SkipLink />
       <PreviewChrome />
       <PreviewBody

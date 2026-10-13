@@ -93,12 +93,10 @@ export function RevealAnchor() {
       const id = decodeURIComponent(url.hash.slice(1));
       if (!id || !document.getElementById(id)) return;
 
-      // Both, and in that order. preventDefault stops the browser's own jump
-      // to a target that is still folded away; stopPropagation keeps the click
-      // from reaching next/link, which would otherwise route the hash itself
-      // and scroll -- or fail to -- on its own terms.
+      // Reveal before scrolling. Keep propagation so link callbacks, such as
+      // marking a notification read, still run. Next Link respects the
+      // prevented default and skips its own navigation/scroll.
       e.preventDefault();
-      e.stopPropagation();
       go(id, true);
       // The URL still changes, so Back returns and the link can be copied.
       history.pushState(null, "", url.hash);

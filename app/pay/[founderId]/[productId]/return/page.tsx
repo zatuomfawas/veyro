@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { buildViewport } from "@/lib/seo";
-import { CSS, CSS2 } from "@/app/_ui/css";
 import { Wordmark, SkipLink } from "@/app/_ui/marks";
 
 export const viewport = buildViewport();
@@ -50,7 +49,6 @@ export default async function ReturnPage({
 
   return (
     <div className="fw">
-      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
 
       <header className="task-navbar">

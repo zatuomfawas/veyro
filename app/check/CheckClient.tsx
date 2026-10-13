@@ -5,7 +5,7 @@
  * public page. No login, no database, no API calls — eligibility() is pure
  * arithmetic over the two tables below, run entirely in the browser.
  *
- * The design system lives in app/_ui/css.ts and app/_ui/marks.tsx, shared with
+ * The design system lives in app/_ui/veyro.css and app/_ui/marks.tsx, shared with
  * the other pages. This began as a verbatim copy of the prototype, including
  * the parts that were inconsistent on their own; those have since been brought
  * into line with the system rather than preserved as-found. Notice's 8px

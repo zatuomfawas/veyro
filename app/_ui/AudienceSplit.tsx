@@ -38,7 +38,7 @@ const FOUNDER = [
 // statement, and the wrong thing to render as a pine tick. Pine is the money
 // and settled colour, so a green mark against a limit on the reader's own
 // authority reads as reassurance for the thing it is withholding. The CSS has
-// a data-no guard written for exactly this (css.ts, .ticks) and this list
+// a data-no guard written for exactly this (veyro.css, .ticks) and this list
 // never set it. The fact is not dropped: it moves into the paragraph above,
 // where it reads as scope rather than as a benefit.
 const PARENT = [

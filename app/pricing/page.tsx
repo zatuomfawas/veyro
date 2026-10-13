@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { buildViewport, SITE } from "@/lib/seo";
-import { CSS, CSS2 } from "@/app/_ui/css";
 import { PriceCalculator } from "@/app/_ui/PriceCalculator";
 import { feeMinor, EXAMPLE_EARNINGS_MINOR, FREE_FLOOR_MINOR } from "@/lib/pricing";
 import { formatMinor } from "@/lib/money";
@@ -66,7 +65,6 @@ const ANY_SOON = [...INCLUDED, ...ABOVE].some((i) => i[2]);
 export default function Pricing() {
   return (
     <div className="fw public-page pricing-page">
-      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
       <SiteNav active="/pricing" />
 

@@ -3,7 +3,6 @@ import { buildMetadata, buildViewport } from "@/lib/seo";
 import { currentUser } from "@/lib/auth";
 import { FREE_FLOOR_MINOR, RATE } from "@/lib/pricing";
 import { formatMinor } from "@/lib/money";
-import { CSS, CSS2 } from "@/app/_ui/css";
 import { SkipLink } from "@/app/_ui/marks";
 import { HeroWallet } from "@/app/_ui/HeroWallet";
 import { SiteNav } from "@/app/_ui/SiteNav";
@@ -37,7 +36,6 @@ export default async function Home() {
 
   return (
     <div className="fw public-page home-page">
-      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
       <SiteNav user={user} />
 
@@ -49,8 +47,8 @@ export default async function Home() {
                 Get paid for what you make, before you&rsquo;re 18.
               </h1>
               <p className="home-lead">
-                A checkout link for your apps, templates and commissions. Your parent or
-                guardian completes payment verification. You run the business.
+                Sell your apps, templates and commissions with your own checkout link.
+                Your guardian handles verification. You run the business.
               </p>
               <div className="public-actions">
                 <Link className="btn btn-lg" href="/check">Check eligibility</Link>

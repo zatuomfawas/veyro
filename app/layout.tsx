@@ -4,11 +4,12 @@ import { Analytics } from "@vercel/analytics/next";
 import { SITE, SEO_ROUTES } from "@/lib/seo";
 import { THEME_SCRIPT } from "@/app/_ui/ThemeToggle";
 import "./globals.css";
+import "./_ui/veyro.css";
 
 // Fonts are self-hosted, not fetched from Google at runtime.
 //
-// This used to be an @import of fonts.googleapis.com inside the injected
-// <style> block in app/_ui/css.ts. Two things were wrong with that. An @import
+// This used to be an @import of fonts.googleapis.com inside the shared CSS
+// string injected into a <style> block. Two things were wrong with that. An @import
 // is only honoured at the top of a stylesheet, and that block is injected
 // mid-document, so browsers were entitled to ignore it outright. And when it did
 // work it made every first paint wait on a third-party request that can be slow,
@@ -64,20 +65,14 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
-  // The two variables land on <html>, where app/_ui/css.ts reads them for
+  // The two variables land on <html>, where app/_ui/veyro.css reads them for
   // --display and --ui.
   return (
     <html lang="en" className={`${archivo.variable} ${onest.variable}`} suppressHydrationWarning>
-      <head>
-        {/* Before first paint, so a reader who chose dark never sees the page
-            render light and then flip. Inline and synchronous on purpose:
-            anything deferred runs after the browser has already painted,
-            which is the flash this exists to prevent. suppressHydrationWarning
-            on <html> because this script legitimately changes an attribute the
-            server did not write. */}
-        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
-      </head>
       <body>
+        {/* Synchronous before page content, preserving the stored theme without
+            owning a head subtree alongside Next's metadata renderer. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
         {children}
         {/* Vercel Analytics: aggregate page views, no cookie.
  

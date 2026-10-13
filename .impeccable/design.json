@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-13T06:08:43Z",
+  "generatedAt": "2026-10-13T10:47:10Z",
   "title": "Design System: Veyro",
   "extensions": {
     "colorMeta": {
@@ -840,17 +840,52 @@
       {
         "name": "t-3",
         "value": "320ms",
-        "purpose": "Existing explanatory reveal timing; excludes the static hero and guardian guide."
+        "purpose": "Established explanatory reveal timing; guardian guide remains static."
       },
       {
         "name": "t-4",
         "value": "560ms",
-        "purpose": "Existing explanatory reveal timing; excludes the static hero and guardian guide."
+        "purpose": "Established explanatory reveal timing; guardian guide remains static."
       },
       {
         "name": "reduced-motion",
         "value": "transition-duration:0ms; animation-duration:0ms; scroll-behavior:auto",
-        "purpose": "Keep readable content visible and remove nonessential movement."
+        "purpose": "Settle disclosures and preview values immediately; retain readable content and remove nonessential movement."
+      },
+      {
+        "name": "motion-disclosure-duration",
+        "value": "240ms",
+        "purpose": "Measured native-details height; interrupted runs scale to the remaining distance."
+      },
+      {
+        "name": "motion-disclosure-ease",
+        "value": "cubic-bezier(.2,.8,.2,1)",
+        "purpose": "Interruptible disclosure opening and closing; external anchor openings settle directly."
+      },
+      {
+        "name": "motion-enter-duration",
+        "value": "240ms",
+        "purpose": "Quiet entry of the illustrative earnings preview."
+      },
+      {
+        "name": "motion-enter-ease",
+        "value": "cubic-bezier(.16,1,.3,1)",
+        "purpose": "Preview and mobile-menu entry."
+      },
+      {
+        "name": "menu-entry",
+        "value": "150ms",
+        "purpose": "Mobile navigation panel entry."
+      },
+      {
+        "name": "illustrative-count",
+        "value": "920ms; 1 - (1 - progress)^4",
+        "purpose": "Once-only illustrative sales total; static fee, final accessible value and reserved width. Never use for real account balances."
+      },
+      {
+        "name": "button-press",
+        "value": "translateY(1px)",
+        "purpose": "Immediate press feedback; removed in reduced motion."
       }
     ],
     "breakpoints": [
@@ -887,7 +922,7 @@
       "refersTo": "button-primary",
       "description": "A shared action with square shape, visible focus and no lift.",
       "html": "<button class=\"ds-button-primary\" type=\"button\">Check eligibility</button>",
-      "css": ".ds-button-primary{display:inline-flex;align-items:center;justify-content:center;height:38px;padding:0 16px;border:1px solid;border-radius:0;font-size:14px;font-weight:500;letter-spacing:-.006em;cursor:pointer;white-space:nowrap;font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;transition:background-color 110ms cubic-bezier(.4,0,.2,1),border-color 110ms cubic-bezier(.4,0,.2,1),color 110ms cubic-bezier(.4,0,.2,1);color:#ffffff;background:#111315;border-color:#111315;}.ds-button-primary:hover{background:#2b2f33;border-color:#2b2f33;}.ds-button-primary:active{background:#000000;border-color:#000000;transition-duration:0s;}.ds-button-primary:focus-visible{outline:2px solid #12513a;outline-offset:2px;border-radius:0;}.ds-button-primary:disabled{background:#eeeeec;border-color:#e3e3e0;color:#61666b;cursor:not-allowed;}@media(pointer:coarse){.ds-button-primary{min-height:44px;}}@media(prefers-reduced-motion:reduce){.ds-button-primary{transition:none;}}"
+      "css": ".ds-button-primary{display:inline-flex;align-items:center;justify-content:center;height:38px;padding:0 16px;border:1px solid;border-radius:0;font-size:14px;font-weight:500;letter-spacing:-.006em;cursor:pointer;white-space:nowrap;font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;transition:background-color 110ms cubic-bezier(.4,0,.2,1),border-color 110ms cubic-bezier(.4,0,.2,1),color 110ms cubic-bezier(.4,0,.2,1);color:#ffffff;background:#111315;border-color:#111315;}.ds-button-primary:hover{background:#2b2f33;border-color:#2b2f33;}.ds-button-primary:active{background:#000000;border-color:#000000;transition-duration:0s;}.ds-button-primary:focus-visible{outline:2px solid #12513a;outline-offset:2px;border-radius:0;}.ds-button-primary:disabled{background:#eeeeec;border-color:#e3e3e0;color:#61666b;cursor:not-allowed;}@media(pointer:coarse){.ds-button-primary{min-height:44px;}}@media(prefers-reduced-motion:reduce){.ds-button-primary{transition:none;}}.ds-button-primary:active:not(:disabled){transform:translateY(1px);}@media(prefers-reduced-motion:reduce){.ds-button-primary:active:not(:disabled){transform:none;}}"
     },
     {
       "name": "Secondary Button",
@@ -895,7 +930,7 @@
       "refersTo": "button-secondary",
       "description": "A shared action with square shape, visible focus and no lift.",
       "html": "<button class=\"ds-button-secondary\" type=\"button\">Cancel</button>",
-      "css": ".ds-button-secondary{display:inline-flex;align-items:center;justify-content:center;height:38px;padding:0 16px;border:1px solid;border-radius:0;font-size:14px;font-weight:500;letter-spacing:-.006em;cursor:pointer;white-space:nowrap;font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;transition:background-color 110ms cubic-bezier(.4,0,.2,1),border-color 110ms cubic-bezier(.4,0,.2,1),color 110ms cubic-bezier(.4,0,.2,1);color:#111315;background:#ffffff;border-color:#e3e3e0;}.ds-button-secondary:hover{background:#f7f7f6;border-color:#d4d4d1;}.ds-button-secondary:active{background:#eeeeec;border-color:#61666b;transition-duration:0s;}.ds-button-secondary:focus-visible{outline:2px solid #12513a;outline-offset:2px;border-radius:0;}.ds-button-secondary:disabled{background:#eeeeec;border-color:#e3e3e0;color:#61666b;cursor:not-allowed;}@media(pointer:coarse){.ds-button-secondary{min-height:44px;}}@media(prefers-reduced-motion:reduce){.ds-button-secondary{transition:none;}}"
+      "css": ".ds-button-secondary{display:inline-flex;align-items:center;justify-content:center;height:38px;padding:0 16px;border:1px solid;border-radius:0;font-size:14px;font-weight:500;letter-spacing:-.006em;cursor:pointer;white-space:nowrap;font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;transition:background-color 110ms cubic-bezier(.4,0,.2,1),border-color 110ms cubic-bezier(.4,0,.2,1),color 110ms cubic-bezier(.4,0,.2,1);color:#111315;background:#ffffff;border-color:#e3e3e0;}.ds-button-secondary:hover{background:#f7f7f6;border-color:#d4d4d1;}.ds-button-secondary:active{background:#eeeeec;border-color:#61666b;transition-duration:0s;}.ds-button-secondary:focus-visible{outline:2px solid #12513a;outline-offset:2px;border-radius:0;}.ds-button-secondary:disabled{background:#eeeeec;border-color:#e3e3e0;color:#61666b;cursor:not-allowed;}@media(pointer:coarse){.ds-button-secondary{min-height:44px;}}@media(prefers-reduced-motion:reduce){.ds-button-secondary{transition:none;}}.ds-button-secondary:active:not(:disabled){transform:translateY(1px);}@media(prefers-reduced-motion:reduce){.ds-button-secondary:active:not(:disabled){transform:none;}}"
     },
     {
       "name": "Quiet Button",
@@ -903,7 +938,7 @@
       "refersTo": "button-quiet",
       "description": "A shared action with square shape, visible focus and no lift.",
       "html": "<button class=\"ds-button-quiet\" type=\"button\">How it works</button>",
-      "css": ".ds-button-quiet{display:inline-flex;align-items:center;justify-content:center;height:38px;padding:0 16px;border:1px solid;border-radius:0;font-size:14px;font-weight:500;letter-spacing:-.006em;cursor:pointer;white-space:nowrap;font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;transition:background-color 110ms cubic-bezier(.4,0,.2,1),border-color 110ms cubic-bezier(.4,0,.2,1),color 110ms cubic-bezier(.4,0,.2,1);color:#4a4f54;background:transparent;border-color:transparent;}.ds-button-quiet:hover{background:#eeeeec;color:#111315;}.ds-button-quiet:active{background:#eeeeec;transition-duration:0s;}.ds-button-quiet:focus-visible{outline:2px solid #12513a;outline-offset:2px;border-radius:0;}.ds-button-quiet:disabled{background:#eeeeec;border-color:#e3e3e0;color:#61666b;cursor:not-allowed;}@media(pointer:coarse){.ds-button-quiet{min-height:44px;}}@media(prefers-reduced-motion:reduce){.ds-button-quiet{transition:none;}}"
+      "css": ".ds-button-quiet{display:inline-flex;align-items:center;justify-content:center;height:38px;padding:0 16px;border:1px solid;border-radius:0;font-size:14px;font-weight:500;letter-spacing:-.006em;cursor:pointer;white-space:nowrap;font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;transition:background-color 110ms cubic-bezier(.4,0,.2,1),border-color 110ms cubic-bezier(.4,0,.2,1),color 110ms cubic-bezier(.4,0,.2,1);color:#4a4f54;background:transparent;border-color:transparent;}.ds-button-quiet:hover{background:#eeeeec;color:#111315;}.ds-button-quiet:active{background:#eeeeec;transition-duration:0s;}.ds-button-quiet:focus-visible{outline:2px solid #12513a;outline-offset:2px;border-radius:0;}.ds-button-quiet:disabled{background:#eeeeec;border-color:#e3e3e0;color:#61666b;cursor:not-allowed;}@media(pointer:coarse){.ds-button-quiet{min-height:44px;}}@media(prefers-reduced-motion:reduce){.ds-button-quiet{transition:none;}}.ds-button-quiet:active:not(:disabled){transform:translateY(1px);}@media(prefers-reduced-motion:reduce){.ds-button-quiet:active:not(:disabled){transform:none;}}"
     },
     {
       "name": "Labelled Field",
@@ -941,9 +976,9 @@
       "name": "Product Earnings Example",
       "kind": "card",
       "refersTo": "hero-wallet",
-      "description": "Static example of the current shared fee arithmetic.",
+      "description": "One labelled sales example; runtime total counts once over 920ms with quartic ease-out. Fee and accessible final value stay static.",
       "html": "<article class=\"ds-wallet\"><div class=\"ds-wallet-head\"><span>Product earnings</span><span class=\"ds-wallet-example\">Example</span></div><div class=\"ds-wallet-body\"><p class=\"ds-wallet-product\">Notion Second Brain template</p><p class=\"ds-wallet-terms\">$12.00 each · 12 sales</p><p class=\"ds-wallet-label\">Sales this month</p><p class=\"ds-wallet-total\">$144.00</p><dl class=\"ds-wallet-fee\"><div><dt>Veyro fee</dt><dd>$1.32</dd></div></dl><p class=\"ds-wallet-note\">First $100.00 each month free. 3% on earnings above it. Stripe processing fees excluded.</p></div></article>",
-      "css": ".ds-wallet{border:1px solid #e3e3e0;border-radius:0;background:#fff;color:#111315;font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;font-variant-numeric:tabular-nums;}.ds-wallet-head{display:flex;justify-content:space-between;gap:20px;padding:16px 24px;border-bottom:1px solid #e3e3e0;font-size:14px;font-weight:500;}.ds-wallet-example{font-size:13px;color:#61666b;font-weight:400;}.ds-wallet-body{padding:32px;}.ds-wallet-product{margin:0;font-size:16px;line-height:1.5;font-weight:500;}.ds-wallet-terms{margin:8px 0 0;font-size:14px;color:#61666b;}.ds-wallet-label{margin:32px 0 0;font-size:13px;color:#4a4f54;}.ds-wallet-total{margin:8px 0 0;font-size:36px;line-height:1.2;letter-spacing:-.03em;font-weight:500;color:#12513a;}.ds-wallet-fee{margin:24px 0 0;padding-top:16px;border-top:1px solid #e3e3e0;}.ds-wallet-fee>div{display:flex;justify-content:space-between;gap:20px;align-items:baseline;}.ds-wallet-fee dt{font-size:14px;color:#4a4f54;}.ds-wallet-fee dd{margin:0;font-size:16px;font-weight:500;}.ds-wallet-note{margin:12px 0 0;font-size:13px;color:#61666b;line-height:1.65;}@media(max-width:420px){.ds-wallet-body{padding:24px;}.ds-wallet-total{font-size:32px;}}"
+      "css": ".ds-wallet{border:1px solid #e3e3e0;border-radius:0;background:#fff;color:#111315;font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;font-variant-numeric:tabular-nums;}.ds-wallet-head{background:#f7f7f6;display:flex;justify-content:space-between;gap:20px;padding:16px 24px;border-bottom:1px solid #e3e3e0;font-size:14px;font-weight:500;}.ds-wallet-example{font-size:13px;color:#61666b;font-weight:400;}.ds-wallet-body{padding:24px 32px;}.ds-wallet-product{margin:0;font-size:16px;line-height:1.5;font-weight:500;}.ds-wallet-terms{margin:8px 0 0;font-size:14px;color:#61666b;}.ds-wallet-label{margin:24px 0 0;font-size:13px;color:#4a4f54;}.ds-wallet-total{margin:8px 0 0;font-size:40px;line-height:1.2;letter-spacing:-.03em;font-weight:500;color:#12513a;}.ds-wallet-fee{margin:24px 0 0;padding-top:16px;border-top:1px solid #e3e3e0;}.ds-wallet-fee>div{display:flex;justify-content:space-between;gap:20px;align-items:baseline;}.ds-wallet-fee dt{font-size:14px;color:#4a4f54;}.ds-wallet-fee dd{margin:0;font-size:16px;font-weight:500;}.ds-wallet-note{margin:12px 0 0;font-size:13px;color:#61666b;line-height:1.65;}@media(max-width:420px){.ds-wallet-body{padding:24px;}.ds-wallet-total{font-size:32px;}}"
     },
     {
       "name": "Guardian Guide",
@@ -957,14 +992,14 @@
       "name": "Pricing Range",
       "kind": "input",
       "refersTo": "pricing-calculator",
-      "description": "Native labelled range with the current allowance track. Live calculated output remains in PriceCalculator.",
+      "description": "Native labelled range on the always-black contrast surface. Live calculated output remains in PriceCalculator.",
       "html": "<div class=\"ds-calculator\"><label class=\"ds-calc-label\" for=\"ds-monthly\">You earn, in a month</label><input class=\"ds-calc-range\" id=\"ds-monthly\" type=\"range\" min=\"0\" max=\"100000\" step=\"2500\" value=\"40000\" aria-describedby=\"ds-calc-help\"><div class=\"ds-calc-scale\"><span>$0</span><span>free under $100</span><span>$1,000</span></div><p class=\"ds-calc-help\" id=\"ds-calc-help\">First $100 each month free. Stripe card processing fees are separate.</p></div>",
-      "css": ".ds-calculator{padding:24px;border:1px solid #e3e3e0;border-radius:0;background:#fff;color:#111315;font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;font-variant-numeric:tabular-nums;}.ds-calc-label{display:block;font-size:13px;color:#61666b;margin-bottom:20px;}.ds-calc-range{appearance:none;display:block;width:100%;height:26px;background:transparent;cursor:pointer;}.ds-calc-range:focus-visible{outline:2px solid #111315;outline-offset:2px;}.ds-calc-range::-webkit-slider-runnable-track{height:6px;border:1px solid #878d92;background:linear-gradient(90deg,#e4efe9 0,#e4efe9 10%,#ececeb 10%,#ececeb 100%);}.ds-calc-range::-moz-range-track{height:6px;border:1px solid #878d92;background:linear-gradient(90deg,#e4efe9 0,#e4efe9 10%,#ececeb 10%,#ececeb 100%);}.ds-calc-range::-webkit-slider-thumb{appearance:none;width:18px;height:18px;margin-top:-7px;background:#111315;border:1px solid #111315;border-radius:0;}.ds-calc-range::-moz-range-thumb{width:18px;height:18px;background:#111315;border:1px solid #111315;border-radius:0;}.ds-calc-scale{display:flex;justify-content:space-between;gap:12px;margin-top:7px;font-size:12px;color:#61666b;}.ds-calc-help{margin:24px 0 0;padding-top:20px;border-top:1px solid #e3e3e0;font-size:13px;line-height:1.6;color:#4a4f54;}"
+      "css": ".ds-calculator{padding:24px;border:1px solid #2a2f34;border-radius:0;background:#111315;color:#e8eaec;font-family:Onest, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;font-variant-numeric:tabular-nums;}.ds-calc-label{display:block;font-size:13px;color:#8c949b;margin-bottom:20px;}.ds-calc-range{appearance:none;display:block;width:100%;height:26px;background:transparent;cursor:pointer;}.ds-calc-range:focus-visible{outline:2px solid #5fb48f;outline-offset:2px;}.ds-calc-range::-webkit-slider-runnable-track{height:6px;border:1px solid #7b848b;background:linear-gradient(90deg,#163027 0,#163027 10%,#24282c 10%,#24282c 100%);}.ds-calc-range::-moz-range-track{height:6px;border:1px solid #7b848b;background:linear-gradient(90deg,#163027 0,#163027 10%,#24282c 10%,#24282c 100%);}.ds-calc-range::-webkit-slider-thumb{appearance:none;width:18px;height:18px;margin-top:-7px;background:#e8eaec;border:1px solid #e8eaec;border-radius:0;}.ds-calc-range::-moz-range-thumb{width:18px;height:18px;background:#e8eaec;border:1px solid #e8eaec;border-radius:0;}.ds-calc-scale{display:flex;justify-content:space-between;gap:12px;margin-top:7px;font-size:12px;color:#8c949b;}.ds-calc-help{margin:24px 0 0;padding-top:20px;border-top:1px solid #2a2f34;font-size:13px;line-height:1.6;color:#aab1b7;}"
     }
   ],
   "narrative": {
     "northStar": "The Clear Record",
-    "overview": "Veyro uses a plain financial record as its visual model: readable type, square controls, thin rules and deliberate space. White and neutral paper carry the interface. Meaningful color marks money, action and status without becoming decoration.\n\nThe system serves young founders and guardians together. Product explanations feel approachable; account tasks stay direct and legible. Use the shared primitives so public pages, authentication, checkout and dashboards remain recognizably part of the same product.",
+    "overview": "Veyro uses a plain financial record as its visual model: readable type, square controls, thin rules and deliberate space. White and neutral paper carry the interface; selected black regions establish money and payout context. Meaningful color marks money, action and status without becoming decoration.\n\nThe system serves young founders and guardians together. Product explanations feel approachable; account tasks stay direct and legible. Use the shared primitives so public pages, authentication, checkout and dashboards remain recognizably part of the same product.",
     "keyCharacteristics": [
       "Onest for interface text; Archivo for the existing wordmark.",
       "Square controls and surfaces, with thin rules instead of decorative framing.",
@@ -992,6 +1027,7 @@
       "Do reuse the shared buttons, fields, notices, navigation, footer and checkout content primitives.",
       "Do use the established type and spacing scales, with the documented responsive heading exceptions.",
       "Do keep money figures tabular, examples visibly labelled and fees derived from the shared calculation.",
+      "Do render real account balances immediately and keep currencies separate in revenue, fee and payout records.",
       "Do preserve real link destinations, guardian-role wording and full product disclosures.",
       "Do retain labelled controls, visible focus, keyboard access to scroll regions and reduced-motion behavior.",
       "Do test new layouts at 320px and at the main 760px collapse, including open menus and long content."

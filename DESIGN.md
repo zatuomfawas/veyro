@@ -208,15 +208,15 @@ components:
     backgroundColor: "{colors.card}"
     textColor: "{colors.ink}"
     rounded: "{rounded.square}"
-    padding: "32px"
+    padding: "24px 32px"
   guardian-guide:
     backgroundColor: "{colors.card}"
     textColor: "{colors.ink}"
     rounded: "{rounded.square}"
     padding: "24px"
   pricing-calculator:
-    backgroundColor: "{colors.card}"
-    textColor: "{colors.ink}"
+    backgroundColor: "{colors.brand}"
+    textColor: "{colors.dark-ink}"
     rounded: "{rounded.square}"
     padding: "24px"
 ---
@@ -227,7 +227,7 @@ components:
 
 **Creative North Star: "The Clear Record"**
 
-Veyro uses a plain financial record as its visual model: readable type, square controls, thin rules and deliberate space. White and neutral paper carry the interface. Meaningful color marks money, action and status without becoming decoration.
+Veyro uses a plain financial record as its visual model: readable type, square controls, thin rules and deliberate space. White and neutral paper carry the interface; selected black regions establish money and payout context. Meaningful color marks money, action and status without becoming decoration.
 
 The system serves young founders and guardians together. Product explanations feel approachable; account tasks stay direct and legible. Use the shared primitives so public pages, authentication, checkout and dashboards remain recognizably part of the same product.
 
@@ -238,7 +238,7 @@ The system serves young founders and guardians together. Product explanations fe
 - Neutral foundations with explicit, named financial states.
 - Shared components, responsive layouts and keyboard-visible interaction states.
 
-The implementation source is `app/_ui/css.ts`; fonts are loaded in `app/layout.tsx`. Frontmatter records the actual primitives. The `dark-` color entries describe the corresponding overrides in the shared dark theme, rather than a second independent palette. The sidecar adds behavior and self-contained light-theme component previews. Its synthesized tonal ramps are preview strips, not a new runtime color scale. Homepage composition lives in `.impeccable/surfaces/home.md`.
+The implementation source is `app/_ui/veyro.css`; fonts are loaded in `app/layout.tsx`. The root layout imports the native global stylesheet once; pages inherit it instead of injecting CSS strings. Frontmatter records the actual primitives. The `dark-` color entries describe the corresponding overrides in the shared dark theme and contrast surfaces, rather than a second independent palette. The sidecar adds behavior and self-contained component previews. Its synthesized tonal ramps are preview strips, not a new runtime color scale. Surface composition lives in `.impeccable/surfaces/`.
 
 ## Colors
 
@@ -265,7 +265,7 @@ The palette is neutral paper with restrained, functional accents.
 - **Reverse, Selection and Scrim** (`reverse`, `select-bg`, `scrim`): reversed text, selected text and modal background separation.
 - **Allowance Track** (`track-free`, `track-rest`): the pricing slider's labelled free portion and remaining range.
 
-Dark mode remaps the same roles. Semantic badges gain dark tinted fills; their text and meaning stay explicit. Inverted sections use their own shared overrides and light focus indicators. Recheck `npm run contrast` after palette changes; that check is targeted evidence, not a claim of full accessibility certification.
+Dark mode remaps the same roles. Semantic badges gain dark tinted fills; their text and meaning stay explicit. `.contrast-surface`, founder navigation and the payout overview use Record Ink as their background with the existing dark semantic palette and Pine focus indicators. These regions remain black in either theme. The homepage hero follows the page theme; its default presentation is light. Recheck `npm run contrast` after palette changes; that check is targeted evidence, not a claim of full accessibility certification.
 
 **The Written State Rule.** Every financial and account state has a visible label. Color supports the wording; it never replaces it.
 
@@ -297,6 +297,8 @@ Public pages share a centered outer container capped at 1248px, including fluid 
 
 Use the ten spacing steps for component rhythm. Public sections use 64px vertical padding on desktop and 48px on mobile; the homepage uses its documented surface rhythm. Arrange explanatory copy and evidence in simple two-column layouts, with thin rules where related content needs separation.
 
+Founder overview content uses a 1320px wrapper: available funds and payout context come first, followed by transactions and a narrower requests/updates column. Setup action precedes the balance when incomplete. Secondary tools use shared disclosures. The how-it-works guide uses a compact article with a 200px sticky index, 56px gap and 780px reading column; at 760px its index becomes a two-column list above the article. Keep these arrangements in their surface briefs rather than imposing them on unrelated pages.
+
 The main collapse is 760px: navigation becomes a menu, explanatory columns and authentication stack, and section headings reduce. A 980px adjustment reduces wide gaps before collapse; 940px and 900px support existing split and content grids. The 560px and 420px adjustments simplify dense panels and tight layouts. Layouts must remain usable at 320px with the eligibility action and menu visible.
 
 Keep intrinsic widths flexible. Tables and code blocks can scroll inside their own labelled, focusable region rather than forcing the page wide. Use a caption and column headers for tabular records. Coarse-pointer controls use the shared 44px minimum target; the mobile navigation action and menu preserve that minimum.
@@ -325,7 +327,7 @@ Hover changes fill or boundary without a lift. Presses acknowledge immediately; 
 
 ### Cards / Containers
 
-Flat outlined rectangles carry product content. Header and footer rules separate related content without creating nested decoration. Standard card bodies use the 20px spacing step; the earnings example uses a roomier 32px body; authentication forms use 32px on desktop and 24px when collapsed. A card's appearance alone does not make it clickable.
+Flat outlined rectangles carry product content. Header and footer rules separate related content without creating nested decoration. Standard card bodies use the 20px spacing step; the earnings example uses 24px vertical and 32px horizontal padding, with 24px throughout on narrow mobile; authentication forms use 32px on desktop and 24px when collapsed. A card's appearance alone does not make it clickable.
 
 ### Inputs / Fields
 
@@ -345,7 +347,7 @@ Focused task and dashboard headers retain their distinct labels, destinations an
 
 ### Examples / Checkout
 
-The earnings preview is a static, visibly labelled example. Price and sales produce the total; the fee uses the shared arithmetic. It does not count up or resemble live account activity. The guardian preview is a static guide with numbered setup steps and clear descriptions of controls provided in Stripe. It has no simulated browser chrome or animated completion sequence.
+The earnings preview is one visibly labelled sales example. Price and sales produce the total; the fee uses the shared arithmetic and remains static. Only the illustrative total counts once on entering view, over 920ms with quartic ease-out. Its 40px desktop figure becomes 32px on narrow mobile. Reserve the final value's width and keep the final formatted value in server-rendered HTML and accessible text; reduced motion shows it immediately. Real account balances always render directly. The guardian preview is a static guide with numbered setup steps and clear descriptions of controls provided in Stripe. It has no simulated browser chrome or animated completion sequence.
 
 Keep useful interactions in the pricing calculator, share and integration examples, and applicable account demonstrations. The pricing range is a real labelled control with correct server-rendered starting figures. Checkout previews and live checkout share heading, summary and assurance primitives; their card-form behavior remains appropriate to each context. A still preview must visibly explain that no payment is taken.
 
@@ -353,7 +355,7 @@ Keep useful interactions in the pricing calculator, share and integration exampl
 
 Confirmation dialogs carry a title and dialog semantics, move focus into the panel, contain keyboard focus, make background branches inert, and restore prior focus when dismissed. Escape and backdrop dismissal respect busy state and the configured task behavior. Reuse the shared dialog rather than reproducing only its appearance.
 
-Motion communicates a state change. The shared 110ms and 170ms transitions keep ordinary interactions quick; longer reveal durations are reserved for established explanatory behavior. Reduced-motion mode removes transitions and animation and leaves the actual content visible. The homepage earnings preview and guardian guide remain static in every motion mode.
+Motion communicates a state change. The shared 110ms and 170ms transitions keep ordinary interactions quick; button presses acknowledge with a 1px downward translation. Shared `Accordion` disclosures retain native `details` semantics and animate measured height with WAAPI over 240ms using `cubic-bezier(.2,.8,.2,1)`. Reversals continue from the presented height; closing keeps native `open` until the visual exit completes and immediately removes closing content from focus. Anchor-triggered openings settle directly. The preview enters over 240ms with `cubic-bezier(.16,1,.3,1)`; the mobile menu enters over 150ms. Reduced motion removes these movements, settles disclosures immediately and retains final readable values. Keep the guardian guide static and real account values free of counting motion.
 
 ## Do's and Don'ts
 
@@ -362,6 +364,7 @@ Motion communicates a state change. The shared 110ms and 170ms transitions keep 
 - **Do** reuse the shared buttons, fields, notices, navigation, footer and checkout content primitives.
 - **Do** use the established type and spacing scales, with the documented responsive heading exceptions.
 - **Do** keep money figures tabular, examples visibly labelled and fees derived from the shared calculation.
+- **Do** render real account balances immediately and keep currencies separate in revenue, fee and payout records.
 - **Do** preserve real link destinations, guardian-role wording and full product disclosures.
 - **Do** retain labelled controls, visible focus, keyboard access to scroll regions and reduced-motion behavior.
 - **Do** test new layouts at 320px and at the main 760px collapse, including open menus and long content.

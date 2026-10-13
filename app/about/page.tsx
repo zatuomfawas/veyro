@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { buildViewport, SITE } from "@/lib/seo";
 import type { Metadata } from "next";
-import { CSS, CSS2 } from "@/app/_ui/css";
 import { SkipLink } from "@/app/_ui/marks";
 import { SiteNav } from "@/app/_ui/SiteNav";
 import { SiteFooter } from "@/app/_ui/SiteFooter";
@@ -105,7 +104,6 @@ const COMMITMENTS: { head: string; body: React.ReactNode }[] = [
 export default function About() {
   return (
     <div className="fw public-page">
-      <style href="veyro-css" precedence="default">{CSS + CSS2}</style>
       <SkipLink />
 
       <SiteNav active="/about" />
