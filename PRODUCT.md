@@ -101,26 +101,15 @@ provider reply Veyro obtained and publishes in full.
   by Stripe, which sets and deducts them. The arithmetic lives in
   `lib/pricing.ts` and the prose figures are rendered from it, so a quoted
   number cannot disagree with the rule.
-- **The fee start date is pending, and the site still says 15 October 2026.**
-  Confirmed slipping on 12 October 2026 with no replacement date set. This is
-  the one piece of drift on the site with a deadline attached: from 15 October
-  the published copy asserts that fees have started, and they will not have.
-  The date is not computed from anything, so it has to be changed by hand in
-  each of these, and the Terms are the one that matters legally:
-
-  - `app/terms/page.tsx` — `EFFECTIVE`, the Terms' own effective date
-  - `app/terms/2026-09-16/page.tsx` — the superseded Terms say when they stop
-    governing, in the body and in the metadata description
-  - `app/pricing/page.tsx` — twice, in the fee-timing note and the closing text
-  - `app/_ui/faq.tsx` — the fee answer
-  - `app/about/page.tsx` — the fourth commitment, "Most people will never pay
-    Veyro anything"
-  - `app/dashboard/founder/page.tsx` — the `feesStart` prop
-
-  Nine occurrences across those six files, found with
-  `grep -rn "15 October 2026" app lib`. Nobody should guess a new date into
-  them: a Terms effective date with a dated archive beside it is a legal
-  construct, not copy. Set the date, then change all nine together.
+- **The fee launch is postponed**, confirmed by the owner on 14 October 2026.
+  No replacement date has been announced. Veyro fee collection is disabled with
+  `FEE_COLLECTION_ENABLED = false`; Stripe processing fees still apply separately.
+  The published 3% model and its arithmetic remain unchanged and are illustrated
+  for when fees launch. The updated Terms dated 5 October 2026 have a postponed
+  effective date; the Terms dated 16 September 2026 remain in force until an
+  announced new version takes effect. Do not infer a new launch date from the
+  retained historical `FEES_EFFECTIVE_AT` floor. Re-enabling collection requires
+  the owner's launch decision and consistent operational, Terms and public timing.
 - **Currency** is formatted from the currency's own minor-unit exponent via
   `Intl`, not from an assumed two decimals. Figures quoted in prose are USD.
 - **Stack**: Next.js 16 App Router, React 19, Prisma 7 against Postgres, Stripe,

@@ -7,8 +7,8 @@ import { Btn, Field, Notice, PasswordField } from "@/app/_ui/form";
 import { safeNextPath, defaultLandingFor } from "@/lib/next-path";
 
 export default function SigninForm({
-  next, justVerified = false,
-}: { next?: string | null; justVerified?: boolean }) {
+  next, justVerified = false, justRegistered = false,
+}: { next?: string | null; justVerified?: boolean; justRegistered?: boolean }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -53,6 +53,16 @@ export default function SigninForm({
 
   return (
     <form onSubmit={onSubmit} noValidate>
+      {justRegistered && !justVerified && !formError && (
+        <div className="auth-feedback">
+          <Notice tone="pine" head="Your account is created" action={
+            <Link className="linkbtn" href="/auth/resend-verification">Send a new verification link</Link>
+          }>
+            Check your email and use the verification link before signing in. The link lasts 24 hours.
+            If it has not arrived, check your spam folder.
+          </Notice>
+        </div>
+      )}
       {justVerified && !formError && (
         <div style={{ marginBottom: 16 }}>
           <Notice tone="pine" head="Email verified">
@@ -91,11 +101,11 @@ export default function SigninForm({
       )}
 
       <Field label="Email address">
-        <input className="input" type="email" value={email} autoComplete="email"
+        <input className="input" name="email" type="email" value={email} autoComplete="email"
           onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
       </Field>
 
-      <PasswordField label="Password" value={password} autoComplete="current-password"
+      <PasswordField label="Password" name="password" value={password} autoComplete="current-password"
         onChange={setPassword} />
 
       <p className="small" style={{ marginTop: -6, marginBottom: 18 }}>

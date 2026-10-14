@@ -12,6 +12,7 @@ import { ScrollProgress } from "@/app/_ui/ScrollProgress";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
 import { GuardianPermissions } from "@/app/_ui/GuardianPermissions";
 import { LiveWallet } from "@/app/_ui/LiveWallet";
+import { Accordion } from "@/app/_ui/Accordion";
 
 export const metadata = buildMetadata("how");
 export const viewport = buildViewport();
@@ -20,10 +21,10 @@ const UPDATED = "13 September 2026";
 const CHAPTERS = [
   ["setup", "Getting started"],
   ["roles", "Who does what"],
+  ["money", "Money and guardian controls"],
   ["provider-reply", "Stripe’s written reply"],
   ["countries", "Country and age limits"],
   ["account-limits", "Account limitations"],
-  ["money", "Money and guardian controls"],
 ] as const;
 
 /** Provider quotations remain verbatim from the single shared source. */
@@ -112,51 +113,105 @@ export default function HowItWorks() {
               </p>
             </section>
 
+            <section className="how-chapter" id="money" aria-labelledby="money-heading">
+              <div className="how-chapter-head">
+                <h2 id="money-heading">Money and guardian controls</h2>
+                <p>Your product stays yours. The payment account has a verified adult behind it.</p>
+              </div>
+              <div className="how-guardian">
+                <GuardianPermissions />
+              </div>
+              <p>
+                Your guardian can change the payment account&rsquo;s settings, payout schedule or
+                bank details in Stripe, and can close or freeze it. Veyro does not provide
+                per-sale or per-payout approval controls. Stripe can ask the guardian to verify
+                again after setup. <Link className="linkbtn" href="/for-parents">Read the guardian responsibilities</Link>.
+              </p>
+
+              <section className="how-wallet" aria-labelledby="wallet-example-heading">
+                <h3 id="wallet-example-heading">From a payment to available funds</h3>
+                <p>
+                  A customer opens your checkout, Stripe processes the payment, and Veyro
+                  records its status. A settling payment is not yet available. Stripe handles
+                  the eventual bank transfer under the account&rsquo;s settings.
+                </p>
+                <p className="small">Illustrative wallet below. These are example amounts and payment states, not a real account or a new payment.</p>
+                <LiveWallet />
+              </section>
+
+              <div className="how-payment-options">
+                <h3>Choose how customers pay</h3>
+                <p>Share a product&rsquo;s checkout link, or add checkout to your app with the
+                  SDK or API. Both use the same payment account; payment details are handled by Stripe.</p>
+                <div className="row" style={{ gap: 16, flexWrap: "wrap" }}>
+                  <Link className="linkbtn" href="/get-started">See the checkout setup</Link>
+                  <Link className="linkbtn" href="/docs/sdk">Read the integration guide</Link>
+                </div>
+              </div>
+            </section>
+
             <section className="how-chapter" id="provider-reply" aria-labelledby="reply-heading">
               <div className="how-chapter-head">
                 <h2 id="reply-heading">Stripe&rsquo;s written reply</h2>
                 <p>What the provider confirmed, and the limits of that confirmation.</p>
               </div>
               <p>
-                We asked Stripe whether a platform could onboard founders aged 13 to 17 with a
-                guardian, which Connect account types support it, where the route is available,
-                and whether Stripe should collect verification documents directly. This is a
-                summary of our question, not a quotation.
+                Stripe&rsquo;s reply covers guardian involvement for ages 13 to 17, account types,
+                country availability and hosted verification. Read the provider&rsquo;s exact words
+                alongside the limits of what they confirm.
               </p>
-              <p>Arthur at Stripe Support replied on {REPLY_DATE}. Everything attributed to Stripe below is quoted exactly.</p>
+              <Accordion
+                className="how-reference"
+                summary={
+                  <span>
+                    <span className="how-reference-title">Read the complete quoted reply</span>
+                    <span className="how-reference-meta">All five provider quotations · {REPLY_DATE}</span>
+                  </span>
+                }
+              >
+                <div className="how-reference-inner">
+                  <p>
+                    We asked Stripe whether a platform could onboard founders aged 13 to 17 with a
+                    guardian, which Connect account types support it, where the route is available,
+                    and whether Stripe should collect verification documents directly. This is a
+                    summary of our question, not a quotation.
+                  </p>
+                  <p>Arthur at Stripe Support replied on {REPLY_DATE}. Everything attributed to Stripe below is quoted exactly.</p>
 
-              <h3>The age and guardian requirement</h3>
-              <Quote>&ldquo;{Q_CORE}&rdquo;</Quote>
-              <p>
-                The guardian&rsquo;s involvement must be completed through Stripe onboarding
-                <em> before</em> the account accepts charges or receives payouts. Consent on its
-                own is not completed payment setup.
-              </p>
+                  <h3>The age and guardian requirement</h3>
+                  <Quote>&ldquo;{Q_CORE}&rdquo;</Quote>
+                  <p>
+                    The guardian&rsquo;s involvement must be completed through Stripe onboarding
+                    <em> before</em> the account accepts charges or receives payouts. Consent on its
+                    own is not completed payment setup.
+                  </p>
 
-              <h3>The supported account types</h3>
-              <Quote>&ldquo;{Q_TYPES}&rdquo;</Quote>
-              <p>
-                We had relied on older guidance that set an 18-plus minimum for Express and
-                Custom. Stripe corrected that: all three account types can support users aged
-                13 to 17 with guardian involvement, subject to availability. Veyro currently uses Standard.
-              </p>
+                  <h3>The supported account types</h3>
+                  <Quote>&ldquo;{Q_TYPES}&rdquo;</Quote>
+                  <p>
+                    We had relied on older guidance that set an 18-plus minimum for Express and
+                    Custom. Stripe corrected that: all three account types can support users aged
+                    13 to 17 with guardian involvement, subject to availability. Veyro currently uses Standard.
+                  </p>
 
-              <h3>Country availability</h3>
-              <Quote>&ldquo;{Q_COUNTRIES}&rdquo;</Quote>
-              <p>
-                The United States is confirmed by name. Brazil is excluded for under-18 account
-                holders, even with a guardian. Other countries were not individually confirmed:
-                country-specific requirements still apply, and the checker makes that distinction visible.
-              </p>
+                  <h3>Country availability</h3>
+                  <Quote>&ldquo;{Q_COUNTRIES}&rdquo;</Quote>
+                  <p>
+                    The United States is confirmed by name. Brazil is excluded for under-18 account
+                    holders, even with a guardian. Other countries were not individually confirmed:
+                    country-specific requirements still apply, and the checker makes that distinction visible.
+                  </p>
 
-              <h3>Verification and architecture</h3>
-              <Quote>&ldquo;{Q_ONBOARDING}&rdquo;</Quote>
-              <Quote>&ldquo;{Q_ARCHITECTURE}&rdquo;</Quote>
-              <p>
-                Veyro uses Stripe-hosted onboarding. Stripe collects the verification details;
-                Veyro stores the account reference, guardian relationship and payment records.
-              </p>
+                  <h3>Verification and architecture</h3>
+                  <Quote>&ldquo;{Q_ONBOARDING}&rdquo;</Quote>
+                  <Quote>&ldquo;{Q_ARCHITECTURE}&rdquo;</Quote>
+                  <p>
+                    Veyro uses Stripe-hosted onboarding. Stripe collects the verification details;
+                    Veyro stores the account reference, guardian relationship and payment records.
+                  </p>
 
+                </div>
+              </Accordion>
               <aside className="how-evidence-note">
                 <h3>Provider guidance is not legal approval</h3>
                 <p>
@@ -227,73 +282,53 @@ export default function HowItWorks() {
                 <h2 id="limits-heading">Account limitations</h2>
                 <p>What the current integration supports, and what it cannot promise.</p>
               </div>
-              <dl className="how-limit-list">
-                <div>
-                  <dt>Veyro uses Stripe Connect Standard</dt>
-                  <dd>Veyro&rsquo;s platform is registered in the UAE, where Express and Custom
-                    connected accounts are not available through the self-serve route. This
-                    platform restriction is separate from the under-18 rules.</dd>
-                </div>
-                <div>
-                  <dt>The account controls its payout schedule</dt>
-                  <dd>Standard provides its own Stripe dashboard. Veyro cannot hold money,
-                    delay a payout or add a guardian approval step to each payout. The guardian
-                    receives notifications and records, while account controls remain in Stripe.</dd>
-                </div>
-                <div>
-                  <dt>The verified person must be the guardian</dt>
-                  <dd>The guardian completes setup from their own signed-in session. Veyro
-                    re-reads the account from Stripe and checks the verified individual against
-                    the expected guardian. A mismatch prevents the account from being treated as
-                    ready. Veyro cannot control who enters details in Stripe&rsquo;s form.</dd>
-                </div>
-                <div>
-                  <dt>The integration still uses Accounts v1</dt>
-                  <dd>Stripe now recommends a newer API for new Connect integrations.
-                    Migration remains in development; this page does not present it as complete.</dd>
-                </div>
-              </dl>
               <p>
-                Annual earnings and payout summaries are records to share with an accountant,
-                not tax returns or tax advice. Veyro does not promise to file your taxes.
+                Veyro uses Stripe Connect Standard. The account holder controls bank transfers
+                and payout settings in Stripe. Veyro cannot hold funds or require guardian
+                approval for each payout.
               </p>
-            </section>
-
-            <section className="how-chapter" id="money" aria-labelledby="money-heading">
-              <div className="how-chapter-head">
-                <h2 id="money-heading">Money and guardian controls</h2>
-                <p>Your product stays yours. The payment account has a verified adult behind it.</p>
-              </div>
-              <div className="how-guardian">
-                <GuardianPermissions />
-              </div>
-              <p>
-                Your guardian can change the payment account&rsquo;s settings, payout schedule or
-                bank details in Stripe, and can close or freeze it. Veyro does not provide
-                per-sale or per-payout approval controls. Stripe can ask the guardian to verify
-                again after setup. <Link className="linkbtn" href="/for-parents">Read the guardian responsibilities</Link>.
-              </p>
-
-              <section className="how-wallet" aria-labelledby="wallet-example-heading">
-                <h3 id="wallet-example-heading">From a payment to available funds</h3>
-                <p>
-                  A customer opens your checkout, Stripe processes the payment, and Veyro
-                  records its status. A settling payment is not yet available. Stripe handles
-                  the eventual bank transfer under the account&rsquo;s settings.
-                </p>
-                <p className="small">Illustrative wallet below. These are example amounts and payment states, not a real account or a new payment.</p>
-                <LiveWallet />
-              </section>
-
-              <div className="how-payment-options">
-                <h3>Choose how customers pay</h3>
-                <p>Share a product&rsquo;s checkout link, or add checkout to your app with the
-                  SDK or API. Both use the same payment account; payment details are handled by Stripe.</p>
-                <div className="row" style={{ gap: 16, flexWrap: "wrap" }}>
-                  <Link className="linkbtn" href="/get-started">See the checkout setup</Link>
-                  <Link className="linkbtn" href="/docs/sdk">Read the integration guide</Link>
+              <Accordion
+                className="how-reference"
+                summary={
+                  <span>
+                    <span className="how-reference-title">Read the integration limits</span>
+                    <span className="how-reference-meta">UAE platform, guardian verification and Accounts v1</span>
+                  </span>
+                }
+              >
+                <div className="how-reference-inner">
+                  <dl className="how-limit-list">
+                    <div>
+                      <dt>Veyro uses Stripe Connect Standard</dt>
+                      <dd>Veyro&rsquo;s platform is registered in the UAE, where Express and Custom
+                        connected accounts are not available through the self-serve route. This
+                        platform restriction is separate from the under-18 rules.</dd>
+                    </div>
+                    <div>
+                      <dt>The account controls its payout schedule</dt>
+                      <dd>Standard provides its own Stripe dashboard. Veyro cannot hold money,
+                        delay a payout or add a guardian approval step to each payout. The guardian
+                        receives notifications and records, while account controls remain in Stripe.</dd>
+                    </div>
+                    <div>
+                      <dt>The verified person must be the guardian</dt>
+                      <dd>The guardian completes setup from their own signed-in session. Veyro
+                        re-reads the account from Stripe and checks the verified individual against
+                        the expected guardian. A mismatch prevents the account from being treated as
+                        ready. Veyro cannot control who enters details in Stripe&rsquo;s form.</dd>
+                    </div>
+                    <div>
+                      <dt>The integration still uses Accounts v1</dt>
+                      <dd>Stripe now recommends a newer API for new Connect integrations.
+                        Migration remains in development; this page does not present it as complete.</dd>
+                    </div>
+                  </dl>
+                  <p>
+                    Annual earnings and payout summaries are records to share with an accountant,
+                    not tax returns or tax advice. Veyro does not promise to file your taxes.
+                  </p>
                 </div>
-              </div>
+              </Accordion>
             </section>
 
             <section className="how-next" aria-labelledby="next-heading">

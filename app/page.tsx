@@ -11,6 +11,10 @@ import { FAQ } from "@/app/_ui/faq";
 import { Accordion } from "@/app/_ui/Accordion";
 import { type RevealGroup } from "@/app/_ui/Reveal";
 import { SiteReveal } from "@/app/_ui/SiteReveal";
+import { CheckoutPreview } from "@/app/_ui/CheckoutPreview";
+import { LiveWallet } from "@/app/_ui/LiveWallet";
+import { ProductTour } from "@/app/_ui/ProductTour";
+import { Q_CORE, REPLY_DATE } from "@/app/_ui/provider-reply";
 
 export const metadata = buildMetadata("landing");
 export const viewport = buildViewport();
@@ -60,6 +64,8 @@ const HOME_REVEAL: RevealGroup[] = [
   { select: ".home-questions-grid > div:first-child > *", stagger: 60 },
   { select: ".public-faq > *", stagger: 70 },
   { select: ".home-close-inner > *", stagger: 80 },
+  { select: ".home-product-copy > *", stagger: 60 },
+  { select: ".home-proof-grid > *", stagger: 70 },
 ];
 
 export default async function Home() {
@@ -83,11 +89,38 @@ export default async function Home() {
               </p>
               <div className="public-actions">
                 <Link className="btn btn-lg" href="/check">Check eligibility</Link>
-                <Link className="linkbtn" href="/how-it-works">How it works</Link>
+                <Link className="linkbtn" href="#product-demo">Explore the product</Link>
               </div>
               <p className="home-hero-note">Free to check. No account needed.</p>
             </div>
             <HeroWallet />
+          </div>
+        </section>
+
+        <section className="home-product-section" id="product-demo" aria-labelledby="product-title">
+          <div className="wrap-lp home-product-grid">
+            <div className="home-product-copy">
+              <h2 id="product-title">From what you make<br />to a working checkout.</h2>
+              <p className="body">One place to sell your product and understand what happens to the money.</p>
+            </div>
+            <ProductTour checkout={<CheckoutPreview />} record={<LiveWallet />} />
+            <div className="home-product-details">
+              <dl className="home-product-benefits">
+                <div>
+                  <dt>A link for what you sell</dt>
+                  <dd>Add your app, template or commission, set a price, and share its checkout link.</dd>
+                </div>
+                <div>
+                  <dt>A record you can understand</dt>
+                  <dd>See payments, processing fees and what is still settling, with every currency kept separate.</dd>
+                </div>
+                <div>
+                  <dt>Adult verification, on Stripe</dt>
+                  <dd>Your guardian completes Stripe&rsquo;s hosted checks. Veyro never receives identity documents or bank details.</dd>
+                </div>
+              </dl>
+              <Link className="linkbtn home-section-link" href="/docs/sdk">Add checkout to your app</Link>
+            </div>
           </div>
         </section>
 
@@ -124,7 +157,7 @@ export default async function Home() {
               <Link className="linkbtn" href="/for-parents">What your guardian takes on</Link>
             </div>
             <div className="home-pricing">
-              <h3>Start small. Keep the costs small.</h3>
+              <h3>Planned pricing. No subscription.</h3>
               <dl className="home-price-rules">
                 <div>
                   <dt>First {formatMinor(FREE_FLOOR_MINOR, "USD").replace(/\.00$/, "")} earned each month</dt>
@@ -135,9 +168,24 @@ export default async function Home() {
                   <dd>{RATE * 100}%</dd>
                 </div>
               </dl>
-              <p className="small">No subscription. Stripe&rsquo;s processing fees are separate.</p>
+              <p className="small">Fee launch postponed. Stripe&rsquo;s processing fees are separate.</p>
               <Link className="linkbtn" href="/pricing">See pricing and calculate your fee</Link>
             </div>
+          </div>
+        </section>
+
+        <section className="home-section home-proof" aria-labelledby="proof-title">
+          <div className="wrap-lp home-proof-grid">
+            <div>
+              <h2 id="proof-title">A real route for young founders.</h2>
+              <p className="body">We asked Stripe directly about founders aged 13 to 17. Here is the core of its written reply.</p>
+              <Link className="linkbtn home-section-link" href="/how-it-works#provider-reply">Read the full reply and its limits</Link>
+            </div>
+            <figure className="home-provider-reply">
+              <blockquote><p>{Q_CORE}</p></blockquote>
+              <figcaption>Stripe Support &middot; <time dateTime="2026-09-08">{REPLY_DATE}</time></figcaption>
+              <p className="home-proof-limit">Subject to country availability and completed onboarding. Provider guidance is not legal approval.</p>
+            </figure>
           </div>
         </section>
 

@@ -23,12 +23,14 @@ export function AuthShell({
           <div className="auth-intro">
             <h1 className="d2 auth-title">{title}</h1>
             <p className="body auth-lead">{lead}</p>
-            <p className="small auth-footer">{footer}</p>
             {aside && <div className="auth-aside">{aside}</div>}
           </div>
 
-          <div className="card auth-form">
-            <div className="card-b">{children}</div>
+          <div className="auth-form-column">
+            <div className="card auth-form">
+              <div className="card-b">{children}</div>
+            </div>
+            <p className="small auth-footer">{footer}</p>
           </div>
         </div>
       </main>

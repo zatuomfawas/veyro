@@ -5,7 +5,7 @@
 // decided by /api/auth/signup, because anything checked here can be bypassed
 // by anyone who opens the network tab.
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Btn, Field, Notice, PasswordField } from "@/app/_ui/form";
 import { SIGNUP_COUNTRIES } from "@/app/_ui/countries";
@@ -51,8 +51,11 @@ function checkField(field: string, value: string, isGuardian: boolean): string |
   }
 }
 
-export default function SignupForm({ next }: { next?: string | null }) {
+export default function SignupForm({
+  next, initialGuardian = false,
+}: { next?: string | null; initialGuardian?: boolean }) {
   const router = useRouter();
+  const form = useRef<HTMLFormElement>(null);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -60,7 +63,7 @@ export default function SignupForm({ next }: { next?: string | null }) {
   const [confirm, setConfirm] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [country, setCountry] = useState("");
-  const [isGuardian, setIsGuardian] = useState(false);
+  const [isGuardian, setIsGuardian] = useState(initialGuardian);
 
   const [errors, setErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState<string | null>(null);
@@ -81,6 +84,22 @@ export default function SignupForm({ next }: { next?: string | null }) {
   };
   const clear = (field: string) => setErrors((e) => ({ ...e, [field]: "" }));
 
+  const focusField = (field: string | undefined) => {
+    if (!field) return;
+    requestAnimationFrame(() => {
+      const control = form.current?.elements.namedItem(field);
+      if (control instanceof HTMLElement) control.focus();
+    });
+  };
+
+  const selectRole = (guardian: boolean) => {
+    setIsGuardian(guardian);
+    setErrors((previous) => ({
+      ...previous,
+      dateOfBirth: checkField("dateOfBirth", dateOfBirth, guardian) ?? "",
+    }));
+  };
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (submitting) return;
@@ -93,6 +112,7 @@ export default function SignupForm({ next }: { next?: string | null }) {
       for (const f of missing) blanks[f] = "This one is needed.";
       setErrors(blanks);
       setFormError(null);
+      focusField(missing[0]);
       return;
     }
 
@@ -100,6 +120,7 @@ export default function SignupForm({ next }: { next?: string | null }) {
     if (password !== confirm) {
       setErrors({ confirm: "Those two passwords are different." });
       setFormError(null);
+      focusField("confirm");
       return;
     }
 
@@ -120,8 +141,10 @@ export default function SignupForm({ next }: { next?: string | null }) {
 
       if (!res.ok) {
         // Two shapes: {errors: {field: msg}} for validation, {error: msg} otherwise.
-        if (body?.errors) setErrors(body.errors);
-        else setFormError(body?.error ?? "Something went wrong. Nothing was created.");
+        if (body?.errors) {
+          setErrors(body.errors);
+          focusField(Object.keys(body.errors)[0]);
+        } else setFormError(body?.error ?? "Something went wrong. Nothing was created.");
         setSubmitting(false);
         return;
       }
@@ -142,78 +165,77 @@ export default function SignupForm({ next }: { next?: string | null }) {
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate>
+    <form ref={form} onSubmit={onSubmit} noValidate>
       {formError && (
         <div style={{ marginBottom: 16 }}>
           <Notice tone="clay" head="That didn&rsquo;t work" live>{formError}</Notice>
         </div>
       )}
 
-      <Field label="Your name" error={errors.name || undefined}>
-        <input className="input" value={name} autoComplete="name"
-          onBlur={blur("name", name)}
-          onChange={(e) => { setName(e.target.value); clear("name"); }} placeholder="Alex Taylor" />
-      </Field>
+      <fieldset className="auth-role" disabled={submitting}>
+        <legend>Which account are you creating?</legend>
+        <div className="auth-role-options">
+          <label className="auth-role-option" data-selected={!isGuardian ? "true" : undefined}>
+            <input type="radio" name="accountRole" value="founder" checked={!isGuardian}
+              onChange={() => selectRole(false)} />
+            <span><strong>Founder</strong>{" "}<span>I am building a business.</span></span>
+          </label>
+          <label className="auth-role-option" data-selected={isGuardian ? "true" : undefined}>
+            <input type="radio" name="accountRole" value="guardian" checked={isGuardian}
+              onChange={() => selectRole(true)} />
+            <span><strong>Guardian</strong>{" "}<span>I am the adult helping a founder.</span></span>
+          </label>
+        </div>
+        <p className="hint">{isGuardian
+          ? "You must be 18 or over. Enter your own details: Stripe verifies the adult on the payment account."
+          : "Founders can join from 13. A parent or legal guardian is needed before payments can be set up."}</p>
+      </fieldset>
 
-      <Field label="Email address" error={errors.email || undefined}>
-        <input className="input" type="email" value={email} autoComplete="email"
-          onBlur={blur("email", email)}
-          onChange={(e) => { setEmail(e.target.value); clear("email"); }} placeholder="you@example.com" />
-      </Field>
+      <div className="auth-field-pair">
+        <Field label="Your name" error={errors.name || undefined}>
+          <input className="input" name="name" value={name} autoComplete="name"
+            onBlur={blur("name", name)}
+            onChange={(e) => { setName(e.target.value); clear("name"); }} placeholder="Alex Taylor" />
+        </Field>
+
+        <Field label="Email address" error={errors.email || undefined}>
+          <input className="input" name="email" type="email" value={email} autoComplete="email"
+            onBlur={blur("email", email)}
+            onChange={(e) => { setEmail(e.target.value); clear("email"); }} placeholder="you@example.com" />
+        </Field>
+      </div>
 
       <PasswordField label="Password" error={errors.password || undefined}
         hint="At least 10 characters. A short sentence is easier to remember than a jumble."
-        value={password} autoComplete="new-password"
+        name="password" value={password} autoComplete="new-password"
         onBlur={blur("password", password)}
         onChange={(v) => { setPassword(v); clear("password"); }} />
 
       <PasswordField label="Confirm password" error={errors.confirm || undefined}
-        value={confirm} autoComplete="new-password"
+        name="confirm" value={confirm} autoComplete="new-password"
         onBlur={() => setErrors((x) => ({ ...x, confirm: confirm && confirm !== password ? "Those two passwords are different." : "" }))}
         onChange={(v) => { setConfirm(v); clear("confirm"); }} />
 
-      <Field label="Date of birth" error={errors.dateOfBirth || undefined}
-        hint="The full date, because the age rules turn on it. It is never shown publicly.">
-        <input className="input" type="date" value={dateOfBirth}
-          onBlur={blur("dateOfBirth", dateOfBirth)}
-          onChange={(e) => { setDateOfBirth(e.target.value); clear("dateOfBirth"); }} max="2026-12-31" />
-      </Field>
+      <div className="auth-field-pair">
+        <Field label="Date of birth" error={errors.dateOfBirth || undefined}
+          hint="The full date, because the age rules turn on it. It is never shown publicly.">
+          <input className="input" name="dateOfBirth" type="date" value={dateOfBirth}
+            onBlur={blur("dateOfBirth", dateOfBirth)}
+            onChange={(e) => { setDateOfBirth(e.target.value); clear("dateOfBirth"); }} max="2026-12-31" />
+        </Field>
 
-      <Field label="Where do you live?" error={errors.country || undefined}
-        hint="The legal age to sign a contract is set locally, and it decides which route is open to you.">
-        <select className="select" value={country} onChange={(e) => setCountry(e.target.value)}>
-          <option value="">Choose a country</option>
-          {SIGNUP_COUNTRIES.map(([code, label]) => (
-            <option key={code} value={code}>{label}</option>
-          ))}
-        </select>
-      </Field>
+        <Field label="Where do you live?" error={errors.country || undefined}
+          hint="The legal age to sign a contract is set locally, and it decides which route is open to you.">
+          <select className="select" name="country" value={country} onChange={(e) => { setCountry(e.target.value); clear("country"); }}>
+            <option value="">Choose a country</option>
+            {SIGNUP_COUNTRIES.map(([code, label]) => (
+              <option key={code} value={code}>{label}</option>
+            ))}
+          </select>
+        </Field>
+      </div>
 
-      <button
-        type="button"
-        className="choice"
-        data-on={isGuardian ? "1" : "0"}
-        onClick={() => {
-          const now = !isGuardian;
-          setIsGuardian(now);
-          setErrors((x) => ({ ...x, dateOfBirth: checkField("dateOfBirth", dateOfBirth, now) ?? "" }));
-        }}
-        aria-pressed={isGuardian}
-        style={{ marginBottom: 12 }}
-      >
-        <span className="tick" />
-        <span>
-          <span style={{ display: "block", fontSize: "var(--fs-3)", fontWeight: 500 }}>
-            I am a parent or guardian
-          </span>
-          <span className="tiny" style={{ display: "block", marginTop: 4 }}>
-            Tick this if you are the adult signing for someone else. You have to be 18 or over:
-            you are the person the payment provider verifies.
-          </span>
-        </span>
-      </button>
-
-      <Btn className="btn-w" type="submit" disabled={submitting || !complete}
+      <Btn className="btn-w" type="submit" disabled={submitting}
         aria-busy={submitting ? "true" : undefined}>
         {submitting ? "Creating your account…" : "Create account"}
       </Btn>

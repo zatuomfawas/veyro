@@ -1,37 +1,35 @@
 # Homepage surface brief
 
-The homepage introduces the actual payment route to a young founder and gives their guardian enough context to continue. Its primary action is **Check eligibility**, pointing to `/check`, with no account needed for that check. It uses the global visual tokens and shared public navigation and footer.
+**Route:** `/` · **Mode:** Persuade · **Visual authority:** `DESIGN.md`, “The Clear Record”.
 
-## Implemented composition
+The founder should understand what they can sell, see the checkout and payment record, then check their country and age. The primary action remains **Check eligibility** → `/check`, with no account required. This extends the incumbent neutral palette, Onest interface type, Archivo wordmark, square geometry and thin rules.
 
-1. **Hero:** one clear promise, short supporting copy, eligibility action and a secondary route to `/how-it-works`. One quiet product-earnings example accompanies the copy.
-2. **Setup:** three numbered steps: founder account, guardian verification, checkout link. Link to `/get-started` for the full sequence.
-3. **Money and pricing:** explain the dashboard record, state Stripe's role, give the shared free allowance and rate, and link to parents and pricing.
-4. **Questions:** three shared FAQ entries in native disclosures, plus links to the full FAQ, the provider's reply and the open legal questions.
-5. **Closing action:** a brief invitation to check country and age, with the same eligibility destination.
+## Current composition
 
-The shared footer follows the five main sections. It supplies real product, company and legal destinations, support contact and the complete processing disclosure.
+1. **Hero:** a short product promise and eligibility action, plus **Explore the product** → `#product-demo`. `HeroWallet` pairs an authored “Second Brain” product cover with an explicitly labelled earnings example; its working checkout link leads to the tour.
+2. **Product tour:** **Customer checkout** and **Payment record** views beside three practical benefits and the SDK destination. The tour precedes the benefits in DOM order and in the mobile stack.
+3. **Setup:** founder account, guardian verification, checkout link; the full sequence links to `/get-started`.
+4. **Money and pricing:** the separate business record, Stripe’s processing/funds role, planned allowance and rate, and routes to parent responsibilities and pricing.
+5. **Provider evidence:** the exact shared `Q_CORE` quotation, attributed to Stripe Support and dated 8 September 2026. Its visible qualification distinguishes provider guidance from legal approval and links to the complete reply.
+6. **Questions:** three shared FAQ disclosures, with routes to the full FAQ, provider evidence and unsettled legal questions.
+7. **Closing action:** check country and age. The shared neutral footer follows with actual navigation, support contact and the full processing disclosure.
 
-## Geometry and typography
+## Layout and behavior
 
-The public outer container is capped at 1248px and uses the global 20–48px fluid gutters. The hero uses a 1.35:1 column split and 64px gap; paired gaps reduce at 980px and stack at 760px. The hero uses 64px top and 56px bottom padding; the intermediate layout uses 56px, and the collapsed layout uses 40px top and 56px bottom. Main sections use 72px vertical padding on desktop and 48px when collapsed. The closing region uses 56px.
+The outer public container is capped at 1248px with fluid 20–48px gutters. The hero uses a 1.35:1 split and 64px gap. The tour uses a .85:1.15 split with its copy and benefits beside the example. At 980px gaps tighten; at 760px paired content stacks. Main homepage sections use 56px vertical padding on desktop and 48px on mobile; the product tour section uses 56px and 40px respectively. The hero retains its existing 64px/56px desktop and 40px/56px collapsed padding. Section headings remain in the established 32px/28px hierarchy.
 
-The hero heading caps at 58px, uses 44px at intermediate widths, 40px in the collapsed layout and 36px at narrow mobile widths. Section headings are 32px, reducing to 28px. Leads are 18px, reducing to 16px; reading copy is 16px. Use the established hierarchy rather than adding new heading sizes, category labels or competing actions.
+The hero follows the page theme. Money/pricing uses the existing black contrast surface; the close uses recessed paper and the footer uses the quieter `surface-2` foundation. Flat boundaries and rules establish hierarchy.
 
-The default hero, setup and questions are light; the hero follows the page theme. Money/pricing and the shared footer use the black contrast surface and existing dark semantic colors; these stay black in dark theme. Recessed neutral paper groups the final action. Thin horizontal and vertical rules do the structural work; no decorative shadow or browser frame belongs in the example.
+The tour uses native buttons with ARIA tab semantics, linked tab panels, selected state and roving tab stops. Left/Right arrows, Home and End select and focus a tab. The inactive panel is hidden; both panels remain mounted so example sequences do not replay on switching.
 
-## Example truth and interactions
+`CheckoutPreview` shares live checkout presentation primitives but its card form is an inert illustration with a visible no-payment explanation. `LiveWallet` labels all amounts as invented; hover, focus, click or tap on an arithmetic term reveals its explanation in a polite status region. **View in Stripe** is an external dashboard link, not a payout command. Its example sale progresses once from Received through Settling to Available. Reduced motion settles immediately. Neither example performs a payment or reads account data.
 
-The hero shows one illustrative product at **$12.00 × 12 sales = $144.00**, with **$1.32** as the current computed Veyro fee. Its values come from `app/_ui/wallet-example.ts` and `lib/pricing.ts`, and the preview states that Stripe processing fees are excluded. The total counts once when the example enters view, over 920ms with quartic ease-out; the fee stays static. The total is 40px on desktop and 32px at the narrow mobile breakpoint. Width is reserved for the final value, and final server-rendered and accessible text remain correct without JavaScript. Reduced motion shows the final total immediately. Real account balances never count up.
+The hero’s example is $12 × 12 sales = $144. Its $1.32 planned Veyro fee comes from the shared arithmetic, with processing fees excluded. Illustrative totals count once using `CountUp`, with final server-rendered and accessible values preserved. Real account balances render directly. Shared FAQ disclosures retain native `details` semantics and reduced-motion handling.
 
-The FAQ uses shared native `details` disclosures enhanced with interruptible measured-height WAAPI motion: 240ms, `cubic-bezier(.2,.8,.2,1)`, immediate settlement for reduced motion and external anchor openings. The menu/theme controls stay functional. Elsewhere, pricing, sharing and integration examples retain useful interactions; the pricing calculator uses the black contrast surface. The guardian setup guide is static and identifies controls as belonging to Stripe. Checkout previews and live checkout reuse the shared content primitives.
+## Constraints and evidence
 
-## Accessibility and constraints
+Preserve the skip link, one main landmark/page heading, named sections, visible focus, explicit example labels and written financial states. Retain the verbatim provider text and legal qualifications. Standard accounts do not give Veyro or guardians a per-payout veto. This surface does not establish payment readiness or accessibility certification.
 
-Use one page heading, named sections, a main landmark and the first-position skip link. Preserve current-page navigation semantics, labelled controls, visible keyboard focus and accessible descriptions. Tables and code that overflow must have labelled, focusable scroll containers. The layout must remain usable at 320px with the primary action and menu visible; reduced-motion mode must retain readable content.
+The owner confirmed on 14 October 2026 that Veyro fees are postponed, with no replacement start date. Planned fee illustrations explain the existing formula; they are not evidence of a charge. Stripe processing fees remain separate.
 
-Preserve the full provider and legal disclosures. This surface is not evidence of payment launch readiness or a full accessibility certification. `PRODUCT.md` flags unresolved fee-launch timing drift; this UI overhaul does not correct or select a launch date.
-
-## Sources
-
-`app/page.tsx`, `app/_ui/veyro.css`, `app/_ui/HeroWallet.tsx`, `app/_ui/CountUp.tsx`, `app/_ui/Accordion.tsx`, `app/_ui/SiteNav.tsx`, `app/_ui/SiteFooter.tsx`, `app/_ui/faq.tsx`, `app/_ui/wallet-example.ts` and `lib/pricing.ts`.
+Source checked: `app/page.tsx`, `app/_ui/{HeroWallet,ProductTour,CheckoutPreview,LiveWallet,CountUp,Accordion,SiteFooter}.tsx`, `app/_ui/{veyro.css,wallet-example.ts,provider-reply.ts}` and `lib/pricing.ts`. The saved `.impeccable/review/professional-final/report.json` records the bounded route, layout and automated accessibility checks; no additional browser review was performed for this documentation pass.

@@ -13,17 +13,17 @@ import { ScrollTop } from "@/app/_ui/ScrollTop";
 export const viewport = buildViewport();
 
 export const metadata: Metadata = {
-  title: "Pricing: one product, free under $100 a month",
+  title: "Pricing: Veyro fee launch postponed",
   description:
-    "Your first $100 of monthly earnings is free, then 3% on the amount above it. "
-    + "No subscription. Stripe card processing fees apply separately.",
+    "Veyro fees are postponed, with no new launch date announced. The published model is "
+    + "free for the first $100 each month, then 3% above it. Stripe processing fees still apply.",
   alternates: { canonical: SITE + "/pricing" },
   robots: { index: true, follow: true },
   openGraph: {
     type: "website",
     siteName: "Veyro",
-    title: "Pricing: one product, free under $100 a month",
-    description: "Core payment tools at every size. Free for your first $100 each month, then 3% above it.",
+    title: "Pricing: Veyro fee launch postponed",
+    description: "No Veyro fees are being collected for now. The published model is illustrated here; Stripe processing fees still apply.",
     url: SITE + "/pricing",
   },
 };
@@ -34,7 +34,7 @@ type Item = readonly [name: string, detail: string, soon?: true];
 // The label a not-yet-built line carries. One constant, because the same words
 // appeared in three places and went stale in all of them the first time the
 // launch date moved.
-const SOON_LABEL = "From 15 October";
+const SOON_LABEL = "Launch postponed";
 
 const INCLUDED: readonly Item[] = [
   ["Core payment functionality", "Getting your parent verified, the payment account open, and payments working."],
@@ -70,29 +70,78 @@ export default function Pricing() {
       <SiteNav active="/pricing" />
 
       <main id="main">
-        <div className="hero-band">
+        <div className="hero-band" id="estimate">
           <div className="wrap-lp gs-hero">
             <div className="gs-hero-grid">
               <div>
                 <h1 className="hero-h1">Start free. Pay as you earn.</h1>
                 <p className="hero-lead">
-                  Your first $100 each calendar month is free. Veyro takes 3% of earnings
-                  above that, with no subscription or plan to choose.
+                  No Veyro fees are being collected while the launch is postponed.
+                  The published model is free for your first $100 each calendar month,
+                  then 3% above that, with no subscription or plan to choose.
                 </p>
                 <div className="hero-cta">
                   <Link className="btn btn-lg" href="/check">Check eligibility</Link>
                   <Link className="linkbtn" href="/get-started">See the setup</Link>
                 </div>
                 <p className="small" style={{ marginTop: "var(--sp-5)" }}>
-                  Card processing fees apply separately. Fees start on 15 October 2026.
+                  No new fee launch date has been announced. Stripe processing fees apply separately.
                 </p>
               </div>
               <PriceCalculator />
             </div>
+            <nav className="journey-index" aria-label="Pricing sections">
+              <a href="#fee-examples">Fee examples</a>
+              <a href="#included">What is included</a>
+              <a href="#fee-details">Refunds and fee timing</a>
+            </nav>
           </div>
         </div>
 
-        <section className="lp ch ch-surface">
+        <section className="lp ch" id="fee-examples">
+          <div className="wrap-lp aside-grid">
+            <div className="aside-head">
+              <h2 className="lp-h2">The fee, in real numbers.</h2>
+              <p className="body" style={{ marginTop: "var(--sp-4)" }}>
+                These examples illustrate the published model for when fees launch:
+                subtract the first $100 of monthly earnings, then take 3% of the rest.
+              </p>
+              <p className="small" style={{ marginTop: "var(--sp-5)" }}>
+                Stripe sets and deducts card processing fees separately, including when
+                Veyro is free. We do not mark them up. Your dashboard shows them on each transaction.
+              </p>
+            </div>
+            <div className="tblwrap" role="region" aria-label="Monthly earnings and Veyro fees" tabIndex={0}>
+              <table className="tbl ptable">
+                <caption className="sr-only">Illustrative monthly earnings and Veyro fees after launch, in US dollars</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Monthly earnings</th>
+                    <th scope="col">Charged on</th>
+                    <th scope="col">Veyro fee</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {EXAMPLE_EARNINGS_MINOR.map((earned) => {
+                    const over = Math.max(0, earned - FREE_FLOOR_MINOR);
+                    const fee = feeMinor(earned);
+                    return (
+                      <tr key={earned}>
+                        <td className="num">{formatMinor(earned, "USD")}</td>
+                        <td className="num ptable-mid">{over === 0 ? "Nothing" : formatMinor(over, "USD")}</td>
+                        <td className="num ptable-fee" data-free={fee === 0 ? "1" : undefined}>
+                          {formatMinor(fee, "USD")}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section className="lp ch ch-surface" id="included">
           <div className="wrap-lp">
             <h2 className="lp-h2">One core product for everyone.</h2>
             <p className="body" style={{ marginTop: "var(--sp-4)" }}>
@@ -133,56 +182,13 @@ export default function Pricing() {
           </div>
         </section>
 
-        <section className="lp ch">
-          <div className="wrap-lp aside-grid">
-            <div className="aside-head">
-              <h2 className="lp-h2">The fee, in real numbers.</h2>
-              <p className="body" style={{ marginTop: "var(--sp-4)" }}>
-                Subtract the first $100 of monthly earnings, then take 3% of the rest.
-                These examples use the same calculation as your account.
-              </p>
-              <p className="small" style={{ marginTop: "var(--sp-5)" }}>
-                Stripe sets and deducts card processing fees separately, including when
-                Veyro is free. We do not mark them up. Your dashboard shows them on each transaction.
-              </p>
-            </div>
-            <div className="tblwrap" role="region" aria-label="Monthly earnings and Veyro fees" tabIndex={0}>
-              <table className="tbl ptable">
-                <caption className="sr-only">Example monthly earnings and Veyro fees, in US dollars</caption>
-                <thead>
-                  <tr>
-                    <th scope="col">Monthly earnings</th>
-                    <th scope="col">Charged on</th>
-                    <th scope="col">Veyro fee</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {EXAMPLE_EARNINGS_MINOR.map((earned) => {
-                    const over = Math.max(0, earned - FREE_FLOOR_MINOR);
-                    const fee = feeMinor(earned);
-                    return (
-                      <tr key={earned}>
-                        <td className="num">{formatMinor(earned, "USD")}</td>
-                        <td className="num ptable-mid">{over === 0 ? "Nothing" : formatMinor(over, "USD")}</td>
-                        <td className="num ptable-fee" data-free={fee === 0 ? "1" : undefined}>
-                          {formatMinor(fee, "USD")}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <section className="lp ch ch-surface">
+        <section className="lp ch ch-surface" id="fee-details">
           <div className="wrap-lp aside-grid">
             <div className="aside-head">
               <h2 className="lp-h2">Before your first sale.</h2>
               <p className="body" style={{ marginTop: "var(--sp-4)" }}>
-                The free allowance gives you room to try selling what you made. The fee
-                helps cover the payment account and the support around it.
+                The published model keeps the first $100 of monthly earnings free.
+                When fees launch, they help cover the payment account and the support around it.
               </p>
               <div className="hero-cta">
                 <Link className="btn btn-lg" href="/check">Check eligibility</Link>
@@ -193,14 +199,14 @@ export default function Pricing() {
               <div>
                 <dt>Refunds</dt>
                 <dd>
-                  Veyro&rsquo;s fee is calculated when a payment succeeds and is not returned
+                  Under the published model, Veyro&rsquo;s fee is calculated when a payment succeeds and is not returned
                   if you refund it. A refund lowers the monthly earnings total used to
                   calculate fees on later payments.
                 </dd>
               </div>
               <div>
                 <dt>Fee timing</dt>
-                <dd>Fees start on 15 October 2026. Nothing is charged before then.</dd>
+                <dd>The fee launch is postponed. No new date has been announced. Veyro fees are not being collected for now.</dd>
               </div>
               <div>
                 <dt>Our costs</dt>

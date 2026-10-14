@@ -20,9 +20,8 @@
 //
 // WHAT IS NEW: the month's arithmetic is a row of controls rather than a
 // figure you take on trust. Hover or focus any term and the line underneath
-// says what that number is; the others go quiet so the one you asked about is
-// the one you see. Requesting a payout is a real click with a real state
-// change.
+// says what that number is. Activated explanations persist after a tap and
+// all other financial values retain readable contrast.
 //
 // THE RULE THIS FILE IS STILL BUILT AROUND: nothing changes without a cause
 // the viewer can see. That rule is why the button used to be inert -- it
@@ -104,11 +103,10 @@ const TERMS: { k: TermKey; label: string; amount: number; op?: string; note: str
   },
   {
     k: "available", label: "Available", amount: BALANCE_MINOR, op: "=",
-    // Not "yours to request, nobody has to approve it", which was the old
-    // note and was false twice over: the payout is scheduled in Stripe, and
-    // it is scheduled by the account holder rather than by the founder.
-    note: "Cleared, and ready to be paid out. Your guardian schedules payouts in Stripe, "
-      + "as the account holder.",
+    // Name the provider-owned transfer without asserting who holds the
+    // Stripe login; that remains an unresolved setup detail in PRODUCT.md.
+    note: "Cleared for payout under the account’s Stripe settings. Veyro keeps the record; "
+      + "Stripe handles the bank transfer.",
   },
 ];
 
@@ -116,6 +114,7 @@ export function LiveWallet() {
   const [phase, setPhase] = useReducer((_: Phase, n: Phase) => n, 0 as Phase);
   /** Which term the pointer or keyboard is on. Null means none. */
   const [term, setTerm] = useState<TermKey | null>(null);
+  const [chosenTerm, chooseTerm] = useState<TermKey | null>(null);
   const node = useRef<HTMLDivElement>(null);
   const ran = useRef(false);
 
@@ -165,19 +164,22 @@ export function LiveWallet() {
   // label in one column.
   const saleState = phase >= 3 ? "Available" : phase === 2 ? "Settling" : "Received";
   const saleTone = phase >= 3 ? "pine" : phase === 2 ? "amber" : "slate";
-  const active = TERMS.find((t) => t.k === term);
+  // Pointer leave and blur end a preview; they must not clear a deliberate tap.
+  const currentTerm = term ?? chosenTerm;
+  const active = TERMS.find((t) => t.k === currentTerm);
 
   return (
     <div className="dp" ref={node} data-dim={term ? "1" : undefined}>
       {/* The whole thing in words, for anyone not seeing it. The controls
           below are real and reachable; this is the summary they sit in. */}
       <p className="sr-only">
-        An example founder wallet. {formatMinor(COLLECTED_MINOR, "USD")} collected this month,
+        An example founder wallet at the planned pricing. Veyro fee launch is postponed.
+        {formatMinor(COLLECTED_MINOR, "USD")} collected this month,
         less {formatMinor(PROCESSING_MINOR, "USD")} in processing fees,{" "}
         {formatMinor(VEYRO_FEE_MINOR, "USD")} to Veyro and{" "}
         {formatMinor(SETTLING_MINOR, "USD")} still settling, leaving an available balance of{" "}
-        {formatMinor(BALANCE_MINOR, "USD")}. Payouts are scheduled in Stripe by the guardian,
-        who is the account holder. Every figure is invented.
+        {formatMinor(BALANCE_MINOR, "USD")}. Payouts follow the payment account’s
+        schedule in Stripe. Every figure is invented.
       </p>
 
       <div className="dp-bar" aria-hidden="true">
@@ -187,6 +189,7 @@ export function LiveWallet() {
       </div>
 
       <div className="dp-body">
+        <p className="lw-pricing-note small">Illustrative planned pricing. Veyro fees are postponed.</p>
         <div className="dp-head">
           <div>
             {/* "Available to request" implied the founder does the
@@ -218,11 +221,11 @@ export function LiveWallet() {
                 type="button"
                 className="lw-term"
                 data-k={t.k}
-                data-on={term === t.k ? "1" : undefined}
+                data-on={currentTerm === t.k ? "1" : undefined}
                 onMouseEnter={() => setTerm(t.k)}
                 onFocus={() => setTerm(t.k)}
                 onBlur={() => setTerm(null)}
-                onClick={() => setTerm((v) => (v === t.k ? null : t.k))}
+                onClick={() => { chooseTerm(t.k); setTerm(t.k); }}
                 aria-describedby="lw-note"
               >
                 <span className="lw-term-k">{t.label}</span>
@@ -237,8 +240,8 @@ export function LiveWallet() {
         <p className="lw-note" id="lw-note" role="status" aria-live="polite">
           {active
             ? active.note
-            : "Hover any term to see what it is. Payouts are scheduled in Stripe by your "
-              + "guardian, who is the account holder."}
+            : "Hover or choose a term to understand it. Stripe handles bank transfers "
+              + "under the payment account’s settings."}
         </p>
 
         <div className="chips lw-chips">

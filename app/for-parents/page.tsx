@@ -6,8 +6,8 @@ import { SiteFooter } from "@/app/_ui/SiteFooter";
 import { SiteReveal } from "@/app/_ui/SiteReveal";
 import { SiteNav } from "@/app/_ui/SiteNav";
 import { ScrollTop } from "@/app/_ui/ScrollTop";
+import { Accordion } from "@/app/_ui/Accordion";
 import { GuardianPermissions } from "@/app/_ui/GuardianPermissions";
-import { ParentPanel } from "@/app/_ui/ParentPanel";
 import { FlowDiagram } from "@/app/_ui/FlowDiagram";
 import { TalkToAPerson } from "./TalkToAPerson";
 import { supportMailto } from "@/lib/support";
@@ -47,13 +47,13 @@ const QUESTIONS: QA[] = [
     verdict: "Permitted, not settled",
     tone: "amber",
     lead:
-      "The processor's own written policy allows it. No court has ruled on it, and we are not going to pretend one has.",
+      "Stripe's written reply permits the route under its policies. Veyro has not established the legal position in your country.",
     a: (
       <p className="body" style={{ marginTop: 0 }}>
         That policy is quoted in full (named, dated and unedited) on{" "}
         <Link className="linkbtn" href="/how-it-works">how it works</Link>. What it is not is a
-        court ruling: no judge has tested whether a minor can be bound by the contracts
-        underneath, and no lawyer has confirmed it in any country.{" "}
+        legal ruling. Questions about a minor&rsquo;s contracts and your obligations may
+        depend on the law in your country.{" "}
         <Link className="linkbtn" href="/legal">The full list of what is unproven</Link> is a page
         rather than a footnote.
       </p>
@@ -61,14 +61,13 @@ const QUESTIONS: QA[] = [
   },
   {
     q: "Am I liable if it goes wrong?",
-    verdict: "Yes, and that is the point",
-    tone: "pine",
+    verdict: "The account is your responsibility",
+    tone: "amber",
     lead:
-      "You are the account owner, because an adult has to be the party anyone can actually hold to the agreement.",
+      "You are the verified adult and account holder. Review the obligations you accept with Stripe before agreeing.",
     a: (
       <p className="body" style={{ marginTop: 0 }}>
-        A contract with a minor is voidable at the minor&rsquo;s election, so the enforceable
-        party has to be an adult. You get identity-checked, not your child. Refunds, chargebacks
+        Stripe checks your identity, not your child&rsquo;s. Refunds, chargebacks
         and disputes are ultimately yours, as they would be if your child used your own
         account. What changes is that this is a separate account for a separate activity.
       </p>
@@ -83,8 +82,8 @@ const QUESTIONS: QA[] = [
     a: (
       <>
         <p className="body" style={{ marginTop: 0 }}>
-          That follows from your being the account owner, which is what makes the route lawful
-          at all. Veyro keeps the two separable: the account covers your child&rsquo;s activity
+          The payment account is in your name under the provider&rsquo;s guardian route.
+          Veyro keeps the activity separable: the account covers your child&rsquo;s activity
           only, and the ledger records every payment and fee against it. Exports come from
           Stripe, which holds the payments.
         </p>
@@ -116,7 +115,7 @@ export default function ForParents() {
   return (
     <div className="fw public-page parents-page">
       <SkipLink />
-      <SiteNav active="/for-parents" cta={{ href: "/auth/signup", label: "Create account" }} />
+      <SiteNav active="/for-parents" cta={{ href: "/auth/signup?role=guardian", label: "Create account" }} />
 
       <main id="main">
         <div className="hero-band">
@@ -134,8 +133,31 @@ export default function ForParents() {
                   <Link className="linkbtn" href="/legal">What is not settled</Link>
                 </div>
               </div>
-              <ParentPanel />
+              <aside className="guardian-brief" aria-labelledby="guardian-brief-heading">
+                <h2 id="guardian-brief-heading">Before you accept.</h2>
+                <dl>
+                  <div>
+                    <dt>Your identity</dt>
+                    <dd>Stripe verifies you on its hosted form. Veyro never receives your ID or bank details.</dd>
+                  </div>
+                  <div>
+                    <dt>Your responsibility</dt>
+                    <dd>You are the account holder. Refunds, disputes and the account&rsquo;s obligations stay with you.</dd>
+                  </div>
+                  <div>
+                    <dt>Your oversight</dt>
+                    <dd>Your child manages products and sales. You receive payout-request notices and keep the controls Stripe provides.</dd>
+                  </div>
+                </dl>
+                <p>You can decline the invitation. Payments remain unavailable until the required setup is complete.</p>
+              </aside>
             </div>
+            <nav className="journey-index" aria-label="Guardian guide sections">
+              <a href="#your-role">Your role</a>
+              <a href="#money-and-control">Money and account controls</a>
+              <a href="#disputes">Disputes and refunds</a>
+              <a href="#questions-before-consent">Before you agree</a>
+            </nav>
           </div>
         </div>
 
@@ -175,7 +197,7 @@ export default function ForParents() {
           </div>
         </section>
 
-        <section className="lp ch">
+        <section className="lp ch" id="money-and-control">
           <div className="wrap-lp">
             <div className="aside-grid">
               <div className="aside-head">
@@ -219,7 +241,7 @@ export default function ForParents() {
           </div>
         </section>
 
-        <section className="lp ch ch-surface">
+        <section className="lp ch ch-surface" id="disputes">
           <div className="wrap-lp">
             <div className="aside-grid">
               <div className="aside-head">
@@ -251,7 +273,7 @@ export default function ForParents() {
           </div>
         </section>
 
-        <section className="lp ch">
+        <section className="lp ch" id="questions-before-consent">
           <div className="wrap-lp aside-grid">
             <div className="aside-head">
               <h2 className="lp-h2">The questions to ask before agreeing.</h2>
@@ -261,14 +283,21 @@ export default function ForParents() {
               </p>
             </div>
             <div>
-              <div className="qalist">
-                {QUESTIONS.map((question) => (
-                  <article className="qa" key={question.q}>
-                    <h3 className="qa-q">{question.q}</h3>
-                    <p className="qa-verdict" data-tone={question.tone}>{question.verdict}</p>
+              <div className="public-faq guardian-questions">
+                {QUESTIONS.map((question, index) => (
+                  <Accordion
+                    key={question.q}
+                    defaultOpen={index === 0}
+                    summary={
+                      <h3 className="guardian-question-heading">
+                        <span className="guardian-question-title">{question.q}</span>
+                        <span className="guardian-question-verdict" data-tone={question.tone}>{question.verdict}</span>
+                      </h3>
+                    }
+                  >
                     <p className="qa-lead">{question.lead}</p>
                     <div className="qa-body">{question.a}</div>
-                  </article>
+                  </Accordion>
                 ))}
               </div>
               <div className="gbefore">
@@ -298,7 +327,7 @@ export default function ForParents() {
               as plainly as you can accept it.
             </p>
             <div className="hero-cta">
-              <Link className="btn btn-lg" href="/auth/signup">Create your guardian account</Link>
+              <Link className="btn btn-lg" href="/auth/signup?role=guardian">Create your guardian account</Link>
               <Link className="linkbtn" href="/legal">Read the legal questions</Link>
             </div>
           </div>

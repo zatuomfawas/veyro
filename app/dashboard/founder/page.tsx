@@ -527,7 +527,7 @@ export default async function FounderDashboard() {
             <div className="dashboard-disclosure-inner anchor" id="revenue-details">
               <RevenueDetails folds={byEarned} payments={paymentCount} series={weekSeries} />
               <ThisMonth qmeMinor={qmeMinor} feeMinor={monthFeeMinor} currency="USD"
-                collecting={collecting} crossed={crossedThreshold} feesStart="15 October 2026" />
+                collecting={collecting} crossed={crossedThreshold} />
               <section className="dashboard-report-section" aria-labelledby="analytics-heading">
                 <h3 id="analytics-heading" className="h4">Last 30 days</h3>
                 <Analytics fold={analytics} hasProducts={products.length > 0} />

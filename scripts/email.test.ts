@@ -5,12 +5,26 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import * as nodeModule from "node:module";
 import { renderText, renderHtml } from "../lib/email-html.ts";
 import {
   payoutMail, disputeMailForFounder, disputeMailForGuardian,
 } from "../lib/email-bodies.ts";
-import { crossedFreeLimit, FEES_EFFECTIVE_AT, FEES_EFFECTIVE_LABEL } from "../lib/pricing.ts";
+import {
+  crossedFreeLimit, feeMinor, FEES_EFFECTIVE_LABEL, FEE_COLLECTION_ENABLED,
+} from "../lib/pricing.ts";
 import { SUPPORT_EMAIL } from "../lib/support.ts";
+
+// The installed Node runtime supports synchronous loader hooks; this project's
+// @types/node 20 predates that API. Type the small surface used by this test.
+type ResolveContext = { parentURL?: string };
+type ResolveResult = { url: string; shortCircuit?: boolean };
+type ResolveNext = (specifier: string, context: ResolveContext) => ResolveResult;
+const registerHooks = (nodeModule as unknown as {
+  registerHooks: (hooks: {
+    resolve: (specifier: string, context: ResolveContext, nextResolve: ResolveNext) => ResolveResult;
+  }) => { deregister: () => void };
+}).registerHooks;
 
 /* ---------------- the sender ---------------- */
 
@@ -265,12 +279,81 @@ test("a new month starts with its own notice", () => {
 
 /* ---------------- what the notice says ---------------- */
 
-test("the date in the email is the date the code enforces", () => {
-  // The email tells somebody when they will start being charged. If this
-  // string were typed by hand it could disagree with the guard, and the
-  // product would have promised one date and acted on another.
-  assert.equal(FEES_EFFECTIVE_LABEL, "15 October 2026");
-  assert.equal(new Date(FEES_EFFECTIVE_AT).toISOString(), "2026-10-15T00:00:00.000Z");
+test("postponed collection exposes a status instead of the original launch date", () => {
+  assert.equal(FEE_COLLECTION_ENABLED, false);
+  assert.equal(FEES_EFFECTIVE_LABEL, "Postponed");
+});
+
+test("threshold emails distinguish postponed estimates, collected fees and a confirmed future date", async () => {
+  // Load the real sender and renderers while replacing only the mail provider
+  // and audit dependency. No database, credentials or outbound request is used.
+  const emailUrl = new URL("../lib/email.ts", import.meta.url).href;
+  const providerUrl = "data:text/javascript," + encodeURIComponent(`
+    export const messages = [];
+    export class Resend {
+      emails = { send: async message => { messages.push(message); return { error: null }; } };
+    }
+  `);
+  const auditUrl = "data:text/javascript,export async function audit() {}";
+  const scheduledPricingUrl = "data:text/javascript," + encodeURIComponent(`
+    export const FREE_FLOOR_MINOR = 10000;
+    export const FEE_COLLECTION_ENABLED = true;
+    export const FEES_EFFECTIVE_LABEL = "1 December 2026";
+  `);
+  const hooks = registerHooks({
+    resolve(specifier, context, nextResolve) {
+      if (context.parentURL?.startsWith(emailUrl)) {
+        if (specifier === "resend") return { url: providerUrl, shortCircuit: true };
+        if (specifier === "./auth") return { url: auditUrl, shortCircuit: true };
+        if (specifier === "./pricing" && context.parentURL.endsWith("?scheduled")) {
+          return { url: scheduledPricingUrl, shortCircuit: true };
+        }
+        if (specifier.startsWith("./")) {
+          return nextResolve(new URL(`${specifier}.ts`, context.parentURL).href, context);
+        }
+      }
+      return nextResolve(specifier, context);
+    },
+  });
+  const previousKey = process.env.RESEND_API_KEY;
+  process.env.RESEND_API_KEY = "test-provider-is-replaced-no-request";
+  try {
+    const provider = await import(providerUrl) as {
+      messages: { text: string; html: string }[];
+    };
+    const { sendThresholdEmail } = await import(emailUrl) as typeof import("../lib/email.ts");
+    const args = { qmeMinor: 20000, feeMinor: feeMinor(20000), month: "2026-10", collecting: false };
+    await sendThresholdEmail("founder@veyro-ui-test.invalid", args, "test-founder");
+    const postponed = provider.messages[0];
+    for (const output of [postponed.text, postponed.html]) {
+      assert.match(output, /postponed for now/i);
+      assert.match(output, /no new start date is set/i);
+      assert.match(output, /Estimated Veyro fee \(not charged\)/);
+      assert.match(output, /\$3\.00/);
+      assert.ok(!/15 October 2026|starts on Postponed|fee from Postponed/i.test(output));
+    }
+    assert.match(postponed.text, /Nothing is being charged/);
+    assert.match(postponed.text, /This is an estimate, not an amount charged/);
+
+    await sendThresholdEmail("founder@veyro-ui-test.invalid", { ...args, collecting: true }, "test-founder");
+    const collected = provider.messages[1];
+    assert.match(collected.text, /Veyro fee so far: \$3\.00/);
+    assert.match(collected.text, /It is taken from payments as they arrive/);
+    assert.ok(!/postponed|estimate|Nothing is being charged/i.test(collected.text));
+
+    const scheduled = await import(`${emailUrl}?scheduled`) as typeof import("../lib/email.ts");
+    await scheduled.sendThresholdEmail("founder@veyro-ui-test.invalid", args, "test-founder");
+    const waiting = provider.messages[2];
+    assert.match(waiting.text, /Nothing is being charged/);
+    assert.match(waiting.text, /fee starts on 1 December 2026/);
+    assert.match(waiting.text, /Veyro fee from 1 December 2026: \$3\.00/);
+    assert.ok(!/postponed|15 October 2026/i.test(waiting.text));
+    assert.equal(provider.messages.length, 3);
+  } finally {
+    hooks.deregister();
+    if (previousKey === undefined) delete process.env.RESEND_API_KEY;
+    else process.env.RESEND_API_KEY = previousKey;
+  }
 });
 
 test("the notice offers nothing and promises nothing", () => {

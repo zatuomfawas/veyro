@@ -81,13 +81,15 @@ export function qmeMonthKey(stripeCreatedUnixSeconds: number): string {
 /**
  * No Veyro fee may be taken before the Terms that introduce it are in force.
  *
- * Two independent locks, as counsel asked. FEE_COLLECTION_ENABLED is the
- * operational switch; this date is the legal floor and does not care what the
- * switch says. Flipping the flag early cannot take a fee, because the guard
- * below is the thing the collection path has to get past.
+ * Two independent locks. FEE_COLLECTION_ENABLED is the operational switch;
+ * the date is a floor, so enabling the switch early still cannot take a fee.
+ * Collection is postponed without a replacement date. The original date is
+ * retained only as a historical floor; passing it does not enable collection.
+ * A future launch must confirm the Terms and update the date before enabling
+ * the switch.
  */
 export const FEES_EFFECTIVE_AT = Date.UTC(2026, 9, 15, 0, 0, 0); // 15 Oct 2026, 00:00 UTC
-export const FEE_COLLECTION_ENABLED = true;
+export const FEE_COLLECTION_ENABLED = false;
 
 /**
  * Is this the payment that took the month past the free limit, and has
@@ -111,16 +113,16 @@ export function crossedFreeLimit(qmeAfterMinor: number, alreadyNotified: boolean
 }
 
 /**
- * The same instant, worded for a reader.
- *
- * Derived rather than typed out, because this string goes in an email that
- * tells someone when they will start being charged, and a hand-copied date
- * that drifts from the one the code enforces is the single worst sentence
- * this product could send.
+ * The collection status, worded for a reader. While collection is postponed,
+ * the historical date must never read as a promised future launch date.
+ * When collection is explicitly enabled, derive its label from the same floor
+ * the guard enforces rather than maintaining a second copy of the date.
  */
-export const FEES_EFFECTIVE_LABEL = new Date(FEES_EFFECTIVE_AT).toLocaleDateString("en-GB", {
-  day: "numeric", month: "long", year: "numeric", timeZone: "UTC",
-});
+export const FEES_EFFECTIVE_LABEL = FEE_COLLECTION_ENABLED
+  ? new Date(FEES_EFFECTIVE_AT).toLocaleDateString("en-GB", {
+      day: "numeric", month: "long", year: "numeric", timeZone: "UTC",
+    })
+  : "Postponed";
 
 /** Whether a fee may lawfully be taken at `nowMs`. Both locks must agree. */
 export function mayCollectFee(nowMs: number = Date.now()): boolean {

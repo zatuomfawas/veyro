@@ -1,17 +1,32 @@
 # How-it-works surface brief
 
-This page explains the implemented guardian payment route as one compact article. Keep provider evidence, account limitations, country/age qualifications and legal uncertainty visible. Its updated/check dates and product claims remain incumbent facts; visual changes do not resolve them.
+**Route:** `/how-it-works` · **Mode:** Read · **Visual authority:** `DESIGN.md`, “The Clear Record”.
 
-## Composition
+This compact guide explains practical setup before offering detailed provider evidence. Keep the incumbent identity, source dates, country/age qualifications, account restrictions and legal uncertainty intact.
 
-A short introduction leads into six indexed chapters: getting started, roles, Stripe's written reply, country/age limits, account limitations, and money/guardian controls. The desktop layout uses a 200px sticky index, 56px gap and a reading column capped at 780px. At 980px the index narrows to 160px with a 32px gap; at 760px it becomes a static two-column list above the article.
+## Current composition
 
-Chapters use thin rules, 32px vertical padding and 26px headings, reducing to 24px padding and 22px headings on mobile. Reading copy is 16px with 1.65 leading. Compact steps, role context, country records and limitations support the prose. Use one illustrative wallet with a clear example label; avoid repeating diagrams or stretching chapters into tall bands.
+The introduction states the founder, guardian, Stripe and Veyro roles, with **Check eligibility** and setup-guide actions. The existing six chapter anchors remain, in this reading order:
 
-All five provider quotations come verbatim from the shared `app/_ui/provider-reply.ts` source. Keep the distinction between provider guidance and legal approval, and between guardian consent and completed Stripe payment setup. Standard-account controls stay in Stripe; Veyro records requests and does not promise per-payout guardian approval.
+1. `#setup`: four practical steps, from checking eligibility to following payments and payout requests.
+2. `#roles`: the shared role record and the software/provider division of responsibility.
+3. `#money`: guardian account controls, an explicitly labelled illustrative wallet and checkout integration routes.
+4. `#provider-reply`: a native disclosure containing all five exact provider quotations; the provider-versus-law qualification stays visible outside it.
+5. `#countries`: direct country/age qualifications, local differences and the open legal question.
+6. `#account-limits`: the Standard-account payout limitation stays open; a separate disclosure carries UAE platform restrictions, guardian verification and the unfinished Accounts v1 migration.
 
-Eligibility actions remain in the public header, introduction and closing article section. The duplicate sticky eligibility prompt is removed. The shared footer follows, retaining its processing disclosure; scroll progress and scroll-to-top controls remain.
+The closing eligibility action follows the chapters. The sticky index has legal context rather than a second eligibility prompt. Scroll progress, scroll-to-top and the shared neutral footer remain.
 
-## Sources
+## Layout and interactions
 
-`app/how-it-works/page.tsx`, `app/_ui/veyro.css`, `app/_ui/provider-reply.ts`, `app/_ui/RoleStack.tsx`, `app/_ui/GuardianPermissions.tsx`, `app/_ui/LiveWallet.tsx`, `app/_ui/SiteNav.tsx` and `app/_ui/SiteFooter.tsx`.
+Desktop uses a 200px sticky index, 56px gap and reading column capped at 780px. At 980px the index becomes 160px with a 32px gap; at 760px it becomes a static two-column list above the article. Chapter rules separate 32px desktop and 24px mobile vertical padding; headings use 26px and 22px. Reading text is 16px with 1.65 leading, bounded by the incumbent reading measure.
+
+**Read the complete quoted reply** identifies all five quotations and their 8 September 2026 date before opening. **Read the integration limits** identifies its technical contents. Both use shared `Accordion` native `details`/`summary`, interruptible measured-height motion and immediate reduced-motion settlement. All quoted text stays server-rendered and comes from `app/_ui/provider-reply.ts`.
+
+The wallet uses actual buttons for five arithmetic explanations, with a polite status region and a written accessible summary. Its invented sale sequence runs once; reduced motion shows the final state. The Stripe link opens the provider dashboard. This demonstration creates no payment, payout request or account balance. Its fee figures illustrate the planned formula: Veyro fee collection is postponed, with no replacement date, as confirmed by the owner on 14 October 2026.
+
+## Constraints and evidence
+
+Guardian consent alone is not completed payment setup. Stripe processes and holds funds; Veyro maintains records. Standard-account settings and transfers remain in Stripe, with no per-sale or per-payout approval supplied by Veyro. A recorded payout request does not confirm a bank transfer. Preserve the visible legal qualification, exact quotations, local availability distinctions and incomplete migration disclosure. The provider check date of 13 September 2026 remains the incumbent page fact, not a new verification.
+
+Source checked: `app/how-it-works/page.tsx`, `app/_ui/{veyro.css,provider-reply.ts}`, and shared `RoleStack`, `GuardianPermissions`, `LiveWallet`, `Accordion`, navigation and footer components. The saved `.impeccable/review/professional-final/report.json` records desktop/mobile native disclosure and five-quotation checks alongside the route/layout review. This documentation pass did not rerun the browser or verify current provider policy.

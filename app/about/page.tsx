@@ -70,8 +70,9 @@ const COMMITMENTS: { head: string; body: React.ReactNode }[] = [
     head: "Most people will never pay Veyro anything.",
     body: (
       <>
-        Free under $100 a month in earnings, and 3% on whatever is above that, starting
-        15 October 2026. The core product is the same whether you are paying us or not; some
+        The fee launch is postponed, with no new date announced and no Veyro fees being
+        collected for now. The published model is free for your first $100 of monthly earnings,
+        then 3% above that. The core product is the same whether you are paying us or not; some
         extra services switch on in the months you are above the line. A dormant account costs us nothing, which is why the free limit is
         genuinely free rather than something paid users subsidise. Card processing fees are
         charged on top by the payment processor, which sets and deducts them.

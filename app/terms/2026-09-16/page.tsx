@@ -1,12 +1,12 @@
 // The Terms as they stood before counsel's October rewrite, kept at a stable
-// URL because they govern until the new ones take effect on 15 October 2026.
+// URL because they remain in force while the October update is postponed.
 //
 // The clause text below is restored unchanged from git (23ff1e6^, the last
 // commit before the rewrite began). Do not edit it. If something here is
 // wrong, it was wrong in the document people agreed to, and the correction
 // belongs in the current Terms rather than in a rewritten history.
 //
-// This URL stays live permanently. A superseded version that 404s is worse
+// This URL stays live permanently. An earlier version that 404s is worse
 // than no archive at all: anyone trying to check what they agreed to finds
 // nothing, and has to take our word for it.
 import type { Metadata } from "next";
@@ -17,12 +17,12 @@ import { LegalShell, Clause, SUPPORT_EMAIL } from "@/app/_ui/LegalShell";
 export const viewport = buildViewport();
 
 export const metadata: Metadata = {
-  title: "Terms of Service, 16 September 2026 (superseded)",
+  title: "Terms of Service, 16 September 2026 (currently in force)",
   description:
-    "The Veyro Terms of Service dated 16 September 2026, kept for reference. "
-    + "These govern until the Terms dated 5 October 2026 take effect on 15 October 2026.",
+    "The Veyro Terms of Service dated 16 September 2026 remain in force. "
+    + "The October update's effective date is postponed, with no new date announced.",
   alternates: { canonical: SITE + "/terms/2026-09-16" },
-  // Not indexed: search should land on the current Terms, and two near
+  // Not indexed: search should land on the Terms landing page, and two near
   // identical legal documents in an index is how people read the wrong one.
   robots: { index: false, follow: true },
 };
@@ -51,11 +51,12 @@ export default function TermsArchive() {
       sections={SECTIONS}
     >
       <div className="archive-note">
-        <strong>This is a superseded version, kept for reference.</strong>
+        <strong>These Terms remain in force.</strong>
         <p style={{ margin: "6px 0 0" }}>
-          These Terms are dated 16 September 2026 and govern until{" "}
-          <strong>15 October 2026</strong>. From that date the{" "}
-          <Link className="linkbtn" href="/terms">current Terms</Link> apply.
+          These Terms are dated 16 September 2026. The effective date for the{" "}
+          <Link className="linkbtn" href="/terms">updated Terms dated 5 October 2026</Link>{" "}
+          is postponed, with no new date announced. This version continues to govern until
+          an announced new version takes effect.
         </p>
       </div>
 

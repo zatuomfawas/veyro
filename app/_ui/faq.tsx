@@ -72,12 +72,12 @@ export const FAQ: FaqEntry[] = [
     
     a: (
       <>
-      Nothing under $100 a month in earnings, which is most people. Above that, 3% on the
-      amount over $100, and <strong>fees start on 15 October 2026</strong> &mdash; nothing is
-      charged before then. The core product is the same either way: account setup, the dashboard,
+      <strong>Veyro&rsquo;s fee launch is postponed.</strong> No new date has been announced,
+      and no Veyro fees are being collected for now. The published model is free for the first
+      $100 of monthly earnings, then 3% on the amount above it. The core product is the same either way: account setup, the dashboard,
       payouts, account status monitoring and support. Some extra services switch on in the months
       you earn above $100.{" "}
-      <Link className="linkbtn" href="/pricing">What those are</Link>. The fee is taken when a
+      <Link className="linkbtn" href="/pricing">What those are</Link>. Under the published model, a fee is taken when a
       payment succeeds, and a later refund does not return it. Card processing fees are charged
       on top by the payment processor, which sets and deducts them, at every size.
       {/* The worked example reads as a figure rather than as a clause,
@@ -88,11 +88,11 @@ export const FAQ: FaqEntry[] = [
           <span className="fig fig-sm">$400.00</span>
         </span>
         <span>
-          <span className="fig-k">Veyro&rsquo;s fee</span>
+          <span className="fig-k">Illustrative Veyro fee</span>
           <span className="fig fig-sm">$9.00</span>
         </span>
         <span>
-          <span className="fig-k">You keep</span>
+          <span className="fig-k">After that fee</span>
           <span className="fig fig-sm fig-pos">$391.00</span>
         </span>
       </span>

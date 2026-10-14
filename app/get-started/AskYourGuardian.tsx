@@ -2,14 +2,9 @@
 
 // The message a founder sends their parent, written for them.
 //
-// This exists because of where accounts actually stop. Of the founders on the
-// platform today, more invited a guardian than got one to accept, and fewer
-// still got through the payment provider's form -- the drop is at the asking,
-// not at the software. The page used to answer that with a sentence telling
-// people to "ask them early", which is advice, not help. A thirteen-year-old
-// explaining identity verification to a parent over text is the hardest thing
-// this product asks of anyone, and it was the one step we handed over with
-// nothing.
+// Explaining identity verification and the adult's responsibilities is a real
+// setup task. A selectable message helps the founder ask without promising a
+// fixed verification time or implying that the guardian takes on no risk.
 //
 // So the words are here, written for the parent rather than for the founder,
 // and they are deliberately an ASK rather than an announcement: it ends on a
@@ -30,9 +25,9 @@ import { Btn } from "@/app/_ui/form";
 
 const MESSAGE = `Hi — I've built something I want to sell online, and there's one part I need you for.
 
-I'm using Veyro. Because I'm under 18, the payment account has to be in an adult's name, and that would be you. It's one form and about ten minutes. Stripe, the payment company, is who verifies you — Veyro never sees your ID or your bank details.
+I'm setting up payments with Veyro. Because I'm under 18, Stripe needs a parent or legal guardian to complete verification as the adult on the payment account. Stripe handles the identity checks — Veyro never sees your ID or your bank details.
 
-What it means for you: your name is on the payment account, and you're told every time I request a payout. You're not running the business and it doesn't cost you anything.
+What it means for you: you take on the responsibilities of the adult named on the payment account, and Veyro tells you when I request a payout. I'll run the business, but please read the responsibilities and legal limits before deciding.
 
 This page explains it properly, including the parts that aren't settled yet:
 https://withveyro.com/for-parents

@@ -376,4 +376,4 @@ Motion communicates a state change. The shared 110ms and 170ms transitions keep 
 - **Don't** duplicate a heading with a category label above it unless that label adds a distinct navigation or structural meaning.
 - **Don't** present example account controls as live actions, or remove useful calculator and share interactions while simplifying their appearance.
 - **Don't** invent testimonials, activity, payment availability or a launch-ready state.
-- **Don't** treat this design document as a replacement for product facts. The fee-launch drift remains an unresolved issue in PRODUCT.md.
+- **Don't** treat this design document as a replacement for product facts. The fee launch is postponed; PRODUCT.md records the confirmed timing and collection state.

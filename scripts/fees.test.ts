@@ -82,10 +82,13 @@ test("the month boundary is UTC and keyed on Stripe's timestamp", () => {
   assert.equal(qmeMonthKey(Date.UTC(2026, 10, 1, 0, 0, 0) / 1000), "2026-11");
 });
 
-test("no fee can be taken before 15 October 2026", () => {
+test("planned fees remain calculable while collection is postponed", () => {
   assert.equal(mayCollectFee(FEES_EFFECTIVE_AT - 1), false);
-  assert.equal(mayCollectFee(FEES_EFFECTIVE_AT), true);
-  assert.equal(new Date(FEES_EFFECTIVE_AT).toISOString(), "2026-10-15T00:00:00.000Z");
+  assert.equal(mayCollectFee(FEES_EFFECTIVE_AT), false);
+  assert.equal(mayCollectFee(Date.UTC(2030, 0, 1)), false);
+  assert.equal(feeMinor(20000), 300);
+  assert.equal(feeOnPaymentMinor(16000, 150), 30);
+  assert.equal(feeOnPaymentMinor(11000, 150), 0);
 });
 
 test("a simulated race cannot produce two under-limit decisions", () => {

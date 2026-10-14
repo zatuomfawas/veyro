@@ -8,6 +8,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
+import { FEE_COLLECTION_ENABLED, FEES_EFFECTIVE_LABEL, mayCollectFee } from "../lib/pricing.ts";
 
 const read = (p: string) => (existsSync(p) ? readFileSync(p, "utf8") : "");
 
@@ -116,40 +117,33 @@ test("no tax claims anywhere on the pricing page", () => {
   assert.ok(!/tax form|quarterly estimate/i.test(claims("app/pricing/page.tsx")));
 });
 
-test("fees cannot be collected before the Terms take effect", () => {
-  // The page says fees start on 5 November. The code must agree, or the page
-  // is making a commitment the system can break.
-  const pricing = claims("app/pricing/page.tsx");
-  assert.match(pricing, /Fees start on 15 October 2026/);
-  const lib = read("lib/pricing.ts");
-  // Collection is on from 15 October. The date guard is now the only lock,
-  // so the test asserts it is present and correct rather than that the flag
-  // is off.
-  assert.match(lib, /FEE_COLLECTION_ENABLED = true/);
-  assert.match(lib, /Date\.UTC\(2026, 9, 15, 0, 0, 0\)/);
-  assert.match(lib, /FEES_EFFECTIVE_AT/);
+test("published fee postponement is enforced by the collection guard", () => {
+  assert.equal(FEE_COLLECTION_ENABLED, false);
+  assert.equal(FEES_EFFECTIVE_LABEL, "Postponed");
+  assert.equal(mayCollectFee(Date.UTC(2026, 9, 14)), false);
+  assert.equal(mayCollectFee(Date.UTC(2026, 9, 15)), false);
+  assert.equal(mayCollectFee(Date.UTC(2030, 0, 1)), false);
+
+  for (const path of [
+    "app/pricing/page.tsx", "app/_ui/faq.tsx", "app/about/page.tsx", "public/llms.txt",
+  ]) {
+    const source = claims(path);
+    assert.match(source, /postponed/i, `${path} must state the current fee status`);
+    assert.ok(!/15 October 2026/.test(source), `${path} must not promise the old launch date`);
+  }
 });
 
-test("the fee start date in code and in the Terms are the same instant", () => {
-  // The single most dangerous thing that can drift in this codebase.
-  //
-  // FEES_EFFECTIVE_AT decides when money may be taken; EFFECTIVE on /terms
-  // decides when the document that provides for it is in force. If one moves
-  // without the other, Veyro either charges under Terms not yet operative, or
-  // publishes an obligation it is not yet enforcing. Both are the kind of
-  // mistake nobody notices until somebody is owed a refund.
-  const lib = read("lib/pricing.ts");
-  const terms = read("app/terms/page.tsx");
-
-  const m = lib.match(/FEES_EFFECTIVE_AT = Date\.UTC\((\d+), (\d+), (\d+)/);
-  assert.ok(m, "FEES_EFFECTIVE_AT is not in the form this test can read");
-  const [, y, mo, d] = m;
-  const iso = new Date(Date.UTC(Number(y), Number(mo), Number(d))).toISOString();
-  assert.equal(iso, "2026-10-15T00:00:00.000Z");
-
-  const e = terms.match(/const EFFECTIVE = "([^"]+)"/);
-  assert.ok(e, "EFFECTIVE is missing from the Terms");
-  assert.equal(e[1], "15 October 2026");
+test("the Terms disclose postponement and retain the September version in force", () => {
+  const terms = claims("app/terms/page.tsx");
+  const current = claims("app/terms/2026-09-16/page.tsx");
+  for (const [path, source] of [["updated Terms", terms], ["September Terms", current]]) {
+    assert.match(source, /postponed/i, `${path} must explain the postponed update`);
+    assert.ok(!/15 October 2026/.test(source), `${path} must not assert the old effective date`);
+    assert.match(source, /remain in force|continues to govern/i,
+      `${path} must identify which agreement still governs`);
+  }
+  assert.match(terms, /href="\/terms\/2026-09-16"/,
+    "the updated Terms must link to the version that remains applicable");
 });
 
 test("the annual summary is scheduled for 5 January, not 1 January", () => {

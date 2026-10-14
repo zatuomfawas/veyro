@@ -3,14 +3,13 @@ import { FREE_LIMIT_MINOR } from "@/lib/fees";
 
 /** The authoritative monthly ledger is in USD, separate from per-currency wallet records. */
 export function ThisMonth({
-  qmeMinor, feeMinor, currency, collecting, crossed, feesStart,
+  qmeMinor, feeMinor, currency, collecting, crossed,
 }: {
   qmeMinor: number;
   feeMinor: number;
   currency: string;
   collecting: boolean;
   crossed: boolean;
-  feesStart: string;
 }) {
   const over = Math.max(0, qmeMinor - FREE_LIMIT_MINOR);
   return (
@@ -22,11 +21,11 @@ export function ThisMonth({
         <div><dt>{collecting ? "Veyro fee" : "Estimated Veyro fee"}</dt><dd className="num">{formatMinor(feeMinor, currency)}</dd></div>
       </dl>
       <p className="small">
-        {over === 0
-          ? `Nothing is charged under ${formatMinor(FREE_LIMIT_MINOR, currency)} a month.`
-          : collecting
-            ? "The fee applies only to qualifying earnings above the free allowance."
-            : `Nothing is being charged yet. This is what the fee will be once fees start on ${feesStart}.`}
+        {!collecting
+          ? "Veyro fee collection is postponed. This is an estimate at the planned rate, not a charge. A new start date will be announced."
+          : over === 0
+            ? `Nothing is charged under ${formatMinor(FREE_LIMIT_MINOR, currency)} a month.`
+            : "The fee applies only to qualifying earnings above the free allowance."}
         {" "}This monthly ledger is recorded in USD; wallet currencies remain separate.
       </p>
       {crossed && (

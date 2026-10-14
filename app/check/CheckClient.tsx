@@ -15,6 +15,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Btn, Field, Notice } from "@/app/_ui/form";
+import { Accordion } from "@/app/_ui/Accordion";
 
 /* ------------------------------------------------------------------ *
  * Eligibility
@@ -202,7 +203,11 @@ function EligibilityCheck({
             whoever wants it. */}
         <div className={embedded ? undefined : "wrap-lp cktool"}>
         <div>
-        <div className="card card-prose" style={{ marginTop: 20 }}><div className="card-b checkform">
+        <div className="card card-prose" style={{ marginTop: 20 }}><form className="card-b checkform"
+          onSubmit={(event) => {
+            event.preventDefault();
+            if (ready) setR(eligibility(code, age, region));
+          }}>
           <Field label="Where do you live?">
             <select className="select" value={code} onChange={(e) => { setCode(e.target.value); setRegion(""); reset(); }}>
               <option value="">Choose a country</option>
@@ -218,12 +223,12 @@ function EligibilityCheck({
               </select>
             </Field>
           )}
-          <Field label="Year you were born">
+          <Field label="Year you were born" hint="This gives an estimate. Signup checks your full date of birth.">
             <input className="input" inputMode="numeric" maxLength={4} value={year}
               onChange={(e) => { setYear(e.target.value.replace(/\D/g, "")); reset(); }} placeholder="2009" />
           </Field>
-          <Btn className="btn-w" disabled={!ready} onClick={() => setR(eligibility(code, age, region))}>Check</Btn>
-        </div></div>
+          <Btn className="btn-w" type="submit" disabled={!ready}>Check my eligibility</Btn>
+        </form></div>
 
         {R && (
           /* Keyed on the answer, so asking a second question replays the
@@ -231,29 +236,21 @@ function EligibilityCheck({
              a result that changes silently is one they can miss entirely. */
           <div className="check-res" key={`${R.route}-${R.country?.[0]}-${R.region}`}>
             {R.route === "guardian" && (
-              <Notice live lead tone="pine" head={"Verified in " + (R.region || R.country?.[1])}
+              <Notice live lead tone="pine" head="Your route: with a guardian"
                 action={<Btn size="sm" onClick={() => go("signup")}>Create your account</Btn>}>
                 <p>
-                  {R.country?.[1]} is on the payment provider&rsquo;s supported list, and this route is open to you.
-                  In {R.region || R.country?.[1]} you can sign a binding contract in your own name from{" "}
-                  {R.majority}; you turn {age} this year, so a parent or legal guardian is named as the adult on the payment
-                  account before it can take charges or pay out. They pass the provider&rsquo;s identity checks and
-                  accept responsibility for the account, which is what the provider requires and what makes the rest of
-                  it legitimate. You keep running the business. We walk both of you through the setup and keep the
-                  record of who agreed to what, and when.
+                  You turn {age} this year. In {R.region || R.country?.[1]}, you can sign a binding contract
+                  in your own name from {R.majority}. A parent or legal guardian needs to complete
+                  Stripe&rsquo;s onboarding as the verified adult before the account can accept charges or receive payouts.
+                  You keep running the business; Veyro keeps the consent and payment records.
                 </p>
                 <p style={{ marginTop: 8 }}>
                   {STRIPE_CONFIRMED.has(R.country?.[0] ?? "") ? (
-                    <>Stripe confirmed {R.country?.[1]} by name when we asked them directly on 8 September 2026, and
-                    the age above comes from {R.evidence === "primary" ? "a named statute or an official body"
-                      : R.evidence === "disputed" ? "sources that disagree, so we use the higher figure"
-                      : "secondary summaries"}. This is the strongest case we have.</>
+                    <>Stripe confirmed {R.country?.[1]} by name on 8 September 2026. Provider policy
+                    permits this model; local legal advice has not been obtained.</>
                   ) : (
-                    <>Stripe confirmed how this works in general (13 and over, with the guardian&rsquo;s involvement
-                    completed through their own onboarding), and we have found nothing in {R.country?.[1]}&rsquo;s law
-                    that prevents it. What they would not confirm is availability country by country; they named only
-                    the US. So you would find out for certain at the Stripe step, before any money moves and before
-                    anyone has committed to anything.</>
+                    <>Stripe confirmed the guardian model, but did not confirm minor onboarding in
+                    {" "}{R.country?.[1]} specifically. Availability is checked at the Stripe step, before any money moves.</>
                   )}
                 </p>
               </Notice>
@@ -334,7 +331,22 @@ function EligibilityCheck({
             )}
 
             {(["guardian", "adult", "preview", "extended", "adults_only"] as Route[]).includes(R.route) && (
-              <div className="panel" style={{ marginTop: 12 }}>
+              <Accordion className="check-result-evidence" summary="Sources and limits of this result">
+                {R.route === "guardian" && (
+                  <p className="small">
+                    {STRIPE_CONFIRMED.has(R.country?.[0] ?? "") ? (
+                      <>Stripe confirmed {R.country?.[1]} by name when we asked them directly on 8 September 2026.
+                      The age above comes from {R.evidence === "primary" ? "a named statute or an official body"
+                        : R.evidence === "disputed" ? "sources that disagree, so we use the higher figure"
+                        : "secondary summaries"}. This is the strongest case we have.</>
+                    ) : (
+                      <>Stripe confirmed how this works in general: 13 and over, with the guardian&rsquo;s involvement
+                      completed through their own onboarding. We have found nothing in {R.country?.[1]}&rsquo;s law
+                      that prevents it. What they would not confirm is availability country by country; they named
+                      only the US. You would find out at the Stripe step, before any money moves.</>
+                    )}
+                  </p>
+                )}
                 {R.note && !R.region && <>
                   <div className="lbl" style={{ marginBottom: 4 }}>Worth knowing about {R.country?.[1]}</div>
                   <p className="small" style={{ marginBottom: 12 }}>{R.note}</p>
@@ -346,12 +358,12 @@ function EligibilityCheck({
                    : R.evidence === "disputed" ? "Sources disagree, so we use the higher figure. Being told you need a guardian when you do not costs a step; the reverse produces an invalid application."
                    : "From secondary summaries, not yet confirmed against the statute."}
                 </p>
-                <p className="tiny" style={{ marginTop: 8 }}>
+                <p className="small" style={{ marginTop: 8 }}>
                   Separately, and this is the part that gates everything: whether a minor may hold the account
                   in {R.country?.[1]} with a guardian as representative has not been confirmed by a lawyer in any
                   country. Provider policy permitting it is not the same as it being settled locally.
                 </p>
-              </div>
+              </Accordion>
             )}
           </div>
         )}
@@ -395,17 +407,17 @@ function EligibilityCheck({
           </div>
           <div className="ckfilters">
 
-          <p className="tiny">
+          <p className="small">
             <strong>Filter one is reach:</strong> how the payment provider gets to your country at all, which is
             what the four figures above divide up.
           </p>
-          <p className="tiny">
+          <p className="small">
             <strong>Filter two is age:</strong> the age at which you can enter a binding contract where you live,
             because the provider&rsquo;s terms defer to local law rather than assuming 18. Scotland is 16, seven
             Canadian provinces and territories are 19, Mississippi is 21, and Singapore separates contracting age
             from adulthood entirely.
           </p>
-          <p className="tiny">
+          <p className="small">
             <strong>Beyond those two, the route is treated as open.</strong> Stripe confirmed the mechanism to us
             directly on 8 September 2026, so we do not mark a country closed unless its own law sets a higher age
             or the provider carves it out. What Stripe would not confirm is availability country by country, and

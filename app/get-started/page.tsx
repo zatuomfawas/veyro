@@ -41,7 +41,7 @@ const PHASES = [
   {
     who: "Your guardian",
     key: "parent",
-    time: "About 10 minutes, once",
+    time: "About 10 minutes",
     title: "They get verified",
     d: "They accept your invite and complete Stripe's own identity and bank-account forms. "
       + "Payments stay unavailable until verification is complete.",
@@ -69,10 +69,10 @@ const GUARDIAN_DOES = [
 
 const FAQ: [string, React.ReactNode][] = [
   [
-    "Does my parent have to do anything after the first ten minutes?",
+    "Will my parent need to stay involved after setup?",
     <>
-      No. The verification happens once. After it, they are the named adult on the payment
-      account and they get an email each time you request a payout, which is a notice rather
+      They remain the named adult on the payment account. Stripe can ask for more information
+      later, and your guardian handles those requests. They get an email each time you request a payout, which is a notice rather
       than a request to approve. They do not touch your products, your prices or your links.
       The one thing that stays theirs is the payment account itself. Refunds are issued
       from it, and so is anything the provider asks for later.
@@ -82,7 +82,7 @@ const FAQ: [string, React.ReactNode][] = [
     "What if my parent says no, or never replies?",
     <>
       Then the account cannot take payments, and there is no way around that: it is the
-      part that makes the whole arrangement lawful rather than a workaround. You can send a fresh
+      involvement Stripe requires for this route. You can send a fresh
       invite whenever you like, and invites last fourteen days. If the hesitation is about what
       they are signing up for, the page written for them answers it in their words, including
       the parts that are not settled:{" "}
@@ -154,6 +154,14 @@ export default function GetStarted() {
                   <Link className="btn btn-lg" href="/check">Check eligibility</Link>
                   <Link className="linkbtn" href="/auth/signup">Create a founder account</Link>
                 </div>
+                <div className="journey-preflight">
+                  <h2>What you will need.</h2>
+                  <ul>
+                    <li>An eligible age and country</li>
+                    <li>A parent or legal guardian willing to take the account role</li>
+                    <li>A product name and price</li>
+                  </ul>
+                </div>
               </div>
 
               <ol className="gs-phases" aria-label="Setup steps and estimated time">
@@ -170,10 +178,16 @@ export default function GetStarted() {
                 ))}
               </ol>
             </div>
+            <nav className="journey-index" aria-label="Getting started sections">
+              <a href="#prepare-guardian">Prepare your guardian</a>
+              <a href="#checkout">Your checkout</a>
+              <a href="#add-to-app">Add the link</a>
+              <a href="#setup-questions">Setup questions</a>
+            </nav>
           </div>
         </div>
 
-        <section className="lp ch">
+        <section className="lp ch" id="prepare-guardian">
           <div className="wrap-lp">
             <div className="aside-grid">
               <div className="aside-head">
@@ -202,13 +216,15 @@ export default function GetStarted() {
                   ))}
                 </div>
 
-                <AskYourGuardian />
+                <Accordion className="guardian-message" summary="Open a message to send your guardian">
+                  <AskYourGuardian />
+                </Accordion>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="lp ch ch-surface">
+        <section className="lp ch ch-surface" id="checkout">
           <div className="wrap-lp gs-hero-grid">
               <div>
                 <h2 className="lp-h2">A checkout ready to share.</h2>
@@ -230,7 +246,7 @@ export default function GetStarted() {
           </div>
         </section>
 
-        <section className="lp ch">
+        <section className="lp ch" id="add-to-app">
           <div className="wrap-lp">
             <div className="aside-grid">
               <div className="aside-head">
@@ -269,7 +285,7 @@ export default function GetStarted() {
           </div>
         </section>
 
-        <section className="lp ch ch-surface">
+        <section className="lp ch ch-surface" id="setup-questions">
           <div className="wrap-lp aside-grid">
             <div className="aside-head">
               <h2 className="lp-h2">Before you get started.</h2>

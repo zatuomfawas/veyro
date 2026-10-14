@@ -7,18 +7,11 @@ export const viewport = buildViewport();
 
 const UPDATED = "5 October 2026";
 /**
- * When these Terms begin to govern, and the instant fees may first be taken.
- * Until then the version dated 16 September 2026 applies, and is served at
- * /terms/2026-09-16.
- *
- * This date and FEES_EFFECTIVE_AT in lib/pricing.ts are the same moment and
- * must stay that way.
- *
- * AFTER 15 OCTOBER 2026: delete EFFECTIVE and the <notice> below. The archive
- * route stays live permanently -- it is what somebody checks when they want
- * to know what they actually agreed to.
+ * The owner postponed this update's effective date on 14 October 2026,
+ * without announcing a new date. The 16 September 2026 Terms remain in force
+ * at /terms/2026-09-16. This status is not an invented replacement date.
  */
-const EFFECTIVE = "15 October 2026";
+const EFFECTIVE = "Postponed";
 
 const SECTIONS = [
   { n: 1, title: "What Veyro is" },
@@ -37,9 +30,8 @@ export default function Terms() {
   return (
     <LegalShell
       title="Terms of Service"
-      lead="What Veyro is, what it is not, and what you and your guardian are agreeing to."
+      lead="The updated Terms dated 5 October 2026. Their effective date is postponed; the 16 September 2026 Terms remain in force."
       updated={UPDATED}
-      effective={EFFECTIVE}
       sections={SECTIONS}
       shape="index"
       masthead={
@@ -48,7 +40,7 @@ export default function Terms() {
            note and a sidebar. */
         <dl className="lglkey">
           <div>
-            <dt className="fig-k">Takes effect</dt>
+            <dt className="fig-k">Effective date</dt>
             <dd className="fig fig-sm">{EFFECTIVE}</dd>
           </div>
           <div>
@@ -63,13 +55,13 @@ export default function Terms() {
       }
       notice={
         <div className="archive-note" data-tone="pending">
-          <strong>These Terms take effect on {EFFECTIVE}.</strong>
+          <strong>The effective date for these updated Terms is postponed.</strong>
           <p style={{ margin: "6px 0 0" }}>
-            Until then, the{" "}
+            No new date has been announced. The{" "}
             <Link className="linkbtn" href="/terms/2026-09-16">
               Terms dated 16 September 2026
             </Link>{" "}
-            apply.
+            remain in force until an announced new version takes effect.
           </p>
         </div>
       }

@@ -13,7 +13,7 @@ export const viewport = buildViewport();
 export default async function SigninPage({
   searchParams,
 }: {
-  searchParams: Promise<{ next?: string | string[]; verified?: string }>;
+  searchParams: Promise<{ next?: string | string[]; verified?: string; registered?: string }>;
 }) {
   const params = await searchParams;
   const raw = params.next;
@@ -29,7 +29,7 @@ export default async function SigninPage({
         </>
       }
     >
-      <SigninForm next={next} justVerified={params.verified === "1"} />
+      <SigninForm next={next} justVerified={params.verified === "1"} justRegistered={params.registered === "1"} />
     </AuthShell>
   );
 }

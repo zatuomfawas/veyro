@@ -7,7 +7,10 @@
 // counsel wrote out are pinned here exactly as they wrote them.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { feeOnPaymentMinor, qmeMonthKey, mayCollectFee, FEES_EFFECTIVE_AT } from "../lib/pricing.ts";
+import {
+  feeOnPaymentMinor, qmeMonthKey, mayCollectFee, FEES_EFFECTIVE_AT,
+  FEE_COLLECTION_ENABLED, FEES_EFFECTIVE_LABEL,
+} from "../lib/pricing.ts";
 
 test("counsel case one: a refund does not return the fee, and the next charge tops up", () => {
   // $150 charge -> QME $150 -> fee $1.50
@@ -49,17 +52,18 @@ test("the calendar month is UTC, not local", () => {
   assert.equal(qmeMonthKey(Date.UTC(2026, 10, 1, 0, 1) / 1000), "2026-11");
 });
 
-test("no fee can be taken before the Terms take effect", () => {
-  // The flag is on now, so the date is the only thing holding the line --
-  // which is exactly why it exists as a separate lock.
+test("postponed collection stays off before and after the original date", () => {
+  assert.equal(FEE_COLLECTION_ENABLED, false);
+  assert.equal(FEES_EFFECTIVE_LABEL, "Postponed");
   assert.equal(mayCollectFee(FEES_EFFECTIVE_AT - 1000), false);
   assert.equal(mayCollectFee(FEES_EFFECTIVE_AT - 1), false);
-  assert.equal(mayCollectFee(FEES_EFFECTIVE_AT), true);
-  assert.equal(mayCollectFee(FEES_EFFECTIVE_AT + 1000), true);
+  assert.equal(mayCollectFee(FEES_EFFECTIVE_AT), false);
+  assert.equal(mayCollectFee(FEES_EFFECTIVE_AT + 1000), false);
+  assert.equal(mayCollectFee(Date.UTC(2027, 0, 1)), false);
+  assert.equal(mayCollectFee(Date.UTC(2050, 0, 1)), false);
 });
 
-test("the effective date is 15 October 2026 at 00:00 UTC", () => {
-  // The same instant the Terms give as their Effective Date. If one moves
-  // without the other, a fee is taken under a document not yet in force.
+test("the retained original date is historical and cannot enable collection", () => {
   assert.equal(new Date(FEES_EFFECTIVE_AT).toISOString(), "2026-10-15T00:00:00.000Z");
+  assert.equal(mayCollectFee(FEES_EFFECTIVE_AT), false);
 });

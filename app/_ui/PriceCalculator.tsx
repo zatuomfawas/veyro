@@ -1,86 +1,121 @@
 "use client";
 
-// Pricing, as the instrument rather than the sentence.
-//
-// The page already said "earn $400 and you pay $9", which is correct and does
-// nothing: the reader has to find themselves in someone else's example. A
-// slider lets them put their own number in and watch the fee follow it, which
-// is both a better answer and a demonstration of the one thing the pricing
-// model is trying to prove -- that below $100 the number stays at zero.
-//
-// The free band is the point, so it is drawn: the track is tinted up to $100
-// and the figure stays at $0.00 across the whole of it. Someone dragging from
-// the left watches nothing happen for a quarter of the track, which is the
-// argument the paragraph was making in words.
-//
-// Server-rendered at the default position with the real figures already in
-// place, so this is readable and correct with no JavaScript -- it just stops
-// being draggable.
+// An illustrative USD estimate, using the account's shared fee arithmetic.
+// The native range and exact amount field describe the same value. No
+// account data, payment request or network call is involved.
 
 import { useId, useState } from "react";
-import { formatMinor } from "@/lib/money";
+import { formatMinor, parseMinor } from "@/lib/money";
 import { feeMinor, FREE_FLOOR_MINOR } from "@/lib/pricing";
 
-const MAX_MINOR = 100000; // $1,000 a month: past this the band is rare enough
-const START_MINOR = 40000; // $400, the figure the copy has always used
+const BASE_MAX_MINOR = 100000;
+const MAX_INPUT_USD = 1000000;
 const STEP_MINOR = 2500;
+const PRESETS_MINOR = [10000, 40000, 100000] as const;
 
 export function PriceCalculator() {
-  const [earned, setEarned] = useState(START_MINOR);
+  const [amount, setAmount] = useState("400.00");
   const id = useId();
 
-  const fee = feeMinor(earned);
-  const keep = earned - fee;
-  // The rate against the whole amount, which is the number a reader is
-  // actually comparing with other platforms. It is always below 3%, and on
-  // under the free limit it is zero -- stating it is the strongest thing this
-  // component does.
-  const effective = earned > 0 ? (fee / earned) * 100 : 0;
+  const entry = amount.trim();
+  const numeric = /^(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d{0,2})?$/.test(entry);
+  const parsed = numeric ? parseMinor(entry.replace(/\.$/, ""), "USD") : null;
+  const earned = parsed !== null && parsed <= MAX_INPUT_USD * 100 ? parsed : null;
+  const valid = earned !== null;
+  const fee = earned === null ? null : feeMinor(earned);
+  const keep = earned === null || fee === null ? null : earned - fee;
+  const effective = earned !== null && earned > 0 && fee !== null ? (fee / earned) * 100 : 0;
   const free = fee === 0;
+  // Larger exact entries remain usable; the range expands to include them.
+  // A cent step also keeps an exact input aligned with its range value.
+  const maxMinor = Math.max(BASE_MAX_MINOR, earned ?? 0);
+  const stepMinor = earned !== null && earned % STEP_MINOR !== 0 ? 1 : STEP_MINOR;
+  const setMinor = (minor: number) => setAmount((minor / 100).toFixed(2));
 
   return (
     <div className="calc contrast-surface">
       <div className="calc-top">
-        <label className="fig-k" htmlFor={id}>You earn, in a month</label>
-        <output className="fig fig-lg" htmlFor={id}>{formatMinor(earned, "USD")}</output>
+        <label className="fig-k" htmlFor={`${id}-amount`}>Your monthly earnings (USD)</label>
+        <div className="calc-amount-field">
+          <span aria-hidden="true">$</span>
+          <input
+            id={`${id}-amount`}
+            className="calc-amount"
+            type="text"
+            inputMode="decimal"
+            autoComplete="off"
+            spellCheck={false}
+            value={amount}
+            onChange={(event) => setAmount(event.target.value)}
+            onBlur={() => { if (earned !== null) setMinor(earned); }}
+            aria-invalid={!valid}
+            aria-describedby={`${id}-help${valid ? "" : ` ${id}-error`}`}
+          />
+        </div>
+        <p className="calc-help" id={`${id}-help`}>Enter an amount or adjust the slider.</p>
+        {!valid && (
+          <p className="calc-input-error" id={`${id}-error`} role="status">
+            Enter a USD amount from 0 to 1,000,000 with up to two decimal places.
+          </p>
+        )}
       </div>
 
+      <label className="sr-only" htmlFor={id}>Adjust monthly earnings in US dollars</label>
       <input
         id={id}
         className="calc-range"
         type="range"
         min={0}
-        max={MAX_MINOR}
-        step={STEP_MINOR}
-        value={earned}
-        onChange={(e) => setEarned(Number(e.target.value))}
+        max={maxMinor}
+        step={stepMinor}
+        value={earned ?? 0}
+        onChange={(e) => setMinor(Number(e.target.value))}
+        aria-valuetext={formatMinor(earned ?? 0, "USD")}
         aria-describedby={`${id}-out`}
-        style={{ ["--calc-free" as string]: `${(FREE_FLOOR_MINOR / MAX_MINOR) * 100}%` }}
+        style={{ ["--calc-free" as string]: `${(FREE_FLOOR_MINOR / maxMinor) * 100}%` }}
       />
       <div className="calc-scale" aria-hidden="true">
         <span>$0</span>
-        <span className="calc-mark">free under $100</span>
-        <span>${(MAX_MINOR / 100).toLocaleString("en-US")}</span>
+        <span className="calc-mark">First $100 free</span>
+        <span>${(maxMinor / 100).toLocaleString("en-US")}</span>
+      </div>
+
+      <div className="calc-presets" role="group" aria-label="Example monthly earnings">
+        {PRESETS_MINOR.map((minor) => (
+          <button type="button" key={minor} aria-pressed={earned === minor} onClick={() => setMinor(minor)}>
+            ${(minor / 100).toLocaleString("en-US")}
+          </button>
+        ))}
       </div>
 
       <div className="calc-out figrow" id={`${id}-out`}>
         <div>
-          <span className="fig-k">Veyro&rsquo;s fee</span>
+          <span className="fig-k">Veyro fee at the planned rate</span>
           <span className="fig fig-md" data-free={free ? "1" : undefined}>
-            {formatMinor(fee, "USD")}
+            {fee === null ? "—" : formatMinor(fee, "USD")}
           </span>
           <span className="fig-sub">
-            {free
-              ? "Nothing. You are under the free limit."
+            {earned === null
+              ? "Enter a valid amount to calculate."
+              : earned <= FREE_FLOOR_MINOR
+              ? "Your first $100 each month is free."
               : `${effective.toFixed(2)}% of what you earned`}
           </span>
         </div>
         <div>
-          <span className="fig-k">You keep</span>
-          <span className="fig fig-md fig-pos">{formatMinor(keep, "USD")}</span>
-          <span className="fig-sub">Before card processing fees, which are not ours.</span>
+          <span className="fig-k">After the planned fee</span>
+          <span className="fig fig-md fig-pos">{keep === null ? "—" : formatMinor(keep, "USD")}</span>
+          <span className="fig-sub">Fee launch postponed. Stripe processing fees apply separately.</span>
         </div>
       </div>
+      <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        {earned !== null && fee !== null && keep !== null
+          ? `Illustrative planned pricing. Monthly earnings ${formatMinor(earned, "USD")}. Veyro fee ${formatMinor(fee, "USD")}. After Veyro's fee ${formatMinor(keep, "USD")}, before Stripe processing fees. Fee launch postponed.`
+          : "Enter a valid USD amount to see the fee estimate."}
+      </p>
+      <noscript>
+        <p className="calc-help">This is a $400 example. Enable JavaScript to calculate another amount.</p>
+      </noscript>
     </div>
   );
 }
